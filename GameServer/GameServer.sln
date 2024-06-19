@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{59298129-90DD-4C43-8364-3ED3630B7D50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerCore", "ServerCore\ServerCore.csproj", "{3618FA9B-51F5-494F-A611-ACE26E31D566}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FE121EC4-C729-4D98-8E70-1DE1A5462AD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketGenerator", "PacketGenerator\PacketGenerator.csproj", "{5CC25935-252F-4896-8559-229755231349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServer", "AccountServer\AccountServer.csproj", "{2BAF2513-8D71-4F4A-9635-2952EE2A178A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{DC875D0A-AC7E-45BC-A943-2C7C0D22A5C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyClient", "DummyClient\DummyClient.csproj", "{F11A7944-06A1-425C-AF24-CEDA834958E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59298129-90DD-4C43-8364-3ED3630B7D50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59298129-90DD-4C43-8364-3ED3630B7D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59298129-90DD-4C43-8364-3ED3630B7D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59298129-90DD-4C43-8364-3ED3630B7D50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3618FA9B-51F5-494F-A611-ACE26E31D566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3618FA9B-51F5-494F-A611-ACE26E31D566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3618FA9B-51F5-494F-A611-ACE26E31D566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3618FA9B-51F5-494F-A611-ACE26E31D566}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CC25935-252F-4896-8559-229755231349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CC25935-252F-4896-8559-229755231349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CC25935-252F-4896-8559-229755231349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CC25935-252F-4896-8559-229755231349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BAF2513-8D71-4F4A-9635-2952EE2A178A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BAF2513-8D71-4F4A-9635-2952EE2A178A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BAF2513-8D71-4F4A-9635-2952EE2A178A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BAF2513-8D71-4F4A-9635-2952EE2A178A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC875D0A-AC7E-45BC-A943-2C7C0D22A5C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC875D0A-AC7E-45BC-A943-2C7C0D22A5C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC875D0A-AC7E-45BC-A943-2C7C0D22A5C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC875D0A-AC7E-45BC-A943-2C7C0D22A5C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5CC25935-252F-4896-8559-229755231349} = {FE121EC4-C729-4D98-8E70-1DE1A5462AD5}
+	EndGlobalSection
+EndGlobal
