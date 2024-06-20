@@ -33,6 +33,10 @@ namespace GameServer.DB
             builder.Entity<PlayerDb>()
                 .HasIndex(p => p.PlayerName)
                 .IsUnique();
+            
+            builder.Entity<ServerDb>()
+                .HasIndex(s => s.Name)
+                .IsUnique();
         }
     }
 }
