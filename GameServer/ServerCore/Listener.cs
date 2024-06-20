@@ -19,7 +19,7 @@ namespace ServerCore
             _sessionFactory += sessionFactory;
 
             //클라이언트에서 연결 시도를 위한 엔드포인트 등록
-            _listenSocket.Bind(endPoint);
+			_listenSocket.Bind(endPoint);
 
             
             //대기가 가능한 수
@@ -29,7 +29,7 @@ namespace ServerCore
             for (int i = 0; i < register; i++)
             {
                 //송신과 수신을 담당하는 클래스
-                SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+				SocketAsyncEventArgs args = new SocketAsyncEventArgs();
                 //작업이 완료되면 실행하는 기능
                 args.Completed += OnAcceptCompleted;
                 //연결 수신부
@@ -40,11 +40,11 @@ namespace ServerCore
         
         //수신 작업 등록
         void RegisterAccept(SocketAsyncEventArgs args)
-        {
-            args.AcceptSocket = null;
+		{
+			args.AcceptSocket = null;
 
-            try
-            {
+			try
+			{
                 //비동기 수신
                 bool pending = _listenSocket.AcceptAsync(args);
                 if (pending == false)
@@ -68,7 +68,7 @@ namespace ServerCore
                     Session session = _sessionFactory.Invoke();
                     
                     //세션 초기화
-                    session.Start(args.ConnectSocket);
+                    session.Start(args.AcceptSocket);
                     
                     //수신 엔드포인트 등록
                     session.OnConnected(args.AcceptSocket.RemoteEndPoint);
