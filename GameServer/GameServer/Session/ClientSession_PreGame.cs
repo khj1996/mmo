@@ -16,6 +16,7 @@ namespace GameServer
     {
         //계정 id
         public int AccountDbId { get; private set; }
+
         //플레이어 정보
         //다캐릭 대응
         public List<LobbyPlayerInfo> LobbyPlayers { get; set; } = new List<LobbyPlayerInfo>();
@@ -27,6 +28,8 @@ namespace GameServer
             if (ServerState != PlayerServerState.ServerStateLogin)
                 return;
 
+            var accountDbId = int.Parse(JwtUtils.DecipherJwtAccessToken(loginPacket.JwtToken).Subject);
+
             // TODO : 문제가 있긴 있다
             // - 동시에 다른 사람이 같은 UniqueId을 보낸다면?
             // - 악의적으로 여러번 보낸다면
@@ -34,15 +37,21 @@ namespace GameServer
 
             LobbyPlayers.Clear();
 
-            
+
             using (AppDbContext db = new AppDbContext())
             {
                 //계정 정보 획득
                 AccountDb findAccount = db.Accounts
                     .Include(a => a.Players)
-                    .Where(a => a.AccountName == loginPacket.UniqueId).FirstOrDefault();
+                    .Where(a => a.AccountDbId == accountDbId).FirstOrDefault();
 
-                //신규 계정
+
+                //서버 정보 획득
+                List<ServerDb> serverDbs = db.Servers
+                    .Where(i => i.ServerDbId != null)
+                    .ToList();
+
+                //기존 계정
                 if (findAccount != null)
                 {
                     // AccountDbId 메모리에 기억
@@ -73,14 +82,27 @@ namespace GameServer
                         loginOk.Players.Add(lobbyPlayer);
                     }
 
+                    foreach (var serverDb in serverDbs)
+                    {
+                        ServerInfo serverInfo = new ServerInfo()
+                        {
+                            Name = serverDb.Name,
+                            IpAddress = serverDb.IpAddress,
+                            Port = serverDb.Port,
+                            BusyScore = serverDb.BusyScore,
+                        };
+                        loginOk.ServerInfos.Add(serverInfo);
+                    }
+
+
                     Send(loginOk);
                     // 로비로 이동
                     ServerState = PlayerServerState.ServerStateLobby;
                 }
                 else
                 {
-                    //기존 계정
-                    AccountDb newAccount = new AccountDb() { AccountName = loginPacket.UniqueId };
+                    //신규 계정
+                    AccountDb newAccount = new AccountDb() { AccountName = $"Player_{accountDbId}" };
                     db.Accounts.Add(newAccount);
                     bool success = db.SaveChangesEx();
                     if (success == false)
@@ -90,6 +112,19 @@ namespace GameServer
                     AccountDbId = newAccount.AccountDbId;
 
                     S_Login loginOk = new S_Login() { LoginOk = 1 };
+
+                    foreach (var serverDb in serverDbs)
+                    {
+                        ServerInfo serverInfo = new ServerInfo()
+                        {
+                            Name = serverDb.Name,
+                            IpAddress = serverDb.IpAddress,
+                            Port = serverDb.Port,
+                            BusyScore = serverDb.BusyScore,
+                        };
+                        loginOk.ServerInfos.Add(serverInfo);
+                    }
+
                     Send(loginOk);
                     // 로비로 이동
                     ServerState = PlayerServerState.ServerStateLobby;

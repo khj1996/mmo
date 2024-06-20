@@ -107,7 +107,7 @@ class PacketHandler
 		C_Login loginPacket = new C_Login();
 
 		string path = Application.dataPath;
-		loginPacket.UniqueId = path.GetHashCode().ToString();
+		loginPacket.JwtToken = path.GetHashCode().ToString();
 		Managers.Network.Send(loginPacket);
 	}
 
@@ -116,8 +116,12 @@ class PacketHandler
 	{
 		S_Login loginPacket = (S_Login)packet;
 		Debug.Log($"LoginOk({loginPacket.LoginOk})");
-
-		// TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록
+		
+		
+		Managers.UI.ShowPopupUI<UI_SelectServerPopup>().SetServers(loginPacket.ServerInfos);
+		
+		
+		/*// TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록
 		if (loginPacket.Players == null || loginPacket.Players.Count == 0)
 		{
 			C_CreatePlayer createPacket = new C_CreatePlayer();
@@ -131,7 +135,7 @@ class PacketHandler
 			C_EnterGame enterGamePacket = new C_EnterGame();
 			enterGamePacket.Name = info.Name;
 			Managers.Network.Send(enterGamePacket);
-		}
+		}*/
 	}
 
 	public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)

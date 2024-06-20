@@ -8,6 +8,7 @@ namespace GameServer.DB
     {
         //DB
         public DbSet<AccountDb> Accounts { get; set; }
+        public DbSet<ServerDb> Servers { get; set; }
         public DbSet<PlayerDb> Players { get; set; }
         public DbSet<ItemDb> Items { get; set; }
 

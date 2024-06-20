@@ -83,8 +83,8 @@ enum ArmorType {
 }
 
 enum ConsumableType {
-   CONSUMABLE_TYPE_NONE = 0;
-   CONSUMABLE_TYPE_POTION = 1;
+  CONSUMABLE_TYPE_NONE = 0;
+  CONSUMABLE_TYPE_POTION = 1;
 }
 
 
@@ -135,12 +135,13 @@ message S_Connected {
 }
 
 message C_Login {
-  string uniqueId = 1;
+  string  jwtToken = 1;
 }
 
 message S_Login {
   int32 loginOk = 1;
-  repeated LobbyPlayerInfo players = 2;
+  repeated ServerInfo serverInfos = 2;
+  repeated LobbyPlayerInfo players = 3;
 }
 
 message C_CreatePlayer {
@@ -214,6 +215,13 @@ message StatInfo {
 
 message SkillInfo {
   int32 skillId = 1;
+}
+
+message ServerInfo {
+  string name = 1;
+  string ipAddress = 2;
+  int32 port = 3;
+  int32 busyScore = 4;
 }
 
 message ItemInfo {

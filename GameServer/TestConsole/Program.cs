@@ -9,14 +9,14 @@ namespace AccountServer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
             long expired = now -1000;
 
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, "1"), // Subject
+                new Claim(JwtRegisteredClaimNames.Sub, "435634"), // Subject
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToString()), // Issued At
                 new Claim(JwtRegisteredClaimNames.Exp, expired.ToString()) // Expiration
             };
@@ -35,7 +35,7 @@ namespace AccountServer
             var test1 = DecipherJwtAccessToken(token);
             var test2 = ValidateJwtAccessToken(token, "dskfnglskjdnf;ogkjsndofignjdkfngolsjd");
 
-            return;
+            return int.Parse(test1.Subject);
         }
 
 
