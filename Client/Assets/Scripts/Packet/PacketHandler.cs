@@ -106,8 +106,7 @@ class PacketHandler
 		Debug.Log("S_ConnectedHandler");
 		C_Login loginPacket = new C_Login();
 
-		string path = Application.dataPath;
-		loginPacket.JwtToken = path.GetHashCode().ToString();
+		loginPacket.JwtToken =Managers.Network.Token;
 		Managers.Network.Send(loginPacket);
 	}
 
@@ -119,6 +118,9 @@ class PacketHandler
 		
 		
 		Managers.UI.ShowPopupUI<UI_SelectServerPopup>().SetServers(loginPacket.ServerInfos);
+		
+		
+		Managers.Network.ConnectToGame(null);
 		
 		
 		/*// TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록

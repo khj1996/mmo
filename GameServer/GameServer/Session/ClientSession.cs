@@ -111,7 +111,7 @@ namespace GameServer
         //유저가 연결시 실행
         public override void OnConnected(EndPoint endPoint)
         {
-            //Console.WriteLine($"OnConnected : {endPoint}");
+            Console.WriteLine($"OnConnected : {endPoint}");
 
             {
                 S_Connected connectedPacket = new S_Connected();

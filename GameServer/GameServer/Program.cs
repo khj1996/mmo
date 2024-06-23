@@ -83,7 +83,7 @@ namespace GameServer
             IpAddress = ipAddr.ToString();
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
-            Console.WriteLine("Listening..." + Port);
+            Console.WriteLine("Listening..." + Port + "/" +ipAddr);
 
             // DbTask
             {
