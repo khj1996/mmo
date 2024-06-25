@@ -12,13 +12,21 @@ public class NetworkManager
 
 	ServerSession _session = new ServerSession();
 
+	private bool isConnected = false; 
+
 	public void Send(IMessage packet)
 	{
 		_session.Send(packet);
 	}
 
-	public void ConnectToGame(ServerInfo info)
+	public void Connect(ServerInfo info)
 	{
+		if (isConnected)
+		{
+			DisConnect();
+		}
+		Debug.Log($"{info.IpAddress} : {info.Port}");
+		
 		IPAddress ipAddr = IPAddress.Parse(info.IpAddress);
 		IPEndPoint endPoint = new IPEndPoint(ipAddr, info.Port);
 
@@ -27,6 +35,13 @@ public class NetworkManager
 		connector.Connect(endPoint,
 			() => { return _session; },
 			1);
+		isConnected = true;
+	}
+
+	public void DisConnect()
+	{
+		_session.Disconnect();
+		isConnected = false;
 	}
 
 	public void Update()

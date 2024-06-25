@@ -27,6 +27,7 @@ enum MsgId {
   S_CHANGE_STAT = 20;
   S_PING = 21;
   C_PONG = 22;
+  S_Enter_Server = 23;
 }
 
 enum CreatureState {
@@ -141,6 +142,10 @@ message C_Login {
 message S_Login {
   int32 loginOk = 1;
   repeated ServerInfo serverInfos = 2;
+  repeated LobbyPlayerInfo players = 3;
+}
+
+message S_EnterServer {
   repeated LobbyPlayerInfo players = 3;
 }
 

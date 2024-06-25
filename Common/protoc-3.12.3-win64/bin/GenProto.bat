@@ -7,6 +7,8 @@ START ../../../GameServer/PacketGenerator/bin/PacketGenerator.exe ./Protocol.pro
 XCOPY /Y Protocol.cs "../../../Client/Assets/Scripts/Packet"
 XCOPY /Y Protocol.cs "../../../GameServer/DummyClient/Packet"
 XCOPY /Y Protocol.cs "../../../GameServer/GameServer/Packet"
+XCOPY /Y Protocol.cs "../../../GameServer/LoginServer/Packet"
 XCOPY /Y ClientPacketManager.cs "../../../Client/Assets/Scripts/Packet"
 XCOPY /Y ClientPacketManager.cs "../../../GameServer/DummyClient/Packet"
 XCOPY /Y ServerPacketManager.cs "../../../GameServer/GameServer/Packet"
+XCOPY /Y ServerPacketManager.cs "../../../GameServer/LoginServer/Packet"

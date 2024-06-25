@@ -54,14 +54,7 @@ namespace AccountServer.Services
 
             if (accountDb == null)
             {
-                accountDb = new AccountDb()
-                {
-                    LoginProviderUserId = packet.AccountName,
-                    LoginProviderType = ProviderType.Email
-                };
-
-                _context.Accounts.Add(accountDb);
-                await _context.SaveChangesAsync();
+                return null;
             }
 
             string jwtToken = _token.CreateJwtAccessToken(accountDb.AccountDbId);

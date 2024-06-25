@@ -37,7 +37,7 @@ public class UI_SelectServerPopup_Item : UI_Base
 
 	void OnClickButton(PointerEventData evt)
 	{
-		//Managers.Network.ConnectToGame(Info);
+		Managers.Network.Connect(Info);
 		Managers.Scene.LoadScene(Define.Scene.Game);
 		Managers.UI.ClosePopupUI();
 	}

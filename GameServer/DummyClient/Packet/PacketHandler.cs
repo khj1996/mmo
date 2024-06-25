@@ -127,4 +127,7 @@ class PacketHandler
     {
         C_Pong pongPacket = new C_Pong();
     }
+    public static void S_EnterServerHandler(PacketSession session, IMessage packet)
+    {
+    }
 }

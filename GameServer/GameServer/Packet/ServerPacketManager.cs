@@ -49,6 +49,7 @@ class PacketManager
 		count += 2;
 
 		Action<PacketSession, ArraySegment<byte>, ushort> action = null;
+		Console.WriteLine(id);
 		if (_onRecv.TryGetValue(id, out action))
 			action.Invoke(session, buffer, id);
 	}

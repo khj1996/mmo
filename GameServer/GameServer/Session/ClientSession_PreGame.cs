@@ -24,9 +24,9 @@ namespace GameServer
         //로그인(계정 로그인)
         public void HandleLogin(C_Login loginPacket)
         {
-            // TODO : 이런 저런 보안 체크
+            /*// TODO : 이런 저런 보안 체크
             if (ServerState != PlayerServerState.ServerStateLogin)
-                return;
+                return;*/
 
             var accountDbId = int.Parse(JwtUtils.DecipherJwtAccessToken(loginPacket.JwtToken).Subject);
 
@@ -45,90 +45,38 @@ namespace GameServer
                     .Include(a => a.Players)
                     .Where(a => a.AccountDbId == accountDbId).FirstOrDefault();
 
+                // AccountDbId 메모리에 기억
+                AccountDbId = findAccount.AccountDbId;
 
-                //서버 정보 획득
-                List<ServerDb> serverDbs = db.Servers
-                    .Where(i => i.ServerDbId != null)
-                    .ToList();
-
-                //기존 계정
-                if (findAccount != null)
+                S_EnterServer loginOk = new S_EnterServer();
+                foreach (PlayerDb playerDb in findAccount.Players)
                 {
-                    // AccountDbId 메모리에 기억
-                    AccountDbId = findAccount.AccountDbId;
-
-                    S_Login loginOk = new S_Login() { LoginOk = 1 };
-                    foreach (PlayerDb playerDb in findAccount.Players)
+                    LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
                     {
-                        LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
+                        PlayerDbId = playerDb.PlayerDbId,
+                        Name = playerDb.PlayerName,
+                        StatInfo = new StatInfo()
                         {
-                            PlayerDbId = playerDb.PlayerDbId,
-                            Name = playerDb.PlayerName,
-                            StatInfo = new StatInfo()
-                            {
-                                Level = playerDb.Level,
-                                Hp = playerDb.Hp,
-                                MaxHp = playerDb.MaxHp,
-                                Attack = playerDb.Attack,
-                                Speed = playerDb.Speed,
-                                TotalExp = playerDb.TotalExp
-                            }
-                        };
+                            Level = playerDb.Level,
+                            Hp = playerDb.Hp,
+                            MaxHp = playerDb.MaxHp,
+                            Attack = playerDb.Attack,
+                            Speed = playerDb.Speed,
+                            TotalExp = playerDb.TotalExp
+                        }
+                    };
 
-                        // 메모리에도 들고 있다
-                        LobbyPlayers.Add(lobbyPlayer);
+                    // 메모리에도 들고 있다
+                    LobbyPlayers.Add(lobbyPlayer);
 
-                        // 패킷에 넣어준다
-                        loginOk.Players.Add(lobbyPlayer);
-                    }
-
-                    foreach (var serverDb in serverDbs)
-                    {
-                        ServerInfo serverInfo = new ServerInfo()
-                        {
-                            Name = serverDb.Name,
-                            IpAddress = serverDb.IpAddress,
-                            Port = serverDb.Port,
-                            BusyScore = serverDb.BusyScore,
-                        };
-                        loginOk.ServerInfos.Add(serverInfo);
-                    }
-
-
-                    Send(loginOk);
-                    // 로비로 이동
-                    ServerState = PlayerServerState.ServerStateLobby;
+                    // 패킷에 넣어준다
+                    loginOk.Players.Add(lobbyPlayer);
                 }
-                else
-                {
-                    //신규 계정
-                    AccountDb newAccount = new AccountDb() { AccountName = $"Player_{accountDbId}" };
-                    db.Accounts.Add(newAccount);
-                    bool success = db.SaveChangesEx();
-                    if (success == false)
-                        return;
 
-                    // AccountDbId 메모리에 기억
-                    AccountDbId = newAccount.AccountDbId;
 
-                    S_Login loginOk = new S_Login() { LoginOk = 1 };
-
-                    foreach (var serverDb in serverDbs)
-                    {
-                        ServerInfo serverInfo = new ServerInfo()
-                        {
-                            Name = serverDb.Name,
-                            IpAddress = serverDb.IpAddress,
-                            Port = serverDb.Port,
-                            BusyScore = serverDb.BusyScore,
-                        };
-                        loginOk.ServerInfos.Add(serverInfo);
-                    }
-
-                    Send(loginOk);
-                    // 로비로 이동
-                    ServerState = PlayerServerState.ServerStateLobby;
-                }
+                Send(loginOk);
+                // 로비로 이동
+                ServerState = PlayerServerState.ServerStateLobby;
             }
         }
 

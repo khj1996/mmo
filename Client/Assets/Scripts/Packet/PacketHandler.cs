@@ -107,7 +107,7 @@ class PacketHandler
 		C_Login loginPacket = new C_Login();
 
 		loginPacket.JwtToken =Managers.Network.Token;
-		//Managers.Network.Send(loginPacket);
+		Managers.Network.Send(loginPacket);
 	}
 
 	// 로그인 OK + 캐릭터 목록
@@ -118,26 +118,6 @@ class PacketHandler
 		
 		
 		Managers.UI.ShowPopupUI<UI_SelectServerPopup>().SetServers(loginPacket.ServerInfos);
-		
-		
-		Managers.Network.ConnectToGame(null);
-		
-		
-		/*// TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록
-		if (loginPacket.Players == null || loginPacket.Players.Count == 0)
-		{
-			C_CreatePlayer createPacket = new C_CreatePlayer();
-			createPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
-			Managers.Network.Send(createPacket);
-		}
-		else
-		{
-			// 무조건 첫번째 로그인
-			LobbyPlayerInfo info = loginPacket.Players[0];
-			C_EnterGame enterGamePacket = new C_EnterGame();
-			enterGamePacket.Name = info.Name;
-			Managers.Network.Send(enterGamePacket);
-		}*/
 	}
 
 	public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)
@@ -221,6 +201,27 @@ class PacketHandler
 		S_ChangeStat itemList = (S_ChangeStat)packet;
 
 		// TODO
+	}
+	
+	public static void S_EnterServerHandler(PacketSession session, IMessage packet)
+	{
+		S_EnterServer enterPacket = (S_EnterServer)packet;
+
+		// TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록
+		if (enterPacket.Players == null || enterPacket.Players.Count == 0)
+		{
+			C_CreatePlayer createPacket = new C_CreatePlayer();
+			createPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
+			Managers.Network.Send(createPacket);
+		}
+		else
+		{
+			// 무조건 첫번째 로그인
+			LobbyPlayerInfo info = enterPacket.Players[0];
+			C_EnterGame enterGamePacket = new C_EnterGame();
+			enterGamePacket.Name = info.Name;
+			Managers.Network.Send(enterGamePacket);
+		}
 	}
 
 	public static void S_PingHandler(PacketSession session, IMessage packet)

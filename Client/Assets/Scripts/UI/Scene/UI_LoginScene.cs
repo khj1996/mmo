@@ -74,7 +74,7 @@ public class UI_LoginScene : UI_Scene
 			if (res.LoginOK)
 			{
 				Managers.Network.Token = res.JwtAccessToken;
-				Managers.Network.ConnectToGame(new ServerInfo()
+				Managers.Network.Connect(new ServerInfo()
 				{
 					Port = res.Port,
 					IpAddress = res.IpAddress
