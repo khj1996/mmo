@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyClient", "DummyClient\DummyClient.csproj", "{F11A7944-06A1-425C-AF24-CEDA834958E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginServer", "LoginServer\LoginServer.csproj", "{A420CEB4-1E50-4828-9A85-3CE6883380E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F11A7944-06A1-425C-AF24-CEDA834958E1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A420CEB4-1E50-4828-9A85-3CE6883380E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A420CEB4-1E50-4828-9A85-3CE6883380E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A420CEB4-1E50-4828-9A85-3CE6883380E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A420CEB4-1E50-4828-9A85-3CE6883380E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5CC25935-252F-4896-8559-229755231349} = {FE121EC4-C729-4D98-8E70-1DE1A5462AD5}

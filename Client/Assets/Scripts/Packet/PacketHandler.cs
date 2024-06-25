@@ -107,7 +107,7 @@ class PacketHandler
 		C_Login loginPacket = new C_Login();
 
 		loginPacket.JwtToken =Managers.Network.Token;
-		Managers.Network.Send(loginPacket);
+		//Managers.Network.Send(loginPacket);
 	}
 
 	// 로그인 OK + 캐릭터 목록

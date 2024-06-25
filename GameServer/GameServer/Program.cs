@@ -59,13 +59,15 @@ namespace GameServer
         }
 
         //엔드포인트 포트
-        public static int Port { get; } = 7777;
+        public static int Port { get; set; } = 7777;
 
         //ip주소
         public static string IpAddress { get; set; }
 
         static void Main(string[] args)
         {
+
+
             //설정 파일 로드
             ConfigManager.LoadConfig();
             //데이터 로드
@@ -77,13 +79,17 @@ namespace GameServer
             //클라이언트 접속을 위한 소켓 초기화
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[1];
+            IPAddress ipAddr = (args.Length > 1) ? IPAddress.Parse(args[0]) : ipHost.AddressList[1];
+                
+            
+            Port = (args.Length > 1) ? int.Parse(args[1]) : Port;
+            
             IPEndPoint endPoint = new IPEndPoint(ipAddr, Port);
 
             IpAddress = ipAddr.ToString();
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
-            Console.WriteLine("Listening..." + Port + "/" +ipAddr);
+            Console.WriteLine("Listening..." + Port + "/" + ipAddr);
 
             // DbTask
             {

@@ -4,6 +4,7 @@
     public class ServerConfig
     {
         public string dataPath;
+        public string mapDataPath;
         public string connectionString;
     }
 

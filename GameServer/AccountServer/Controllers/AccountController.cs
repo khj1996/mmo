@@ -36,6 +36,8 @@ namespace AccountServer.Controllers
 
             res.LoginOk = true;
             res.JwtAccessToken = jwtToken;
+            res.IpAddress = "118.37.228.1";
+            res.Port = 5000;
             return res;
         }
 
@@ -65,6 +67,8 @@ namespace AccountServer.Controllers
 
             res.LoginOk = true;
             res.JwtAccessToken = jwtToken;
+            res.IpAddress = "118.37.228.1";
+            res.Port = 5000;
             return res;
         }
     }

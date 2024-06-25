@@ -37,4 +37,6 @@ public class LoginFacebookAccountPacketRes
 {
 	public bool LoginOK;
 	public string JwtAccessToken;
+	public string IpAddress;
+	public int Port;
 }

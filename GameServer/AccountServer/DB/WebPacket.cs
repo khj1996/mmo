@@ -37,4 +37,6 @@ public class LoginAccountPacketRes
 {
     public bool LoginOk { get; set; }
     public string JwtAccessToken { get; set; }
+    public string IpAddress { get; set; }
+    public int Port { get; set; }
 }

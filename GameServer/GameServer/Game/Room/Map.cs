@@ -223,7 +223,7 @@ namespace GameServer.Game
 		}
 
 		//맵 데이터 획득
-		public void LoadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
+		public void LoadMap(int mapId, string pathPrefix)
 		{
 			string mapName = "Map_" + mapId.ToString("000");
 
