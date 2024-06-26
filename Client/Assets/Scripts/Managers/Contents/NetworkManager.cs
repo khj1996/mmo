@@ -24,6 +24,7 @@ public class NetworkManager
 		if (isConnected)
 		{
 			DisConnect();
+			_session = new ServerSession();
 		}
 		Debug.Log($"{info.IpAddress} : {info.Port}");
 		
