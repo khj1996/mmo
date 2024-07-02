@@ -1,6 +1,9 @@
-﻿using AccountServer.Models;
+﻿using System;
+using System.Net.Http;
+using AccountServer.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace AccountServer.Services
 {

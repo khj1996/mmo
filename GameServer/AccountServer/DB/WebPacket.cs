@@ -20,14 +20,6 @@ public class LoginAccountPacketReq
     public string Password { get; set; }
 }
 
-public class ServerInfo
-{
-    public string Name { get; set; }
-    public string IpAddress { get; set; }
-    public int Port { get; set; }
-    public int BusyScore { get; set; }
-}
-
 public class LoginFacebookAccountPacketReq
 {
     public string Token { get; set; }

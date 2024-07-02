@@ -1,4 +1,7 @@
-﻿namespace GameServer.Data
+﻿using System;
+using System.IO;
+
+namespace GameServer.Data
 {
     [Serializable]
     public class ServerConfig

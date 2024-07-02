@@ -1,4 +1,6 @@
-﻿namespace PacketGenerator
+﻿using System.IO;
+
+namespace PacketGenerator
 {
     class Program
     {

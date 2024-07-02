@@ -7,9 +7,9 @@ using UnityEngine.Networking;
 
 public class WebManager
 {
-    public string BaseUrl { get; set; } = "https://localhost:5001/api";
+    public string BaseUrl { get; set; } = "http://localhost:5000/api";
 
-	public void SendPostRequest<T>(string url, object obj, Action<T> res)
+	public void  SendPostRequest<T>(string url, object obj, Action<T> res)
 	{
 		Managers.Instance.StartCoroutine(CoSendWebRequest(url, UnityWebRequest.kHttpVerbPOST, obj, res));
 	}
@@ -17,6 +17,7 @@ public class WebManager
     IEnumerator CoSendWebRequest<T>(string url, string method, object obj, Action<T> res)
 	{
 		string sendUrl = $"{BaseUrl}/{url}";
+		Debug.Log(sendUrl);
 
 		byte[] jsonBytes = null;
 		if (obj != null)

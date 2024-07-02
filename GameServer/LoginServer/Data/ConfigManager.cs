@@ -1,4 +1,7 @@
-﻿namespace LoginServer.Data
+﻿using System;
+using System.IO;
+
+namespace LoginServer.Data
 {
     [Serializable]
     public class ServerConfig

@@ -1,4 +1,7 @@
-﻿namespace ServerCore
+﻿using System;
+using System.Collections.Generic;
+
+namespace ServerCore
 {
     public class PriorityQueue<T> where T : IComparable<T>
     {
