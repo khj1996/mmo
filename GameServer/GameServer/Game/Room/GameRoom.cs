@@ -66,7 +66,7 @@ namespace GameServer.Game
                 }
             }
 
-            // TEMP
+            //몬스터 생성
             for (int i = 0; i < 500; i++)
             {
                 Monster monster = ObjectManager.Instance.Add<Monster>();

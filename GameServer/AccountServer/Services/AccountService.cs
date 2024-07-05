@@ -43,7 +43,7 @@ namespace AccountServer.Services
         }
 
 
-        public async Task<string> LoginEmailAccount(LoginAccountPacketReq packet)
+        public string LoginEmailAccount(LoginAccountPacketReq packet)
         {
             if (packet == null)
                 return null;

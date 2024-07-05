@@ -19,7 +19,7 @@ namespace GameServer
 
         //플레이어 정보
         //다캐릭 대응
-        public List<LobbyPlayerInfo> LobbyPlayers { get; set; } = new List<LobbyPlayerInfo>();
+        public List<LobbyPlayerInfo> LobbyPlayers { get; set; } = new();
 
         //로그인(계정 로그인)
         public void HandleLogin(C_Login loginPacket)

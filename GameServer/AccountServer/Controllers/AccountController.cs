@@ -54,11 +54,11 @@ namespace AccountServer.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<LoginAccountPacketRes> LoginAccount([FromBody] LoginAccountPacketReq req)
+        public LoginAccountPacketRes LoginAccount([FromBody] LoginAccountPacketReq req)
         {
             LoginAccountPacketRes res = new LoginAccountPacketRes();
 
-            string jwtToken = await _account.LoginEmailAccount(req);
+            string jwtToken = _account.LoginEmailAccount(req);
             if (string.IsNullOrEmpty(jwtToken))
             {
                 res.LoginOk = false;

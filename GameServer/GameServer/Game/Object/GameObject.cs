@@ -21,11 +21,11 @@ namespace GameServer.Game
 		public GameRoom Room { get; set; }
 
 		//오브젝트 정보
-		public ObjectInfo Info { get; set; } = new ObjectInfo();
+		public ObjectInfo Info { get; set; } = new();
 		//위치 정보
-		public PositionInfo PosInfo { get; private set; } = new PositionInfo();
+		public PositionInfo PosInfo { get; private set; } = new();
 		//능력치 정보
-		public StatInfo Stat { get; private set; } = new StatInfo();
+		public StatInfo Stat { get; private set; } = new();
 
 		//총 공격력
 		public virtual int TotalAttack { get { return Stat.Attack; } }

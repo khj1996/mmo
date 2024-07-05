@@ -12,9 +12,9 @@ namespace GameServer.Game
         public int IndexX { get; private set; }
 
         //현재 존에 들어가있는 객체 관리
-        public HashSet<Player> Players { get; set; } = new HashSet<Player>();
-        public HashSet<Monster> Monsters { get; set; } = new HashSet<Monster>();
-        public HashSet<Projectile> Projectiles { get; set; } = new HashSet<Projectile>();
+        public HashSet<Player> Players { get; set; } = new();
+        public HashSet<Monster> Monsters { get; set; } = new();
+        public HashSet<Projectile> Projectiles { get; set; } = new();
 
         //존 생성자
         public Zone(int y, int x)
