@@ -18,13 +18,11 @@ namespace GameServer.Game
                 return;
 
             //이동 틱
-            int tick = (int)(1000 / Data.projectile.speed);
+            int tick = (int)(1000 / GameLogic.Instance.updateFrame);
             //다음 이동
             Room.PushAfter(tick, Update);
 
-            //보는 방향 획득
-            Vector2Int destPos = GetFrontCellPos();
-            //방향 이동 적용
+            /*//방향 이동 적용
             //이동이 가능한 상황
             if (Room.Map.ApplyMove(this, destPos, collision: false))
             {
@@ -44,7 +42,7 @@ namespace GameServer.Game
 
                 // 소멸
                 Room.Push(Room.LeaveGame, Id);
-            }
+            }*/
         }
 
         public override GameObject GetOwner()

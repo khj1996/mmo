@@ -47,7 +47,7 @@ namespace GameServer.Game
 		}
 
 		//보는 방향
-		public MoveDir Dir
+		public float Dir
 		{
 			get { return PosInfo.MoveDir; }
 			set { PosInfo.MoveDir = value; }
@@ -74,11 +74,11 @@ namespace GameServer.Game
 		}
 
 		//위치
-		public Vector2Int CellPos
+		public Vector2Float CellPos
 		{
 			get
 			{
-				return new Vector2Int(PosInfo.PosX, PosInfo.PosY);
+				return new Vector2Float(PosInfo.PosX, PosInfo.PosY);
 			}
 
 			set
@@ -86,48 +86,6 @@ namespace GameServer.Game
 				PosInfo.PosX = value.x;
 				PosInfo.PosY = value.y;
 			}
-		}
-
-		//보는 방향 위치
-		public Vector2Int GetFrontCellPos()
-		{
-			return GetFrontCellPos(PosInfo.MoveDir);
-		}
-
-		public Vector2Int GetFrontCellPos(MoveDir dir)
-		{
-			Vector2Int cellPos = CellPos;
-
-			switch (dir)
-			{
-				case MoveDir.Up:
-					cellPos += Vector2Int.up;
-					break;
-				case MoveDir.Down:
-					cellPos += Vector2Int.down;
-					break;
-				case MoveDir.Left:
-					cellPos += Vector2Int.left;
-					break;
-				case MoveDir.Right:
-					cellPos += Vector2Int.right;
-					break;
-			}
-
-			return cellPos;
-		}
-
-		//보는 방향 위치를 통한 방향 획득
-		public static MoveDir GetDirFromVec(Vector2Int dir)
-		{
-			if (dir.x > 0)
-				return MoveDir.Right;
-			else if (dir.x < 0)
-				return MoveDir.Left;
-			else if (dir.y > 0)
-				return MoveDir.Up;
-			else
-				return MoveDir.Down;
 		}
 
 		//피격
@@ -168,7 +126,7 @@ namespace GameServer.Game
 
 			Stat.Hp = Stat.MaxHp;
 			PosInfo.State = CreatureState.Idle;
-			PosInfo.MoveDir = MoveDir.Down;
+			PosInfo.MoveDir = 0;
 
 			room.EnterGame(this, randomPos: true);
 		}

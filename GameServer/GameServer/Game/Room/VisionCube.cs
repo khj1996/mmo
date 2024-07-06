@@ -30,14 +30,14 @@ namespace GameServer.Game.Room
 			List<Zone> zones = Owner.Room.GetAdjacentZones(Owner.CellPos);
 
 			//현재 유저의 위치
-			Vector2Int cellPos = Owner.CellPos;
+			Vector2Float cellPos = Owner.CellPos;
 			//각 존마다 반복하여 획득 가능한 오브젝트 획득
 			foreach (Zone zone in zones)
 			{
 				foreach (Player player in zone.Players)
 				{
-					int dx = player.CellPos.x - cellPos.x;
-					int dy = player.CellPos.y - cellPos.y;
+					float dx = player.CellPos.x - cellPos.x;
+					float dy = player.CellPos.y - cellPos.y;
 					if (Math.Abs(dx) > GameRoom.VisionCells)
 						continue;
 					if (Math.Abs(dy) > GameRoom.VisionCells)
@@ -47,8 +47,8 @@ namespace GameServer.Game.Room
 
 				foreach (Monster monster in zone.Monsters)
 				{
-					int dx = monster.CellPos.x - cellPos.x;
-					int dy = monster.CellPos.y - cellPos.y;
+					float dx = monster.CellPos.x - cellPos.x;
+					float dy = monster.CellPos.y - cellPos.y;
 					if (Math.Abs(dx) > GameRoom.VisionCells)
 						continue;
 					if (Math.Abs(dy) > GameRoom.VisionCells)
@@ -58,8 +58,8 @@ namespace GameServer.Game.Room
 
 				foreach (Projectile projectile in zone.Projectiles)
 				{
-					int dx = projectile.CellPos.x - cellPos.x;
-					int dy = projectile.CellPos.y - cellPos.y;
+					float dx = projectile.CellPos.x - cellPos.x;
+					float dy = projectile.CellPos.y - cellPos.y;
 					if (Math.Abs(dx) > GameRoom.VisionCells)
 						continue;
 					if (Math.Abs(dy) > GameRoom.VisionCells)

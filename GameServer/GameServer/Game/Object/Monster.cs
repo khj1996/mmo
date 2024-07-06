@@ -104,8 +104,8 @@ namespace GameServer.Game
                 return;
             }
 
-            Vector2Int dir = _target.CellPos - CellPos;
-            int dist = dir.cellDistFromZero;
+            Vector2Float dir = _target.CellPos - CellPos;
+            float dist = dir.cellDistFromZero;
             //대상이 멀어지면 추적 포기
             if (dist == 0 || dist > _chaseCellDist)
             {
@@ -116,7 +116,7 @@ namespace GameServer.Game
             }
 
             //경로 탐색
-            List<Vector2Int> path = Room.Map.FindPath(CellPos, _target.CellPos, checkObjects: true);
+            List<Vector2Float> path = Room.Map.FindPath(CellPos, _target.CellPos, checkObjects: true);
             //이미 근접했거나 먼경우
             if (path.Count < 2 || path.Count > _chaseCellDist)
             {
@@ -135,7 +135,7 @@ namespace GameServer.Game
             }
 
             // 이동
-            Dir = GetDirFromVec(path[1] - CellPos);
+            //Dir = GetDirFromVec(path[1] - CellPos);
             Room.Map.ApplyMove(this, path[1]);
             BroadcastMove();
         }
@@ -167,8 +167,8 @@ namespace GameServer.Game
                 }
 
                 // 스킬이 아직 사용 가능한지
-                Vector2Int dir = (_target.CellPos - CellPos);
-                int dist = dir.cellDistFromZero;
+                Vector2Float dir = (_target.CellPos - CellPos);
+                float dist = dir.cellDistFromZero;
                 bool canUseSkill = (dist <= _skillRange && (dir.x == 0 || dir.y == 0));
                 if (canUseSkill == false)
                 {
@@ -178,12 +178,13 @@ namespace GameServer.Game
                 }
 
                 // 타게팅 방향 주시
-                MoveDir lookDir = GetDirFromVec(dir);
+                //TODO : 공격및 이동 가능하게
+                /*MoveDir lookDir = GetDirFromVec(dir);
                 if (Dir != lookDir)
                 {
                     Dir = lookDir;
                     BroadcastMove();
-                }
+                }*/
 
                 Skill skillData = null;
                 DataManager.SkillDict.TryGetValue(1, out skillData);

@@ -22,13 +22,13 @@ namespace GameServer.Game
             // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
             if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
-                if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+                if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
                     return;
             }
 
             info.PosInfo.State = movePosInfo.State;
             info.PosInfo.MoveDir = movePosInfo.MoveDir;
-            Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
+            Map.ApplyMove(player, new Vector2Float(movePosInfo.PosX, movePosInfo.PosY));
 
             // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move();
@@ -62,12 +62,13 @@ namespace GameServer.Game
             {
                 case SkillType.SkillAuto:
                 {
-                    Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                    //TODO : 공격 가능하게 
+                    /*Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
                     GameObject target = Map.Find(skillPos);
                     if (target != null)
                     {
                         Console.WriteLine("Hit GameObject !");
-                    }
+                    }*/
                 }
                     break;
                 case SkillType.SkillProjectile:

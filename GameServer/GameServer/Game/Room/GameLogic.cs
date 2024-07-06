@@ -9,6 +9,9 @@ namespace GameServer.Game
         public static GameLogic Instance { get; } = new GameLogic();
 
         Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
+
+        public float updateFrame = 60.0f;
+        
         int _roomId = 1;
 
         public void Update()

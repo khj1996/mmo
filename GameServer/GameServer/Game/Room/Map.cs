@@ -11,12 +11,12 @@ namespace GameServer.Game
 	public struct Pos
 	{
 		public Pos(int y, int x) { Y = y; X = x; }
-		public int Y;
-		public int X;
+		public float Y;
+		public float X;
 
 		public static bool operator==(Pos lhs, Pos rhs)
 		{
-			return lhs.Y == rhs.Y && lhs.X == rhs.X;
+			return Math.Abs(lhs.Y - rhs.Y) < 0.01 && Math.Abs(lhs.X - rhs.X) < 0.01;
 		}
 
 		public static bool operator!=(Pos lhs, Pos rhs)
@@ -27,12 +27,6 @@ namespace GameServer.Game
 		public override bool Equals(object obj)
 		{
 			return (Pos)obj == this;
-		}
-
-		public override int GetHashCode()
-		{
-			long value = (Y << 32) | X;
-			return value.GetHashCode();
 		}
 
 		public override string ToString()
@@ -57,31 +51,26 @@ namespace GameServer.Game
 		}
 	}
 
-	public struct Vector2Int
+	public struct Vector2Float
 	{
-		public int x;
-		public int y;
+		public float x;
+		public float y;
 
-		public Vector2Int(int x, int y) { this.x = x; this.y = y; }
+		public Vector2Float(float x, float y) { this.x = x; this.y = y; }
 
-		public static Vector2Int up { get { return new Vector2Int(0, 1); } }
-		public static Vector2Int down { get { return new Vector2Int(0, -1); } }
-		public static Vector2Int left { get { return new Vector2Int(-1, 0); } }
-		public static Vector2Int right { get { return new Vector2Int(1, 0); } }
-
-		public static Vector2Int operator+(Vector2Int a, Vector2Int b)
+		public static Vector2Float operator+(Vector2Float a, Vector2Float b)
 		{
-			return new Vector2Int(a.x + b.x, a.y + b.y);
+			return new Vector2Float(a.x + b.x, a.y + b.y);
 		}
 
-		public static Vector2Int operator -(Vector2Int a, Vector2Int b)
+		public static Vector2Float operator -(Vector2Float a, Vector2Float b)
 		{
-			return new Vector2Int(a.x - b.x, a.y - b.y);
+			return new Vector2Float(a.x - b.x, a.y - b.y);
 		}
 
-		public float magnitude { get { return (float)Math.Sqrt(sqrMagnitude); } }
-		public int sqrMagnitude { get { return (x * x + y * y); } }
-		public int cellDistFromZero { get { return Math.Abs(x) + Math.Abs(y); } }
+		public float magnitude { get { return MathF.Sqrt(sqrMagnitude); } }
+		public float sqrMagnitude { get { return (x * x + y * y); } }
+		public float cellDistFromZero { get { return Math.Abs(x) + Math.Abs(y); } }
 	}
 
 	public class Map
@@ -100,29 +89,29 @@ namespace GameServer.Game
 		GameObject[,] _objects;
 
 		//이동 가능 여부 체크
-		public bool CanGo(Vector2Int cellPos, bool checkObjects = true)
+		public bool CanGo(Vector2Float cellPos, bool checkObjects = true)
 		{
 			if (cellPos.x < MinX || cellPos.x > MaxX)
 				return false;
 			if (cellPos.y < MinY || cellPos.y > MaxY)
 				return false;
 
-			int x = cellPos.x - MinX;
-			int y = MaxY - cellPos.y;
-			return !_collision[y, x] && (!checkObjects || _objects[y, x] == null);
+			float x = cellPos.x - MinX;
+			float y = MaxY - cellPos.y;
+			return !_collision[(int)y, (int)x] && (!checkObjects || _objects[(int)y, (int)x] == null);
 		}
 
 		//해당 위치 오브젝트 체크
-		public GameObject Find(Vector2Int cellPos)
+		public GameObject Find(Vector2Float cellPos)
 		{
 			if (cellPos.x < MinX || cellPos.x > MaxX)
 				return null;
 			if (cellPos.y < MinY || cellPos.y > MaxY)
 				return null;
 
-			int x = cellPos.x - MinX;
-			int y = MaxY - cellPos.y;
-			return _objects[y, x];
+			float x = cellPos.x - MinX;
+			float y = MaxY - cellPos.y;
+			return _objects[(int)y, (int)x];
 		}
 
 		//객체 제거시
@@ -144,17 +133,17 @@ namespace GameServer.Game
 			zone.Remove(gameObject);
 
 			{
-				int x = posInfo.PosX - MinX;
-				int y = MaxY - posInfo.PosY;
-				if (_objects[y, x] == gameObject)
-					_objects[y, x] = null;
+				float x = posInfo.PosX - MinX;
+				float y = MaxY - posInfo.PosY;
+				if (_objects[(int)y, (int)x] == gameObject)
+					_objects[(int)y, (int)x] = null;
 			}
 
 			return true;
 		}
 
 		//이동 적용
-		public bool ApplyMove(GameObject gameObject, Vector2Int dest, bool checkObjects = true, bool collision = true)
+		public bool ApplyMove(GameObject gameObject, Vector2Float dest, bool checkObjects = true, bool collision = true)
 		{
 			if (gameObject.Room == null)
 				return false;
@@ -168,15 +157,15 @@ namespace GameServer.Game
 			if (collision)
 			{
 				{
-					int x = posInfo.PosX - MinX;
-					int y = MaxY - posInfo.PosY;
-					if (_objects[y, x] == gameObject)
-						_objects[y, x] = null;
+					float x = posInfo.PosX - MinX;
+					float y = MaxY - posInfo.PosY;
+					if (_objects[(int)y, (int)x] == gameObject)
+						_objects[(int)y, (int)x] = null;
 				}
 				{ 
-					int x = dest.x - MinX;
-					int y = MaxY - dest.y;
-					_objects[y, x] = gameObject;
+					float x = dest.x - MinX;
+					float y = MaxY - dest.y;
+					_objects[(int)y, (int)x] = gameObject;
 				}
 			}
 
@@ -258,7 +247,7 @@ namespace GameServer.Game
 		int[] _deltaX = new int[] { 0, 0, -1, 1 };
 		int[] _cost = new int[] { 10, 10, 10, 10 };
 
-		public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObjects = true, int maxDist = 10)
+		public List<Vector2Float> FindPath(Vector2Float startCellPos, Vector2Float destCellPos, bool checkObjects = true, int maxDist = 10)
 		{
 			List<Pos> path = new List<Pos>();
 
@@ -285,9 +274,9 @@ namespace GameServer.Game
 			Pos dest = Cell2Pos(destCellPos);
 
 			// 시작점 발견 (예약 진행)
-			openList.Add(pos, 10 * (Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)));
+			openList.Add(pos, 10 * (int)(Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)));
 
-			pq.Push(new PQNode() { F = 10 * (Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)), G = 0, Y = pos.Y, X = pos.X });
+			pq.Push(new PQNode() { F = 10 * (int)(Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)), G = 0, Y = (int)pos.Y, X = (int)pos.X });
 			parent.Add(pos, pos);
 
 			while (pq.Count > 0)
@@ -309,7 +298,7 @@ namespace GameServer.Game
 				// 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약(open)한다
 				for (int i = 0; i < _deltaY.Length; i++)
 				{
-					Pos next = new Pos(node.Y + _deltaY[i], node.X + _deltaX[i]);
+					Pos next = new Pos((int)node.Y + _deltaY[i], (int)node.X + _deltaX[i]);
 
 					// 너무 멀면 스킵
 					if (Math.Abs(pos.Y - next.Y) + Math.Abs(pos.X - next.X) > maxDist)
@@ -329,7 +318,7 @@ namespace GameServer.Game
 
 					// 비용 계산
 					int g = 0;// node.G + _cost[i];
-					int h = 10 * ((dest.Y - next.Y) * (dest.Y - next.Y) + (dest.X - next.X) * (dest.X - next.X));
+					int h = 10 * (int)((dest.Y - next.Y) * (dest.Y - next.Y) + (dest.X - next.X) * (dest.X - next.X));
 					// 다른 경로에서 더 빠른 길 이미 찾았으면 스킵
 
 					int value = 0;
@@ -343,7 +332,7 @@ namespace GameServer.Game
 					if (openList.TryAdd(next, g + h) == false)
 						openList[next] = g + h;
 
-					pq.Push(new PQNode() { F = g + h, G = g, Y = next.Y, X = next.X });
+					pq.Push(new PQNode() { F = g + h, G = g, Y = (int)next.Y, X = (int)next.X });
 
 					if (parent.TryAdd(next, node) == false)
 						parent[next] = node;
@@ -353,9 +342,9 @@ namespace GameServer.Game
 			return CalcCellPathFromParent(parent, dest);
 		}
 
-		List<Vector2Int> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
+		List<Vector2Float> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
 		{
-			List<Vector2Int> cells = new List<Vector2Int>();
+			List<Vector2Float> cells = new List<Vector2Float>();
 
 			if (parent.ContainsKey(dest) == false)
 			{
@@ -364,12 +353,12 @@ namespace GameServer.Game
 
 				foreach (Pos pos in parent.Keys)
 				{
-					int dist = Math.Abs(dest.X - pos.X) + Math.Abs(dest.Y - pos.Y);
+					float dist = Math.Abs(dest.X - pos.X) + Math.Abs(dest.Y - pos.Y);
 					// 제일 우수한 후보를 뽑는다
 					if (dist < bestDist)
 					{
 						best = pos;
-						bestDist = dist;
+						bestDist = (int)dist;
 					}
 				}
 
@@ -390,16 +379,16 @@ namespace GameServer.Game
 			return cells;
 		}
 
-		Pos Cell2Pos(Vector2Int cell)
+		Pos Cell2Pos(Vector2Float cell)
 		{
 			// CellPos -> ArrayPos
-			return new Pos(MaxY - cell.y, cell.x - MinX);
+			return new Pos(MaxY - (int)cell.y, (int)cell.x - MinX);
 		}
 
-		Vector2Int Pos2Cell(Pos pos)
+		Vector2Float Pos2Cell(Pos pos)
 		{
 			// ArrayPos -> CellPos
-			return new Vector2Int(pos.X + MinX, MaxY - pos.Y);
+			return new Vector2Float(pos.X + MinX, MaxY - pos.Y);
 		}
 
 		#endregion
