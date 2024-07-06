@@ -47,7 +47,7 @@ namespace GameServer.Game
 		}
 
 		//보는 방향
-		public float Dir
+		public moveDir Dir
 		{
 			get { return PosInfo.MoveDir; }
 			set { PosInfo.MoveDir = value; }
@@ -126,7 +126,12 @@ namespace GameServer.Game
 
 			Stat.Hp = Stat.MaxHp;
 			PosInfo.State = CreatureState.Idle;
-			PosInfo.MoveDir = 0;
+			PosInfo.MoveDir = new moveDir()
+			{
+				X = 0,
+				Y = 0,
+				Z = 0
+			};
 
 			room.EnterGame(this, randomPos: true);
 		}

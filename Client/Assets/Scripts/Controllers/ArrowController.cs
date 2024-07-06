@@ -6,31 +6,17 @@ using static Define;
 
 public class ArrowController : BaseController
 {
-	protected override void Init()
-	{
-		switch (Dir)
-		{
-			case MoveDir.Up:
-				transform.rotation = Quaternion.Euler(0, 0, 0);
-				break;
-			case MoveDir.Down:
-				transform.rotation = Quaternion.Euler(0, 0, -180);
-				break;
-			case MoveDir.Left:
-				transform.rotation = Quaternion.Euler(0, 0, 90);
-				break;
-			case MoveDir.Right:
-				transform.rotation = Quaternion.Euler(0, 0, -90);
-				break;
-		}
+    protected override void Init(Vector3 dir)
+    {
+        transform.rotation = Quaternion.Euler(dir.x, dir.y, dir.z);
 
-		State = CreatureState.Moving;
 
-		base.Init();
-	}
+        State = CreatureState.Moving;
 
-	protected override void UpdateAnimation()
-	{
+        base.Init();
+    }
 
-	}
+    protected override void UpdateAnimation()
+    {
+    }
 }

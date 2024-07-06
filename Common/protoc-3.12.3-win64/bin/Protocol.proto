@@ -198,9 +198,15 @@ message ObjectInfo {
 
 message PositionInfo {
   CreatureState state = 1;
-  float moveDir = 2;
+  moveDir moveDir = 2;
   float posX = 3;
   float posY = 4;
+  float posZ = 5;
+}
+message moveDir{
+  float x = 1;
+  float y = 2;
+  float z = 3;
 }
 
 message StatInfo {

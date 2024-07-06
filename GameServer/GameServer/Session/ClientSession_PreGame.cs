@@ -97,7 +97,12 @@ namespace GameServer
                 MyPlayer.PlayerDbId = playerInfo.PlayerDbId;
                 MyPlayer.Info.Name = playerInfo.Name;
                 MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-                MyPlayer.Info.PosInfo.MoveDir = 0;
+                MyPlayer.Info.PosInfo.MoveDir = new moveDir()
+                {
+                    X = 0,
+                    Y = 0,
+                    Z = 0
+                };
                 MyPlayer.Info.PosInfo.PosX = 0;
                 MyPlayer.Info.PosInfo.PosY = 0;
                 MyPlayer.Stat.MergeFrom(playerInfo.StatInfo);
