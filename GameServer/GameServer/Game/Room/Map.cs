@@ -152,7 +152,7 @@ namespace GameServer.Game
             if (gameObject.Room.Map != this)
                 return false;
 
-            PositionInfo posInfo = gameObject.PosInfo;
+            PositionInfo posInfo = gameObject.Info.PosInfo;
             if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
                 return false;
             if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
@@ -179,7 +179,7 @@ namespace GameServer.Game
             if (gameObject.Room.Map != this)
                 return false;
 
-            PositionInfo posInfo = gameObject.PosInfo;
+            PositionInfo posInfo = gameObject.Info.PosInfo;
             if (CanGo(dest, checkObjects) == false)
                 return false;
 

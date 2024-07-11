@@ -101,7 +101,6 @@ public class BaseController : MonoBehaviour
                 return;
             }
 
-            Debug.Log(value);
             _moveDir = value;
 
             UpdateAnimation();

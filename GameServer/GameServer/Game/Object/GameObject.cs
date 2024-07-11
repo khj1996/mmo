@@ -23,21 +23,13 @@ namespace GameServer.Game
         public GameRoom Room { get; set; }
 
         //오브젝트 정보
-        public ObjectInfo Info { get; set; } = new();
-
-        //위치 정보
-        public PositionInfo PosInfo { get; private set; } = new();
-
-        //이동 방향
-        public moveDir moveDir { get; private set; } = new();
-
-        //능력치 정보
-        public StatInfo Stat { get; private set; } = new();
+        public ObjectInfo Info { get; private set; } = new();
+        
 
         //총 공격력
         public virtual int TotalAttack
         {
-            get { return Stat.Attack; }
+            get { return Info.StatInfo.Attack; }
         }
 
         //총 방어력
@@ -49,36 +41,39 @@ namespace GameServer.Game
         //속도
         public float Speed
         {
-            get { return Stat.Speed; }
-            set { Stat.Speed = value; }
+            get { return Info.StatInfo.Speed; }
+            set { Info.StatInfo.Speed = value; }
         }
 
         //체력
         public int Hp
         {
-            get { return Stat.Hp; }
-            set { Stat.Hp = Math.Clamp(value, 0, Stat.MaxHp); }
+            get { return Info.StatInfo.Hp; }
+            set { Info.StatInfo.Hp = Math.Clamp(value, 0, Info.StatInfo.MaxHp); }
         }
 
         //보는 방향
-        public moveDir Dir
+        public moveDir MoveDir
         {
-            get { return moveDir; }
-            set { moveDir = value; }
+            get { return Info.MoveDir; }
+            set { Info.MoveDir = value; }
         }
 
         //오브젝트 상태
         public CreatureState State
         {
-            get { return PosInfo.State; }
-            set { PosInfo.State = value; }
+            get { return Info.PosInfo.State; }
+            set { Info.PosInfo.State = value; }
         }
 
         //생성자
         public GameObject()
         {
-            Info.PosInfo = PosInfo;
-            Info.StatInfo = Stat;
+            Info = new ObjectInfo
+            {
+                PosInfo = new PositionInfo(),
+                StatInfo = new StatInfo()
+            };
         }
 
         //업데이트
@@ -90,26 +85,27 @@ namespace GameServer.Game
         public virtual void Move()
         {
             //TODO : 이동 가능한 위치인지 추가 필요
-            PosInfo.PosX += Dir.X * Speed * (1.0f / GameLogic.Instance.updateFrame);
-            PosInfo.PosY += Dir.Y * Speed * (1.0f / GameLogic.Instance.updateFrame);
-            Console.WriteLine(PosInfo.PosX + "  " + PosInfo.PosY);
+            Info.PosInfo.PosX += MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame);
+            Info.PosInfo.PosY += MoveDir.Y * Speed * (1.0f / GameLogic.Instance.updateFrame);
+            //Console.WriteLine(PosInfo.PosX + "  " + PosInfo.PosY);
+            Console.WriteLine(MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame));
         }
 
         public virtual void UpdateMoveDir(C_Move movePacket)
         {
-            Dir = movePacket.MoveDir;
+            MoveDir = movePacket.MoveDir;
             State = movePacket.PosInfo.State;
         }
 
         //위치
         public Vector2Float CellPos
         {
-            get { return new Vector2Float(PosInfo.PosX, PosInfo.PosY); }
+            get { return new Vector2Float(Info.PosInfo.PosX, Info.PosInfo.PosY); }
 
             set
             {
-                PosInfo.PosX = value.x;
-                PosInfo.PosY = value.y;
+                Info.PosInfo.PosX = value.x;
+                Info.PosInfo.PosY = value.y;
             }
         }
 
@@ -120,14 +116,14 @@ namespace GameServer.Game
                 return;
 
             damage = Math.Max(damage - TotalDefence, 0);
-            Stat.Hp = Math.Max(Stat.Hp - damage, 0);
+            Info.StatInfo.Hp = Math.Max(Info.StatInfo.Hp - damage, 0);
 
             S_ChangeHp changePacket = new S_ChangeHp();
             changePacket.ObjectId = Id;
-            changePacket.Hp = Stat.Hp;
+            changePacket.Hp = Info.StatInfo.Hp;
             Room.Broadcast(CellPos, changePacket);
 
-            if (Stat.Hp <= 0)
+            if (Info.StatInfo.Hp <= 0)
             {
                 OnDead(attacker);
             }
@@ -149,9 +145,9 @@ namespace GameServer.Game
             GameRoom room = Room;
             room.LeaveGame(Id);
 
-            Stat.Hp = Stat.MaxHp;
-            PosInfo.State = CreatureState.Idle;
-            Dir = new moveDir()
+            Info.StatInfo.Hp = Info.StatInfo.MaxHp;
+            Info.PosInfo.State = CreatureState.Idle;
+            MoveDir = new moveDir()
             {
                 X = 0,
                 Y = 0,

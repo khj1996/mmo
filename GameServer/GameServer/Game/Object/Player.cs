@@ -31,7 +31,7 @@ namespace GameServer.Game
         //전체 공격력
         public override int TotalAttack
         {
-            get { return Stat.Attack + WeaponDamage; }
+            get { return Info.StatInfo.Attack + WeaponDamage; }
         }
 
         //전체 방어력
@@ -104,7 +104,7 @@ namespace GameServer.Game
         {
             Move();
 
-            //BroadcastMove();
+            BroadcastMove();
         }
 
         void BroadcastMove()
@@ -112,8 +112,8 @@ namespace GameServer.Game
             // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move();
             resMovePacket.ObjectId = Info.ObjectId;
-            resMovePacket.PosInfo = PosInfo;
-            resMovePacket.MoveDir = Dir;
+            resMovePacket.PosInfo = Info.PosInfo;
+            resMovePacket.MoveDir = MoveDir;
 
             List<Zone> zones = Room.GetAdjacentZones(CellPos);
 

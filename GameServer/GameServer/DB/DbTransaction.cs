@@ -20,11 +20,11 @@ namespace GameServer.DB
 			//플레이어 정보
 			PlayerDb playerDb = new PlayerDb();
 			playerDb.PlayerDbId = player.PlayerDbId;
-			playerDb.Hp = player.Stat.Hp;
+			playerDb.Hp = player.Info.StatInfo.Hp;
 			playerDb.CurMap = player.Room.Map.MapId;
-			playerDb.PosX = player.PosInfo.PosX;
-			playerDb.PosY = player.PosInfo.PosY;
-			playerDb.PosZ = player.PosInfo.PosZ;
+			playerDb.PosX = player.Info.PosInfo.PosX;
+			playerDb.PosY = player.Info.PosInfo.PosY;
+			playerDb.PosZ = player.Info.PosInfo.PosZ;
 			
 			//플레이어 정보를 db에 저장
 			Instance.Push(() =>

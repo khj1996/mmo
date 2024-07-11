@@ -111,7 +111,7 @@ namespace GameServer
                 };
                 MyPlayer.Info.PosInfo.PosX = playerInfo.PosInfo.PosX;
                 MyPlayer.Info.PosInfo.PosY = playerInfo.PosInfo.PosY;
-                MyPlayer.Stat.MergeFrom(playerInfo.StatInfo);
+                MyPlayer.Info.StatInfo.MergeFrom(playerInfo.StatInfo);
                 MyPlayer.Session = this;
 
                 S_ItemList itemListPacket = new S_ItemList();

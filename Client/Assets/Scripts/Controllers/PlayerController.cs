@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using static Define;
 
@@ -94,6 +95,13 @@ public class PlayerController : CreatureController
     protected override void UpdateController()
     {
         base.UpdateController();
+    }
+
+    protected override void UpdateMoving()
+    {
+        
+        transform.DOMove(transform.position + Dir.normalized * (Speed * Time.deltaTime), Time.deltaTime);
+        
     }
 
     public override void UseSkill(int skillId)

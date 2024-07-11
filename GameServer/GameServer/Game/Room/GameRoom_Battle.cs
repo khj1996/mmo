@@ -50,10 +50,10 @@ namespace GameServer.Game
 
                     arrow.Owner = player;
                     arrow.Data = skillData;
-                    arrow.PosInfo.State = CreatureState.Moving;
-                    arrow.Dir =  skillPacket.MoveDir;
-                    arrow.PosInfo.PosX = player.PosInfo.PosX;
-                    arrow.PosInfo.PosY = player.PosInfo.PosY;
+                    arrow.Info.PosInfo.State = CreatureState.Moving;
+                    arrow.MoveDir =  skillPacket.MoveDir;
+                    arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
+                    arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
                     arrow.Speed = skillData.projectile.speed;
                     Push(EnterGame, arrow, false);
                 }

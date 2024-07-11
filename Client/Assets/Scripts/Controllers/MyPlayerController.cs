@@ -124,6 +124,7 @@ public class MyPlayerController : PlayerController
         }
 
         transform.DOMove(transform.position + Dir.normalized * (Speed * Time.deltaTime), Time.deltaTime);
+        Debug.Log(Dir.normalized * (Speed * Time.deltaTime));
 
         CheckUpdatedFlag();
     }

@@ -10,7 +10,7 @@ namespace GameServer.Game
 
         Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
 
-        public float updateFrame =25.0f;
+        public float updateFrame =60.0f;
         
         int _roomId = 1;
 

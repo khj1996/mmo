@@ -54,6 +54,7 @@ class PacketHandler
 
         Debug.Log(movePacket.PosInfo.PosX + "   " + movePacket.PosInfo.PosY);
         bc.PosInfo = movePacket.PosInfo;
+        bc.Dir = new Vector3(movePacket.MoveDir.X,movePacket.MoveDir.Y,movePacket.MoveDir.Z);
     }
 
     public static void S_SkillHandler(PacketSession session, IMessage packet)

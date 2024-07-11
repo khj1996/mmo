@@ -107,8 +107,8 @@ namespace GameServer.Game
             else
             {
                 Vector2Float respawnPos;
-                respawnPos.x = gameObject.PosInfo.PosX;
-                respawnPos.y = gameObject.PosInfo.PosY;
+                respawnPos.x = gameObject.Info.PosInfo.PosX;
+                respawnPos.y = gameObject.Info.PosInfo.PosY;
                 gameObject.CellPos = respawnPos;
             }
 

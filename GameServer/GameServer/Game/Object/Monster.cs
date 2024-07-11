@@ -24,8 +24,8 @@ namespace GameServer.Game
 
             MonsterData monsterData = null;
             DataManager.MonsterDict.TryGetValue(TemplateId, out monsterData);
-            Stat.MergeFrom(monsterData.stat);
-            Stat.Hp = monsterData.stat.MaxHp;
+            Info.StatInfo.MergeFrom(monsterData.stat);
+            Info.StatInfo.Hp = monsterData.stat.MaxHp;
             State = CreatureState.Idle;
         }
 
@@ -146,7 +146,7 @@ namespace GameServer.Game
             // 다른 플레이어한테도 알려준다
             S_Move movePacket = new S_Move();
             movePacket.ObjectId = Id;
-            movePacket.PosInfo = PosInfo;
+            movePacket.PosInfo = Info.PosInfo;
             Room.Broadcast(CellPos, movePacket);
         }
 
