@@ -11,7 +11,7 @@ namespace GameServer.DB
 		public static DbTransaction Instance { get; } = new DbTransaction();
 
 		// Me (GameRoom) -> You (Db) -> Me (GameRoom)
-		public static void SavePlayerStatus_AllInOne(Player player, GameRoom room)
+		public static void SavePlayerStatus(Player player, GameRoom room)
 		{
 			//예외처리
 			if (player == null || room == null)
@@ -21,6 +21,10 @@ namespace GameServer.DB
 			PlayerDb playerDb = new PlayerDb();
 			playerDb.PlayerDbId = player.PlayerDbId;
 			playerDb.Hp = player.Stat.Hp;
+			playerDb.CurMap = player.Room.Map.MapId;
+			playerDb.PosX = player.PosInfo.PosX;
+			playerDb.PosY = player.PosInfo.PosY;
+			playerDb.PosZ = player.PosInfo.PosZ;
 			
 			//플레이어 정보를 db에 저장
 			Instance.Push(() =>
@@ -29,6 +33,10 @@ namespace GameServer.DB
 				{
 					db.Entry(playerDb).State = EntityState.Unchanged;
 					db.Entry(playerDb).Property(nameof(PlayerDb.Hp)).IsModified = true;
+					db.Entry(playerDb).Property(nameof(PlayerDb.CurMap)).IsModified = true;
+					db.Entry(playerDb).Property(nameof(PlayerDb.PosX)).IsModified = true;
+					db.Entry(playerDb).Property(nameof(PlayerDb.PosY)).IsModified = true;
+					db.Entry(playerDb).Property(nameof(PlayerDb.PosZ)).IsModified = true;
 					bool success = db.SaveChangesEx();
 					if (success)
 					{
@@ -36,40 +44,6 @@ namespace GameServer.DB
 					}
 				}
 			});			
-		}
-
-		// Me (GameRoom)
-		public static void SavePlayerStatus_Step1(Player player, GameRoom room)
-		{
-			if (player == null || room == null)
-				return;
-
-			// Me (GameRoom)
-			PlayerDb playerDb = new PlayerDb();
-			playerDb.PlayerDbId = player.PlayerDbId;
-			playerDb.Hp = player.Stat.Hp;
-			Instance.Push<PlayerDb, GameRoom>(SavePlayerStatus_Step2, playerDb, room);
-		}
-
-		// You (Db)
-		public static void SavePlayerStatus_Step2(PlayerDb playerDb, GameRoom room)
-		{
-			using (AppDbContext db = new AppDbContext())
-			{
-				db.Entry(playerDb).State = EntityState.Unchanged;
-				db.Entry(playerDb).Property(nameof(PlayerDb.Hp)).IsModified = true;
-				bool success = db.SaveChangesEx();
-				if (success)
-				{
-					room.Push(SavePlayerStatus_Step3, playerDb.Hp);
-				}
-			}
-		}
-
-		// Me
-		public static void SavePlayerStatus_Step3(int hp)
-		{
-
 		}
 
 		public static void RewardPlayer(Player player, RewardData rewardData, GameRoom room)

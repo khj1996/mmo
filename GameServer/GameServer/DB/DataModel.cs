@@ -29,6 +29,10 @@ namespace GameServer.DB
         public int Attack { get; set; }
         public float Speed { get; set; }
         public int TotalExp { get; set; }
+        public int CurMap { get; set; }
+        public float PosX { get; set; }
+        public float PosY { get; set; }
+        public float PosZ { get; set; }
     }
 
     [Table("Item")]

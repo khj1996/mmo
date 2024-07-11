@@ -108,13 +108,13 @@ public class MyPlayerController : PlayerController
     {
         _moveKeyPressed = true;
         Dir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
-        if (Dir.x == 0 && Dir.x == 0)
+        if (Dir.x == 0 && Dir.y == 0)
         {
             _moveKeyPressed = false;
         }
     }
 
-    protected override void MoveToNextPos()
+    protected override void UpdateMoving()
     {
         if (_moveKeyPressed == false)
         {
@@ -123,7 +123,7 @@ public class MyPlayerController : PlayerController
             return;
         }
 
-        transform.DOMove(transform.position + Speed * Dir.normalized, Time.deltaTime);
+        transform.DOMove(transform.position + Dir.normalized * (Speed * Time.deltaTime), Time.deltaTime);
 
         CheckUpdatedFlag();
     }
@@ -135,7 +135,7 @@ public class MyPlayerController : PlayerController
             Vector3 moveDir = Dir.normalized;
             C_Move movePacket = new C_Move();
             movePacket.PosInfo = PosInfo;
-            movePacket.PosInfo.MoveDir = new moveDir()
+            movePacket.MoveDir = new moveDir()
             {
                 X = moveDir.x,
                 Y = moveDir.y,

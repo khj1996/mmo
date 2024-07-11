@@ -41,7 +41,7 @@ namespace LoginServer
         }
 
         //엔드포인트 포트
-        public static int Port { get; set; } = 7777;
+        public static int Port { get; set; } = 5000;
 
         //ip주소
         public static string IpAddress { get; set; }

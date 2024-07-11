@@ -63,6 +63,12 @@ namespace GameServer
                             Attack = playerDb.Attack,
                             Speed = playerDb.Speed,
                             TotalExp = playerDb.TotalExp
+                        },
+                        PosInfo = new PositionInfo()
+                        {
+                            PosX = playerDb.PosX,
+                            PosY = playerDb.PosY,
+                            PosZ = 0
                         }
                     };
 
@@ -97,14 +103,14 @@ namespace GameServer
                 MyPlayer.PlayerDbId = playerInfo.PlayerDbId;
                 MyPlayer.Info.Name = playerInfo.Name;
                 MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-                MyPlayer.Info.PosInfo.MoveDir = new moveDir()
+                MyPlayer.Info.MoveDir = new moveDir()
                 {
                     X = 0,
                     Y = 0,
                     Z = 0
                 };
-                MyPlayer.Info.PosInfo.PosX = 0;
-                MyPlayer.Info.PosInfo.PosY = 0;
+                MyPlayer.Info.PosInfo.PosX = playerInfo.PosInfo.PosX;
+                MyPlayer.Info.PosInfo.PosY = playerInfo.PosInfo.PosY;
                 MyPlayer.Stat.MergeFrom(playerInfo.StatInfo);
                 MyPlayer.Session = this;
 
@@ -141,7 +147,7 @@ namespace GameServer
             GameLogic.Instance.Push(() =>
             {
                 GameRoom room = GameLogic.Instance.Find(1);
-                room.Push(room.EnterGame, MyPlayer, true);
+                room.Push(room.EnterGame, MyPlayer, false);
             });
         }
 
@@ -178,7 +184,11 @@ namespace GameServer
                         Attack = stat.Attack,
                         Speed = stat.Speed,
                         TotalExp = 0,
-                        AccountDbId = AccountDbId
+                        AccountDbId = AccountDbId,
+                        CurMap = 0,
+                        PosX = 0,
+                        PosY = 0,
+                        PosZ = 0
                     };
 
                     db.Players.Add(newPlayerDb);
@@ -199,6 +209,12 @@ namespace GameServer
                             Attack = stat.Attack,
                             Speed = stat.Speed,
                             TotalExp = 0
+                        },
+                        PosInfo = new PositionInfo()
+                        {
+                            PosX = 0,
+                            PosY = 0,
+                            PosZ = 0
                         }
                     };
 

@@ -9,35 +9,6 @@ namespace GameServer.Game
 {
     public partial class GameRoom : JobSerializer
     {
-        //이동
-        public void HandleMove(Player player, C_Move movePacket)
-        {
-            if (player == null)
-                return;
-
-            // TODO : 검증
-            PositionInfo movePosInfo = movePacket.PosInfo;
-            ObjectInfo info = player.Info;
-
-            // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
-            {
-                if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
-                    return;
-            }
-
-            info.PosInfo.State = movePosInfo.State;
-            info.PosInfo.MoveDir = movePosInfo.MoveDir;
-            Map.ApplyMove(player, new Vector2Float(movePosInfo.PosX, movePosInfo.PosY));
-
-            // 다른 플레이어한테도 알려준다
-            S_Move resMovePacket = new S_Move();
-            resMovePacket.ObjectId = player.Info.ObjectId;
-            resMovePacket.PosInfo = movePacket.PosInfo;
-
-            Broadcast(player.CellPos, resMovePacket);
-        }
-
         public void HandleSkill(Player player, C_Skill skillPacket)
         {
             if (player == null)
@@ -80,7 +51,7 @@ namespace GameServer.Game
                     arrow.Owner = player;
                     arrow.Data = skillData;
                     arrow.PosInfo.State = CreatureState.Moving;
-                    arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
+                    arrow.Dir =  skillPacket.MoveDir;
                     arrow.PosInfo.PosX = player.PosInfo.PosX;
                     arrow.PosInfo.PosY = player.PosInfo.PosY;
                     arrow.Speed = skillData.projectile.speed;

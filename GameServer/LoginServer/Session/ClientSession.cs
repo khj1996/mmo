@@ -41,7 +41,7 @@ namespace LoginServer
             if (_pingpongTick > 0)
             {
                 long delta = (System.Environment.TickCount64 - _pingpongTick);
-                if (delta > 30 * 1000)
+                if (delta > 3600 * 1000)
                 {
                     Console.WriteLine("Disconnected by PingCheck");
                     Disconnect();

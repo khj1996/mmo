@@ -38,6 +38,7 @@ public class BaseController : MonoBehaviour
     protected bool _updated = false;
 
     PositionInfo _positionInfo = new PositionInfo();
+    Vector3 _moveDir = new Vector3();
 
     public PositionInfo PosInfo
     {
@@ -49,7 +50,6 @@ public class BaseController : MonoBehaviour
 
             CellPos = new Vector3Int((int)value.PosX, (int)value.PosY, 0);
             State = value.State;
-            Dir = new Vector3(value.MoveDir.X, value.MoveDir.Y, value.MoveDir.Z);
         }
     }
 
@@ -93,13 +93,16 @@ public class BaseController : MonoBehaviour
 
     public Vector3 Dir
     {
-        get { return Dir; }
+        get { return _moveDir; }
         set
         {
-            if (PosInfo.MoveDir.X == value.x && PosInfo.MoveDir.Y == value.y && PosInfo.MoveDir.Z == value.z)
+            if (_moveDir.x == value.x && _moveDir.y == value.y && _moveDir.z == value.z)
+            {
                 return;
+            }
 
-            Dir = value;
+            Debug.Log(value);
+            _moveDir = value;
 
             UpdateAnimation();
             _updated = true;

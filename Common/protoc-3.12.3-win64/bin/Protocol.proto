@@ -100,15 +100,18 @@ message S_Despawn {
 
 message C_Move {
   PositionInfo posInfo = 1;
+  moveDir moveDir = 2;
 }
 
 message S_Move {
   int32 objectId = 1;
   PositionInfo posInfo = 2;
+  moveDir moveDir = 3;
 }
 
 message C_Skill {
   SkillInfo info = 1;
+  moveDir moveDir = 2;
 }
 
 message S_Skill {
@@ -187,18 +190,19 @@ message LobbyPlayerInfo {
   int32 playerDbId = 1;
   string name = 2;
   StatInfo statInfo = 3;
+  PositionInfo posInfo = 4;
 }
 
 message ObjectInfo {
   int32 objectId = 1;
   string name = 2;
   PositionInfo posInfo = 3;
-  StatInfo statInfo = 4;
+  moveDir moveDir = 4;
+  StatInfo statInfo = 5;
 }
 
 message PositionInfo {
   CreatureState state = 1;
-  moveDir moveDir = 2;
   float posX = 3;
   float posY = 4;
   float posZ = 5;

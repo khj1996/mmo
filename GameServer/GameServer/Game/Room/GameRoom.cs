@@ -16,6 +16,7 @@ namespace GameServer.Game
         //방 id
         public int RoomId { get; set; }
 
+
         //방 객체 관리를 위한 딕셔너리
         Dictionary<int, Player> _players = new Dictionary<int, Player>();
         Dictionary<int, Monster> _monsters = new Dictionary<int, Monster>();
@@ -25,6 +26,7 @@ namespace GameServer.Game
         public int ZoneCells { get; private set; }
 
         public Map Map { get; private set; } = new Map();
+
 
         // ㅁㅁㅁ
         // ㅁㅁㅁ
@@ -67,12 +69,12 @@ namespace GameServer.Game
             }
 
             //몬스터 생성
-            for (int i = 0; i < 500; i++)
+            /*for (int i = 0; i < 500; i++)
             {
                 Monster monster = ObjectManager.Instance.Add<Monster>();
                 monster.Init(1);
                 EnterGame(monster, randomPos: true);
-            }
+            }*/
         }
 
         // 누군가 주기적으로 호출해줘야 한다
@@ -102,6 +104,13 @@ namespace GameServer.Game
                     }
                 }
             }
+            else
+            {
+                Vector2Float respawnPos;
+                respawnPos.x = gameObject.PosInfo.PosX;
+                respawnPos.y = gameObject.PosInfo.PosY;
+                gameObject.CellPos = respawnPos;
+            }
 
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
 
@@ -119,10 +128,11 @@ namespace GameServer.Game
                 // 본인한테 정보 전송
                 {
                     S_EnterGame enterPacket = new S_EnterGame();
+
                     enterPacket.Player = player.Info;
                     player.Session.Send(enterPacket);
-
                     player.Vision.Update();
+                    player.Update();
                 }
             }
             else if (type == GameObjectType.Monster)

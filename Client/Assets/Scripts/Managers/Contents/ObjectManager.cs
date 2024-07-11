@@ -34,6 +34,7 @@ public class ObjectManager
 				MyPlayer = go.GetComponent<MyPlayerController>();
 				MyPlayer.Id = info.ObjectId;
 				MyPlayer.PosInfo = info.PosInfo;
+				MyPlayer.Dir = new Vector3();
 				MyPlayer.Stat.MergeFrom(info.StatInfo);
 				MyPlayer.SyncPos();
 			}
