@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using static GameServer.Game.GameLogic;
 
 namespace GameServer.Game
 {
@@ -24,7 +25,7 @@ namespace GameServer.Game
 
         //오브젝트 정보
         public ObjectInfo Info { get; private set; } = new();
-        
+
 
         //총 공격력
         public virtual int TotalAttack
@@ -85,10 +86,11 @@ namespace GameServer.Game
         public virtual void Move()
         {
             //TODO : 이동 가능한 위치인지 추가 필요
-            Info.PosInfo.PosX += MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame);
-            Info.PosInfo.PosY += MoveDir.Y * Speed * (1.0f / GameLogic.Instance.updateFrame);
-            //Console.WriteLine(PosInfo.PosX + "  " + PosInfo.PosY);
-            Console.WriteLine(MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame));
+            Info.PosInfo.PosX += MoveDir.X * Speed * (60.0f / Instance.updateFrame)/Instance.updateFrame;
+            Info.PosInfo.PosY += MoveDir.Y * Speed * (60.0f / Instance.updateFrame)/Instance.updateFrame;
+            Console.WriteLine(Speed * (60.0f / Instance.updateFrame)/Instance.updateFrame);
+            //Console.WriteLine(1.0f / GameLogic.Instance.updateFrame);
+            //Console.WriteLine(MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame));
         }
 
         public virtual void UpdateMoveDir(C_Move movePacket)

@@ -71,7 +71,7 @@ namespace GameServer.Game
 
             // 25프레임 (0.2초마다 한번씩 Update)
             if (Room != null)
-                _job = Room.PushAfter(40, Update);
+                _job = Room.PushAfter(1000 / GameLogic.Instance.updateFrame, Update);
         }
 
         protected virtual void UpdateIdle()

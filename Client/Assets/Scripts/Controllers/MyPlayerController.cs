@@ -123,8 +123,8 @@ public class MyPlayerController : PlayerController
             return;
         }
 
-        transform.DOMove(transform.position + Dir.normalized * (Speed * Time.deltaTime), Time.deltaTime);
-        Debug.Log(Dir.normalized * (Speed * Time.deltaTime));
+        transform.DOMove(transform.position + Dir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
+        Debug.Log((Time.deltaTime * Speed));
 
         CheckUpdatedFlag();
     }
@@ -134,13 +134,15 @@ public class MyPlayerController : PlayerController
         if (_updated)
         {
             Vector3 moveDir = Dir.normalized;
-            C_Move movePacket = new C_Move();
-            movePacket.PosInfo = PosInfo;
-            movePacket.MoveDir = new moveDir()
+            C_Move movePacket = new C_Move
             {
-                X = moveDir.x,
-                Y = moveDir.y,
-                Z = moveDir.z,
+                PosInfo = PosInfo,
+                MoveDir = new moveDir()
+                {
+                    X = moveDir.x,
+                    Y = moveDir.y,
+                    Z = moveDir.z,
+                }
             };
             Managers.Network.Send(movePacket);
             _updated = false;

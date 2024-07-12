@@ -36,7 +36,7 @@ public class ObjectManager
 				MyPlayer.PosInfo = info.PosInfo;
 				MyPlayer.Dir = new Vector3();
 				MyPlayer.Stat.MergeFrom(info.StatInfo);
-				MyPlayer.SyncPos();
+				//MyPlayer.SyncPos();
 			}
 			else
 			{
@@ -48,7 +48,7 @@ public class ObjectManager
 				pc.Id = info.ObjectId;
 				pc.PosInfo = info.PosInfo;
 				pc.Stat.MergeFrom(info.StatInfo);
-				pc.SyncPos();
+				//pc.SyncPos();
 			}
 		}
 		else if (objectType == GameObjectType.Monster)
@@ -61,7 +61,7 @@ public class ObjectManager
 			mc.Id = info.ObjectId;
 			mc.PosInfo = info.PosInfo;
 			mc.Stat = info.StatInfo;
-			mc.SyncPos();
+			//mc.SyncPos();
 		}
 		else if (objectType == GameObjectType.Projectile)
 		{
@@ -72,7 +72,7 @@ public class ObjectManager
 			ArrowController ac = go.GetComponent<ArrowController>();
 			ac.PosInfo = info.PosInfo;
 			ac.Stat = info.StatInfo;
-			ac.SyncPos();
+			//ac.SyncPos();
 		}
 	}
 
