@@ -99,9 +99,7 @@ public class PlayerController : CreatureController
 
     protected override void UpdateMoving()
     {
-        
         transform.DOMove(transform.position + Dir.normalized * (Speed * Time.deltaTime), Time.deltaTime);
-        
     }
 
     public override void UseSkill(int skillId)

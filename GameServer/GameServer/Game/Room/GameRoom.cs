@@ -264,9 +264,9 @@ namespace GameServer.Game
             {
                 float dx = p.CellPos.x - pos.x;
                 float dy = p.CellPos.y - pos.y;
-                if (Math.Abs(dx) > GameRoom.VisionCells)
+                if (Math.Abs(dx) > VisionCells)
                     continue;
-                if (Math.Abs(dy) > GameRoom.VisionCells)
+                if (Math.Abs(dy) > VisionCells)
                     continue;
 
                 p.Session.Send(packet);

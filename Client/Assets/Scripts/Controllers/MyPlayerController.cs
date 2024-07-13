@@ -9,6 +9,8 @@ public class MyPlayerController : PlayerController
 {
     private bool _moveKeyPressed = false;
 
+    private float currTime = 0.0f;
+
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
 
@@ -16,6 +18,10 @@ public class MyPlayerController : PlayerController
     {
         base.Init();
         RefreshAdditionalStat();
+    }
+
+    private void CheckUpdate()
+    {
     }
 
     protected override void UpdateController()
@@ -30,6 +36,21 @@ public class MyPlayerController : PlayerController
             case CreatureState.Moving:
                 GetDirInput();
                 break;
+        }
+
+        currTime += Time.deltaTime;
+
+        //초당 5번 위치 데이터 갱신
+        if (currTime >= 0.2f)
+        {
+            PosInfo = new PositionInfo()
+            {
+                PosX = transform.position.x,
+                PosY = transform.position.y,
+                PosZ = transform.position.z,
+            };
+            _updated = true;
+            currTime -= 0.2f;
         }
 
         base.UpdateController();
@@ -106,11 +127,15 @@ public class MyPlayerController : PlayerController
     // 키보드 입력
     void GetDirInput()
     {
-        _moveKeyPressed = true;
         Dir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
         if (Dir.x == 0 && Dir.y == 0)
         {
             _moveKeyPressed = false;
+        }
+        else
+        {
+            _moveKeyPressed = true;
+            State = CreatureState.Moving;
         }
     }
 
@@ -124,7 +149,7 @@ public class MyPlayerController : PlayerController
         }
 
         transform.DOMove(transform.position + Dir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
-        Debug.Log((Time.deltaTime * Speed));
+
 
         CheckUpdatedFlag();
     }

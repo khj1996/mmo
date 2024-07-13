@@ -10,128 +10,41 @@ namespace GameServer.Game
 {
     public class Player : GameObject
     {
-        //플레이어 DB ID
         public int PlayerDbId { get; set; }
-
-        //유저 세션
         public ClientSession Session { get; set; }
-
-        //시야
         public VisionCube Vision { get; private set; }
 
-        //인벤토리
         public Inventory Inven { get; private set; } = new Inventory();
 
-        //공격력(장비)
         public int WeaponDamage { get; private set; }
-
-        //방어력(장비)
         public int ArmorDefence { get; private set; }
 
-        //전체 공격력
         public override int TotalAttack
         {
             get { return Info.StatInfo.Attack + WeaponDamage; }
         }
 
-        //전체 방어력
         public override int TotalDefence
         {
             get { return ArmorDefence; }
         }
 
-        // FSM (Finite State Machine)
-        IJob _job;
-
-        //생성자
         public Player()
         {
-            State = CreatureState.Idle;
             ObjectType = GameObjectType.Player;
             Vision = new VisionCube(this);
         }
 
-        public override void Update()
-        {
-            switch (State)
-            {
-                case CreatureState.Idle:
-                    UpdateIdle();
-                    break;
-                case CreatureState.Moving:
-                    UpdateMoving();
-                    break;
-                case CreatureState.Skill:
-                    //UpdateSkill();
-                    break;
-                case CreatureState.Dead:
-                    UpdateDead();
-                    break;
-            }
-
-            // 25프레임 (0.2초마다 한번씩 Update)
-            if (Room != null)
-                _job = Room.PushAfter(1000 / GameLogic.Instance.updateFrame, Update);
-        }
-
-        protected virtual void UpdateIdle()
-        {
-        }
-
-        public override void UpdateMoveDir(C_Move movePacket)
-        {
-            base.UpdateMoveDir(movePacket);
-        }
-
-
-        //유저 피격
         public override void OnDamaged(GameObject attacker, int damage)
         {
             base.OnDamaged(attacker, damage);
         }
 
-        protected virtual void UpdateDead()
-        {
-        }
-
-        //유저 사망
         public override void OnDead(GameObject attacker)
         {
             base.OnDead(attacker);
         }
 
-        private void UpdateMoving()
-        {
-            Move();
-
-            BroadcastMove();
-        }
-
-        void BroadcastMove()
-        {
-            // 다른 플레이어한테도 알려준다
-            S_Move resMovePacket = new S_Move();
-            resMovePacket.ObjectId = Info.ObjectId;
-            resMovePacket.PosInfo = Info.PosInfo;
-            resMovePacket.MoveDir = MoveDir;
-
-            List<Zone> zones = Room.GetAdjacentZones(CellPos);
-
-            foreach (Player p in zones.SelectMany(z => z.Players))
-            {
-                float dx = p.CellPos.x - CellPos.x;
-                float dy = p.CellPos.y - CellPos.y;
-                if (Math.Abs(dx) > GameRoom.VisionCells)
-                    continue;
-                if (Math.Abs(dy) > GameRoom.VisionCells)
-                    continue;
-
-                p.Session.Send(resMovePacket);
-            }
-        }
-
-
-        //TODO : 나중 테스트
         public void OnLeaveGame()
         {
             // TODO
@@ -147,15 +60,12 @@ namespace GameServer.Game
             DbTransaction.SavePlayerStatus(this, Room);
         }
 
-        //장비 장착 처리
         public void HandleEquipItem(C_EquipItem equipPacket)
         {
-            //아이템 데이터 획득
             Item item = Inven.Get(equipPacket.ItemDbId);
             if (item == null)
                 return;
 
-            //소모품 체크
             if (item.ItemType == ItemType.Consumable)
                 return;
 
@@ -210,7 +120,6 @@ namespace GameServer.Game
             RefreshAdditionalStat();
         }
 
-        //추가 스탯 갱신
         public void RefreshAdditionalStat()
         {
             WeaponDamage = 0;

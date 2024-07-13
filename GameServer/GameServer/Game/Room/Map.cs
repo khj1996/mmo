@@ -119,15 +119,15 @@ namespace GameServer.Game
         GameObject[,] _objects;
 
         //이동 가능 여부 체크
-        public bool CanGo(Vector2Float cellPos, bool checkObjects = true)
+        public bool CanGo(Vector2Float dest, bool checkObjects = true)
         {
-            if (cellPos.x < MinX || cellPos.x > MaxX)
+            if (dest.x < MinX || dest.x > MaxX)
                 return false;
-            if (cellPos.y < MinY || cellPos.y > MaxY)
+            if (dest.y < MinY || dest.y > MaxY)
                 return false;
 
-            float x = cellPos.x - MinX;
-            float y = MaxY - cellPos.y;
+            float x = dest.x - MinX;
+            float y = MaxY - dest.y;
             return !_collision[(int)y, (int)x] && (!checkObjects || _objects[(int)y, (int)x] == null);
         }
 

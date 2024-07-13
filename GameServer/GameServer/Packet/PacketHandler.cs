@@ -20,8 +20,8 @@ class PacketHandler
         GameRoom room = player.Room;
         if (room == null)
             return;
-
-        player.UpdateMoveDir(movePacket);
+        
+		room.Push(room.HandleMove, player, movePacket);
     }
 
     public static void C_SkillHandler(PacketSession session, IMessage packet)

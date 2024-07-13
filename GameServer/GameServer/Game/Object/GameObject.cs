@@ -26,6 +26,8 @@ namespace GameServer.Game
         //오브젝트 정보
         public ObjectInfo Info { get; private set; } = new();
 
+        public Vector2Float _cellPos;
+
 
         //총 공격력
         public virtual int TotalAttack
@@ -92,22 +94,14 @@ namespace GameServer.Game
             //Console.WriteLine(1.0f / GameLogic.Instance.updateFrame);
             //Console.WriteLine(MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame));
         }
-
-        public virtual void UpdateMoveDir(C_Move movePacket)
-        {
-            MoveDir = movePacket.MoveDir;
-            State = movePacket.PosInfo.State;
-        }
-
         //위치
         public Vector2Float CellPos
         {
-            get { return new Vector2Float(Info.PosInfo.PosX, Info.PosInfo.PosY); }
+            get { return _cellPos; }
 
             set
             {
-                Info.PosInfo.PosX = value.x;
-                Info.PosInfo.PosY = value.y;
+                _cellPos = new Vector2Float((int)value.x, (int)value.y);
             }
         }
 

@@ -70,7 +70,6 @@ public class BaseController : MonoBehaviour
 
             PosInfo.PosX = value.x;
             PosInfo.PosY = value.y;
-            _updated = true;
         }
     }
 
@@ -87,7 +86,6 @@ public class BaseController : MonoBehaviour
 
             PosInfo.State = value;
             UpdateAnimation();
-            _updated = true;
         }
     }
 
@@ -104,7 +102,6 @@ public class BaseController : MonoBehaviour
             _moveDir = value;
 
             UpdateAnimation();
-            _updated = true;
         }
     }
 
@@ -202,8 +199,6 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
-        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
-        transform.position = pos;
 
         UpdateAnimation();
     }
@@ -212,8 +207,6 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
-        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
-        transform.position = pos;
 
         UpdateAnimation();
     }
@@ -244,7 +237,10 @@ public class BaseController : MonoBehaviour
     // 스르륵 이동하는 것을 처리
     protected virtual void UpdateMoving()
     {
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
+        /*
+        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld
+        
+        (CellPos) + new Vector3(0.5f, 0.5f);
         Vector3 moveDir = destPos - transform.position;
 
         // 도착 여부 체크
@@ -258,7 +254,7 @@ public class BaseController : MonoBehaviour
         {
             transform.position += moveDir.normalized * Speed * Time.deltaTime;
             State = CreatureState.Moving;
-        }
+        }*/
     }
 
     protected virtual void MoveToNextPos()
