@@ -20,10 +20,6 @@ public class MyPlayerController : PlayerController
         RefreshAdditionalStat();
     }
 
-    private void CheckUpdate()
-    {
-    }
-
     protected override void UpdateController()
     {
         GetUIKeyInput();
@@ -49,7 +45,7 @@ public class MyPlayerController : PlayerController
                 PosY = transform.position.y,
                 PosZ = transform.position.z,
             };
-            _updated = true;
+            CheckUpdatedFlag();
             currTime -= 0.2f;
         }
 
@@ -127,15 +123,11 @@ public class MyPlayerController : PlayerController
     // 키보드 입력
     void GetDirInput()
     {
+        _moveKeyPressed = true;
         Dir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
         if (Dir.x == 0 && Dir.y == 0)
         {
             _moveKeyPressed = false;
-        }
-        else
-        {
-            _moveKeyPressed = true;
-            State = CreatureState.Moving;
         }
     }
 
@@ -144,34 +136,31 @@ public class MyPlayerController : PlayerController
         if (_moveKeyPressed == false)
         {
             State = CreatureState.Idle;
-            CheckUpdatedFlag();
             return;
         }
 
         transform.DOMove(transform.position + Dir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
-
-
-        CheckUpdatedFlag();
     }
 
     protected override void CheckUpdatedFlag()
     {
-        if (_updated)
+        Vector3 moveDir = Dir.normalized;
+        C_Move movePacket = new C_Move
         {
-            Vector3 moveDir = Dir.normalized;
-            C_Move movePacket = new C_Move
+            PosInfo = new PositionInfo()
             {
-                PosInfo = PosInfo,
-                MoveDir = new moveDir()
-                {
-                    X = moveDir.x,
-                    Y = moveDir.y,
-                    Z = moveDir.z,
-                }
-            };
-            Managers.Network.Send(movePacket);
-            _updated = false;
-        }
+                PosX = transform.position.x,
+                PosY = transform.position.y,
+                PosZ = transform.position.z,
+            },
+            MoveDir = new moveDir()
+            {
+                X = moveDir.x,
+                Y = moveDir.y,
+                Z = moveDir.z,
+            }
+        };
+        Managers.Network.Send(movePacket);
     }
 
     public void RefreshAdditionalStat()
