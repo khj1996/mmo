@@ -48,16 +48,10 @@ public class BaseController : MonoBehaviour
             if (_positionInfo.Equals(value))
                 return;
 
-            CellPos = new Vector3Int((int)value.PosX, (int)value.PosY, 0);
-            State = value.State;
+            _positionInfo = value;
         }
     }
 
-    /*public void SyncPos()
-    {
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
-        transform.position = destPos;
-    }*/
 
     public Vector3Int CellPos
     {
@@ -237,10 +231,7 @@ public class BaseController : MonoBehaviour
     // 스르륵 이동하는 것을 처리
     protected virtual void UpdateMoving()
     {
-        /*
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld
-        
-        (CellPos) + new Vector3(0.5f, 0.5f);
+        /*Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         Vector3 moveDir = destPos - transform.position;
 
         // 도착 여부 체크
@@ -255,6 +246,15 @@ public class BaseController : MonoBehaviour
             transform.position += moveDir.normalized * Speed * Time.deltaTime;
             State = CreatureState.Moving;
         }*/
+
+        if (Input.GetAxisRaw("Horizontal") == 0 & Input.GetAxisRaw("Vertical") == 0)
+        {
+            State = CreatureState.Idle;
+        }
+        else
+        {
+            State = CreatureState.Moving;
+        }
     }
 
     protected virtual void MoveToNextPos()
@@ -267,5 +267,13 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateDead()
     {
+    }
+
+
+    public void UpdatePosition(S_Move movepacket)
+    {
+        PosInfo = movepacket.PosInfo;
+        //Dir = new Vector3(movepacket.MoveDir.X, movepacket.MoveDir.Y, movepacket.MoveDir.Z);
+        State = CreatureState.Moving;
     }
 }

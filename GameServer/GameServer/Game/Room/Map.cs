@@ -115,33 +115,17 @@ namespace GameServer.Game
         //벽등 충돌체
         bool[,] _collision;
 
-        //객체
-        GameObject[,] _objects;
-
         //이동 가능 여부 체크
-        public bool CanGo(Vector2Float dest, bool checkObjects = true)
-        {
-            if (dest.x < MinX || dest.x > MaxX)
-                return false;
-            if (dest.y < MinY || dest.y > MaxY)
-                return false;
-
-            float x = dest.x - MinX;
-            float y = MaxY - dest.y;
-            return !_collision[(int)y, (int)x] && (!checkObjects || _objects[(int)y, (int)x] == null);
-        }
-
-        //해당 위치 오브젝트 체크
-        public GameObject Find(Vector2Float cellPos)
+        public bool CanGo(Vector2Float cellPos, bool checkObjects = true)
         {
             if (cellPos.x < MinX || cellPos.x > MaxX)
-                return null;
+                return false;
             if (cellPos.y < MinY || cellPos.y > MaxY)
-                return null;
+                return false;
 
             float x = cellPos.x - MinX;
             float y = MaxY - cellPos.y;
-            return _objects[(int)y, (int)x];
+            return !_collision[(int)y, (int)x];
         }
 
         //객체 제거시
@@ -162,17 +146,11 @@ namespace GameServer.Game
             Zone zone = gameObject.Room.GetZone(gameObject.CellPos);
             zone.Remove(gameObject);
 
-            float x = posInfo.PosX - MinX;
-            float y = MaxY - posInfo.PosY;
-            if (_objects[(int)y, (int)x] == gameObject)
-                _objects[(int)y, (int)x] = null;
-
-
             return true;
         }
 
         //이동 적용
-        public bool ApplyMove(GameObject gameObject, Vector2Float dest, bool checkObjects = true, bool collision = true)
+        public bool ApplyMove(GameObject gameObject, Vector2Float dest, bool checkObjects = true)
         {
             if (gameObject.Room == null)
                 return false;
@@ -180,23 +158,10 @@ namespace GameServer.Game
                 return false;
 
             PositionInfo posInfo = gameObject.Info.PosInfo;
-            if (CanGo(dest, checkObjects) == false)
-                return false;
+            //TODO : 충돌체크
+            /*if (CanGo(dest, checkObjects) == false)
+                return false;*/
 
-            if (collision)
-            {
-                {
-                    float x = posInfo.PosX - MinX;
-                    float y = MaxY - posInfo.PosY;
-                    if (_objects[(int)y, (int)x] == gameObject)
-                        _objects[(int)y, (int)x] = null;
-                }
-                {
-                    float x = dest.x - MinX;
-                    float y = MaxY - dest.y;
-                    _objects[(int)y, (int)x] = gameObject;
-                }
-            }
 
             //존 이동으로 인한 갱신
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
@@ -244,7 +209,7 @@ namespace GameServer.Game
         public void LoadMap(int mapId, string pathPrefix)
         {
             MapId = mapId;
-            
+
             string mapName = "Map_" + mapId.ToString("000");
 
             // Collision 관련 파일
@@ -259,7 +224,6 @@ namespace GameServer.Game
             int xCount = MaxX - MinX + 1;
             int yCount = MaxY - MinY + 1;
             _collision = new bool[yCount, xCount];
-            _objects = new GameObject[yCount, xCount];
 
             for (int y = 0; y < yCount; y++)
             {
@@ -273,10 +237,10 @@ namespace GameServer.Game
 
         #region A* PathFinding
 
-        // U D L R
-        int[] _deltaY = new int[] { 1, -1, 0, 0 };
-        int[] _deltaX = new int[] { 0, 0, -1, 1 };
-        int[] _cost = new int[] { 10, 10, 10, 10 };
+        // U D L R  //  UL UR DL DR
+        int[] _deltaY = new int[] { 1, -1, 0, 0, 1, 1, -1, -1 };
+        int[] _deltaX = new int[] { 0, 0, -1, 1, -1, -1, 1, 1 };
+        int[] _cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 };
 
         public List<Vector2Float> FindPath(Vector2Float startCellPos, Vector2Float destCellPos,
             bool checkObjects = true, int maxDist = 10)

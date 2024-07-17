@@ -52,9 +52,7 @@ class PacketHandler
         if (bc == null)
             return;
 
-        Debug.Log(movePacket.PosInfo.PosX + "   " + movePacket.PosInfo.PosY);
-        bc.PosInfo = movePacket.PosInfo;
-        bc.Dir = new Vector3(movePacket.MoveDir.X,movePacket.MoveDir.Y,movePacket.MoveDir.Z);
+        bc.UpdatePosition(movePacket);
     }
 
     public static void S_SkillHandler(PacketSession session, IMessage packet)

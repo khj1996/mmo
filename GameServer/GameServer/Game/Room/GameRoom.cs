@@ -11,7 +11,7 @@ namespace GameServer.Game
     public partial class GameRoom : JobSerializer
     {
         //플레이어 시야
-        public const int VisionCells = 5;
+        public const int VisionCells = 10;
 
         //방 id
         public int RoomId { get; set; }
@@ -97,11 +97,8 @@ namespace GameServer.Game
                 {
                     respawnPos.x = _rand.Next(Map.MinX, Map.MaxX + 1);
                     respawnPos.y = _rand.Next(Map.MinY, Map.MaxY + 1);
-                    if (Map.Find(respawnPos) == null)
-                    {
-                        gameObject.CellPos = respawnPos;
-                        break;
-                    }
+
+                    gameObject.CellPos = respawnPos;
                 }
             }
             else

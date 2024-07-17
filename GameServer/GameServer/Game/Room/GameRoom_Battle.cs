@@ -25,13 +25,15 @@ namespace GameServer.Game
                     return;
             }*/
 
+
             player.State = movePosInfo.State;
             player.MoveDir = movePacket.MoveDir;
+
             Map.ApplyMove(player, new Vector2Float()
             {
                 x = movePacket.PosInfo.PosX,
                 y = movePacket.PosInfo.PosY,
-            },false,false);
+            }, false);
 
             // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move();
@@ -40,7 +42,7 @@ namespace GameServer.Game
 
             Broadcast(player.CellPos, resMovePacket);
         }
-        
+
         public void HandleSkill(Player player, C_Skill skillPacket)
         {
             if (player == null)
@@ -83,7 +85,7 @@ namespace GameServer.Game
                     arrow.Owner = player;
                     arrow.Data = skillData;
                     arrow.Info.PosInfo.State = CreatureState.Moving;
-                    arrow.MoveDir =  skillPacket.MoveDir;
+                    arrow.MoveDir = skillPacket.MoveDir;
                     arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
                     arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
                     arrow.Speed = skillData.projectile.speed;
