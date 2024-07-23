@@ -69,12 +69,13 @@ namespace GameServer.Game
             }
 
             //몬스터 생성
-            /*for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Monster monster = ObjectManager.Instance.Add<Monster>();
                 monster.Init(1);
-                EnterGame(monster, randomPos: true);
-            }*/
+                SetRandomPos(monster);
+                EnterGame(monster);
+            }
         }
 
         // 누군가 주기적으로 호출해줘야 한다
@@ -85,29 +86,24 @@ namespace GameServer.Game
 
         Random _rand = new Random();
 
-        public void EnterGame(GameObject gameObject, bool randomPos)
+        public void SetRandomPos(GameObject gameObject)
+        {
+            //gameObject.Info.PosInfo.PosX = _rand.Next(Map.MinX, Map.MaxX + 1);
+            //gameObject.Info.PosInfo.PosY = _rand.Next(Map.MinY, Map.MaxY + 1);
+            gameObject.Info.PosInfo.PosX = 5;
+            gameObject.Info.PosInfo.PosY = 5;
+        }
+
+        public void EnterGame(GameObject gameObject)
         {
             if (gameObject == null)
                 return;
 
-            if (randomPos)
-            {
-                Vector2Float respawnPos;
-                while (true)
-                {
-                    respawnPos.x = _rand.Next(Map.MinX, Map.MaxX + 1);
-                    respawnPos.y = _rand.Next(Map.MinY, Map.MaxY + 1);
+            Vector2Float spawnPos;
+            spawnPos.x = gameObject.Info.PosInfo.PosX;
+            spawnPos.y = gameObject.Info.PosInfo.PosY;
+            gameObject.CellPos = spawnPos;
 
-                    gameObject.CellPos = respawnPos;
-                }
-            }
-            else
-            {
-                Vector2Float respawnPos;
-                respawnPos.x = gameObject.Info.PosInfo.PosX;
-                respawnPos.y = gameObject.Info.PosInfo.PosY;
-                gameObject.CellPos = respawnPos;
-            }
 
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
 

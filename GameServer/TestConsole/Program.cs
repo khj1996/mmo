@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,6 +12,40 @@ namespace AccountServer
     {
         public static int Main(string[] args)
         {
+            Stopwatch sw = new Stopwatch();
+
+            Random rand = new Random();
+
+            double sum = 0.0;
+
+            int cnt = 0;
+
+
+            var num = 0.0f;
+            for (int i = 0; i < 100000000; i++)
+            {
+                /*var first = rand.Next();
+                var send = rand.Next();*/
+                
+                var first = rand.NextDouble();
+                var send = rand.NextDouble();
+                long startTicks = DateTime.UtcNow.Ticks;
+
+                var test = Math.Abs(first - send) < 0.0f;
+
+                long endTicks = DateTime.UtcNow.Ticks;
+
+
+                // 측정된 시간 출력
+                long elapsedTicks = endTicks - startTicks;
+                TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
+                sum += elapsedSpan.TotalMilliseconds;
+            }
+
+            Console.WriteLine("측정된 시간: {0}ms", sum);
+
+
+            /*
             long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
             long expired = now -1000;
 
@@ -35,7 +70,8 @@ namespace AccountServer
             var test1 = DecipherJwtAccessToken(token);
             var test2 = ValidateJwtAccessToken(token, "dskfnglskjdnf;ogkjsndofignjdkfngolsjd");
 
-            return int.Parse(test1.Subject);
+            return int.Parse(test1.Subject);*/
+            return 0;
         }
 
 

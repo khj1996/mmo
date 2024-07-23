@@ -24,30 +24,9 @@ public class MyPlayerController : PlayerController
     {
         GetUIKeyInput();
 
-        switch (State)
-        {
-            case CreatureState.Idle:
-                GetDirInput();
-                break;
-            case CreatureState.Moving:
-                GetDirInput();
-                break;
-        }
+        GetDirInput();
 
-        currTime += Time.deltaTime;
-
-        //초당 5번 위치 데이터 갱신
-        if (currTime >= 0.2f)
-        {
-            PosInfo = new PositionInfo()
-            {
-                PosX = transform.position.x,
-                PosY = transform.position.y,
-                PosZ = transform.position.z,
-            };
-            CheckUpdatedFlag();
-            currTime -= 0.2f;
-        }
+        CheckUpdatedFlag();
 
         base.UpdateController();
     }
@@ -57,7 +36,6 @@ public class MyPlayerController : PlayerController
         // 이동 상태로 갈지 확인
         if (_moveKeyPressed)
         {
-            State = CreatureState.Moving;
             return;
         }
 
@@ -123,11 +101,11 @@ public class MyPlayerController : PlayerController
     // 키보드 입력
     void GetDirInput()
     {
-        _moveKeyPressed = true;
-        Dir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
-        if (Dir.x == 0 && Dir.y == 0)
+        _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
+        
+        if (_moveKeyPressed)
         {
-            _moveKeyPressed = false;
+            State = CreatureState.Moving;
         }
     }
 
@@ -139,28 +117,31 @@ public class MyPlayerController : PlayerController
             return;
         }
 
-        transform.DOMove(transform.position + Dir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
+        var moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
+
+        transform.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
     }
 
     protected override void CheckUpdatedFlag()
     {
-        Vector3 moveDir = Dir.normalized;
-        C_Move movePacket = new C_Move
+        currTime += Time.deltaTime;
+
+        //초당 5번 위치 데이터 갱신
+        if (currTime >= 0.2f)
         {
-            PosInfo = new PositionInfo()
+            C_Move movePacket = new C_Move
             {
-                PosX = transform.position.x,
-                PosY = transform.position.y,
-                PosZ = transform.position.z,
-            },
-            MoveDir = new moveDir()
-            {
-                X = moveDir.x,
-                Y = moveDir.y,
-                Z = moveDir.z,
-            }
-        };
-        Managers.Network.Send(movePacket);
+                PosInfo = new PositionInfo()
+                {
+                    PosX = transform.position.x,
+                    PosY = transform.position.y,
+                    PosZ = transform.position.z,
+                }
+            };
+            Managers.Network.Send(movePacket);
+
+            currTime -= 0.2f;
+        }
     }
 
     public void RefreshAdditionalStat()

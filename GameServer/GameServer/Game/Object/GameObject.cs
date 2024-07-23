@@ -26,8 +26,6 @@ namespace GameServer.Game
         //오브젝트 정보
         public ObjectInfo Info { get; private set; } = new();
 
-        public Vector2Float _cellPos;
-
 
         //총 공격력
         public virtual int TotalAttack
@@ -55,13 +53,6 @@ namespace GameServer.Game
             set { Info.StatInfo.Hp = Math.Clamp(value, 0, Info.StatInfo.MaxHp); }
         }
 
-        //보는 방향
-        public moveDir MoveDir
-        {
-            get { return Info.MoveDir; }
-            set { Info.MoveDir = value; }
-        }
-
         //오브젝트 상태
         public CreatureState State
         {
@@ -85,25 +76,18 @@ namespace GameServer.Game
         }
 
 
-        public virtual void Move()
-        {
-            //TODO : 이동 가능한 위치인지 추가 필요
-            Info.PosInfo.PosX += MoveDir.X * Speed * (60.0f / Instance.updateFrame)/Instance.updateFrame;
-            Info.PosInfo.PosY += MoveDir.Y * Speed * (60.0f / Instance.updateFrame)/Instance.updateFrame;
-            Console.WriteLine(Speed * (60.0f / Instance.updateFrame)/Instance.updateFrame);
-            //Console.WriteLine(1.0f / GameLogic.Instance.updateFrame);
-            //Console.WriteLine(MoveDir.X * Speed * (1.0f / GameLogic.Instance.updateFrame));
-        }
         //위치
         public Vector2Float CellPos
         {
-            get { return _cellPos; }
+            get { return new Vector2Float(Info.PosInfo.PosX, Info.PosInfo.PosY); }
 
             set
             {
-                _cellPos = new Vector2Float((int)value.x, (int)value.y);
+                Info.PosInfo.PosX = value.x;
+                Info.PosInfo.PosY = value.y;
             }
         }
+
 
         //피격
         public virtual void OnDamaged(GameObject attacker, int damage)
@@ -143,14 +127,9 @@ namespace GameServer.Game
 
             Info.StatInfo.Hp = Info.StatInfo.MaxHp;
             Info.PosInfo.State = CreatureState.Idle;
-            MoveDir = new moveDir()
-            {
-                X = 0,
-                Y = 0,
-                Z = 0
-            };
+            Info.PosInfo.MoveDir = MoveDir.Down;
 
-            room.EnterGame(this, randomPos: true);
+            room.EnterGame(this);
         }
 
         //소유주

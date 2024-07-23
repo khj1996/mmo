@@ -17,28 +17,29 @@ public class PlayerController : CreatureController
 
     protected override void UpdateAnimation()
     {
+        Debug.Log(PosInfo.State);
         if (_animator == null || _sprite == null)
             return;
 
 
         if (State == CreatureState.Idle)
         {
-            if (Dir.y > 0)
+            if (PosInfo.MoveDir == MoveDir.Up)
             {
                 _animator.Play("IDLE_BACK");
                 _sprite.flipX = false;
             }
-            else if (Dir.y < 0)
+            else if (PosInfo.MoveDir == MoveDir.Down)
             {
                 _animator.Play("IDLE_FRONT");
                 _sprite.flipX = false;
             }
-            else if (Dir.x < 0)
+            else if (PosInfo.MoveDir == MoveDir.Right)
             {
                 _animator.Play("IDLE_RIGHT");
                 _sprite.flipX = true;
             }
-            else if (Dir.x > 0)
+            else if (PosInfo.MoveDir == MoveDir.Left)
             {
                 _animator.Play("IDLE_RIGHT");
                 _sprite.flipX = false;
@@ -46,22 +47,22 @@ public class PlayerController : CreatureController
         }
         else if (State == CreatureState.Moving)
         {
-            if (Dir.y > 0)
+            if (PosInfo.MoveDir == MoveDir.Up)
             {
                 _animator.Play("WALK_BACK");
                 _sprite.flipX = false;
             }
-            else if (Dir.y < 0)
+            else if (PosInfo.MoveDir == MoveDir.Down)
             {
                 _animator.Play("WALK_FRONT");
                 _sprite.flipX = false;
             }
-            else if (Dir.x < 0)
+            else if (PosInfo.MoveDir == MoveDir.Right)
             {
                 _animator.Play("WALK_RIGHT");
                 _sprite.flipX = true;
             }
-            else if (Dir.x > 0)
+            else if (PosInfo.MoveDir == MoveDir.Left)
             {
                 _animator.Play("WALK_RIGHT");
                 _sprite.flipX = false;
@@ -69,22 +70,22 @@ public class PlayerController : CreatureController
         }
         else if (State == CreatureState.Skill)
         {
-            if (Dir.y > 0)
+            if (PosInfo.MoveDir == MoveDir.Up)
             {
                 _animator.Play(_rangedSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
                 _sprite.flipX = false;
             }
-            else if (Dir.y < 0)
+            else if (PosInfo.MoveDir == MoveDir.Down)
             {
                 _animator.Play(_rangedSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
                 _sprite.flipX = false;
             }
-            else if (Dir.x < 0)
+            else if (PosInfo.MoveDir == MoveDir.Right)
             {
                 _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
                 _sprite.flipX = true;
             }
-            else if (Dir.x > 0)
+            else if (PosInfo.MoveDir == MoveDir.Left)
             {
                 _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
                 _sprite.flipX = false;

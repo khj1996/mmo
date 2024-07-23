@@ -27,7 +27,6 @@ namespace GameServer.Game
 
 
             player.State = movePosInfo.State;
-            player.MoveDir = movePacket.MoveDir;
 
             Map.ApplyMove(player, new Vector2Float()
             {
@@ -85,11 +84,11 @@ namespace GameServer.Game
                     arrow.Owner = player;
                     arrow.Data = skillData;
                     arrow.Info.PosInfo.State = CreatureState.Moving;
-                    arrow.MoveDir = skillPacket.MoveDir;
+                    arrow.Info.PosInfo.MoveDir = player.Info.PosInfo.MoveDir;
                     arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
                     arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
                     arrow.Speed = skillData.projectile.speed;
-                    Push(EnterGame, arrow, false);
+                    Push(EnterGame, arrow);
                 }
                     break;
             }
