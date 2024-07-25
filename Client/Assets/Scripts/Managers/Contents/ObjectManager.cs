@@ -33,7 +33,7 @@ public class ObjectManager
 
 				MyPlayer = go.GetComponent<MyPlayerController>();
 				MyPlayer.Id = info.ObjectId;
-				MyPlayer.PosInfo = info.PosInfo;
+				MyPlayer.PosInfo.MergeFrom(info.PosInfo); 
 				MyPlayer.Stat.MergeFrom(info.StatInfo);
 			}
 			else
@@ -44,7 +44,7 @@ public class ObjectManager
 
 				PlayerController pc = go.GetComponent<PlayerController>();
 				pc.Id = info.ObjectId;
-				pc.PosInfo = info.PosInfo;
+				MyPlayer.PosInfo.MergeFrom(info.PosInfo); 
 				pc.Stat.MergeFrom(info.StatInfo);
 			}
 		}
@@ -56,7 +56,7 @@ public class ObjectManager
 
 			MonsterController mc = go.GetComponent<MonsterController>();
 			mc.Id = info.ObjectId;
-			mc.PosInfo = info.PosInfo;
+			MyPlayer.PosInfo.MergeFrom(info.PosInfo); 
 			mc.Stat = info.StatInfo;
 		}
 		else if (objectType == GameObjectType.Projectile)
@@ -66,7 +66,7 @@ public class ObjectManager
 			_objects.Add(info.ObjectId, go);
 
 			ArrowController ac = go.GetComponent<ArrowController>();
-			ac.PosInfo = info.PosInfo;
+			MyPlayer.PosInfo.MergeFrom(info.PosInfo); 
 			ac.Stat = info.StatInfo;
 		}
 	}

@@ -27,7 +27,7 @@ public class MyPlayerController : PlayerController
         GetDirInput();
 
         CheckUpdatedFlag();
-        
+
         UpdateMovDir();
 
         base.UpdateController();
@@ -168,6 +168,8 @@ public class MyPlayerController : PlayerController
                     PosX = transform.position.x,
                     PosY = transform.position.y,
                     PosZ = transform.position.z,
+                    State = State,
+                    MoveDir = MoveDir
                 }
             };
             Managers.Network.Send(movePacket);

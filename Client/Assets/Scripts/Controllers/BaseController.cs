@@ -187,6 +187,7 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
+        transform.position = new Vector3(PosInfo.PosX,PosInfo.PosY,PosInfo.PosZ);
 
         UpdateAnimation();
     }
@@ -195,6 +196,7 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
+        transform.position = new Vector3(PosInfo.PosX,PosInfo.PosY,PosInfo.PosZ);
 
         UpdateAnimation();
     }
@@ -243,6 +245,5 @@ public class BaseController : MonoBehaviour
     public void UpdatePosition(S_Move movepacket)
     {
         PosInfo = movepacket.PosInfo;
-        State = CreatureState.Moving;
     }
 }
