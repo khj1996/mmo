@@ -80,12 +80,6 @@ namespace GameServer.Game
         public Vector2Float CellPos
         {
             get { return new Vector2Float(Info.PosInfo.PosX, Info.PosInfo.PosY); }
-
-            set
-            {
-                Info.PosInfo.PosX = value.x;
-                Info.PosInfo.PosY = value.y;
-            }
         }
 
 

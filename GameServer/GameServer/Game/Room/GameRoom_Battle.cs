@@ -28,7 +28,7 @@ namespace GameServer.Game
 
             player.State = movePosInfo.State;
 
-            Map.ApplyMove(player, new Vector2Float()
+            var result = Map.ApplyMove(player, new Vector2Float()
             {
                 x = movePacket.PosInfo.PosX,
                 y = movePacket.PosInfo.PosY,
@@ -38,6 +38,12 @@ namespace GameServer.Game
             S_Move resMovePacket = new S_Move();
             resMovePacket.ObjectId = player.Info.ObjectId;
             resMovePacket.PosInfo = movePacket.PosInfo;
+
+            //이동 불가능지역 이동시 이전 위치 패킷 전송
+            if (!result)
+            {
+                player.Session.Send(resMovePacket);
+            }
 
             Broadcast(player.CellPos, resMovePacket);
         }

@@ -17,78 +17,74 @@ public class PlayerController : CreatureController
 
     protected override void UpdateAnimation()
     {
-        Debug.Log(PosInfo.State);
         if (_animator == null || _sprite == null)
             return;
 
 
         if (State == CreatureState.Idle)
         {
-            if (PosInfo.MoveDir == MoveDir.Up)
+            switch (MoveDir)
             {
-                _animator.Play("IDLE_BACK");
-                _sprite.flipX = false;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Down)
-            {
-                _animator.Play("IDLE_FRONT");
-                _sprite.flipX = false;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Right)
-            {
-                _animator.Play("IDLE_RIGHT");
-                _sprite.flipX = true;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Left)
-            {
-                _animator.Play("IDLE_RIGHT");
-                _sprite.flipX = false;
+                case MoveDir.Up:
+                    _animator.Play("IDLE_BACK");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Down:
+                    _animator.Play("IDLE_FRONT");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Right:
+                    _animator.Play("IDLE_RIGHT");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Left:
+                    _animator.Play("IDLE_RIGHT");
+                    _sprite.flipX = true;
+                    break;
             }
         }
         else if (State == CreatureState.Moving)
         {
-            if (PosInfo.MoveDir == MoveDir.Up)
+            switch (MoveDir)
             {
-                _animator.Play("WALK_BACK");
-                _sprite.flipX = false;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Down)
-            {
-                _animator.Play("WALK_FRONT");
-                _sprite.flipX = false;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Right)
-            {
-                _animator.Play("WALK_RIGHT");
-                _sprite.flipX = true;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Left)
-            {
-                _animator.Play("WALK_RIGHT");
-                _sprite.flipX = false;
+                case MoveDir.Up:
+                    _animator.Play("WALK_BACK");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Down:
+                    _animator.Play("WALK_FRONT");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Right:
+                    _animator.Play("WALK_RIGHT");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Left:
+                    _animator.Play("WALK_RIGHT");
+                    _sprite.flipX = true;
+                    break;
             }
         }
         else if (State == CreatureState.Skill)
         {
-            if (PosInfo.MoveDir == MoveDir.Up)
+            switch (MoveDir)
             {
-                _animator.Play(_rangedSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
-                _sprite.flipX = false;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Down)
-            {
-                _animator.Play(_rangedSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
-                _sprite.flipX = false;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Right)
-            {
-                _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
-                _sprite.flipX = true;
-            }
-            else if (PosInfo.MoveDir == MoveDir.Left)
-            {
-                _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
-                _sprite.flipX = false;
+                case MoveDir.Up:
+                    _animator.Play(_rangedSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Down:
+                    _animator.Play(_rangedSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Right:
+                    _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
+                    _sprite.flipX = false;
+                    break;
+                case MoveDir.Left:
+                    _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
+                    _sprite.flipX = true;
+                    break;
             }
         }
     }

@@ -159,8 +159,11 @@ namespace GameServer.Game
 
             PositionInfo posInfo = gameObject.Info.PosInfo;
             //TODO : 충돌체크
-            /*if (CanGo(dest, checkObjects) == false)
-                return false;*/
+            if (CanGo(dest, checkObjects) == false)
+            {
+                Console.WriteLine("1");
+                return false;
+            }
 
 
             //존 이동으로 인한 갱신

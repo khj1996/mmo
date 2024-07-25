@@ -35,7 +35,7 @@ public class BaseController : MonoBehaviour
         set { Stat.Hp = value; }
     }
     
-    PositionInfo _positionInfo = new PositionInfo();
+    private PositionInfo _positionInfo = new PositionInfo();
 
     public PositionInfo PosInfo
     {
@@ -70,13 +70,26 @@ public class BaseController : MonoBehaviour
 
     public CreatureState State
     {
-        get { return PosInfo.State; }
+        get { return _positionInfo.State; }
         set
         {
-            if (PosInfo.State == value)
+            if (_positionInfo.State == value)
                 return;
 
-            PosInfo.State = value;
+            _positionInfo.State = value;
+            UpdateAnimation();
+        }
+    }
+    
+    public MoveDir MoveDir
+    {
+        get { return _positionInfo.MoveDir; }
+        set
+        {
+            if (_positionInfo.MoveDir == value)
+                return;
+
+            _positionInfo.MoveDir = value;
             UpdateAnimation();
         }
     }
@@ -90,7 +103,7 @@ public class BaseController : MonoBehaviour
         switch (State)
         {
             case CreatureState.Idle:
-                switch (PosInfo.MoveDir)
+                switch (MoveDir)
                 {
                     case MoveDir.Up:
                         _animator.Play("IDLE_BACK");
@@ -112,7 +125,7 @@ public class BaseController : MonoBehaviour
 
                 break;
             case CreatureState.Moving:
-                switch (PosInfo.MoveDir)
+                switch (MoveDir)
                 {
                     case MoveDir.Up:
                         _animator.Play("WALK_BACK");
@@ -134,7 +147,7 @@ public class BaseController : MonoBehaviour
 
                 break;
             case CreatureState.Skill:
-                switch (PosInfo.MoveDir)
+                switch (MoveDir)
                 {
                     case MoveDir.Up:
                         _animator.Play("ATTACK_BACK");
@@ -212,14 +225,6 @@ public class BaseController : MonoBehaviour
     // 스르륵 이동하는 것을 처리
     protected virtual void UpdateMoving()
     {
-        if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
-        {
-            State = CreatureState.Idle;
-        }
-        else
-        {
-            State = CreatureState.Moving;
-        }
     }
 
     protected virtual void MoveToNextPos()

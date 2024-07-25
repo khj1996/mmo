@@ -27,6 +27,8 @@ public class MyPlayerController : PlayerController
         GetDirInput();
 
         CheckUpdatedFlag();
+        
+        UpdateMovDir();
 
         base.UpdateController();
     }
@@ -102,10 +104,30 @@ public class MyPlayerController : PlayerController
     void GetDirInput()
     {
         _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-        
+
         if (_moveKeyPressed)
         {
             State = CreatureState.Moving;
+        }
+    }
+
+    public void UpdateMovDir()
+    {
+        if (Input.GetAxisRaw("Vertical") > 0)
+        {
+            MoveDir = MoveDir.Up;
+        }
+        else if (Input.GetAxisRaw("Vertical") < 0)
+        {
+            MoveDir = MoveDir.Down;
+        }
+        else if (Input.GetAxisRaw("Horizontal") < 0)
+        {
+            MoveDir = MoveDir.Left;
+        }
+        else if (Input.GetAxisRaw("Horizontal") > 0)
+        {
+            MoveDir = MoveDir.Right;
         }
     }
 
@@ -120,6 +142,16 @@ public class MyPlayerController : PlayerController
         var moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 
         transform.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
+
+
+        /*if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
+        {
+            State = CreatureState.Idle;
+        }
+        else*/
+        {
+            //State = CreatureState.Moving;
+        }
     }
 
     protected override void CheckUpdatedFlag()

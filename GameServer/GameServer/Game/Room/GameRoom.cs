@@ -69,13 +69,13 @@ namespace GameServer.Game
             }
 
             //몬스터 생성
-            for (int i = 0; i < 1; i++)
+            /*for (int i = 0; i < 1; i++)
             {
                 Monster monster = ObjectManager.Instance.Add<Monster>();
                 monster.Init(1);
                 SetRandomPos(monster);
                 EnterGame(monster);
-            }
+            }*/
         }
 
         // 누군가 주기적으로 호출해줘야 한다
@@ -102,7 +102,6 @@ namespace GameServer.Game
             Vector2Float spawnPos;
             spawnPos.x = gameObject.Info.PosInfo.PosX;
             spawnPos.y = gameObject.Info.PosInfo.PosY;
-            gameObject.CellPos = spawnPos;
 
 
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
