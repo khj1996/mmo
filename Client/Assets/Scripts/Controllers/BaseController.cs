@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using DG.Tweening;
 using UnityEngine;
 using static Define;
 
@@ -34,7 +35,7 @@ public class BaseController : MonoBehaviour
         get { return Stat.Hp; }
         set { Stat.Hp = value; }
     }
-    
+
     private PositionInfo _positionInfo = new PositionInfo();
 
     public PositionInfo PosInfo
@@ -47,21 +48,6 @@ public class BaseController : MonoBehaviour
 
             _positionInfo = value;
             UpdateAnimation();
-        }
-    }
-
-
-    public Vector3Int CellPos
-    {
-        get { return new Vector3Int((int)PosInfo.PosX, (int)PosInfo.PosY, 0); }
-
-        set
-        {
-            if (PosInfo.PosX == value.x && PosInfo.PosY == value.y)
-                return;
-
-            PosInfo.PosX = value.x;
-            PosInfo.PosY = value.y;
         }
     }
 
@@ -80,7 +66,7 @@ public class BaseController : MonoBehaviour
             UpdateAnimation();
         }
     }
-    
+
     public MoveDir MoveDir
     {
         get { return _positionInfo.MoveDir; }
@@ -187,7 +173,7 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
-        transform.position = new Vector3(PosInfo.PosX,PosInfo.PosY,PosInfo.PosZ);
+        transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
 
         UpdateAnimation();
     }
@@ -196,7 +182,7 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
-        transform.position = new Vector3(PosInfo.PosX,PosInfo.PosY,PosInfo.PosZ);
+        transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
 
         UpdateAnimation();
     }
@@ -222,11 +208,28 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateIdle()
     {
+        var vecPos = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
+        var dis = (vecPos - transform.position).magnitude;
+
+        if (dis >= Speed * Time.deltaTime)
+        {
+            State = CreatureState.Moving;
+        }
     }
 
     // 스르륵 이동하는 것을 처리
     protected virtual void UpdateMoving()
     {
+        var vecPos = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
+        var dis = (vecPos - transform.position).magnitude;
+
+        if (dis < Speed * Time.deltaTime)
+        {
+            State = CreatureState.Idle;
+            return;
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, vecPos, Speed * Time.deltaTime);
     }
 
     protected virtual void MoveToNextPos()
@@ -244,6 +247,13 @@ public class BaseController : MonoBehaviour
 
     public void UpdatePosition(S_Move movepacket)
     {
-        PosInfo = movepacket.PosInfo;
+        PosInfo = new PositionInfo()
+        {
+            PosX = movepacket.PosInfo.PosX,
+            PosY = movepacket.PosInfo.PosY,
+            PosZ = movepacket.PosInfo.PosZ,
+            MoveDir = movepacket.PosInfo.MoveDir,
+            State = State
+        };
     }
 }

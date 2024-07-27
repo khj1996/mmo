@@ -94,20 +94,6 @@ public class PlayerController : CreatureController
         base.UpdateController();
     }
 
-    protected override void UpdateMoving()
-    {
-        if (Mathf.Approximately(PosInfo.PosX, transform.position.x) &&
-            Mathf.Approximately(PosInfo.PosY, transform.position.y) &&
-            Mathf.Approximately(PosInfo.PosZ, transform.position.z))
-        {
-            State = CreatureState.Idle;
-            return;
-        }
-
-        transform.DOMove(new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ), 0.2f).SetEase(Ease.Linear);
-    }
-
-
     public override void UseSkill(int skillId)
     {
         if (skillId == 1)

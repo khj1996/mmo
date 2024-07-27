@@ -40,10 +40,10 @@ namespace GameServer.Game
             resMovePacket.PosInfo = movePacket.PosInfo;
 
             //이동 불가능지역 이동시 이전 위치 패킷 전송
-            if (!result)
+            /*if (!result)
             {
                 player.Session.Send(resMovePacket);
-            }
+            }*/
 
             Broadcast(player.CellPos, resMovePacket);
         }

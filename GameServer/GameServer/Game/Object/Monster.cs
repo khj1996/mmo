@@ -53,7 +53,7 @@ namespace GameServer.Game
 
             // 5프레임 (0.2초마다 한번씩 Update)
             if (Room != null)
-                _job = Room.PushAfter(40, Update);
+                _job = Room.PushAfter(200, Update);
         }
 
         //추격 대상
