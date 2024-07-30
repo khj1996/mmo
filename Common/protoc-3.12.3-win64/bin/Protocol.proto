@@ -116,11 +116,13 @@ message S_Move {
 
 message C_Skill {
   SkillInfo info = 1;
+  Dir moveDir = 2;
 }
 
 message S_Skill {
   int32 objectId = 1;
   SkillInfo info = 2;
+  Dir moveDir = 3;
 }
 
 message S_ChangeHp {
@@ -230,6 +232,12 @@ message ServerInfo {
   string ipAddress = 2;
   int32 port = 3;
   int32 busyScore = 4;
+}
+
+message Dir {
+  float x = 1;
+  float y = 2;
+  float z = 3;
 }
 
 message ItemInfo {

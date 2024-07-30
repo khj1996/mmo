@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Define;
 
 public class MyPlayerController : PlayerController
@@ -24,34 +25,44 @@ public class MyPlayerController : PlayerController
     {
         GetUIKeyInput();
 
-        GetDirInput();
-
-        CheckUpdatedFlag();
+        UseSkill();
 
         UpdateMovDir();
+
+        CheckUpdatedFlag();
 
         base.UpdateController();
     }
 
-    protected override void UpdateIdle()
+    public void UseSkill()
     {
-        // 이동 상태로 갈지 확인
-        if (_moveKeyPressed)
-        {
-            return;
-        }
-
-        if (_coSkillCooltime == null && Input.GetKey(KeyCode.Space))
+        if (_coSkillCooltime == null && Input.GetMouseButtonDown(0))
         {
             Debug.Log("Skill !");
 
-            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-            skill.Info.SkillId = 2;
+            var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            Debug.DrawLine(transform.position, mPos.origin, Color.red, 2, false);
+
+            C_Skill skill = new C_Skill()
+            {
+                Info = new SkillInfo
+                {
+                    SkillId = 2
+                },
+                MoveDir = new Dir()
+                {
+                    X = mPos.origin.x,
+                    Y = mPos.origin.y,
+                    Z = mPos.origin.z,
+                }
+            };
             Managers.Network.Send(skill);
 
-            _coSkillCooltime = StartCoroutine("CoInputCooltime", 0.2f);
+            _coSkillCooltime = StartCoroutine(nameof(CoInputCooltime), 0.2f);
         }
     }
+
 
     Coroutine _coSkillCooltime;
 
@@ -100,19 +111,13 @@ public class MyPlayerController : PlayerController
         }
     }
 
-    // 키보드 입력
-    void GetDirInput()
-    {
-        _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-
-        if (_moveKeyPressed)
-        {
-            State = CreatureState.Moving;
-        }
-    }
-
     public void UpdateMovDir()
     {
+        if (State == CreatureState.Skill)
+        {
+            return;
+        }
+
         if (Input.GetAxisRaw("Vertical") > 0)
         {
             MoveDir = MoveDir.Up;
@@ -131,9 +136,25 @@ public class MyPlayerController : PlayerController
         }
     }
 
+    protected override void UpdateIdle()
+    {
+        _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
+
+        if (_moveKeyPressed)
+        {
+            State = CreatureState.Moving;
+        }
+    }
+
     protected override void UpdateMoving()
     {
-        if (_moveKeyPressed == false)
+        if (State == CreatureState.Skill)
+        {
+            return;
+        }
+
+        _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
+        if (!_moveKeyPressed)
         {
             State = CreatureState.Idle;
             return;
@@ -142,16 +163,6 @@ public class MyPlayerController : PlayerController
         var moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 
         transform.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
-
-
-        /*if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
-        {
-            State = CreatureState.Idle;
-        }
-        else*/
-        {
-            //State = CreatureState.Moving;
-        }
     }
 
     protected override void CheckUpdatedFlag()

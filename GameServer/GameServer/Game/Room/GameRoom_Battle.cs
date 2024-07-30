@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using GameServer.Data;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace GameServer.Game
@@ -19,11 +20,11 @@ namespace GameServer.Game
             ObjectInfo info = player.Info;
 
             // TODO :다른 좌표로 이동할 경우, 갈 수 있는지 체크
-            /*if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
                 if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
                     return;
-            }*/
+            }
 
 
             player.State = movePosInfo.State;
@@ -62,9 +63,10 @@ namespace GameServer.Game
             S_Skill skill = new S_Skill() { Info = new SkillInfo() };
             skill.ObjectId = info.ObjectId;
             skill.Info.SkillId = skillPacket.Info.SkillId;
+            skill.MoveDir = skillPacket.MoveDir;
             Broadcast(player.CellPos, skill);
 
-            Data.Skill skillData = null;
+            Skill skillData = null;
             if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
                 return;
 
@@ -94,6 +96,7 @@ namespace GameServer.Game
                     arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
                     arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
                     arrow.Speed = skillData.projectile.speed;
+                    arrow.moveDir = new Vector3(skillPacket.MoveDir.X, skillPacket.MoveDir.Y, skillPacket.MoveDir.Z);
                     Push(EnterGame, arrow);
                 }
                     break;

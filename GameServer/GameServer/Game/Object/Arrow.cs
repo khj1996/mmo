@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace GameServer.Game
@@ -22,27 +23,38 @@ namespace GameServer.Game
             //다음 이동
             Room.PushAfter(tick, Update);
 
-            /*//방향 이동 적용
-            //이동이 가능한 상황
-            if (Room.Map.ApplyMove(this, destPos, collision: false))
-            {
-                S_Move movePacket = new S_Move();
-                movePacket.ObjectId = Id;
-                movePacket.PosInfo = PosInfo;
-                Room.Broadcast(CellPos, movePacket);
-            }
-            else
-            {
-                //이동 방향에 물체가 있는 경우 공격
-                GameObject target = Room.Map.Find(destPos);
-                if (target != null)
-                {
-                    target.OnDamaged(this, Data.damage + Owner.TotalAttack);
-                }
+            List<Player> players = Room.GetAdjacentPlayers(CellPos, 1);
 
-                // 소멸
-                Room.Push(Room.LeaveGame, Id);
-            }*/
+            foreach (var player in players)
+            {
+                if(player.Id == Owner.Id)
+                    continue;
+                
+                var dis = (CellPos - player.CellPos).magnitude;
+
+                if (dis < 0.3f)
+                {
+                    if (player != null)
+                    {
+                        player.OnDamaged(this, Data.damage + Owner.TotalAttack);
+                    }
+
+                    // 소멸
+                    Room.Push(Room.LeaveGame, Id);
+                    return;
+                }
+            }
+
+            var tickSpeed = Speed * tick / 1000;
+
+            Info.PosInfo.PosX += moveDir.X * tickSpeed;
+            Info.PosInfo.PosY += moveDir.Y * tickSpeed;
+            Info.PosInfo.PosZ += moveDir.Z * tickSpeed;
+
+            S_Move movePacket = new S_Move();
+            movePacket.ObjectId = Id;
+            movePacket.PosInfo = Info.PosInfo;
+            Room.Broadcast(CellPos, movePacket);
         }
 
         public override GameObject GetOwner()

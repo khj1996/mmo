@@ -6,11 +6,8 @@ using static Define;
 
 public class ArrowController : BaseController
 {
-    protected override void Init(Vector3 dir)
+    protected override void Init()
     {
-        transform.rotation = Quaternion.Euler(dir.x, dir.y, dir.z);
-
-
         State = CreatureState.Moving;
 
         base.Init();
