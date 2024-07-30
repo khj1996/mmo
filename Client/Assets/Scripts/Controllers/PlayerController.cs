@@ -17,8 +17,6 @@ public class PlayerController : CreatureController
 
     protected override void UpdateAnimation()
     {
-        Debug.Log(State);
-        
         if (_animator == null || _sprite == null)
             return;
 

@@ -41,8 +41,11 @@ public class MyPlayerController : PlayerController
             Debug.Log("Skill !");
 
             var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var clickPos = new Vector3(mPos.origin.x, mPos.origin.y, 0);
 
-            Debug.DrawLine(transform.position, mPos.origin, Color.red, 2, false);
+
+            var moveDir = (clickPos - transform.position).normalized;
+
 
             C_Skill skill = new C_Skill()
             {
@@ -52,9 +55,9 @@ public class MyPlayerController : PlayerController
                 },
                 MoveDir = new Dir()
                 {
-                    X = mPos.origin.x,
-                    Y = mPos.origin.y,
-                    Z = mPos.origin.z,
+                    X = moveDir.x,
+                    Y = moveDir.y,
+                    Z = moveDir.z,
                 }
             };
             Managers.Network.Send(skill);

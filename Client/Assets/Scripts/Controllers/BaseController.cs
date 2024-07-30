@@ -256,13 +256,6 @@ public class BaseController : MonoBehaviour
 
     public void UpdatePosition(S_Move movePacket)
     {
-        PosInfo = new PositionInfo()
-        {
-            PosX = movePacket.PosInfo.PosX,
-            PosY = movePacket.PosInfo.PosY,
-            PosZ = movePacket.PosInfo.PosZ,
-            MoveDir = movePacket.PosInfo.MoveDir,
-            State = State
-        };
+        PosInfo = movePacket.PosInfo;
     }
 }
