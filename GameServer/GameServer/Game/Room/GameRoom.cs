@@ -213,7 +213,7 @@ namespace GameServer.Game
             }
         }
 
-        Player FindPlayer(Func<GameObject, bool> condition)
+        public Player FindPlayer(Func<GameObject, bool> condition)
         {
             foreach (Player player in _players.Values)
             {

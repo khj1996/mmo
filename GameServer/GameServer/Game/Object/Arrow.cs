@@ -23,33 +23,29 @@ namespace GameServer.Game
             //다음 이동
             Room.PushAfter(tick, Update);
 
-            List<Player> players = Room.GetAdjacentPlayers(CellPos, 1);
+            var target = Room.FindPlayer(x => (CellPos - x.CellPos).magnitude < 1f);
 
-            foreach (var player in players)
+            if (target != null && target.Id != Owner.Id)
             {
-                if(player.Id == Owner.Id)
-                    continue;
-                
-                var dis = (CellPos - player.CellPos).magnitude;
+                target.OnDamaged(this, Data.damage + Owner.TotalAttack);
 
-                if (dis < 0.3f)
-                {
-                    if (player != null)
-                    {
-                        player.OnDamaged(this, Data.damage + Owner.TotalAttack);
-                    }
 
-                    // 소멸
-                    Room.Push(Room.LeaveGame, Id);
-                    return;
-                }
+                // 소멸
+                Room.Push(Room.LeaveGame, Id);
+                return;
             }
 
             var tickSpeed = Speed * tick / 1000;
 
-            Info.PosInfo.PosX += moveDir.X * tickSpeed;
-            Info.PosInfo.PosY += moveDir.Y * tickSpeed;
-            Info.PosInfo.PosZ += moveDir.Z * tickSpeed;
+            var destPos = new Vector2Float(Info.PosInfo.PosX + moveDir.X * tickSpeed,
+                Info.PosInfo.PosY + moveDir.Y * tickSpeed);
+
+            if (!Room.Map.ApplyMove(this, destPos))
+            {
+                Room.Push(Room.LeaveGame, Id);
+                return;
+            }
+
 
             S_Move movePacket = new S_Move();
             movePacket.ObjectId = Id;
