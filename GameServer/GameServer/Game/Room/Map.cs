@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using GameServer.DB;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameServer.Game
 {
@@ -211,31 +213,72 @@ namespace GameServer.Game
         //맵 데이터 획득
         public void LoadMap(int mapId, string pathPrefix)
         {
-            MapId = mapId;
+            using AppDbContext db = new AppDbContext();
 
-            string mapName = "Map_" + mapId.ToString("000");
 
-            // Collision 관련 파일
-            string text = File.ReadAllText($"{pathPrefix}/{mapName}.txt");
-            StringReader reader = new StringReader(text);
+            MapDb findMapData = db.MapDatas
+                .Where(a => a.MapDbId == mapId).FirstOrDefault();
 
-            MinX = int.Parse(reader.ReadLine());
-            MaxX = int.Parse(reader.ReadLine());
-            MinY = int.Parse(reader.ReadLine());
-            MaxY = int.Parse(reader.ReadLine());
+            if (findMapData == null)
+            {
+                StringBuilder tileStr = new StringBuilder();
 
-            int xCount = MaxX - MinX + 1;
-            int yCount = MaxY - MinY + 1;
+                MapId = mapId;
+
+                string mapName = "Map_" + mapId.ToString("000");
+
+                // Collision 관련 파일
+                string text = File.ReadAllText($"{pathPrefix}/{mapName}.txt");
+                StringReader reader = new StringReader(text);
+
+                MapDb newMapData = new MapDb()
+                {
+                    MinX = int.Parse(reader.ReadLine()),
+                    MaxX = int.Parse(reader.ReadLine()),
+                    MinY = int.Parse(reader.ReadLine()),
+                    MaxY = int.Parse(reader.ReadLine()),
+                };
+
+
+                for (int y = 0; y < newMapData.MaxY - newMapData.MinY; y++)
+                {
+                    tileStr.Append((newMapData.MaxY - newMapData.MinY - 1 != y)
+                        ? reader.ReadLine() + ","
+                        : reader.ReadLine());
+                }
+
+                newMapData.TileInfo = tileStr.ToString();
+
+                db.MapDatas.Add(newMapData);
+                bool success = db.SaveChangesEx();
+
+                if (success == false)
+                    return;
+
+                findMapData = newMapData;
+            }
+
+            MinX = findMapData.MinX;
+            MaxX = findMapData.MaxX;
+            MinY = findMapData.MinY;
+            MaxY = findMapData.MaxY;
+
+
+            int xCount = MaxX - MinX;
+            int yCount = MaxY - MinY;
             _collision = new bool[yCount, xCount];
+
+            var tileData = findMapData.TileInfo.Split(",");
 
             for (int y = 0; y < yCount; y++)
             {
-                string line = reader.ReadLine();
+                string line = tileData[y];
                 for (int x = 0; x < xCount; x++)
                 {
                     _collision[y, x] = (line[x] == '1' ? true : false);
                 }
             }
+            Console.WriteLine(1);
         }
 
         #region A* PathFinding

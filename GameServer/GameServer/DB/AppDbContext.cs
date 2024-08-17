@@ -8,9 +8,11 @@ namespace GameServer.DB
     {
         //DB
         public DbSet<AccountDb> Accounts { get; set; }
+        
         public DbSet<ServerDb> Servers { get; set; }
         public DbSet<PlayerDb> Players { get; set; }
         public DbSet<ItemDb> Items { get; set; }
+        public DbSet<MapDb> MapDatas { get; set; }
 
         //로그
         static readonly ILoggerFactory _logger = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -37,6 +39,10 @@ namespace GameServer.DB
             
             builder.Entity<ServerDb>()
                 .HasIndex(s => s.Name)
+                .IsUnique();
+            
+            builder.Entity<MapDb>()
+                .HasIndex(s => s.MapDbId)
                 .IsUnique();
         }
     }

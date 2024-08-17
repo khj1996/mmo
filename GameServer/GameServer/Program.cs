@@ -73,8 +73,6 @@ namespace GameServer
             //데이터 로드
             DataManager.LoadData();
 
-            //방 생성
-            GameLogic.Instance.Push(() => { GameLogic.Instance.Add(1); });
 
             //클라이언트 접속을 위한 소켓 초기화
             string host = Dns.GetHostName();
@@ -104,6 +102,10 @@ namespace GameServer
                 t.Name = "Network Send";
                 t.Start();
             }
+            
+            
+            //방 생성
+            GameLogic.Instance.Push(() => { GameLogic.Instance.Add(1); });
 
             // GameLogic
             Thread.CurrentThread.Name = "GameLogic";

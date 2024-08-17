@@ -95,6 +95,7 @@ namespace GameServer.Game
                     arrow.Info.PosInfo.MoveDir = player.Info.PosInfo.MoveDir;
                     arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
                     arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
+                    Console.WriteLine(player.Info.PosInfo.PosX + "  " + player.Info.PosInfo.PosY);
                     arrow.Info.PosInfo.LookDir = skillPacket.MoveDir;
                     arrow.moveDir = new Vector3(skillPacket.MoveDir.X, skillPacket.MoveDir.Y, skillPacket.MoveDir.Z);
                     arrow.Speed = skillData.projectile.speed;

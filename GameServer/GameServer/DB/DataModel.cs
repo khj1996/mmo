@@ -37,7 +37,7 @@ namespace GameServer.DB
 
     [Table("Item")]
     public class ItemDb
-    {                               
+    {
         public int ItemDbId { get; set; }
         public int TemplateId { get; set; }
         public int Count { get; set; }
@@ -57,4 +57,29 @@ namespace GameServer.DB
         public int Port { get; set; }
         public int BusyScore { get; set; }
     }
+
+    [Table("MapInfo")]
+    public class MapDb
+    {
+        public int MapDbId { get; set; }
+
+        public int MaxX { get; set; }
+        public int MaxY { get; set; }
+        public int MinX { get; set; }
+        public int MinY { get; set; }
+        public string TileInfo { get; set; }
+    }
+
+    /*[Table("MapObject")]
+    public class MapOnjectDb
+    {
+        public int ItemDbId { get; set; }
+        public int TemplateId { get; set; }
+        public int Count { get; set; }
+        public int Slot { get; set; }
+        public bool Equipped { get; set; } = false;
+
+        [ForeignKey("Owner")] public int? OwnerDbId { get; set; }
+        public PlayerDb Owner { get; set; }
+    }*/
 }
