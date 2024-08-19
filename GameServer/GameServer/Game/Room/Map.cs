@@ -163,7 +163,6 @@ namespace GameServer.Game
             //TODO : 충돌체크
             if (CanGo(dest, checkObjects) == false)
             {
-                Console.WriteLine("1");
                 return false;
             }
 
@@ -279,8 +278,6 @@ namespace GameServer.Game
                     _collision[y, x] = (line[x] == '1' ? true : false);
                 }
             }
-
-            Console.WriteLine(1);
         }
 
         #region A* PathFinding

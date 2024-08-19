@@ -174,6 +174,7 @@ public class BaseController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
         transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
+        Debug.Log(transform.position);
 
         UpdateAnimation();
     }
@@ -254,7 +255,7 @@ public class BaseController : MonoBehaviour
     }
 
 
-    public void UpdatePosition(S_Move movePacket)
+    public virtual void UpdatePosition(S_Move movePacket)
     {
         PosInfo = new PositionInfo()
         {

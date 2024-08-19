@@ -14,9 +14,13 @@ namespace GameServer.Game
             ObjectType = GameObjectType.Projectile;
         }
 
+        public void Start(int delay)
+        {
+            Room.PushAfter(delay, Update);
+        }
+
         public override void Update()
         {
-
         }
     }
 }

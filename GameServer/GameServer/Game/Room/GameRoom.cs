@@ -145,7 +145,8 @@ namespace GameServer.Game
                 projectile.Room = this;
 
                 GetZone(projectile.CellPos).Projectiles.Add(projectile);
-                projectile.Update();
+                projectile.Start(100);
+                
             }
 
             // 타인한테 정보 전송

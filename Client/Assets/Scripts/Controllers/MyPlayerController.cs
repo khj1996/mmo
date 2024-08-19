@@ -213,4 +213,19 @@ public class MyPlayerController : PlayerController
             }
         }
     }
+    
+    public override void UpdatePosition(S_Move movePacket)
+    {
+
+        
+        PosInfo = new PositionInfo()
+        {
+            PosX = movePacket.PosInfo.PosX,
+            PosY = movePacket.PosInfo.PosY,
+            PosZ = movePacket.PosInfo.PosZ,
+            MoveDir = movePacket.PosInfo.MoveDir,
+            State = State
+        };
+        transform.position = new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY, movePacket.PosInfo.PosZ);
+    }
 }
