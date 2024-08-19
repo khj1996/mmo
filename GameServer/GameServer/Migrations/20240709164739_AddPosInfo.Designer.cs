@@ -31,8 +31,6 @@ namespace GameServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountDbId"));
-
                     b.Property<string>("AccountName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");

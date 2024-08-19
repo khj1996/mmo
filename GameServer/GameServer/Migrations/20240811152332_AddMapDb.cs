@@ -14,8 +14,7 @@ namespace GameServer.Migrations
                 name: "MapInfo",
                 columns: table => new
                 {
-                    MapDbId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MapDbId = table.Column<int>(type: "int", nullable: false),
                     MaxX = table.Column<int>(type: "int", nullable: false),
                     MaxY = table.Column<int>(type: "int", nullable: false),
                     MinX = table.Column<int>(type: "int", nullable: false),

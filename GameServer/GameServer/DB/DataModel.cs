@@ -6,7 +6,9 @@ namespace GameServer.DB
     [Table("Account")]
     public class AccountDb
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int AccountDbId { get; set; }
+
         public string AccountName { get; set; }
         public string JwtToken { get; set; }
         public ICollection<PlayerDb> Players { get; set; }
@@ -61,6 +63,7 @@ namespace GameServer.DB
     [Table("MapInfo")]
     public class MapDb
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int MapDbId { get; set; }
 
         public int MaxX { get; set; }

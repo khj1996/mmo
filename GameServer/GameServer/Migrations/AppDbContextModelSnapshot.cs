@@ -28,8 +28,6 @@ namespace GameServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountDbId"));
-
                     b.Property<string>("AccountName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -43,7 +41,7 @@ namespace GameServer.Migrations
                     b.HasIndex("AccountName")
                         .IsUnique();
 
-                    b.ToTable("Account");
+                    b.ToTable("Account", (string)null);
                 });
 
             modelBuilder.Entity("GameServer.DB.ItemDb", b =>
@@ -73,7 +71,7 @@ namespace GameServer.Migrations
 
                     b.HasIndex("OwnerDbId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Item", (string)null);
                 });
 
             modelBuilder.Entity("GameServer.DB.MapDb", b =>
@@ -81,8 +79,6 @@ namespace GameServer.Migrations
                     b.Property<int>("MapDbId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MapDbId"));
 
                     b.Property<int>("MaxX")
                         .HasColumnType("int");
@@ -105,7 +101,7 @@ namespace GameServer.Migrations
                     b.HasIndex("MapDbId")
                         .IsUnique();
 
-                    b.ToTable("MapInfo");
+                    b.ToTable("MapInfo", (string)null);
                 });
 
             modelBuilder.Entity("GameServer.DB.PlayerDb", b =>
@@ -160,7 +156,7 @@ namespace GameServer.Migrations
                     b.HasIndex("PlayerName")
                         .IsUnique();
 
-                    b.ToTable("Player");
+                    b.ToTable("Player", (string)null);
                 });
 
             modelBuilder.Entity("GameServer.DB.ServerDb", b =>
@@ -190,7 +186,7 @@ namespace GameServer.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ServerInfo");
+                    b.ToTable("ServerInfo", (string)null);
                 });
 
             modelBuilder.Entity("GameServer.DB.ItemDb", b =>

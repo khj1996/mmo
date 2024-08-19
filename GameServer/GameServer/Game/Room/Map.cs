@@ -233,6 +233,7 @@ namespace GameServer.Game
 
                 MapDb newMapData = new MapDb()
                 {
+                    MapDbId = mapId,
                     MinX = int.Parse(reader.ReadLine()),
                     MaxX = int.Parse(reader.ReadLine()),
                     MinY = int.Parse(reader.ReadLine()),
@@ -278,6 +279,7 @@ namespace GameServer.Game
                     _collision[y, x] = (line[x] == '1' ? true : false);
                 }
             }
+
             Console.WriteLine(1);
         }
 

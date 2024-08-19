@@ -101,7 +101,12 @@ namespace LoginServer
                 else
                 {
                     //신규 계정
-                    AccountDb newAccount = new AccountDb() { AccountName = $"Player_{accountDbId}" };
+                    AccountDb newAccount = new AccountDb()
+                    {
+                        AccountDbId = accountDbId,
+                        AccountName = $"Player_{accountDbId}", 
+                        JwtToken = loginPacket.JwtToken
+                    };
                     db.Accounts.Add(newAccount);
                     bool success = db.SaveChangesEx();
                     if (success == false)

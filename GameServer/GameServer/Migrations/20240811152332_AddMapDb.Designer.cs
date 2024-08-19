@@ -31,8 +31,6 @@ namespace GameServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountDbId"));
-
                     b.Property<string>("AccountName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -84,8 +82,6 @@ namespace GameServer.Migrations
                     b.Property<int>("MapDbId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MapDbId"));
 
                     b.Property<int>("MaxX")
                         .HasColumnType("int");

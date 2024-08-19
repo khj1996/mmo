@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace GameServer.Migrations
+namespace LoginServer.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -14,12 +14,30 @@ namespace GameServer.Migrations
                 name: "Account",
                 columns: table => new
                 {
-                    AccountDbId = table.Column<int>(type: "int", nullable: false),
-                    AccountName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AccountDbId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JwtToken = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Account", x => x.AccountDbId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServerInfo",
+                columns: table => new
+                {
+                    ServerDbId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Port = table.Column<int>(type: "int", nullable: false),
+                    BusyScore = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServerInfo", x => x.ServerDbId);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,6 +109,12 @@ namespace GameServer.Migrations
                 table: "Player",
                 column: "PlayerName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerInfo_Name",
+                table: "ServerInfo",
+                column: "Name",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -98,6 +122,9 @@ namespace GameServer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Item");
+
+            migrationBuilder.DropTable(
+                name: "ServerInfo");
 
             migrationBuilder.DropTable(
                 name: "Player");
