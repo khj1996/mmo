@@ -165,7 +165,20 @@ public class MyPlayerController : PlayerController
 
         var moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 
-        transform.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
+
+        //지표면 제외
+        int mask = ~(1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Player"));
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDir.normalized, 0.5f, mask);
+
+        if (!hit.collider)
+        {
+            transform.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
+        }
+        else
+        {
+            Debug.Log("장애물");
+        }
     }
 
     protected override void CheckUpdatedFlag()
@@ -213,11 +226,9 @@ public class MyPlayerController : PlayerController
             }
         }
     }
-    
+
     public override void UpdatePosition(S_Move movePacket)
     {
-
-        
         PosInfo = new PositionInfo()
         {
             PosX = movePacket.PosInfo.PosX,
