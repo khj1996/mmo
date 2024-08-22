@@ -12,11 +12,14 @@ public class MyPlayerController : PlayerController
 
     private float currTime = 0.0f;
 
+    private Rigidbody2D _rigid;
+
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
 
     protected override void Init()
     {
+        _rigid = GetComponent<Rigidbody2D>();
         base.Init();
         RefreshAdditionalStat();
     }
@@ -165,20 +168,7 @@ public class MyPlayerController : PlayerController
 
         var moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 
-
-        //지표면 제외
-        int mask = ~(1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Player"));
-
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDir.normalized, 0.5f, mask);
-
-        if (!hit.collider)
-        {
-            transform.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
-        }
-        else
-        {
-            Debug.Log("장애물");
-        }
+        _rigid.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
     }
 
     protected override void CheckUpdatedFlag()
