@@ -72,10 +72,6 @@ public class MapManager
         GameObject go = Managers.Resource.Instantiate($"Map/{mapName}");
         go.name = "Map";
 
-        GameObject collision = Util.FindChild(go, "Tilemap_Collision", true);
-        if (collision != null)
-            collision.SetActive(false);
-
         CurrentGrid = go.GetComponent<Grid>();
 
         // Collision 관련 파일
