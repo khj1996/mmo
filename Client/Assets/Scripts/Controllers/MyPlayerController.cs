@@ -41,10 +41,9 @@ public class MyPlayerController : PlayerController
     {
         if (_coSkillCooltime == null && Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Skill !");
-
             var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
             var clickPos = new Vector3(mPos.origin.x, mPos.origin.y, 0);
+            Debug.Log(clickPos);
 
 
             var moveDir = (clickPos - transform.position).normalized;

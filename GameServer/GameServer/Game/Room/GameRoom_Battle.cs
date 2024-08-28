@@ -22,7 +22,6 @@ namespace GameServer.Game
             // TODO :다른 좌표로 이동할 경우, 갈 수 있는지 체크
             if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
-                Console.WriteLine(Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)));
                 if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
                 {
                     player.Session.Send(new S_Move()
@@ -41,7 +40,7 @@ namespace GameServer.Game
             {
                 x = movePacket.PosInfo.PosX,
                 y = movePacket.PosInfo.PosY,
-            }, false);
+            });
 
             // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move();
@@ -102,7 +101,7 @@ namespace GameServer.Game
                     arrow.Info.PosInfo.MoveDir = player.Info.PosInfo.MoveDir;
                     arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
                     arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
-                    Console.WriteLine(arrow.Info.PosInfo.PosX + ","+arrow.Info.PosInfo.PosY);
+                    Console.WriteLine(arrow.Info.PosInfo.PosX + "," + arrow.Info.PosInfo.PosY);
                     arrow.Info.PosInfo.LookDir = skillPacket.MoveDir;
                     arrow.moveDir = new Vector3(skillPacket.MoveDir.X, skillPacket.MoveDir.Y, skillPacket.MoveDir.Z);
                     arrow.Speed = skillData.projectile.speed;

@@ -174,7 +174,6 @@ public class BaseController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
         transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
-        Debug.Log(transform.position);
 
         UpdateAnimation();
     }
@@ -233,12 +232,10 @@ public class BaseController : MonoBehaviour
         if (dist < Speed * Time.deltaTime)
         {
             transform.position = destPos;
-            State = CreatureState.Idle;
         }
         else
         {
             transform.position += moveDir.normalized * (Speed * Time.deltaTime);
-            State = CreatureState.Moving;
         }
     }
 
@@ -263,7 +260,7 @@ public class BaseController : MonoBehaviour
             PosY = movePacket.PosInfo.PosY,
             PosZ = movePacket.PosInfo.PosZ,
             MoveDir = movePacket.PosInfo.MoveDir,
-            State = State
+            State = movePacket.PosInfo.State
         };
     }
 }

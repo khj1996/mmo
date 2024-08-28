@@ -12,6 +12,10 @@ namespace AccountServer
     {
         public static int Main(string[] args)
         {
+            Console.WriteLine(Math.Truncate(0.5f));
+            Console.WriteLine(Math.Truncate(-0.5f));
+
+            return 0;
             Stopwatch sw = new Stopwatch();
 
             Random rand = new Random();
@@ -26,7 +30,7 @@ namespace AccountServer
             {
                 /*var first = rand.Next();
                 var send = rand.Next();*/
-                
+
                 var first = rand.NextDouble();
                 var send = rand.NextDouble();
                 long startTicks = DateTime.UtcNow.Ticks;

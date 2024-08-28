@@ -118,16 +118,54 @@ namespace GameServer.Game
         bool[,] _collision;
 
         //이동 가능 여부 체크
-        public bool CanGo(Vector2Float cellPos, bool checkObjects = true)
+        public bool CanGo(Vector2Float cellPos)
         {
             if (cellPos.x < MinX || cellPos.x > MaxX)
                 return false;
             if (cellPos.y < MinY || cellPos.y > MaxY)
                 return false;
 
-            float x = cellPos.x - MinX;
-            float y = MaxY - cellPos.y;
-            return !_collision[(int)y, (int)x];
+
+            var x = (int)((cellPos.x < 0) ? cellPos.x - MinX - 1 : cellPos.x - MinX);
+            var y = (int)((cellPos.y < 0) ? MaxY - cellPos.y - 1 : MaxY - cellPos.y);
+
+            return !_collision[y, x];
+        }
+
+
+        //이동 가능 여부 체크
+        public bool CanGo(Vector2Float destPos, Vector2Float curPos)
+        {
+            if (destPos.x < MinX || destPos.x > MaxX)
+                return false;
+            if (destPos.y < MinY || destPos.y > MaxY)
+                return false;
+
+
+            var curX = (int)((curPos.x < 0) ? curPos.x - MinX - 1 : curPos.x - MinX);
+            var curY = (int)((curPos.y < 0) ? MaxY - curPos.y - 1 : MaxY - curPos.y);
+            var destX = (int)((destPos.x < 0) ? destPos.x - MinX - 1 : destPos.x - MinX);
+            var destY = (int)((destPos.y < 0) ? MaxY - destPos.y - 1 : MaxY - destPos.y);
+
+
+            var minX = (curX > destX) ? destX : curX;
+            var maxX = (curX < destX) ? destX : curX;
+            var minY = (curY > destY) ? destY : curY;
+            var maxY = (curY < destY) ? destY : curY;
+
+
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    if (_collision[y, x])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         //객체 제거시
@@ -152,7 +190,7 @@ namespace GameServer.Game
         }
 
         //이동 적용
-        public bool ApplyMove(GameObject gameObject, Vector2Float dest, bool checkObjects = true)
+        public bool ApplyMove(GameObject gameObject, Vector2Float dest)
         {
             if (gameObject.Room == null)
                 return false;
@@ -161,7 +199,7 @@ namespace GameServer.Game
 
             PositionInfo posInfo = gameObject.Info.PosInfo;
             //TODO : 충돌체크
-            if (CanGo(dest, checkObjects) == false)
+            if (CanGo(dest, gameObject.CellPos) == false)
             {
                 return false;
             }
@@ -215,8 +253,7 @@ namespace GameServer.Game
             using AppDbContext db = new AppDbContext();
 
 
-            MapDb findMapData = db.MapDatas
-                .Where(a => a.MapDbId == mapId).FirstOrDefault();
+            MapDb findMapData = db.MapDatas.Where(a => a.MapDbId == mapId).FirstOrDefault();
 
             if (findMapData == null)
             {
@@ -353,7 +390,7 @@ namespace GameServer.Game
                     // 벽으로 막혀서 갈 수 없으면 스킵
                     if (next.Y != dest.Y || next.X != dest.X)
                     {
-                        if (CanGo(Pos2Cell(next), checkObjects) == false) // CellPos
+                        if (CanGo(Pos2Cell(next)) == false) // CellPos
                             continue;
                     }
 

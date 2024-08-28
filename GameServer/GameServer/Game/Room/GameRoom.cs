@@ -52,11 +52,8 @@ namespace GameServer.Game
         {
             Map.LoadMap(mapId, ConfigManager.Config.mapDataPath);
 
-            // Zone
             ZoneCells = zoneCells; // 10
-            // 1~10 칸 = 1존
-            // 11~20칸 = 2존
-            // 21~30칸 = 3존
+            
             int countY = (Map.SizeY + zoneCells - 1) / zoneCells;
             int countX = (Map.SizeX + zoneCells - 1) / zoneCells;
             Zones = new Zone[countY, countX];
