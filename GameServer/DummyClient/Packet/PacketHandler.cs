@@ -69,7 +69,7 @@ class PacketHandler
         ServerSession serverSession = (ServerSession)session;
 
         // TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록
-        if (loginPacket.Players == null || loginPacket.Players.Count == 0)
+        /*if (loginPacket.Players == null || loginPacket.Players.Count == 0)
         {
             C_CreatePlayer createPacket = new C_CreatePlayer();
             createPacket.Name = $"Player_{serverSession.DummyId.ToString("0000")}";
@@ -82,7 +82,7 @@ class PacketHandler
             C_EnterGame enterGamePacket = new C_EnterGame();
             enterGamePacket.Name = info.Name;
             serverSession.Send(enterGamePacket);
-        }
+        }*/
     }
 
     // Step3

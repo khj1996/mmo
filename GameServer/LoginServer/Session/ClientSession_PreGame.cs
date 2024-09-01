@@ -53,50 +53,7 @@ namespace LoginServer
                 //기존 계정
                 if (findAccount != null)
                 {
-                    // AccountDbId 메모리에 기억
                     AccountDbId = findAccount.AccountDbId;
-
-                    S_Login loginOk = new S_Login() { LoginOk = 1 };
-                    foreach (PlayerDb playerDb in findAccount.Players)
-                    {
-                        LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
-                        {
-                            PlayerDbId = playerDb.PlayerDbId,
-                            Name = playerDb.PlayerName,
-                            StatInfo = new StatInfo()
-                            {
-                                Level = playerDb.Level,
-                                Hp = playerDb.Hp,
-                                MaxHp = playerDb.MaxHp,
-                                Attack = playerDb.Attack,
-                                Speed = playerDb.Speed,
-                                TotalExp = playerDb.TotalExp
-                            }
-                        };
-
-                        // 메모리에도 들고 있다
-                        LobbyPlayers.Add(lobbyPlayer);
-
-                        // 패킷에 넣어준다
-                        loginOk.Players.Add(lobbyPlayer);
-                    }
-
-                    foreach (var serverDb in serverDbs)
-                    {
-                        ServerInfo serverInfo = new ServerInfo()
-                        {
-                            Name = serverDb.Name,
-                            IpAddress = serverDb.IpAddress,
-                            Port = serverDb.Port,
-                            BusyScore = serverDb.BusyScore,
-                        };
-                        loginOk.ServerInfos.Add(serverInfo);
-                    }
-
-
-                    Send(loginOk);
-                    // 로비로 이동
-                    ServerState = PlayerServerState.ServerStateLobby;
                 }
                 else
                 {
@@ -104,7 +61,7 @@ namespace LoginServer
                     AccountDb newAccount = new AccountDb()
                     {
                         AccountDbId = accountDbId,
-                        AccountName = $"Player_{accountDbId}", 
+                        AccountName = $"Player_{accountDbId}",
                         JwtToken = loginPacket.JwtToken
                     };
                     db.Accounts.Add(newAccount);
@@ -114,27 +71,55 @@ namespace LoginServer
 
                     // AccountDbId 메모리에 기억
                     AccountDbId = newAccount.AccountDbId;
-
-                    S_Login loginOk = new S_Login() { LoginOk = 1 };
-
-                    foreach (var serverDb in serverDbs)
-                    {
-                        ServerInfo serverInfo = new ServerInfo()
-                        {
-                            Name = serverDb.Name,
-                            IpAddress = serverDb.IpAddress,
-                            Port = serverDb.Port,
-                            BusyScore = serverDb.BusyScore,
-                        };
-                        loginOk.ServerInfos.Add(serverInfo);
-                    }
-
-                    Send(loginOk);
-                    // 로비로 이동
-                    ServerState = PlayerServerState.ServerStateLobby;
                 }
+
+
+                S_Login loginOk = new S_Login() { LoginOk = 1 };
+
+
+                foreach (var serverDb in serverDbs)
+                {
+                    ServerInfo serverInfo = new ServerInfo()
+                    {
+                        Name = serverDb.Name,
+                        IpAddress = serverDb.IpAddress,
+                        Port = serverDb.Port,
+                        BusyScore = serverDb.BusyScore,
+                    };
+                    loginOk.ServerInfos.Add(serverInfo);
+                }
+
+
+                Send(loginOk);
+                // 로비로 이동
+                ServerState = PlayerServerState.ServerStateLobby;
             }
+
+
+            /*foreach (PlayerDb playerDb in findAccount.Players)
+            {
+                LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
+                {
+                    PlayerDbId = playerDb.PlayerDbId,
+                    Name = playerDb.PlayerName,
+                    StatInfo = new StatInfo()
+                    {
+                        Level = playerDb.Level,
+                        Hp = playerDb.Hp,
+                        MaxHp = playerDb.MaxHp,
+                        Attack = playerDb.Attack,
+                        Speed = playerDb.Speed,
+                        TotalExp = playerDb.TotalExp
+                    }
+                };
+
+                // 메모리에도 들고 있다
+                LobbyPlayers.Add(lobbyPlayer);
+
+                // 패킷에 넣어준다
+                loginOk.Players.Add(lobbyPlayer);*/
         }
+
 
         //인게임 입장
         public void HandleEnterGame(C_EnterGame enterGamePacket)

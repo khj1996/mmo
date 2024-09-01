@@ -110,7 +110,6 @@ class PacketHandler
         Managers.Network.Send(loginPacket);
     }
 
-    // 로그인 OK + 캐릭터 목록
     public static void S_LoginHandler(PacketSession session, IMessage packet)
     {
         S_Login loginPacket = (S_Login)packet;
@@ -206,9 +205,11 @@ class PacketHandler
     public static void S_EnterServerHandler(PacketSession session, IMessage packet)
     {
         S_EnterServer enterPacket = (S_EnterServer)packet;
+        
+        Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>().SetCharacter(enterPacket.Players);
 
         // TODO : 로비 UI에서 캐릭터 보여주고, 선택할 수 있도록
-        if (enterPacket.Players == null || enterPacket.Players.Count == 0)
+        /*if (enterPacket.Players == null || enterPacket.Players.Count == 0)
         {
             C_CreatePlayer createPacket = new C_CreatePlayer();
             createPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
@@ -221,7 +222,7 @@ class PacketHandler
             C_EnterGame enterGamePacket = new C_EnterGame();
             enterGamePacket.Name = info.Name;
             Managers.Network.Send(enterGamePacket);
-        }
+        }*/
     }
 
     public static void S_PingHandler(PacketSession session, IMessage packet)

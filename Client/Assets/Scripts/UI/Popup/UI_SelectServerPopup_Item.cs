@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class UI_SelectServerPopup_Item : UI_Base
 		SelectServerButton
 	}
 
-	enum Texts
+	enum TMP_Texts
 	{ 
 		NameText
 	}
@@ -22,7 +23,7 @@ public class UI_SelectServerPopup_Item : UI_Base
 	public override void Init()
 	{
 		Bind<Button>(typeof(Buttons));
-		Bind<Text>(typeof(Texts));
+		Bind<TMP_Text>(typeof(TMP_Texts));
 
 		GetButton((int)Buttons.SelectServerButton).gameObject.BindEvent(OnClickButton);
 	}
@@ -32,13 +33,12 @@ public class UI_SelectServerPopup_Item : UI_Base
 		if (Info == null)
 			return;
 
-		GetText((int)Texts.NameText).text = Info.Name;
+		GetTMP((int)TMP_Texts.NameText).text = Info.Name;
 	}
 
 	void OnClickButton(PointerEventData evt)
 	{
 		Managers.Network.Connect(Info);
-		Managers.Scene.LoadScene(Define.Scene.Game);
 		Managers.UI.ClosePopupUI();
 	}
 }

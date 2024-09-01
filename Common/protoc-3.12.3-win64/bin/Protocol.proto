@@ -145,11 +145,10 @@ message C_Login {
 message S_Login {
   int32 loginOk = 1;
   repeated ServerInfo serverInfos = 2;
-  repeated LobbyPlayerInfo players = 3;
 }
 
 message S_EnterServer {
-  repeated LobbyPlayerInfo players = 3;
+  repeated LobbyPlayerInfo players = 1;
 }
 
 message C_CreatePlayer {
@@ -157,7 +156,8 @@ message C_CreatePlayer {
 }
 
 message S_CreatePlayer {
-  LobbyPlayerInfo player = 1;
+  int32 result = 1;
+  LobbyPlayerInfo player = 2;
 }
 
 message C_EnterGame {
@@ -213,6 +213,7 @@ message PositionInfo {
   float posX = 4;
   float posY = 5;
   float posZ = 6;
+  int32 Map = 7;
 }
 
 message StatInfo {

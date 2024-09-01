@@ -79,6 +79,8 @@ public class UI_LoginScene : UI_Scene
 					Port = res.Port,
 					IpAddress = res.IpAddress
 				});
+				
+				gameObject.SetActive(false);
 			}
 		});
 		

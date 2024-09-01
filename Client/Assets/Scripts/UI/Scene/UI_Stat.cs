@@ -24,8 +24,6 @@ public class UI_Stat : UI_Base
 		AttackValueText,
 		DefenceValueText
 	}
-	
-	[SerializeField] CanvasScaler canvScaler;
 
 	bool _init = false;
 	public override void Init()
