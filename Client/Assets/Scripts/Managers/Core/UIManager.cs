@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIManager
 {
-    int _order = 10;
+    int _order = 100;
 
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
     public UI_Scene SceneUI { get; private set; }
@@ -36,7 +36,7 @@ public class UIManager
             canvas.sortingOrder = 0;
         }
     }
-
+    
 	public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
 	{
 		if (string.IsNullOrEmpty(name))

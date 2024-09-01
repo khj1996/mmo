@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class UI_Stat : UI_Base
 {
@@ -22,6 +24,8 @@ public class UI_Stat : UI_Base
 		AttackValueText,
 		DefenceValueText
 	}
+	
+	[SerializeField] CanvasScaler canvScaler;
 
 	bool _init = false;
 	public override void Init()
@@ -29,9 +33,11 @@ public class UI_Stat : UI_Base
 		Bind<Image>(typeof(Images));
 		Bind<Text>(typeof(Texts));
 
+		
 		_init = true;
 		RefreshUI();
 	}
+
 
 	public void RefreshUI()
 	{
