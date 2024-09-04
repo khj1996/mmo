@@ -38,21 +38,28 @@ public class UI_SelectCharacterPopup_Item : UI_Base
             return;
 
         GetTMP((int)TMP_Texts.NameText).text = Info.PlayerName;
-        GetTMP((int)TMP_Texts.LvText).text = Info.Lv.ToString();
-        GetTMP((int)TMP_Texts.Map).text = Info.CurMap.ToString();
-        GetTMP((int)TMP_Texts.PosX).text = Info.PosX.ToString("0.#");
-        GetTMP((int)TMP_Texts.PosY).text = Info.PosY.ToString("0.#");
+        GetTMP((int)TMP_Texts.LvText).text = $"레벨: {Info.Lv.ToString()}";
+        GetTMP((int)TMP_Texts.Map).text = $"맵: {Info.CurMap.ToString()}";
+        GetTMP((int)TMP_Texts.PosX).text = $"X: {Info.PosX:0.#}";
+        GetTMP((int)TMP_Texts.PosY).text = $"Y: {Info.PosY:0.#}";
     }
 
-    void OnClickButton(PointerEventData evt)
+    void OnClickButton(PointerEventData evt)    
     {
-        C_EnterGame enterGamePacket = new C_EnterGame
+        if (Info.PlayerName != "캐릭터 추가")
         {
-            Name = Info.PlayerName
-        };
-        Managers.Network.Send(enterGamePacket);
+            C_EnterGame enterGamePacket = new C_EnterGame
+            {
+                Name = Info.PlayerName
+            };
+            Managers.Network.Send(enterGamePacket);
+            Managers.Scene.LoadScene(Define.Scene.Game);
+            Managers.UI.ClosePopupUI();
+        }
+        else 
+        {
+            Managers.UI.ShowPopupUI<UI_CreateCharacterPopup>();
+        }
 
-        Managers.Scene.LoadScene(Define.Scene.Game);
-        Managers.UI.ClosePopupUI();
     }
 }

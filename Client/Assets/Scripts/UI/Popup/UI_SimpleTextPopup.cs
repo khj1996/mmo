@@ -5,10 +5,9 @@ using Google.Protobuf.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_SelectCharacterPopup : UI_Popup
+public class UI_SimpleTextPopup : UI_Popup
 {
     public List<UI_SelectCharacterPopup_Item> Items { get; } = new List<UI_SelectCharacterPopup_Item>();
-
 
     public void SetCharacter(RepeatedField<Google.Protobuf.Protocol.LobbyPlayerInfo> playerInfos)
     {
