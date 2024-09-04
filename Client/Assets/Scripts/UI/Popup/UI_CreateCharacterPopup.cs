@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class UI_CreateCharacterPopup : UI_Popup
 {
+    
     enum GameObjects
     {
         CharacterName,
@@ -34,10 +35,13 @@ public class UI_CreateCharacterPopup : UI_Popup
 
     void OnClickCreate(PointerEventData evt)
     {
-        C_CreatePlayer createPacket = new C_CreatePlayer();
-        string account =
-            createPacket.Name = Get<GameObject>((int)GameObjects.CharacterName).GetComponent<InputField>().text;
+        C_CreatePlayer createPacket = new C_CreatePlayer()
+        {
+            Name = Get<GameObject>((int)GameObjects.CharacterName).GetComponent<TMP_InputField>().text
+        };
         Managers.Network.Send(createPacket);
+        
+        Managers.UI.ClosePopupUI();
     }
 
     void OnClickCancel(PointerEventData evt)

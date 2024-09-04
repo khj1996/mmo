@@ -125,9 +125,7 @@ class PacketHandler
 
         if (createOkPacket.Player == null)
         {
-            C_CreatePlayer createPacket = new C_CreatePlayer();
-            createPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
-            Managers.Network.Send(createPacket);
+            Managers.UI.ShowPopupUI<UI_SimpleTextPopup>().SetText("생성실패", "닉네임 중복");
         }
         else
         {
@@ -205,7 +203,7 @@ class PacketHandler
     public static void S_EnterServerHandler(PacketSession session, IMessage packet)
     {
         S_EnterServer enterPacket = (S_EnterServer)packet;
-        
+
         Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>().SetCharacter(enterPacket.Players);
     }
 
