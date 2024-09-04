@@ -9,6 +9,10 @@ public class UI_SelectCharacterPopup : UI_Popup
 {
     public List<UI_SelectCharacterPopup_Item> Items { get; } = new List<UI_SelectCharacterPopup_Item>();
 
+    public override void Init()
+    {
+        base.Init();
+    }
 
     public void SetCharacter(RepeatedField<Google.Protobuf.Protocol.LobbyPlayerInfo> playerInfos)
     {
@@ -20,8 +24,7 @@ public class UI_SelectCharacterPopup : UI_Popup
 
         for (int i = 0; i < playerInfos.Count; i++)
         {
-            GameObject go = Managers.Resource.Instantiate("UI/Popup/UI_SelectCharacterPopup_Item", grid.transform);
-            UI_SelectCharacterPopup_Item item = go.GetOrAddComponent<UI_SelectCharacterPopup_Item>();
+            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
             Items.Add(item);
 
             item.Info = new CharacterInfo()
@@ -36,8 +39,37 @@ public class UI_SelectCharacterPopup : UI_Popup
 
         if (playerInfos.Count < 8)
         {
-            GameObject go = Managers.Resource.Instantiate("UI/Popup/UI_SelectCharacterPopup_Item", grid.transform);
-            UI_SelectCharacterPopup_Item item = go.GetOrAddComponent<UI_SelectCharacterPopup_Item>();
+            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
+            Items.Add(item);
+
+            item.Info = new CharacterInfo()
+            {
+                PlayerName = "캐릭터 추가",
+                Lv = 1,
+                CurMap = 1,
+                PosX = 0,
+                PosY = 0,
+            };
+        }
+
+        RefreshUI();
+    }
+
+    public void AddCharacter(Google.Protobuf.Protocol.LobbyPlayerInfo playerInfos)
+    {
+        Items.Last().Info = new CharacterInfo()
+        {
+            PlayerName = playerInfos.Name,
+            Lv = playerInfos.StatInfo.Level,
+            CurMap = playerInfos.PosInfo.Map,
+            PosX = playerInfos.PosInfo.PosX,
+            PosY = playerInfos.PosInfo.PosY,
+        };
+
+        if (Items.Count < 8)
+        {
+            GameObject grid = GetComponentInChildren<GridLayoutGroup>().gameObject;
+            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
             Items.Add(item);
 
             item.Info = new CharacterInfo()

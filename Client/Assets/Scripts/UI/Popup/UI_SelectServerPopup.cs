@@ -24,8 +24,7 @@ public class UI_SelectServerPopup : UI_Popup
 
 		for (int i = 0; i < servers.Count; i++)
 		{
-			GameObject go = Managers.Resource.Instantiate("UI/Popup/UI_SelectServerPopup_Item", grid.transform);
-			UI_SelectServerPopup_Item item = go.GetOrAddComponent<UI_SelectServerPopup_Item>();
+			UI_SelectServerPopup_Item item = Managers.UI.MakeSubItem<UI_SelectServerPopup_Item>(grid.transform);
 			Items.Add(item);
 
 			item.Info = new ServerInfo()

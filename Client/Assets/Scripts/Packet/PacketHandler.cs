@@ -129,9 +129,9 @@ class PacketHandler
         }
         else
         {
-            C_EnterGame enterGamePacket = new C_EnterGame();
-            enterGamePacket.Name = createOkPacket.Player.Name;
-            Managers.Network.Send(enterGamePacket);
+            Managers.UI.ShowPopupUI<UI_SimpleTextPopup>().SetText("생성성공", "캐릭터 추가");
+            GameObject.Find(nameof(UI_SelectCharacterPopup)).GetComponent<UI_SelectCharacterPopup>()
+                .AddCharacter(createOkPacket.Player);
         }
     }
 

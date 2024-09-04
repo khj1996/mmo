@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class UI_CreateCharacterPopup : UI_Popup
 {
-    
     enum GameObjects
     {
         CharacterName,
