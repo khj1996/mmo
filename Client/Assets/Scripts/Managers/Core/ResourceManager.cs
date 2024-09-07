@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceManager
@@ -19,6 +20,11 @@ public class ResourceManager
         }
 
         return Resources.Load<T>(path);
+    }
+
+    public Sprite LoadItemSprite(int dataKey)
+    {
+        return Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == dataKey).Image;
     }
 
     public GameObject Instantiate(string path, Transform parent = null)

@@ -57,7 +57,7 @@ public class UI_Stat : UI_Base
 
 			ItemData itemData = null;
 			Managers.Data.ItemDict.TryGetValue(item.TemplateId, out itemData);
-			Sprite icon = Managers.Resource.Load<Sprite>(itemData.iconPath);
+			Sprite icon = Managers.Resource.LoadItemSprite(itemData.id);
 
 			if (item.ItemType == ItemType.Weapon)
 			{

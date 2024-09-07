@@ -22,7 +22,7 @@ namespace GameServer.Game
             // TODO :다른 좌표로 이동할 경우, 갈 수 있는지 체크
             if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
-                if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
+                /*if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
                 {
                     player.Session.Send(new S_Move()
                     {
@@ -30,7 +30,7 @@ namespace GameServer.Game
                         PosInfo = player.Info.PosInfo
                     });
                     return;
-                }
+                }*/
             }
 
 
@@ -47,10 +47,10 @@ namespace GameServer.Game
             resMovePacket.ObjectId = player.Info.ObjectId;
             resMovePacket.PosInfo = movePacket.PosInfo;
 
-            //이동 불가능지역 이동시 이전 위치 패킷 전송
+            /*//이동 불가능지역 이동시 이전 위치 패킷 전송
             if (!result)
             {
-            }
+            }*/
 
             Broadcast(player.CellPos, resMovePacket);
         }

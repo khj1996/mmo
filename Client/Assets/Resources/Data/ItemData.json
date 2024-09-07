@@ -4,15 +4,13 @@
             "id": "1",
             "name": "°ß½À»ýÀÇ °Ë",
             "weaponType": "Sword",
-            "damage": "10",
-            "iconPath":  "Textures/Item/sword"
+            "damage": "10"
         },
         {
             "id": "2",
             "name": "°ß½À»ýÀÇ È°",
             "weaponType": "Bow",
-            "damage": "5",
-            "iconPath": "Textures/Item/bow"
+            "damage": "5"
         }
     ],
     "armors": [
@@ -20,15 +18,13 @@
             "id": "100",
             "name": "»À °©¿Ê",
             "armorType": "Armor",
-            "defence": "15",
-            "iconPath": "Textures/Item/armor"
+            "defence": "15"
         },
         {
             "id": "101",
             "name": "»À Åõ±¸",
             "armorType": "Helmet",
-            "defence": "5",
-            "iconPath": "Textures/Item/helmets"
+            "defence": "5"
         }
     ],
     "consumables": [
@@ -36,8 +32,7 @@
             "id": "200",
             "name": "HP ¹°¾à",
             "consumableType": "Potion",
-            "damage": "10",
-            "iconPath": "Textures/Item/hp"
+            "damage": "10"
         }
     ]
 } 

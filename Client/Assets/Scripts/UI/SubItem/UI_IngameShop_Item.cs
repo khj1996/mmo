@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_IngameShop_Item : UI_Base
+public class UI_SelectServerPopup_Item : UI_Base
 {
 	public ServerInfo Info { get; set; }
 

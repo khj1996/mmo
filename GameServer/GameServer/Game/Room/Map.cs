@@ -199,6 +199,7 @@ namespace GameServer.Game
 
             PositionInfo posInfo = gameObject.Info.PosInfo;
             //TODO : 충돌체크
+            
             if (CanGo(dest, gameObject.CellPos) == false)
             {
                 return false;
