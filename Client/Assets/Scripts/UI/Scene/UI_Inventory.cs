@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UI_Inventory : UI_Base
 {
-	public List<UI_Inventory_Item> Items { get; } = new List<UI_Inventory_Item>();
+	public List<UI_Item> Items { get; } = new List<UI_Item>();
 
 	public override void Init()
 	{
@@ -17,7 +17,7 @@ public class UI_Inventory : UI_Base
 
 		for (int i = 0; i < 20; i++)
 		{
-			UI_Inventory_Item item = Managers.UI.MakeSubItem<UI_Inventory_Item>(grid.transform);
+			UI_Item item = Managers.UI.MakeSubItem<UI_Item>(grid.transform);
 			Items.Add(item);
 		}
 

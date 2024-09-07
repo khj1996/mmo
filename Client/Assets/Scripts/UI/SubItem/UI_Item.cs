@@ -1,14 +1,18 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UI_Inventory_Item : UI_Base
+public class UI_Item : UI_Base
 {
     [SerializeField] Image _icon = null;
 
     [SerializeField] Image _frame = null;
+
+    [SerializeField] TMP_Text _quantity = null;
 
     public int ItemDbId { get; private set; }
     public int TemplateId { get; private set; }
@@ -49,6 +53,7 @@ public class UI_Inventory_Item : UI_Base
 
             _icon.gameObject.SetActive(false);
             _frame.gameObject.SetActive(false);
+            _quantity.gameObject.SetActive(false);
         }
         else
         {
@@ -63,8 +68,12 @@ public class UI_Inventory_Item : UI_Base
             Sprite icon = Managers.Resource.LoadItemSprite(itemData.id);
             _icon.sprite = icon;
 
+            _quantity.text = Count.ToString();
+
+
             _icon.gameObject.SetActive(true);
             _frame.gameObject.SetActive(Equipped);
+            _quantity.gameObject.SetActive(itemData.itemType == ItemType.Consumable);
         }
     }
 }
