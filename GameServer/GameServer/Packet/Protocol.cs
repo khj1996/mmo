@@ -87,11 +87,12 @@ namespace Google.Protobuf.Protocol {
             "TV9UWVBFX1dFQVBPThABEhMKD0lURU1fVFlQRV9BUk1PUhACEhgKFElURU1f",
             "VFlQRV9DT05TVU1BQkxFEAMqTgoKV2VhcG9uVHlwZRIUChBXRUFQT05fVFlQ",
             "RV9OT05FEAASFQoRV0VBUE9OX1RZUEVfU1dPUkQQARITCg9XRUFQT05fVFlQ",
-            "RV9CT1cQAipjCglBcm1vclR5cGUSEwoPQVJNT1JfVFlQRV9OT05FEAASFQoR",
+            "RV9CT1cQAip6CglBcm1vclR5cGUSEwoPQVJNT1JfVFlQRV9OT05FEAASFQoR",
             "QVJNT1JfVFlQRV9IRUxNRVQQARIUChBBUk1PUl9UWVBFX0FSTU9SEAISFAoQ",
-            "QVJNT1JfVFlQRV9CT09UUxADKkYKDkNvbnN1bWFibGVUeXBlEhgKFENPTlNV",
-            "TUFCTEVfVFlQRV9OT05FEAASGgoWQ09OU1VNQUJMRV9UWVBFX1BPVElPThAB",
-            "QhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "QVJNT1JfVFlQRV9CT09UUxADEhUKEUFSTU9SX1RZUEVfR0xPVkVTEAQqRgoO",
+            "Q29uc3VtYWJsZVR5cGUSGAoUQ09OU1VNQUJMRV9UWVBFX05PTkUQABIaChZD",
+            "T05TVU1BQkxFX1RZUEVfUE9USU9OEAFCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Q",
+            "cm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.MoveDir), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), typeof(global::Google.Protobuf.Protocol.PlayerServerState), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.WeaponType), typeof(global::Google.Protobuf.Protocol.ArmorType), typeof(global::Google.Protobuf.Protocol.ConsumableType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -211,6 +212,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("ARMOR_TYPE_HELMET")] Helmet = 1,
     [pbr::OriginalName("ARMOR_TYPE_ARMOR")] Armor = 2,
     [pbr::OriginalName("ARMOR_TYPE_BOOTS")] Boots = 3,
+    [pbr::OriginalName("ARMOR_TYPE_GLOVES")] Gloves = 4,
   }
 
   public enum ConsumableType {

@@ -41,15 +41,15 @@ namespace GameServer
             using (AppDbContext db = new AppDbContext())
             {
                 //계정 정보 획득
-                AccountDb findAccount = db.Accounts
+                AccountGameDb findAccountGame = db.Accounts
                     .Include(a => a.Players)
-                    .Where(a => a.AccountDbId == accountDbId).FirstOrDefault();
+                    .Where(a => a.AccountGameDbId == accountDbId).FirstOrDefault();
 
                 // AccountDbId 메모리에 기억
-                AccountDbId = findAccount.AccountDbId;
+                AccountDbId = findAccountGame.AccountGameDbId;
 
                 S_EnterServer loginOk = new S_EnterServer();
-                foreach (PlayerDb playerDb in findAccount.Players)
+                foreach (PlayerDb playerDb in findAccountGame.Players)
                 {
                     LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
                     {

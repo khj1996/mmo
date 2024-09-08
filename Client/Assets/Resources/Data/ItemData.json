@@ -1,38 +1,57 @@
 {
-    "weapons": [
-        {
-            "id": "1",
-            "name": "°ß½À»ýÀÇ °Ë",
-            "weaponType": "Sword",
-            "damage": "10"
-        },
-        {
-            "id": "2",
-            "name": "°ß½À»ýÀÇ È°",
-            "weaponType": "Bow",
-            "damage": "5"
-        }
-    ],
-    "armors": [
-        {
-            "id": "100",
-            "name": "»À °©¿Ê",
-            "armorType": "Armor",
-            "defence": "15"
-        },
-        {
-            "id": "101",
-            "name": "»À Åõ±¸",
-            "armorType": "Helmet",
-            "defence": "5"
-        }
-    ],
-    "consumables": [
-        {
-            "id": "200",
-            "name": "HP ¹°¾à",
-            "consumableType": "Potion",
-            "damage": "10"
-        }
-    ]
+  "weapons": [
+    {
+      "id": "100000",
+      "name": "°ß½À»ýÀÇ °Ë",
+      "weaponType": "Sword",
+      "damage": "10"
+    },
+    {
+      "id": "100100",
+      "name": "°ß½À»ýÀÇ È°",
+      "weaponType": "Bow",
+      "damage": "5"
+    }
+  ],
+  "armors": [
+    {
+      "id": "200000",
+      "name": "»À °©¿Ê",
+      "armorType": "Armor",
+      "defence": "15"
+    },
+    {
+      "id": "200001",
+      "name": "Ã¶ °©¿Ê",
+      "armorType": "Armor",
+      "defence": "15"
+    },
+    {
+      "id": "200100",
+      "name": "»À Åõ±¸",
+      "armorType": "Helmet",
+      "defence": "5"
+    },
+    {
+      "id": "200200",
+      "name": "»À Àå°©",
+      "armorType": "Gloves",
+      "defence": "5"
+    },
+    {
+      "id": "200300",
+      "name": "»À ½Å¹ß",
+      "armorType": "Boots",
+      "defence": "5"
+    }
+  ],
+  "consumables": [
+    {
+      "id": "300000",
+      "name": "HP ¹°¾à",
+      "consumableType": "Potion",
+      "maxCount": "10",
+      "value": "10"
+    }
+  ]
 } 

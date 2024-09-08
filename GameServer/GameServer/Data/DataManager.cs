@@ -24,7 +24,7 @@ namespace GameServer.Data
         {
             StatDict = LoadJson<StatData, int, StatInfo>("StatData").MakeDict();
             SkillDict = LoadJson<SkillData, int, Skill>("SkillData").MakeDict();
-            ItemDict = LoadJson<ItemLoader, int, ItemData>("ItemData").MakeDict();
+            LoadItemData();
             LoadMonsterData();
         }
 
@@ -103,6 +103,102 @@ namespace GameServer.Data
                     }
 
                     MonsterDict.Add(monsterData.MonsterDataDbid, newMonsterData);
+                }
+            }
+        }
+
+        public static void LoadItemData()
+        {
+            using AppDbContext db = new AppDbContext();
+
+
+            List<ItemDataDb> itemDatas =
+                db.ItemDatas.Where(x => x.ItemDataDbid != -1).ToList();
+
+            if (itemDatas.Count == 0)
+            {
+                ItemDict = LoadJson<ItemLoader, int, ItemData>("ItemData").MakeDict();
+
+                foreach (var itemDataKp in ItemDict)
+                {
+                    var newItemData = new ItemDataDb()
+                    {
+                        name = itemDataKp.Value.name,
+                        ItemDataDbid = itemDataKp.Key,
+                    };
+
+                    int type = newItemData.ItemDataDbid / 100000;
+
+                    switch (type)
+                    {
+                        case 1:
+                            newItemData.type = (int)((WeaponData)itemDataKp.Value).weaponType;
+                            newItemData.value = ((WeaponData)itemDataKp.Value).damage;
+                            break;
+                        case 2:
+                            newItemData.type = (int)((ArmorData)itemDataKp.Value).armorType;
+                            newItemData.value = ((ArmorData)itemDataKp.Value).defence;
+                            break;
+                        case 3:
+                            newItemData.type = (int)((ConsumableData)itemDataKp.Value).consumableType;
+                            newItemData.maxCount = ((ConsumableData)itemDataKp.Value).maxCount;
+                            newItemData.value = ((ConsumableData)itemDataKp.Value).value;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    db.ItemDatas.Add(newItemData);
+                }
+
+                bool success = db.SaveChangesEx();
+
+                if (success == false)
+                    return;
+            }
+            else
+            {
+                foreach (var itemData in itemDatas)
+                {
+                    ItemType type = (ItemType)(itemData.id / 100000);
+                    switch (type)
+                    {
+                        case ItemType.None:
+                            break;
+                        case ItemType.Weapon:
+                            ItemDict.Add(itemData.id, new WeaponData()
+                            {
+                                name = itemData.name,
+                                id = itemData.id,
+                                damage = itemData.value,
+                                weaponType = (WeaponType)itemData.type,
+                                itemType = type
+                            });
+                            break;
+                        case ItemType.Armor:
+                            ItemDict.Add(itemData.id, new ArmorData()
+                            {
+                                name = itemData.name,
+                                id = itemData.id,
+                                defence = itemData.value,
+                                armorType = (ArmorType)itemData.type,
+                                itemType = type
+                            });
+                            break;
+                        case ItemType.Consumable:
+                            ItemDict.Add(itemData.id, new ConsumableData()
+                            {
+                                name = itemData.name,
+                                id = itemData.id,
+                                maxCount = itemData.maxCount,
+                                value = itemData.value,
+                                consumableType = (ConsumableType)itemData.type,
+                                itemType = type
+                            });
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }

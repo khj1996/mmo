@@ -89,6 +89,7 @@ namespace GameServer.Data
     {
         public ConsumableType consumableType;
         public int maxCount;
+        public int value;
     }
 
 

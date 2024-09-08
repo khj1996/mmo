@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameServer.DB
 {
-    [Table("Account")]
-    public class AccountDb
+    [Table("AccountGame")]
+    public class AccountGameDb
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int AccountDbId { get; set; }
+        public int AccountGameDbId { get; set; }
 
         public string AccountName { get; set; }
         public string JwtToken { get; set; }
@@ -21,7 +21,7 @@ namespace GameServer.DB
         public string PlayerName { get; set; }
 
         [ForeignKey("Account")] public int AccountDbId { get; set; }
-        public AccountDb Account { get; set; }
+        public AccountGameDb AccountGame { get; set; }
 
         public ICollection<ItemDb> Items { get; set; }
 
@@ -50,12 +50,12 @@ namespace GameServer.DB
         public PlayerDb Owner { get; set; }
     }
 
-
     [Table("Monster")]
     public class MonsterDataDb
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int MonsterDataDbid { get; set; }
+
         public string name { get; set; }
 
         public int Level { get; set; }
@@ -67,17 +67,28 @@ namespace GameServer.DB
         public ICollection<RewardDataDb> rewards { get; set; }
     }
 
-    [Serializable]
+    [Table("RewardData")]
     public class RewardDataDb
     {
         public int RewardDataDbid { get; set; }
-        public int probability{ get; set; }
-        public int itemId{ get; set; }
-        public int count{ get; set; }
-        
-        
+        public int probability { get; set; }
+        public int itemId { get; set; }
+        public int count { get; set; }
+
+
         [ForeignKey("Owner")] public int? OwnerDbId { get; set; }
         public MonsterDataDb Owner { get; set; }
+    }
+
+    [Table("ItemData")]
+    public class ItemDataDb
+    {
+        public int ItemDataDbid { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public int type { get; set; }
+        public int maxCount { get; set; }
+        public int value { get; set; }
     }
 
     [Table("ServerInfo")]
