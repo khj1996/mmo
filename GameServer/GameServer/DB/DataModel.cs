@@ -50,6 +50,36 @@ namespace GameServer.DB
         public PlayerDb Owner { get; set; }
     }
 
+
+    [Table("Monster")]
+    public class MonsterDataDb
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int MonsterDataDbid { get; set; }
+        public string name { get; set; }
+
+        public int Level { get; set; }
+        public int MaxHp { get; set; }
+        public int Attack { get; set; }
+        public float Speed { get; set; }
+        public int TotalExp { get; set; }
+
+        public ICollection<RewardDataDb> rewards { get; set; }
+    }
+
+    [Serializable]
+    public class RewardDataDb
+    {
+        public int RewardDataDbid { get; set; }
+        public int probability{ get; set; }
+        public int itemId{ get; set; }
+        public int count{ get; set; }
+        
+        
+        [ForeignKey("Owner")] public int? OwnerDbId { get; set; }
+        public MonsterDataDb Owner { get; set; }
+    }
+
     [Table("ServerInfo")]
     public class ServerDb
     {

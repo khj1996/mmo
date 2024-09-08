@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using GameServer.DB;
 using Google.Protobuf.Protocol;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameServer.Data
 {
@@ -14,15 +16,97 @@ namespace GameServer.Data
         public static Dictionary<int, StatInfo> StatDict { get; private set; } = new Dictionary<int, StatInfo>();
         public static Dictionary<int, Skill> SkillDict { get; private set; } = new Dictionary<int, Data.Skill>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
-        public static Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, Data.MonsterData>();
+
+        public static Dictionary<int, MonsterData> MonsterDict { get; private set; } =
+            new Dictionary<int, MonsterData>();
 
         public static void LoadData()
         {
             StatDict = LoadJson<StatData, int, StatInfo>("StatData").MakeDict();
             SkillDict = LoadJson<SkillData, int, Skill>("SkillData").MakeDict();
             ItemDict = LoadJson<ItemLoader, int, ItemData>("ItemData").MakeDict();
-            MonsterDict = LoadJson<MonsterLoader, int, MonsterData>("MonsterData").MakeDict();
+            LoadMonsterData();
         }
+
+        public static void LoadMonsterData()
+        {
+            using AppDbContext db = new AppDbContext();
+
+
+            List<DB.MonsterDataDb> monsterDatas =
+                db.MonsterDatas.Include(x => x.rewards).Where(x => x.MonsterDataDbid != -1).ToList();
+
+            if (monsterDatas.Count == 0)
+            {
+                MonsterDict = LoadJson<MonsterLoader, int, MonsterData>("MonsterData").MakeDict();
+
+                foreach (var monsterDataKp in MonsterDict)
+                {
+                    var newMonsterData = new MonsterDataDb()
+                    {
+                        MonsterDataDbid = monsterDataKp.Key,
+                        name = monsterDataKp.Value.name,
+                        Level = monsterDataKp.Value.stat.Level,
+                        MaxHp = monsterDataKp.Value.stat.MaxHp,
+                        Attack = monsterDataKp.Value.stat.Attack,
+                        Speed = monsterDataKp.Value.stat.Speed,
+                        TotalExp = monsterDataKp.Value.stat.TotalExp,
+                        rewards = new List<DB.RewardDataDb>()
+                    };
+
+                    foreach (var rewardData in monsterDataKp.Value.rewards)
+                    {
+                        var newRewardData = new RewardDataDb()
+                        {
+                            count = rewardData.count,
+                            probability = rewardData.probability,
+                            itemId = rewardData.itemId,
+                            OwnerDbId = monsterDataKp.Key
+                        };
+                        db.RewardDatas.Add(newRewardData);
+                    }
+
+                    db.MonsterDatas.Add(newMonsterData);
+                }
+
+                bool success = db.SaveChangesEx();
+
+                if (success == false)
+                    return;
+            }
+            else
+            {
+                foreach (var monsterData in monsterDatas)
+                {
+                    var newMonsterData = new MonsterData()
+                    {
+                        name = monsterData.name,
+                        rewards = new List<RewardData>(),
+                        stat = new StatInfo()
+                        {
+                            Level = monsterData.Level,
+                            Attack = monsterData.Attack,
+                            TotalExp = monsterData.TotalExp,
+                            MaxHp = monsterData.MaxHp,
+                            Speed = monsterData.Speed,
+                        },
+                        id = monsterData.MonsterDataDbid,
+                    };
+                    foreach (var reward in monsterData.rewards)
+                    {
+                        newMonsterData.rewards.Add(new RewardData()
+                        {
+                            count = reward.count,
+                            probability = reward.probability,
+                            itemId = reward.itemId
+                        });
+                    }
+
+                    MonsterDict.Add(monsterData.MonsterDataDbid, newMonsterData);
+                }
+            }
+        }
+
 
         static Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
         {

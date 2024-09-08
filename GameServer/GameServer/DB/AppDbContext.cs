@@ -13,6 +13,8 @@ namespace GameServer.DB
         public DbSet<PlayerDb> Players { get; set; }
         public DbSet<ItemDb> Items { get; set; }
         public DbSet<MapDb> MapDatas { get; set; }
+        public DbSet<MonsterDataDb> MonsterDatas { get; set; }
+        public DbSet<RewardDataDb> RewardDatas { get; set; }
 
         //로그
         static readonly ILoggerFactory _logger = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -43,6 +45,14 @@ namespace GameServer.DB
             
             builder.Entity<MapDb>()
                 .HasIndex(s => s.MapDbId)
+                .IsUnique();
+            
+            builder.Entity<MonsterDataDb>()
+                .HasIndex(s => s.MonsterDataDbid)
+                .IsUnique();
+            
+            builder.Entity<RewardDataDb>()
+                .HasIndex(s => s.RewardDataDbid)
                 .IsUnique();
         }
     }

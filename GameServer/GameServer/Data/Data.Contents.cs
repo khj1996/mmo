@@ -144,7 +144,6 @@ namespace GameServer.Data
         public StatInfo stat;
 
         public List<RewardData> rewards;
-        //public string prefabPath;
     }
 
     [Serializable]

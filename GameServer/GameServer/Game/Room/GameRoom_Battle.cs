@@ -19,21 +19,6 @@ namespace GameServer.Game
             PositionInfo movePosInfo = movePacket.PosInfo;
             ObjectInfo info = player.Info;
 
-            // TODO :다른 좌표로 이동할 경우, 갈 수 있는지 체크
-            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
-            {
-                /*if (Map.CanGo(new Vector2Float(movePosInfo.PosX, movePosInfo.PosY)) == false)
-                {
-                    player.Session.Send(new S_Move()
-                    {
-                        ObjectId = player.Info.ObjectId,
-                        PosInfo = player.Info.PosInfo
-                    });
-                    return;
-                }*/
-            }
-
-
             player.State = movePosInfo.State;
 
             var result = Map.ApplyMove(player, new Vector2Float()
@@ -41,16 +26,19 @@ namespace GameServer.Game
                 x = movePacket.PosInfo.PosX,
                 y = movePacket.PosInfo.PosY,
             });
+            
+            //이동 불가능지역 이동시 이전 위치 패킷 전송
+            if (!result)
+            {
+                return;
+            }
 
             // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move();
             resMovePacket.ObjectId = player.Info.ObjectId;
             resMovePacket.PosInfo = movePacket.PosInfo;
 
-            /*//이동 불가능지역 이동시 이전 위치 패킷 전송
-            if (!result)
-            {
-            }*/
+           
 
             Broadcast(player.CellPos, resMovePacket);
         }

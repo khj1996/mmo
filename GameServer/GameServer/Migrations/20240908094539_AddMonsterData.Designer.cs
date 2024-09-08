@@ -4,6 +4,7 @@ using GameServer.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240908094539_AddMonsterData")]
+    partial class AddMonsterData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +28,6 @@ namespace GameServer.Migrations
             modelBuilder.Entity("GameServer.DB.AccountDb", b =>
                 {
                     b.Property<int>("AccountDbId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("AccountName")
@@ -41,7 +43,7 @@ namespace GameServer.Migrations
                     b.HasIndex("AccountName")
                         .IsUnique();
 
-                    b.ToTable("Account", (string)null);
+                    b.ToTable("Account");
                 });
 
             modelBuilder.Entity("GameServer.DB.ItemDb", b =>
@@ -71,13 +73,12 @@ namespace GameServer.Migrations
 
                     b.HasIndex("OwnerDbId");
 
-                    b.ToTable("Item", (string)null);
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("GameServer.DB.MapDb", b =>
                 {
                     b.Property<int>("MapDbId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("MaxX")
@@ -101,7 +102,7 @@ namespace GameServer.Migrations
                     b.HasIndex("MapDbId")
                         .IsUnique();
 
-                    b.ToTable("MapInfo", (string)null);
+                    b.ToTable("MapInfo");
                 });
 
             modelBuilder.Entity("GameServer.DB.MonsterDataDb", b =>
@@ -188,7 +189,7 @@ namespace GameServer.Migrations
                     b.HasIndex("PlayerName")
                         .IsUnique();
 
-                    b.ToTable("Player", (string)null);
+                    b.ToTable("Player");
                 });
 
             modelBuilder.Entity("GameServer.DB.RewardDataDb", b =>
@@ -248,7 +249,7 @@ namespace GameServer.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ServerInfo", (string)null);
+                    b.ToTable("ServerInfo");
                 });
 
             modelBuilder.Entity("GameServer.DB.ItemDb", b =>

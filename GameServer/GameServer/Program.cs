@@ -66,29 +66,6 @@ namespace GameServer
 
         static void Main(string[] args)
         {
-
-
-            //설정 파일 로드
-            ConfigManager.LoadConfig();
-            //데이터 로드
-            DataManager.LoadData();
-
-
-            //클라이언트 접속을 위한 소켓 초기화
-            string host = Dns.GetHostName();
-            IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = (args.Length > 1) ? IPAddress.Parse(args[0]) : ipHost.AddressList[1];
-                
-            
-            Port = (args.Length > 1) ? int.Parse(args[1]) : Port;
-            
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, Port);
-
-            IpAddress = ipAddr.ToString();
-
-            _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
-            Console.WriteLine("Listening..." + Port + "/" + ipAddr);
-
             // DbTask
             {
                 Thread t = new Thread(DbTask);
@@ -102,8 +79,29 @@ namespace GameServer
                 t.Name = "Network Send";
                 t.Start();
             }
-            
-            
+
+            //설정 파일 로드
+            ConfigManager.LoadConfig();
+            //데이터 로드
+            DataManager.LoadData();
+
+
+            //클라이언트 접속을 위한 소켓 초기화
+            string host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
+            IPAddress ipAddr = (args.Length > 1) ? IPAddress.Parse(args[0]) : ipHost.AddressList[1];
+
+
+            Port = (args.Length > 1) ? int.Parse(args[1]) : Port;
+
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, Port);
+
+            IpAddress = ipAddr.ToString();
+
+            _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
+            Console.WriteLine("Listening..." + Port + "/" + ipAddr);
+
+
             //방 생성
             GameLogic.Instance.Push(() => { GameLogic.Instance.Add(1); });
 
