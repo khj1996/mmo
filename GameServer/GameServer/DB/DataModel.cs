@@ -113,6 +113,28 @@ namespace GameServer.DB
         public int MinY { get; set; }
         public string TileInfo { get; set; }
     }
+    [Table("ShopProduct")]
+    public class ShopProductDb
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ShopProductId { get; set; }
+
+        public int PId { get; set; }
+        public int CType { get; set; }
+        public int CAmount { get; set; }
+    }
+    
+    [Table("Shop")]
+    public class ShopDb
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ShopId { get; set; }
+
+        public int Name { get; set; }
+        public ICollection<ShopProductDb> ProductList { get; set; }
+    }
+    
+    
 
     /*[Table("MapObject")]
     public class MapOnjectDb

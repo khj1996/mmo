@@ -24,7 +24,7 @@
       "id": "200001",
       "name": "Ã¶ °©¿Ê",
       "armorType": "Armor",
-      "defence": "15"
+      "defence": "25"
     },
     {
       "id": "200100",
@@ -52,6 +52,12 @@
       "consumableType": "Potion",
       "maxCount": "10",
       "value": "10"
+    }
+  ],
+  "currency": [
+    {
+      "id": "400000",
+      "name": "°ñµå"
     }
   ]
 } 
