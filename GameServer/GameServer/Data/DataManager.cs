@@ -16,24 +16,91 @@ namespace GameServer.Data
         public static Dictionary<int, StatInfo> StatDict { get; private set; } = new Dictionary<int, StatInfo>();
         public static Dictionary<int, Skill> SkillDict { get; private set; } = new Dictionary<int, Data.Skill>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
-
-        public static Dictionary<int, MonsterData> MonsterDict { get; private set; } =
-            new Dictionary<int, MonsterData>();
-
+        public static Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, MonsterData>();
+        public static Dictionary<int, ShopInfo> ShopDict { get; private set; } = new Dictionary<int, ShopInfo>();
+        
         public static void LoadData()
         {
-            StatDict = LoadJson<StatData, int, StatInfo>("StatData").MakeDict();
-            SkillDict = LoadJson<SkillData, int, Skill>("SkillData").MakeDict();
+            StatDict = LoadJson<StatDataLoader, int, StatInfo>("StatData").MakeDict();
+            SkillDict = LoadJson<SkillDataLoader, int, Skill>("SkillData").MakeDict();
             LoadItemData();
             LoadMonsterData();
+            LoadShopData();
+        }
+
+        public static void LoadShopData()
+        {
+            using AppDbContext db = new AppDbContext();
+
+            List<ShopDb> shopDatas = db.ShopDatas.Where(x => x.ShopDbId != -1).Include(shopDb => shopDb.ShopProducts).ToList();
+
+            if (shopDatas.Count == 0)
+            {
+                ShopDict = LoadJson<ShopLoader, int, ShopInfo>("ShopData").MakeDict();
+
+                foreach (var shopDataKp in ShopDict)
+                {
+                    var newShopData = new ShopDb()
+                    {
+                        ShopDbId = shopDataKp.Key,
+                        Name = shopDataKp.Value.Name,
+                        ShopProducts = new List<ShopProductDb>()
+                    };
+
+                    foreach (var productInfo in shopDataKp.Value.ProductList)
+                    {
+                        newShopData.ShopProducts.Add(new ShopProductDb()
+                        {
+                            ShopProductDbId = productInfo.Id,
+                            PId = productInfo.PId,
+                            CType = productInfo.CType,
+                            CAmount = productInfo.CAmount
+                        });
+                    }
+
+
+                    db.ShopDatas.Add(newShopData);
+                }
+
+                bool success = db.SaveChangesEx();
+
+                if (success == false)
+                    return;
+            }
+            else
+            {
+                foreach (var shopData in shopDatas)
+                {
+                    var newShopData = new ShopInfo()
+                    {
+                        ShopId = shopData.ShopDbId,
+                        Name = shopData.Name,
+                        ProductList =
+                        {
+                            Capacity = 0,
+                        }
+                    };
+                    foreach (var product in shopData.ShopProducts)
+                    {
+                        newShopData.ProductList.Add(new ShopProductInfo()
+                        {
+                            Id = product.ShopProductDbId,
+                            CAmount = product.CAmount,
+                            CType = product.CType,
+                            PId = product.PId
+                        });
+                    }
+
+                    ShopDict.Add(shopData.ShopDbId, newShopData);
+                }
+            }
         }
 
         public static void LoadMonsterData()
         {
             using AppDbContext db = new AppDbContext();
 
-
-            List<DB.MonsterDataDb> monsterDatas =
+            List<MonsterDataDb> monsterDatas =
                 db.MonsterDatas.Include(x => x.rewards).Where(x => x.MonsterDataDbid != -1).ToList();
 
             if (monsterDatas.Count == 0)

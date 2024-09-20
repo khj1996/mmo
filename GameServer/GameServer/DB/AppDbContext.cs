@@ -16,6 +16,8 @@ namespace GameServer.DB
         public DbSet<MonsterDataDb> MonsterDatas { get; set; }
         public DbSet<RewardDataDb> RewardDatas { get; set; }
         public DbSet<ItemDataDb> ItemDatas { get; set; }
+        public DbSet<ShopDb> ShopDatas { get; set; }
+        public DbSet<ShopProductDb> ShopProductDatas { get; set; }
 
         //로그
         static readonly ILoggerFactory _logger = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -56,9 +58,16 @@ namespace GameServer.DB
                 .HasIndex(s => s.RewardDataDbid)
                 .IsUnique();
 
-
             builder.Entity<ItemDataDb>()
                 .HasIndex(s => s.ItemDataDbid)
+                .IsUnique();
+
+            builder.Entity<ShopDb>()
+                .HasIndex(s => s.ShopDbId)
+                .IsUnique();
+
+            builder.Entity<ShopProductDb>()
+                .HasIndex(s => s.ShopProductDbId)
                 .IsUnique();
         }
     }

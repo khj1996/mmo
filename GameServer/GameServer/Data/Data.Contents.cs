@@ -7,7 +7,7 @@ namespace GameServer.Data
     #region Stat
 
     [Serializable]
-    public class StatData : ILoader<int, StatInfo>
+    public class StatDataLoader : ILoader<int, StatInfo>
     {
         public List<StatInfo> stats = new List<StatInfo>();
 
@@ -18,6 +18,27 @@ namespace GameServer.Data
             {
                 stat.Hp = stat.MaxHp;
                 dict.Add(stat.Level, stat);
+            }
+
+            return dict;
+        }
+    }
+
+    #endregion
+
+    #region Shop
+
+    [Serializable]
+    public class ShopLoader : ILoader<int, ShopInfo>
+    {
+        public List<ShopInfo> Shops = new List<ShopInfo>();
+
+        public Dictionary<int, ShopInfo> MakeDict()
+        {
+            Dictionary<int, ShopInfo> dict = new Dictionary<int, ShopInfo>();
+            foreach (ShopInfo shop in Shops)
+            {
+                dict.Add(shop.ShopId, shop);
             }
 
             return dict;
@@ -48,7 +69,7 @@ namespace GameServer.Data
     }
 
     [Serializable]
-    public class SkillData : ILoader<int, Skill>
+    public class SkillDataLoader : ILoader<int, Skill>
     {
         public List<Skill> skills = new List<Skill>();
 

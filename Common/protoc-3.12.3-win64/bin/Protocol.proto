@@ -226,6 +226,19 @@ message StatInfo {
   int32 totalExp = 6;
 }
 
+message ShopInfo{
+  int32 shopId = 1;
+  string name = 2;
+  repeated ShopProductInfo productList = 3;
+}
+
+message ShopProductInfo{
+  int32 id = 1;
+  int32 pId = 2;
+  int32 cType = 3;
+  int32 cAmount = 4;
+}
+
 message SkillInfo {
   int32 skillId = 1;
 }

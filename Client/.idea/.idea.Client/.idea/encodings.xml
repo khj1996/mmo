@@ -3,5 +3,7 @@
   <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
     <file url="file://$PROJECT_DIR$/Assets/Resources/Data/ItemData.json" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Assets/Resources/Data/MonsterData.json" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/Resources/Data/ShopData.json" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Assets/Resources/Data/ShopProductData.json" charset="x-windows-949" />
   </component>
 </project>
