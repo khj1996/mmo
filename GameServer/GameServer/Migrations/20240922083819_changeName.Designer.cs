@@ -4,6 +4,7 @@ using GameServer.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240922083819_changeName")]
+    partial class changeName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,6 +176,9 @@ namespace GameServer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlayerDbId"));
+
+                    b.Property<int>("AccountDbId")
+                        .HasColumnType("int");
 
                     b.Property<int>("AccountGameDbId")
                         .HasColumnType("int");
@@ -349,7 +355,8 @@ namespace GameServer.Migrations
                 {
                     b.HasOne("GameServer.DB.MonsterDataDb", "Owner")
                         .WithMany("rewards")
-                        .HasForeignKey("OwnerDbId");
+                        .HasForeignKey("OwnerDbId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Owner");
                 });
@@ -358,7 +365,8 @@ namespace GameServer.Migrations
                 {
                     b.HasOne("GameServer.DB.ShopDb", null)
                         .WithMany("ShopProducts")
-                        .HasForeignKey("ShopDbId");
+                        .HasForeignKey("ShopDbId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GameServer.DB.AccountGameDb", b =>

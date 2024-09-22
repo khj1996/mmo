@@ -17,8 +17,8 @@ namespace GameServer.Data
         public static Dictionary<int, Skill> SkillDict { get; private set; } = new Dictionary<int, Data.Skill>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
         public static Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, MonsterData>();
-        public static Dictionary<int, ShopInfo> ShopDict { get; private set; } = new Dictionary<int, ShopInfo>();
-        
+        public static Dictionary<int, ShopData> ShopDict { get; private set; } = new Dictionary<int, ShopData>();
+
         public static void LoadData()
         {
             StatDict = LoadJson<StatDataLoader, int, StatInfo>("StatData").MakeDict();
@@ -36,25 +36,25 @@ namespace GameServer.Data
 
             if (shopDatas.Count == 0)
             {
-                ShopDict = LoadJson<ShopLoader, int, ShopInfo>("ShopData").MakeDict();
+                ShopDict = LoadJson<ShopLoader, int, ShopData>("ShopData").MakeDict();
 
                 foreach (var shopDataKp in ShopDict)
                 {
                     var newShopData = new ShopDb()
                     {
                         ShopDbId = shopDataKp.Key,
-                        Name = shopDataKp.Value.Name,
+                        Name = shopDataKp.Value.name,
                         ShopProducts = new List<ShopProductDb>()
                     };
 
-                    foreach (var productInfo in shopDataKp.Value.ProductList)
+                    foreach (var productInfo in shopDataKp.Value.productList)
                     {
                         newShopData.ShopProducts.Add(new ShopProductDb()
                         {
-                            ShopProductDbId = productInfo.Id,
-                            PId = productInfo.PId,
-                            CType = productInfo.CType,
-                            CAmount = productInfo.CAmount
+                            ShopProductDbId = productInfo.id,
+                            PId = productInfo.pId,
+                            CType = productInfo.cType,
+                            CAmount = productInfo.cAmount
                         });
                     }
 
@@ -71,23 +71,20 @@ namespace GameServer.Data
             {
                 foreach (var shopData in shopDatas)
                 {
-                    var newShopData = new ShopInfo()
+                    var newShopData = new ShopData()
                     {
-                        ShopId = shopData.ShopDbId,
-                        Name = shopData.Name,
-                        ProductList =
-                        {
-                            Capacity = 0,
-                        }
+                        id = shopData.ShopDbId,
+                        name = shopData.Name,
+                        productList = new List<ProductData>()
                     };
                     foreach (var product in shopData.ShopProducts)
                     {
-                        newShopData.ProductList.Add(new ShopProductInfo()
+                        newShopData.productList.Add(new ProductData()
                         {
-                            Id = product.ShopProductDbId,
-                            CAmount = product.CAmount,
-                            CType = product.CType,
-                            PId = product.PId
+                            id = product.ShopProductDbId,
+                            cAmount = product.CAmount,
+                            cType = product.CType,
+                            pId = product.PId
                         });
                     }
 

@@ -227,7 +227,7 @@ message StatInfo {
 }
 
 message ShopInfo{
-  int32 shopId = 1;
+  int32 id = 1;
   string name = 2;
   repeated ShopProductInfo productList = 3;
 }

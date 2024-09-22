@@ -40,9 +40,9 @@ namespace LoginServer
             using (AppDbContext db = new AppDbContext())
             {
                 //계정 정보 획득
-                AccountDb findAccount = db.Accounts
+                AccountGameDb findAccountGame = db.Accounts
                     .Include(a => a.Players)
-                    .Where(a => a.AccountDbId == accountDbId).FirstOrDefault();
+                    .Where(a => a.AccountGameDbId == accountDbId).FirstOrDefault();
 
 
                 //서버 정보 획득
@@ -51,26 +51,26 @@ namespace LoginServer
                     .ToList();
 
                 //기존 계정
-                if (findAccount != null)
+                if (findAccountGame != null)
                 {
-                    AccountDbId = findAccount.AccountDbId;
+                    AccountDbId = findAccountGame.AccountGameDbId;
                 }
                 else
                 {
                     //신규 계정
-                    AccountDb newAccount = new AccountDb()
+                    AccountGameDb newAccountGame = new AccountGameDb()
                     {
-                        AccountDbId = accountDbId,
+                        AccountGameDbId = accountDbId,
                         AccountName = $"Player_{accountDbId}",
                         JwtToken = loginPacket.JwtToken
                     };
-                    db.Accounts.Add(newAccount);
+                    db.Accounts.Add(newAccountGame);
                     bool success = db.SaveChangesEx();
                     if (success == false)
                         return;
 
                     // AccountDbId 메모리에 기억
-                    AccountDbId = newAccount.AccountDbId;
+                    AccountDbId = newAccountGame.AccountGameDbId;
                 }
 
 

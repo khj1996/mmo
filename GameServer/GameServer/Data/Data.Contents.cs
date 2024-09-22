@@ -29,16 +29,34 @@ namespace GameServer.Data
     #region Shop
 
     [Serializable]
-    public class ShopLoader : ILoader<int, ShopInfo>
+    public class ShopData
     {
-        public List<ShopInfo> Shops = new List<ShopInfo>();
+        public int id;
+        public string name;
+        public List<ProductData> productList;
+    }
 
-        public Dictionary<int, ShopInfo> MakeDict()
+    [Serializable]
+    public class ProductData
+    {
+        public int id;
+        public int pId;
+        public int cType;
+        public int cAmount;
+    }
+
+
+    [Serializable]
+    public class ShopLoader : ILoader<int, ShopData>
+    {
+        public List<ShopData> Shops = new List<ShopData>();
+
+        public Dictionary<int, ShopData> MakeDict()
         {
-            Dictionary<int, ShopInfo> dict = new Dictionary<int, ShopInfo>();
-            foreach (ShopInfo shop in Shops)
+            Dictionary<int, ShopData> dict = new Dictionary<int, ShopData>();
+            foreach (ShopData shop in Shops)
             {
-                dict.Add(shop.ShopId, shop);
+                dict.Add(shop.id, shop);
             }
 
             return dict;

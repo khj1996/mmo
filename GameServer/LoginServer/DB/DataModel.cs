@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoginServer.DB
 {
-    [Table("Account")]
-    public class AccountDb
+    [Table("AccountGame")]
+    public class AccountGameDb
     {
-        public int AccountDbId { get; set; }
+        public int AccountGameDbId { get; set; }
         public string AccountName { get; set; }
         public string JwtToken { get; set; }
         public ICollection<PlayerDb> Players { get; set; }
@@ -18,8 +18,8 @@ namespace LoginServer.DB
         public int PlayerDbId { get; set; }
         public string PlayerName { get; set; }
 
-        [ForeignKey("Account")] public int AccountDbId { get; set; }
-        public AccountDb Account { get; set; }
+        [ForeignKey("AccountGame")] public int AccountGameDbId { get; set; }
+        public AccountGameDb AccountGame { get; set; }
 
         public ICollection<ItemDb> Items { get; set; }
 

@@ -7,7 +7,7 @@ namespace LoginServer.DB
     public class AppDbContext : DbContext
     {
         //DB
-        public DbSet<AccountDb> Accounts { get; set; }
+        public DbSet<AccountGameDb> Accounts { get; set; }
         public DbSet<ServerDb> Servers { get; set; }
         public DbSet<PlayerDb> Players { get; set; }
         public DbSet<ItemDb> Items { get; set; }
@@ -27,7 +27,7 @@ namespace LoginServer.DB
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<AccountDb>()
+            builder.Entity<AccountGameDb>()
                 .HasIndex(a => a.AccountName)
                 .IsUnique();
 

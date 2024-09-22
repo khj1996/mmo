@@ -20,7 +20,7 @@ namespace GameServer.DB
         public int PlayerDbId { get; set; }
         public string PlayerName { get; set; }
 
-        [ForeignKey("Account")] public int AccountDbId { get; set; }
+        [ForeignKey("AccountGame")] public int AccountGameDbId { get; set; }
         public AccountGameDb AccountGame { get; set; }
 
         public ICollection<ItemDb> Items { get; set; }
@@ -121,6 +121,7 @@ namespace GameServer.DB
         public int ShopDbId { get; set; }
 
         public string Name { get; set; }
+        
         public ICollection<ShopProductDb> ShopProducts { get; set; }
     }
     

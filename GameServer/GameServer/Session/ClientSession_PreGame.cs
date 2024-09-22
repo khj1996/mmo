@@ -179,7 +179,7 @@ namespace GameServer
                         Attack = stat.Attack,
                         Speed = stat.Speed,
                         TotalExp = 0,
-                        AccountDbId = AccountDbId,
+                        AccountGameDbId = AccountDbId,
                         CurMap = 0,
                         PosX = 0,
                         PosY = 0,
