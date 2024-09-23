@@ -1,9 +1,8 @@
-﻿using Google.Protobuf.Protocol;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
+using Google.Protobuf.Protocol;
+using Data;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UI_Item : UI_Base
@@ -42,6 +41,17 @@ public class UI_Item : UI_Base
         });
     }
 
+    public void SetItem(ItemData item)
+    {
+        TemplateId = item.id;
+        
+        _icon.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == TemplateId).Image;
+
+        _icon.gameObject.SetActive(true);
+        _frame.gameObject.SetActive(false);
+        _quantity.gameObject.SetActive(false);
+    }
+
     public void SetItem(Item item)
     {
         if (item == null)
@@ -62,14 +72,11 @@ public class UI_Item : UI_Base
             Count = item.Count;
             Equipped = item.Equipped;
 
-            Data.ItemData itemData = null;
-            Managers.Data.ItemDict.TryGetValue(TemplateId, out itemData);
+            Managers.Data.ItemDict.TryGetValue(TemplateId, out ItemData itemData);
 
-            Sprite icon = Managers.Resource.LoadItemSprite(itemData.id);
-            _icon.sprite = icon;
+            _icon.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == TemplateId).Image;
 
             _quantity.text = Count.ToString();
-
 
             _icon.gameObject.SetActive(true);
             _frame.gameObject.SetActive(Equipped);

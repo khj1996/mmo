@@ -114,6 +114,21 @@ public class MyPlayerController : PlayerController
                 statUI.RefreshUI();
             }
         }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            UI_Shop shopUI = gameSceneUI.ShopUI;
+
+            if (shopUI.gameObject.activeSelf)
+            {
+                shopUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                shopUI.gameObject.SetActive(true);
+                shopUI.RefreshUI();
+            }
+        }
     }
 
     public void UpdateMovDir()

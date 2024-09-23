@@ -15,7 +15,7 @@ public class DataManager
 
     public Dictionary<int, Data.MonsterData> MonsterDict { get; private set; } = new Dictionary<int, Data.MonsterData>();
     
-    public static Dictionary<int, Data.ShopData> ShopDict { get; private set; } = new Dictionary<int, Data.ShopData>();
+    public Dictionary<int, Data.ShopData> ShopDict { get; private set; } = new Dictionary<int, Data.ShopData>();
 
     public ItemImageSO ItemImageSO { get; private set; }
 
@@ -26,7 +26,7 @@ public class DataManager
         MonsterDict = LoadJson<Data.MonsterLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         ShopDict = LoadJson<Data.ShopLoader, int, Data.ShopData>("ShopData").MakeDict();
 
-        ItemImageSO = LoadSO<ItemImageSO>("ShopImageStorage");
+        ItemImageSO = LoadSO<ItemImageSO>("ItemImageStorage");
     }
 
     Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

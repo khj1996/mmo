@@ -107,7 +107,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_firstOverflowCharacterIndex: -1
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 553448356301415458}
   - component: {fileID: 3950005467813986174}
   m_Layer: 5
-  m_Name: Place_ItemCostImg
+  m_Name: Image_ItemCost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 3485327032687351983}
   - component: {fileID: 7518772639474596799}
   m_Layer: 5
-  m_Name: Place_Cost
+  m_Name: Cost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 7670270365399289664}
   - component: {fileID: 1778387291831673806}
   m_Layer: 5
-  m_Name: Tmp_ItemName
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_firstOverflowCharacterIndex: -1
@@ -463,6 +463,7 @@ GameObject:
   - component: {fileID: 2870352224402276549}
   - component: {fileID: 3677530978859558394}
   - component: {fileID: 6322587052944457191}
+  - component: {fileID: 523935809956137332}
   m_Layer: 5
   m_Name: UI_Shop_Item
   m_TagString: Untagged
@@ -485,10 +486,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 500}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2870352224402276549
 CanvasRenderer:
@@ -570,6 +571,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &523935809956137332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8138414538728333982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5505dd1c6f427748a751aaad3adb578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _item: {fileID: 8451889867832070021}
+  _itemCost: {fileID: 6168118741775982084}
+  _name: {fileID: 1778387291831673806}
+  _costImg: {fileID: 3950005467813986174}
 --- !u!1 &8546601668508088044
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,3 +874,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 738009374780610681}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8451889867832070021 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9184751226073274364, guid: b38a10960a8e58540a6feb6b5d46086f,
+    type: 3}
+  m_PrefabInstance: {fileID: 738009374780610681}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76dc072efff622478249f917cc5abda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

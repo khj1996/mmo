@@ -19,12 +19,15 @@ public class ResourceManager
                 return go as T;
         }
 
-        return Resources.Load<T>(path);
-    }
+        var data = Resources.Load<T>(path);
 
-    public Sprite LoadItemSprite(int dataKey)
-    {
-        return Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == dataKey).Image;
+        if (!data)
+        {
+            Debug.Log(typeof(T) + "로드실패");
+        }
+
+
+        return Resources.Load<T>(path);
     }
 
     public GameObject Instantiate(string path, Transform parent = null)

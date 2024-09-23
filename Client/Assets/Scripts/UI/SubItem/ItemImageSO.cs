@@ -11,7 +11,7 @@ public class ItemImageSO : ScriptableObject
 [System.Serializable]
 public struct ItemImageData
 {
+    public int DataKey;
     public Sprite Image;
     public Color Color;
-    public int DataKey;
 }
