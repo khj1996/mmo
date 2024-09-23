@@ -12,5 +12,6 @@ public class ItemImageSO : ScriptableObject
 public struct ItemImageData
 {
     public Sprite Image;
+    public Color Color;
     public int DataKey;
 }
