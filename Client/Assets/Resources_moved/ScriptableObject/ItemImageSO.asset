@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9448b22af177fb546af71375a8d363d0, type: 3}
+  m_Name: ItemImageSO
+  m_EditorClassIdentifier: 
+  ItemImageStructs:
+  - DataKey: 100000
+    Image: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 100100
+    Image: {fileID: 21300000, guid: 5d7061fc7da05ce44add317708ec7215, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 200000
+    Image: {fileID: 21300000, guid: 6fc27c9d7fc2d9448af6851bf935e6d2, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 200001
+    Image: {fileID: 21300000, guid: 2f1eaeeaad36ee5469eff7ff158f37ba, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 200100
+    Image: {fileID: 21300000, guid: fd6e4fc32c78509458fc45ea4a478ba8, type: 3}
+    Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+  - DataKey: 200200
+    Image: {fileID: 21300000, guid: d4f5634edede200468fc1ccf30e6f3a1, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 200300
+    Image: {fileID: 21300000, guid: e420c5bc93cb2604695a893500c897e3, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 300000
+    Image: {fileID: 21300000, guid: e52ea25af699fd445b7046374f81a5b9, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - DataKey: 400000
+    Image: {fileID: 21300000, guid: eeebc75fcd43fdc479a9606c298412c8, type: 3}
+    Color: {r: 1, g: 1, b: 1, a: 1}

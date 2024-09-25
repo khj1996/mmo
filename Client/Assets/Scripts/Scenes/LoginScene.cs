@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoginScene : BaseScene
+public class LoginScene : MonoBehaviour
 {
     UI_LoginScene _sceneUI;
 
-    protected override void Init()
+    private void Start()
     {
-        base.Init();
-
-        SceneType = Define.Scene.Login;
-
-        Screen.SetResolution(640, 480, false);
-
-        _sceneUI = Managers.UI.ShowSceneUI<UI_LoginScene>();
+        Init();
     }
 
-    public override void Clear()
+    protected async void Init()
     {
-        
+        Screen.SetResolution(640, 480, false);
+
+        _sceneUI = await Managers.UI.ShowSceneUI<UI_LoginScene>();
+    }
+
+    public void Clear()
+    {
     }
 }

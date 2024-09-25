@@ -53,7 +53,7 @@ public class UI_SelectCharacterPopup_Item : UI_Base
                 Name = Info.PlayerName
             };
             Managers.Network.Send(enterGamePacket);
-            Managers.Scene.LoadScene(Define.Scene.Game);
+            Managers.Scene.LoadScene("Game");
             Managers.UI.ClosePopupUI();
         }
         else 

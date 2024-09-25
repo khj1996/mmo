@@ -4,75 +4,114 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    static Managers s_instance; // 유일성이 보장된다
-    public static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
+    private static Managers _instance = null; // 유일성이 보장된다
+
+    public static Managers Instance
+    {
+        get
+        {
+            if (_instance is null)
+            {
+                _instance = FindObjectOfType<Managers>();
+
+                if (_instance is null) return null;
+            }
+
+            return _instance;
+        }
+    }
 
     #region Contents
+
     InventoryManager _inven = new InventoryManager();
     MapManager _map = new MapManager();
     ObjectManager _obj = new ObjectManager();
     NetworkManager _network = new NetworkManager();
     WebManager _web = new WebManager();
 
-    public static InventoryManager Inven { get { return Instance._inven; } }
-    public static MapManager Map { get { return Instance._map; } }
-    public static ObjectManager Object { get { return Instance._obj; } }
-    public static NetworkManager Network { get { return Instance._network; } }
-    public static WebManager Web { get { return Instance._web; } }
-	#endregion
+    public static InventoryManager Inven
+    {
+        get { return Instance._inven; }
+    }
 
-	#region Core
-	DataManager _data = new DataManager();
-    PoolManager _pool = new PoolManager();
-    ResourceManager _resource = new ResourceManager();
-    SceneManagerEx _scene = new SceneManagerEx();
-    SoundManager _sound = new SoundManager();
-    UIManager _ui = new UIManager();
+    public static MapManager Map
+    {
+        get { return Instance._map; }
+    }
 
-    public static DataManager Data { get { return Instance._data; } }
-    public static PoolManager Pool { get { return Instance._pool; } }
-    public static ResourceManager Resource { get { return Instance._resource; } }
-    public static SceneManagerEx Scene { get { return Instance._scene; } }
-    public static SoundManager Sound { get { return Instance._sound; } }
-    public static UIManager UI { get { return Instance._ui; } }
-	#endregion
+    public static ObjectManager Object
+    {
+        get { return Instance._obj; }
+    }
 
-	void Start()
+    public static NetworkManager Network
+    {
+        get { return Instance._network; }
+    }
+
+    public static WebManager Web
+    {
+        get { return Instance._web; }
+    }
+
+    #endregion
+
+    #region Core
+
+    [SerializeField] DataManager _data = new DataManager() ;
+    [SerializeField] PoolManager _pool = new PoolManager();
+    [SerializeField] ResourceManager _resource = new ResourceManager();
+    [SerializeField] SceneLoader _scene;
+    [SerializeField] SoundManager _sound = new SoundManager();
+    [SerializeField] UIManager _ui = new UIManager();
+
+    public static DataManager Data
+    {
+        get { return Instance._data; }
+    }
+
+    public static PoolManager Pool
+    {
+        get { return Instance._pool; }
+    }
+
+    public static ResourceManager Resource
+    {
+        get { return Instance._resource; }
+    }
+
+    public static SceneLoader Scene
+    {
+        get { return Instance._scene; }
+    }
+
+    public static SoundManager Sound
+    {
+        get { return Instance._sound; }
+    }
+
+    public static UIManager UI
+    {
+        get { return Instance._ui; }
+    }
+
+    #endregion
+
+    void Start()
     {
         Init();
-	}
+    }
 
     void Update()
     {
         _network.Update();
     }
 
-    static void Init()
+    void Init()
     {
-        if (s_instance == null)
-        {
-			GameObject go = GameObject.Find("@Managers");
-            if (go == null)
-            {
-                go = new GameObject { name = "@Managers" };
-                go.AddComponent<Managers>();
-            }
-
-            DontDestroyOnLoad(go);
-            s_instance = go.GetComponent<Managers>();
-
-            s_instance._data.Init();
-            s_instance._pool.Init();
-            s_instance._sound.Init();
-            Application.targetFrameRate = 60;
-        }		
-	}
-
-    public static void Clear()
-    {
-        Sound.Clear();
-        Scene.Clear();
-        UI.Clear();
-        Pool.Clear();
+        _data.Init();
+        _pool.Init();
+        _sound.Init();
+        Application.targetFrameRate = 60;
     }
 }

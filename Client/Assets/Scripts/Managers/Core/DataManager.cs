@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public interface ILoader<Key, Value>
 {
@@ -14,30 +17,30 @@ public class DataManager
     public Dictionary<int, Data.ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
 
     public Dictionary<int, Data.MonsterData> MonsterDict { get; private set; } = new Dictionary<int, Data.MonsterData>();
-    
+
     public Dictionary<int, Data.ShopData> ShopDict { get; private set; } = new Dictionary<int, Data.ShopData>();
 
     public ItemImageSO ItemImageSO { get; private set; }
 
-    public void Init()
+    public async void Init()
     {
-        SkillDict = LoadJson<Data.SkillDataLoader, int, Data.Skill>("SkillData").MakeDict();
-        ItemDict = LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData").MakeDict();
-        MonsterDict = LoadJson<Data.MonsterLoader, int, Data.MonsterData>("MonsterData").MakeDict();
-        ShopDict = LoadJson<Data.ShopLoader, int, Data.ShopData>("ShopData").MakeDict();
+        SkillDict = (await LoadJson<Data.SkillDataLoader, int, Data.Skill>("Assets/Resources_moved/Data/SkillData.json")).MakeDict();
+        ItemDict = (await LoadJson<Data.ItemLoader, int, Data.ItemData>("Assets/Resources_moved/Data/ItemData.json")).MakeDict();
+        MonsterDict = (await LoadJson<Data.MonsterLoader, int, Data.MonsterData>("Assets/Resources_moved/Data/MonsterData.json")).MakeDict();
+        ShopDict = (await LoadJson<Data.ShopLoader, int, Data.ShopData>("Assets/Resources_moved/Data/ShopData.json")).MakeDict();
 
-        ItemImageSO = LoadSO<ItemImageSO>("ItemImageStorage");
+        ItemImageSO = await LoadSO<ItemImageSO>("ItemImageSO");
     }
 
-    Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+    async UniTask<Loader> LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
-        TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/{path}");
+        TextAsset textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(textAsset.text);
     }
 
-    T LoadSO<T>(string path) where T : ScriptableObject
+    async UniTask<T> LoadSO<T>(string name) where T : ScriptableObject
     {
-        T sO = Managers.Resource.Load<T>($"ScriptableObject/{path}");
+        T sO = await Addressables.LoadAssetAsync<T>($"Assets/Resources_moved/ScriptableObject/{name}.asset").ToUniTask();
         return sO;
     }
 }

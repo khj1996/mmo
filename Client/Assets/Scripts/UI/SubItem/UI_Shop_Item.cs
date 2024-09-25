@@ -29,7 +29,7 @@ public class UI_Shop_Item : UI_Base
         {
             _itemCost.text = productInfo.cAmount.ToString();
             _name.text = item.name;
-            _costImg.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == item.id).Image;
+            _costImg.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == _productData.cType).Image;
             _item.SetItem(item);
         }
     }

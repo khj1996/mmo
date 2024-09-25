@@ -86,7 +86,7 @@ public class MyPlayerController : PlayerController
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
             UI_Inventory invenUI = gameSceneUI.InvenUI;
 
             if (invenUI.gameObject.activeSelf)
@@ -101,7 +101,7 @@ public class MyPlayerController : PlayerController
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
-            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
             UI_Stat statUI = gameSceneUI.StatUI;
 
             if (statUI.gameObject.activeSelf)
@@ -116,7 +116,7 @@ public class MyPlayerController : PlayerController
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
             UI_Shop shopUI = gameSceneUI.ShopUI;
 
             if (shopUI.gameObject.activeSelf)

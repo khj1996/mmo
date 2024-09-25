@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 79728047678416a44918807c7d14a310
+  m_SerializeEntries:
+  - m_GUID: 399a02a04497b4e4981572d2ee2d285c
+    m_Address: Prefabs
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3b15cdcf1e778d04db388c9f7b257cae
+    m_Address: Art
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5b422126d44bb6244b053390e1430033
+    m_Address: Map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8714cd7d0583cc944b8b211d1b36c143
+    m_Address: Tiles
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ce22aad5eb01aad48902b24923efcec6
+    m_Address: Sounds
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e2a2ed5cd941322459a167bae9b2fbf7
+    m_Address: DOTweenSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f27fee78886466a418089c5e03f1e51c
+    m_Address: Animations
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6e69780dc5834d045b5ba7f518a53bdf
+    m_Address: Assets/Resources_moved/Data
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0e6976659ae9e304db75b764512dc861
+    m_Address: Assets/Resources_moved/ScriptableObject
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2dde99ac12ca1374daba32611e752600
+    m_Address: Assets/Scenes/PersistentManagers.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: dadec0f093598fa4a95b28ba821f3088
+    m_Address: Assets/Scenes/Login.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 73ed7a8d5df364a4f880b6b12f7f36de
+    m_Address: Assets/Scenes/Game.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 46de63de42670fc45bce08d09192baad, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: fda23a518e3c34d4398c8c5ea644bc6f, type: 2}
+    - {fileID: 11400000, guid: 1e3124a1b203b2c44ab35cf11faac25c, type: 2}

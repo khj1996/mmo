@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18d76b145b9d7c42ae7b0ce84ab9c8f, type: 3}
+  m_Name: SceneDataSO
+  m_EditorClassIdentifier: 
+  data:
+  - SceneName: Login
+    Scene:
+      m_AssetGUID: dadec0f093598fa4a95b28ba821f3088
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - SceneName: Game
+    Scene:
+      m_AssetGUID: 73ed7a8d5df364a4f880b6b12f7f36de
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

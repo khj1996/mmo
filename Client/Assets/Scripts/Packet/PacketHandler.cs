@@ -162,7 +162,7 @@ class PacketHandler
 
         Debug.Log("아이템을 획득했습니다!");
 
-        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
         gameSceneUI.InvenUI.RefreshUI();
         gameSceneUI.StatUI.RefreshUI();
 
@@ -182,7 +182,7 @@ class PacketHandler
         item.Equipped = equipItemOk.Equipped;
         Debug.Log("아이템 착용 변경!");
 
-        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
         gameSceneUI.InvenUI.RefreshUI();
         gameSceneUI.StatUI.RefreshUI();
 
