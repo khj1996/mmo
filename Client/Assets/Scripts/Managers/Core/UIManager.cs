@@ -39,14 +39,12 @@ public class UIManager
         }
     }
 
-    public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
+    public async UniTask<T> MakeWorldSpaceUI<T>(Transform parent, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = Managers.Resource.Instantiate($"UI/WorldSpace/{name}");
-        if (parent != null)
-            go.transform.SetParent(parent);
+        GameObject go = await Managers.Resource.Instantiate($"UI/WorldSpace/{name}.prefab", Root.transform);
 
         Canvas canvas = go.GetOrAddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
@@ -55,12 +53,13 @@ public class UIManager
         return Util.GetOrAddComponent<T>(go);
     }
 
-    public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UI_Base
+    public async UniTask<T> MakeSubItem<T>(Transform parent, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}");
+        var go = await Addressables.InstantiateAsync($"Prefabs/UI/SubItem/{name}.prefab", Root.transform).ToUniTask();
+
         if (parent != null)
             go.transform.SetParent(parent);
 
@@ -82,16 +81,15 @@ public class UIManager
         return sceneUI;
     }
 
-    public T ShowPopupUI<T>(string name = null) where T : UI_Popup
+    public async UniTask<T> ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}");
+        var go = await Addressables.InstantiateAsync($"Prefabs/UI/Popup/{name}.prefab", Root.transform).ToUniTask();
+
         T popup = Util.GetOrAddComponent<T>(go);
         _popupStack.Push(popup);
-
-        go.transform.SetParent(Root.transform);
 
         return popup;
     }

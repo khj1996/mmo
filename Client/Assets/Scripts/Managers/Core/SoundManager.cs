@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class SoundManager
@@ -38,61 +39,62 @@ public class SoundManager
             audioSource.clip = null;
             audioSource.Stop();
         }
+
         _audioClips.Clear();
     }
 
-    public void Play(string path, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
+    public async void Play(string path, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
     {
-        AudioClip audioClip = GetOrAddAudioClip(path, type);
+        AudioClip audioClip = await GetOrAddAudioClip(path, type);
         Play(audioClip, type, pitch);
     }
 
-	public void Play(AudioClip audioClip, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
-	{
+    public void Play(AudioClip audioClip, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
+    {
         if (audioClip == null)
             return;
 
-		if (type == Define.Sound.Bgm)
-		{
-			AudioSource audioSource = _audioSources[(int)Define.Sound.Bgm];
-			if (audioSource.isPlaying)
-				audioSource.Stop();
+        if (type == Define.Sound.Bgm)
+        {
+            AudioSource audioSource = _audioSources[(int)Define.Sound.Bgm];
+            if (audioSource.isPlaying)
+                audioSource.Stop();
 
-			audioSource.pitch = pitch;
-			audioSource.clip = audioClip;
-			audioSource.Play();
-		}
-		else
-		{
-			AudioSource audioSource = _audioSources[(int)Define.Sound.Effect];
-			audioSource.pitch = pitch;
-			audioSource.PlayOneShot(audioClip);
-		}
-	}
+            audioSource.pitch = pitch;
+            audioSource.clip = audioClip;
+            audioSource.Play();
+        }
+        else
+        {
+            AudioSource audioSource = _audioSources[(int)Define.Sound.Effect];
+            audioSource.pitch = pitch;
+            audioSource.PlayOneShot(audioClip);
+        }
+    }
 
-	AudioClip GetOrAddAudioClip(string path, Define.Sound type = Define.Sound.Effect)
+    async UniTask<AudioClip> GetOrAddAudioClip(string path, Define.Sound type = Define.Sound.Effect)
     {
-		if (path.Contains("Sounds/") == false)
-			path = $"Sounds/{path}";
+        if (path.Contains("Sounds/") == false)
+            path = $"Sounds/{path}";
 
-		AudioClip audioClip = null;
+        AudioClip audioClip = null;
 
-		if (type == Define.Sound.Bgm)
-		{
-			audioClip = Managers.Resource.Load<AudioClip>(path);
-		}
-		else
-		{
-			if (_audioClips.TryGetValue(path, out audioClip) == false)
-			{
-				audioClip = Managers.Resource.Load<AudioClip>(path);
-				_audioClips.Add(path, audioClip);
-			}
-		}
+        if (type == Define.Sound.Bgm)
+        {
+            audioClip = await Managers.Resource.Load<AudioClip>(path);
+        }
+        else
+        {
+            if (_audioClips.TryGetValue(path, out audioClip) == false)
+            {
+                audioClip = await Managers.Resource.Load<AudioClip>(path);
+                _audioClips.Add(path, audioClip);
+            }
+        }
 
-		if (audioClip == null)
-			Debug.Log($"AudioClip Missing ! {path}");
+        if (audioClip == null)
+            Debug.Log($"AudioClip Missing ! {path}");
 
-		return audioClip;
+        return audioClip;
     }
 }

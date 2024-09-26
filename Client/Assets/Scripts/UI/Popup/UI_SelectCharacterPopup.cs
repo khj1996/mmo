@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Google.Protobuf.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class UI_SelectCharacterPopup : UI_Popup
         base.Init();
     }
 
-    public void SetCharacter(RepeatedField<Google.Protobuf.Protocol.LobbyPlayerInfo> playerInfos)
+    public async void SetCharacter(RepeatedField<Google.Protobuf.Protocol.LobbyPlayerInfo> playerInfos)
     {
         Items.Clear();
 
@@ -22,12 +23,19 @@ public class UI_SelectCharacterPopup : UI_Popup
         foreach (Transform child in grid.transform)
             Destroy(child.gameObject);
 
+        var newTask = new List<UniTask<UI_SelectCharacterPopup_Item>>();
+
         for (int i = 0; i < playerInfos.Count; i++)
         {
-            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
-            Items.Add(item);
+            newTask.Add(Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform));
+        }
 
-            item.Info = new CharacterInfo()
+        Items.AddRange(await UniTask.WhenAll(newTask));
+
+
+        for (int i = 0; i < playerInfos.Count; i++)
+        {
+            Items[i].Info = new CharacterInfo()
             {
                 PlayerName = playerInfos[i].Name,
                 Lv = playerInfos[i].StatInfo.Level,
@@ -39,7 +47,7 @@ public class UI_SelectCharacterPopup : UI_Popup
 
         if (playerInfos.Count < 8)
         {
-            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
+            UI_SelectCharacterPopup_Item item = await Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
             Items.Add(item);
 
             item.Info = new CharacterInfo()
@@ -55,7 +63,7 @@ public class UI_SelectCharacterPopup : UI_Popup
         RefreshUI();
     }
 
-    public void AddCharacter(Google.Protobuf.Protocol.LobbyPlayerInfo playerInfos)
+    public async void AddCharacter(Google.Protobuf.Protocol.LobbyPlayerInfo playerInfos)
     {
         Items.Last().Info = new CharacterInfo()
         {
@@ -69,7 +77,7 @@ public class UI_SelectCharacterPopup : UI_Popup
         if (Items.Count < 8)
         {
             GameObject grid = GetComponentInChildren<GridLayoutGroup>().gameObject;
-            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
+            UI_SelectCharacterPopup_Item item = await Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
             Items.Add(item);
 
             item.Info = new CharacterInfo()

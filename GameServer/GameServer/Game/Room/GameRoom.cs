@@ -150,7 +150,7 @@ namespace GameServer.Game
             {
                 S_Spawn spawnPacket = new S_Spawn();
                 spawnPacket.Objects.Add(gameObject.Info);
-                Broadcast(gameObject.CellPos, spawnPacket);
+                //Broadcast(gameObject.CellPos, spawnPacket);
             }
         }
 

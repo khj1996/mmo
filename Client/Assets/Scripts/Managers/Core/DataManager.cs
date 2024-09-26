@@ -24,23 +24,23 @@ public class DataManager
 
     public async void Init()
     {
-        SkillDict = (await LoadJson<Data.SkillDataLoader, int, Data.Skill>("Assets/Resources_moved/Data/SkillData.json")).MakeDict();
-        ItemDict = (await LoadJson<Data.ItemLoader, int, Data.ItemData>("Assets/Resources_moved/Data/ItemData.json")).MakeDict();
-        MonsterDict = (await LoadJson<Data.MonsterLoader, int, Data.MonsterData>("Assets/Resources_moved/Data/MonsterData.json")).MakeDict();
-        ShopDict = (await LoadJson<Data.ShopLoader, int, Data.ShopData>("Assets/Resources_moved/Data/ShopData.json")).MakeDict();
+        SkillDict = (await LoadJson<Data.SkillDataLoader, int, Data.Skill>("SkillData")).MakeDict();
+        ItemDict = (await LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData")).MakeDict();
+        MonsterDict = (await LoadJson<Data.MonsterLoader, int, Data.MonsterData>("MonsterData")).MakeDict();
+        ShopDict = (await LoadJson<Data.ShopLoader, int, Data.ShopData>("ShopData")).MakeDict();
 
         ItemImageSO = await LoadSO<ItemImageSO>("ItemImageSO");
     }
 
-    async UniTask<Loader> LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+    async UniTask<Loader> LoadJson<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
     {
-        TextAsset textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
+        TextAsset textAsset = await Addressables.LoadAssetAsync<TextAsset>($"Data/{name}.json").ToUniTask();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(textAsset.text);
     }
 
     async UniTask<T> LoadSO<T>(string name) where T : ScriptableObject
     {
-        T sO = await Addressables.LoadAssetAsync<T>($"Assets/Resources_moved/ScriptableObject/{name}.asset").ToUniTask();
+        T sO = await Addressables.LoadAssetAsync<T>($"ScriptableObject/{name}.asset").ToUniTask();
         return sO;
     }
 }

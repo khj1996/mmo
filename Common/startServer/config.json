@@ -1,5 +1,5 @@
 {
-	"dataPath": "../../Client/Assets/Resources/Data",
+	"dataPath": "../../Client/Assets/Resources_moved/Data",
 	"mapDataPath": "../MapData",
 	"connectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GameDB;"
 }

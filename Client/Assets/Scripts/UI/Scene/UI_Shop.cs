@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Data;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class UI_Shop : UI_Base
 
     private ShopData shopdata;
 
-    public override void Init()
+    public override async void Init()
     {
         Products.Clear();
 
@@ -20,11 +21,14 @@ public class UI_Shop : UI_Base
 
         Managers.Data.ShopDict.TryGetValue(1, out shopdata);
 
+        var newTask = new List<UniTask<UI_Shop_Item>>();
+
         for (int i = 0; i < shopdata.productList.Count; i++)
         {
-            UI_Shop_Item item = Managers.UI.MakeSubItem<UI_Shop_Item>(grid.transform);
-            Products.Add(item);
+            newTask.Add(Managers.UI.MakeSubItem<UI_Shop_Item>(grid.transform));
         }
+
+        Products.AddRange(await UniTask.WhenAll(newTask));
 
         RefreshUI();
     }

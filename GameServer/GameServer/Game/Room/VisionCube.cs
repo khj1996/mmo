@@ -92,7 +92,7 @@ namespace GameServer.Game.Room
 					spawnPacket.Objects.Add(info);
 				}
 
-				Owner.Session.Send(spawnPacket);
+				//Owner.Session.Send(spawnPacket);
 			}
 
 			// 기존엔 있었는데 사라진 애들 Despawn 처리

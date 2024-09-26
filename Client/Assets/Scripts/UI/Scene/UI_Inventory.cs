@@ -1,43 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class UI_Inventory : UI_Base
 {
-	public List<UI_Item> Items { get; } = new List<UI_Item>();
+    public List<UI_Item> Items { get; } = new List<UI_Item>();
 
-	public override void Init()
-	{
-		Items.Clear();
+    public override async void Init()
+    {
+        Items.Clear();
 
-		GameObject grid = transform.Find("ItemGrid").gameObject;
-		foreach (Transform child in grid.transform)
-			Destroy(child.gameObject);
+        GameObject grid = transform.Find("ItemGrid").gameObject;
+        foreach (Transform child in grid.transform)
+            Destroy(child.gameObject);
 
-		for (int i = 0; i < 20; i++)
-		{
-			UI_Item item = Managers.UI.MakeSubItem<UI_Item>(grid.transform);
-			Items.Add(item);
-		}
 
-		RefreshUI();
-	}
+        var newTask = new List<UniTask<UI_Item>>();
 
-	public void RefreshUI()
-	{
-		if (Items.Count == 0)
-			return;
+        for (int i = 0; i < 20; i++)
+        {
+            newTask.Add(Managers.UI.MakeSubItem<UI_Item>(grid.transform));
+        }
 
-		List<Item> items = Managers.Inven.Items.Values.ToList();
-		items.Sort((left, right) => { return left.Slot - right.Slot; });
+        Items.AddRange(await UniTask.WhenAll(newTask));
 
-		foreach (Item item in items)
-		{
-			if (item.Slot < 0 || item.Slot >= 20)
-				continue;
+        RefreshUI();
+    }
 
-			Items[item.Slot].SetItem(item);
-		}
-	}
+    public void RefreshUI()
+    {
+        if (Items.Count == 0)
+            return;
+
+        List<Item> items = Managers.Inven.Items.Values.ToList();
+        items.Sort((left, right) => { return left.Slot - right.Slot; });
+
+        foreach (Item item in items)
+        {
+            if (item.Slot < 0 || item.Slot >= 20)
+                continue;
+
+            Items[item.Slot].SetItem(item);
+        }
+    }
 }

@@ -107,26 +107,26 @@ class PacketHandler
         Managers.Network.Send(loginPacket);
     }
 
-    public static void S_LoginHandler(PacketSession session, IMessage packet)
+    public static async void S_LoginHandler(PacketSession session, IMessage packet)
     {
         S_Login loginPacket = (S_Login)packet;
         Debug.Log($"LoginOk({loginPacket.LoginOk})");
 
 
-        Managers.UI.ShowPopupUI<UI_SelectServerPopup>().SetServers(loginPacket.ServerInfos);
+        (await Managers.UI.ShowPopupUI<UI_SelectServerPopup>()).SetServers(loginPacket.ServerInfos);
     }
 
-    public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)
+    public static async void S_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
         S_CreatePlayer createOkPacket = (S_CreatePlayer)packet;
 
         if (createOkPacket.Player == null)
         {
-            Managers.UI.ShowPopupUI<UI_SimpleTextPopup>().SetText("생성실패", "닉네임 중복");
+            (await Managers.UI.ShowPopupUI<UI_SimpleTextPopup>()).SetText("생성실패", "닉네임 중복");
         }
         else
         {
-            Managers.UI.ShowPopupUI<UI_SimpleTextPopup>().SetText("생성성공", "캐릭터 추가");
+            (await Managers.UI.ShowPopupUI<UI_SimpleTextPopup>()).SetText("생성성공", "캐릭터 추가");
             GameObject.Find(nameof(UI_SelectCharacterPopup)).GetComponent<UI_SelectCharacterPopup>()
                 .AddCharacter(createOkPacket.Player);
         }
@@ -197,11 +197,11 @@ class PacketHandler
         // TODO
     }
 
-    public static void S_EnterServerHandler(PacketSession session, IMessage packet)
+    public static async void S_EnterServerHandler(PacketSession session, IMessage packet)
     {
         S_EnterServer enterPacket = (S_EnterServer)packet;
 
-        Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>().SetCharacter(enterPacket.Players);
+        (await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
     }
 
     public static void S_PingHandler(PacketSession session, IMessage packet)

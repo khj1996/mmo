@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public struct Pos
 {
@@ -64,18 +66,18 @@ public class MapManager
         return !_collision[y, x];
     }
 
-    public void LoadMap(int mapId)
+    public async void LoadMap(int mapId)
     {
         DestroyMap();
 
         string mapName = "Map_" + mapId.ToString("000");
-        GameObject go = Managers.Resource.Instantiate($"Map/{mapName}");
+        GameObject go = await Addressables.InstantiateAsync($"Prefabs/Map/{mapName}.prefab").ToUniTask();
         go.name = "Map";
 
         CurrentGrid = go.GetComponent<Grid>();
 
         // Collision 관련 파일
-        TextAsset txt = Managers.Resource.Load<TextAsset>($"Map/{mapName}");
+        TextAsset txt = await Managers.Resource.Load<TextAsset>($"Map/{mapName}.txt");
         StringReader reader = new StringReader(txt.text);
 
         MinX = int.Parse(reader.ReadLine());

@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class ResourceManager
 {
-    public T Load<T>(string path) where T : Object
+    public async UniTask<T> Load<T>(string path) where T : Object
     {
         if (typeof(T) == typeof(GameObject))
         {
@@ -19,7 +21,7 @@ public class ResourceManager
                 return go as T;
         }
 
-        var data = Resources.Load<T>(path);
+        var data = await Addressables.LoadAssetAsync<T>(path);
 
         if (!data)
         {
@@ -27,12 +29,12 @@ public class ResourceManager
         }
 
 
-        return Resources.Load<T>(path);
+        return data;
     }
 
-    public GameObject Instantiate(string path, Transform parent = null)
+    public async UniTask<GameObject> Instantiate(string path, Transform parent = null)
     {
-        GameObject original = Load<GameObject>($"Prefabs/{path}");
+        GameObject original = await Load<GameObject>($"Prefabs/{path}");
         if (original == null)
         {
             Debug.Log($"Failed to load prefab : {path}");
