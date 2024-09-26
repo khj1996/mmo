@@ -18,7 +18,6 @@ namespace GameServer.Game
             if (Data == null || Data.projectile == null || Owner == null || Room == null)
                 return;
 
-            Console.WriteLine($"Arrow ({Info.PosInfo.PosX}, {Info.PosInfo.PosY})");
             //이동 틱
             int tick = (int)(1000 / GameLogic.Instance.updateFrame);
             //다음 이동

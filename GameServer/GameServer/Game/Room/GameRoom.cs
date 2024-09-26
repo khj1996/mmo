@@ -123,6 +123,10 @@ namespace GameServer.Game
                     player.Vision.Update();
                     player.Update();
                 }
+
+                S_Spawn spawnPacket = new S_Spawn();
+                spawnPacket.Objects.Add(gameObject.Info);
+                Broadcast(gameObject.CellPos, spawnPacket, player.PlayerDbId);
             }
             else if (type == GameObjectType.Monster)
             {
@@ -134,6 +138,10 @@ namespace GameServer.Game
                 Map.ApplyMove(monster, new Vector2Float(monster.CellPos.x, monster.CellPos.y));
 
                 monster.Update();
+
+                S_Spawn spawnPacket = new S_Spawn();
+                spawnPacket.Objects.Add(gameObject.Info);
+                Broadcast(gameObject.CellPos, spawnPacket);
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -143,14 +151,6 @@ namespace GameServer.Game
 
                 GetZone(projectile.CellPos).Projectiles.Add(projectile);
                 projectile.Start(100);
-            }
-
-            // 타인한테 정보 전송
-            {
-                S_Spawn spawnPacket = new S_Spawn();
-                spawnPacket.Objects.Add(gameObject.Info);
-                Broadcast(gameObject.CellPos, spawnPacket, 
-                    type == GameObjectType.Player ? (gameObject as Player).PlayerDbId : -1);
             }
         }
 
@@ -255,11 +255,11 @@ namespace GameServer.Game
                 if (p.PlayerDbId == playerDbId)
                     continue;
 
-
                 var dis = (p.CellPos - pos).magnitude;
 
                 if (dis > VisionDis)
                     continue;
+                Console.WriteLine(p.PlayerDbId);
 
                 p.Session.Send(packet);
             }
