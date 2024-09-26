@@ -5,114 +5,115 @@ using Google.Protobuf.Protocol;
 
 namespace GameServer.Game.Room
 {
-	public class VisionCube
-	{
-		//시야의 소유주
-		public Player Owner { get; private set; }
-		//시야 에들어와있는 물체
-		public HashSet<GameObject> PreviousObjects { get; private set; } = new HashSet<GameObject>();
+    public class VisionCube
+    {
+        //시야의 소유주
+        public Player Owner { get; private set; }
 
-		//생성자
-		public VisionCube(Player owner)
-		{
-			Owner = owner;
-		}
+        //시야 에들어와있는 물체
+        public HashSet<GameObject> PreviousObjects { get; private set; } = new HashSet<GameObject>();
 
-		//시야 내부에 존재하는 오브젝트 획득
-		public HashSet<GameObject> GatherObjects()
-		{
-			if (Owner == null || Owner.Room == null)
-				return null;
+        //생성자
+        public VisionCube(Player owner)
+        {
+            Owner = owner;
+        }
 
-			HashSet<GameObject> objects = new HashSet<GameObject>();
+        //시야 내부에 존재하는 오브젝트 획득
+        public HashSet<GameObject> GatherObjects()
+        {
+            if (Owner == null || Owner.Room == null)
+                return null;
 
-			//근접한 존 획득
-			List<Zone> zones = Owner.Room.GetAdjacentZones(Owner.CellPos);
+            HashSet<GameObject> objects = new HashSet<GameObject>();
 
-			//현재 유저의 위치
-			Vector2Float cellPos = Owner.CellPos;
-			//각 존마다 반복하여 획득 가능한 오브젝트 획득
-			foreach (Zone zone in zones)
-			{
-				foreach (Player player in zone.Players)
-				{
-					float dx = player.CellPos.x - cellPos.x;
-					float dy = player.CellPos.y - cellPos.y;
-					if (Math.Abs(dx) > GameRoom.VisionCells)
-						continue;
-					if (Math.Abs(dy) > GameRoom.VisionCells)
-						continue;
-					objects.Add(player);
-				}
+            //근접한 존 획득
+            List<Zone> zones = Owner.Room.GetAdjacentZones(Owner.CellPos);
 
-				foreach (Monster monster in zone.Monsters)
-				{
-					float dx = monster.CellPos.x - cellPos.x;
-					float dy = monster.CellPos.y - cellPos.y;
-					if (Math.Abs(dx) > GameRoom.VisionCells)
-						continue;
-					if (Math.Abs(dy) > GameRoom.VisionCells)
-						continue;
-					objects.Add(monster);
-				}
+            //현재 유저의 위치
+            Vector2Float cellPos = Owner.CellPos;
+            //각 존마다 반복하여 획득 가능한 오브젝트 획득
+            foreach (Zone zone in zones)
+            {
+                foreach (Player player in zone.Players)
+                {
+                    if (player.PlayerDbId == Owner.PlayerDbId)
+                        continue;
 
-				foreach (Projectile projectile in zone.Projectiles)
-				{
-					float dx = projectile.CellPos.x - cellPos.x;
-					float dy = projectile.CellPos.y - cellPos.y;
-					if (Math.Abs(dx) > GameRoom.VisionCells)
-						continue;
-					if (Math.Abs(dy) > GameRoom.VisionCells)
-						continue;
-					objects.Add(projectile);
-				}
-			}
+                    var dis = (player.CellPos - cellPos).magnitude;
 
-			return objects;
-		}
+                    if (dis > GameRoom.VisionDis)
+                        continue;
 
-		//업데이트
-		public void Update()
-		{
-			if (Owner == null || Owner.Room == null)
-				return;
+                    objects.Add(player);
+                }
 
-			HashSet<GameObject> currentObjects = GatherObjects();
+                foreach (Monster monster in zone.Monsters)
+                {
+                    var dis = (monster.CellPos - cellPos).magnitude;
 
-			// 기존엔 없었는데 새로 생긴 애들 Spawn 처리
-			List<GameObject> added = currentObjects.Except(PreviousObjects).ToList();
-			if (added.Count > 0)
-			{
-				S_Spawn spawnPacket = new S_Spawn();
+                    if (dis > GameRoom.VisionDis)
+                        continue;
 
-				foreach (GameObject gameObject in added)
-				{
-					ObjectInfo info = new ObjectInfo();
-					info.MergeFrom(gameObject.Info);
-					spawnPacket.Objects.Add(info);
-				}
+                    objects.Add(monster);
+                }
 
-				//Owner.Session.Send(spawnPacket);
-			}
+                foreach (Projectile projectile in zone.Projectiles)
+                {
+                    var dis = (projectile.CellPos - cellPos).magnitude;
 
-			// 기존엔 있었는데 사라진 애들 Despawn 처리
-			List<GameObject> removed = PreviousObjects.Except(currentObjects).ToList();
-			if (removed.Count > 0)
-			{
-				S_Despawn despawnPacket = new S_Despawn();
+                    if (dis > GameRoom.VisionDis)
+                        continue;
 
-				foreach (GameObject gameObject in removed)
-				{
-					despawnPacket.ObjectIds.Add(gameObject.Id);
-				}
+                    objects.Add(projectile);
+                }
+            }
 
-				Owner.Session.Send(despawnPacket);
-			}
+            return objects;
+        }
 
-			// 교체
-			PreviousObjects = currentObjects;
+        //업데이트
+        public void Update()
+        {
+            if (Owner == null || Owner.Room == null)
+                return;
 
-			Owner.Room.PushAfter(100, Update);
-		}
-	}
+            HashSet<GameObject> currentObjects = GatherObjects();
+
+            // 기존엔 없었는데 새로 생긴 애들 Spawn 처리
+            List<GameObject> added = currentObjects.Except(PreviousObjects).ToList();
+            if (added.Count > 0)
+            {
+                S_Spawn spawnPacket = new S_Spawn();
+
+                foreach (GameObject gameObject in added)
+                {
+                    ObjectInfo info = new ObjectInfo();
+                    info.MergeFrom(gameObject.Info);
+                    spawnPacket.Objects.Add(info);
+                }
+
+                Owner.Session.Send(spawnPacket);
+            }
+
+            // 기존엔 있었는데 사라진 애들 Despawn 처리
+            List<GameObject> removed = PreviousObjects.Except(currentObjects).ToList();
+            if (removed.Count > 0)
+            {
+                S_Despawn despawnPacket = new S_Despawn();
+
+                foreach (GameObject gameObject in removed)
+                {
+                    despawnPacket.ObjectIds.Add(gameObject.Id);
+                }
+
+                Owner.Session.Send(despawnPacket);
+            }
+
+            // 교체
+            PreviousObjects = currentObjects;
+
+            Owner.Room.PushAfter(100, Update);
+        }
+    }
 }

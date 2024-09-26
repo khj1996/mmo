@@ -11,7 +11,7 @@ namespace GameServer.Game
     public partial class GameRoom : JobSerializer
     {
         //플레이어 시야
-        public const int VisionCells = 10;
+        public const int VisionDis = 10;
 
         //방 id
         public int RoomId { get; set; }
@@ -53,7 +53,7 @@ namespace GameServer.Game
             Map.LoadMap(mapId, ConfigManager.Config.mapDataPath);
 
             ZoneCells = zoneCells; // 10
-            
+
             int countY = (Map.SizeY + zoneCells - 1) / zoneCells;
             int countX = (Map.SizeX + zoneCells - 1) / zoneCells;
             Zones = new Zone[countY, countX];
@@ -143,14 +143,14 @@ namespace GameServer.Game
 
                 GetZone(projectile.CellPos).Projectiles.Add(projectile);
                 projectile.Start(100);
-                
             }
 
             // 타인한테 정보 전송
             {
                 S_Spawn spawnPacket = new S_Spawn();
                 spawnPacket.Objects.Add(gameObject.Info);
-                //Broadcast(gameObject.CellPos, spawnPacket);
+                Broadcast(gameObject.CellPos, spawnPacket, 
+                    type == GameObjectType.Player ? (gameObject as Player).PlayerDbId : -1);
             }
         }
 
@@ -246,17 +246,19 @@ namespace GameServer.Game
             return null;
         }
 
-        public void Broadcast(Vector2Float pos, IMessage packet)
+        public void Broadcast(Vector2Float pos, IMessage packet, int playerDbId = -1)
         {
             List<Zone> zones = GetAdjacentZones(pos);
 
-            foreach (Player p in zones.SelectMany(z => z.Players))
+            foreach (var p in zones.SelectMany(z => z.Players))
             {
-                float dx = p.CellPos.x - pos.x;
-                float dy = p.CellPos.y - pos.y;
-                if (Math.Abs(dx) > VisionCells)
+                if (p.PlayerDbId == playerDbId)
                     continue;
-                if (Math.Abs(dy) > VisionCells)
+
+
+                var dis = (p.CellPos - pos).magnitude;
+
+                if (dis > VisionDis)
                     continue;
 
                 p.Session.Send(packet);
@@ -273,7 +275,7 @@ namespace GameServer.Game
         // ㅁㅁㅁㅁㅁㅁ
         // ㅁㅁㅁㅁㅁㅁ
         // ㅁㅁㅁㅁㅁㅁ
-        public List<Zone> GetAdjacentZones(Vector2Float cellPos, int range = GameRoom.VisionCells)
+        public List<Zone> GetAdjacentZones(Vector2Float cellPos, int range = GameRoom.VisionDis)
         {
             HashSet<Zone> zones = new HashSet<Zone>();
 
