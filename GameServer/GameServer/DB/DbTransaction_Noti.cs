@@ -37,5 +37,62 @@ namespace GameServer.DB
                 }
             });
         }
+
+
+        public static void BuyItemNoti(Player player, List<ItemDb> itemData, GameRoom room)
+        {
+            if (player == null || itemData == null || room == null)
+                return;
+
+
+            // You
+            Instance.Push(() =>
+            {
+                using (AppDbContext db = new AppDbContext())
+                {
+                    foreach (var costItem in itemData.Where(x => x.Count < 0))
+                    {
+                        db.Entry(costItem).State = EntityState.Unchanged;
+                        db.Entry(costItem).Property(nameof(ItemDb.Count)).IsModified = true;
+                    }
+
+                    foreach (var getItem in itemData.Where(x => x.Count > 0))
+                    {
+                        db.Items.Add(getItem);
+                    }
+
+
+                    bool success = db.SaveChangesEx();
+                    if (success)
+                    {
+                        // Me
+                        room.Push(() =>
+                        {
+                            foreach (var costItem in itemData.Where(x => x.Count < 0))
+                            {
+                                player.Inven.SetItemAmount(costItem.TemplateId, costItem.Count);
+                            }
+
+                            foreach (var getItem in itemData.Where(x => x.Count > 0))
+                            {
+                                Item newItem = Item.MakeItem(getItem);
+                                player.Inven.Add(newItem);
+                            }
+
+
+                            // Client Noti
+                            {
+                                S_BuyItem buyPacket = new S_BuyItem()
+                                {
+                                    Result = true
+                                };
+
+                                player.Session.Send(buyPacket);
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 }

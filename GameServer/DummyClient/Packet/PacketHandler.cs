@@ -130,4 +130,7 @@ class PacketHandler
     public static void S_EnterServerHandler(PacketSession session, IMessage packet)
     {
     }
+    public static void S_BuyItemHandler(PacketSession session, IMessage packet)
+    {
+    }
 }

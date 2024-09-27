@@ -28,6 +28,8 @@ enum MsgId {
   S_PING = 21;
   C_PONG = 22;
   S_Enter_Server = 23;
+  S_Buy_Item = 24;
+  C_Buy_Item = 25;
 }
 
 enum CreatureState {
@@ -69,6 +71,7 @@ enum ItemType {
   ITEM_TYPE_WEAPON = 1;
   ITEM_TYPE_ARMOR = 2;
   ITEM_TYPE_CONSUMABLE = 3;
+  ITEM_TYPE_CURRENCY = 4;
 }
 
 enum WeaponType {
@@ -141,6 +144,16 @@ message S_Connected {
 
 message C_Login {
   string  jwtToken = 1;
+}
+
+message C_BuyItem {
+  string  jwtToken = 1;
+  int32 shop = 2;
+  int32 productId = 3;
+}
+
+message S_BuyItem {
+  bool result = 1;
 }
 
 message S_Login {

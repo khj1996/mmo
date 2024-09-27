@@ -21,6 +21,12 @@ namespace GameServer.Game
             return item;
         }
 
+        public void SetItemAmount(int itemDbId, int amount)
+        {
+            Items.TryGetValue(itemDbId, out var item);
+            item.Count = amount;
+        }
+
         public Item Find(Func<Item, bool> condition)
         {
             foreach (Item item in Items.Values)
@@ -30,6 +36,18 @@ namespace GameServer.Game
             }
 
             return null;
+        }
+
+        public int? GetAvailableSlot(int TemplateId)
+        {
+            var item = Items.First(x => x.Value.TemplateId == TemplateId).Value;
+
+            if (item != null)
+            {
+                return item.TemplateId;
+            }
+
+            return GetEmptySlot();
         }
 
         public int? GetEmptySlot()

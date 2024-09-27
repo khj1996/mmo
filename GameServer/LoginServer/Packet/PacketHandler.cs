@@ -44,4 +44,19 @@ class PacketHandler
         ClientSession clientSession = (ClientSession)session;
         clientSession.HandlePong();
     }
+    public static void C_BuyItemHandler(PacketSession session, IMessage packet)
+    {/*
+        produc equipPacket = (C_EquipItem)packet;
+        ClientSession clientSession = (ClientSession)session;
+
+        Player player = clientSession.MyPlayer;
+        if (player == null)
+            return;
+
+        GameRoom room = player.Room;
+        if (room == null)
+            return;
+
+        room.Push(room.HandleEquipItem, player, equipPacket);*/
+    }
 }

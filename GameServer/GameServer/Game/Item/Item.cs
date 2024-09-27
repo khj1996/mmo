@@ -45,6 +45,7 @@ namespace GameServer.Game
 
         //아이템 타입
         public ItemType ItemType { get; private set; }
+
         //누적 가능 여부
         public bool Stackable { get; protected set; }
 
@@ -55,7 +56,7 @@ namespace GameServer.Game
         }
 
         //아이템 데이터
-        public static Item MakeItem(ItemDb itemDb)
+        public static Item MakeItem(ItemDb itemDb, int amount = 1)
         {
             Item item = null;
 
@@ -75,6 +76,9 @@ namespace GameServer.Game
                     break;
                 case ItemType.Consumable:
                     item = new Consumable(itemDb.TemplateId);
+                    break;
+                case ItemType.Currency:
+                    item = new Currency(itemDb.TemplateId, amount);
                     break;
             }
 
@@ -172,6 +176,33 @@ namespace GameServer.Game
                 Count = 1;
                 MaxCount = data.maxCount;
                 ConsumableType = data.consumableType;
+                Stackable = (data.maxCount > 1);
+            }
+        }
+    }
+
+    //소비타입
+    public class Currency : Item
+    {
+        public int MaxCount { get; set; }
+
+        public Currency(int templateId, int amount = 1) : base(ItemType.Currency)
+        {
+            Init(templateId, amount);
+        }
+
+        void Init(int templateId, int amount = 1)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(templateId, out itemData);
+            if (itemData.itemType != ItemType.Currency)
+                return;
+
+            ConsumableData data = (ConsumableData)itemData;
+            {
+                TemplateId = data.id;
+                Count = amount;
+                MaxCount = data.maxCount;
                 Stackable = (data.maxCount > 1);
             }
         }

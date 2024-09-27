@@ -75,6 +75,23 @@ class PacketHandler
         room.Push(room.HandleEquipItem, player, equipPacket);
     }
 
+    public static void C_BuyItemHandler(PacketSession session, IMessage packet)
+    {
+        C_BuyItem buyItemPacket = (C_BuyItem)packet;
+        ClientSession clientSession = (ClientSession)session;
+
+        Player player = clientSession.MyPlayer;
+        if (player == null)
+            return;
+
+        GameRoom room = player.Room;
+        if (room == null)
+            return;
+
+        room.Push(room.HandleBuyItem, player, buyItemPacket);
+    }
+
+
     public static void C_PongHandler(PacketSession session, IMessage packet)
     {
         ClientSession clientSession = (ClientSession)session;
