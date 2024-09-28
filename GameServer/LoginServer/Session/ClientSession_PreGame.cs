@@ -23,19 +23,12 @@ namespace LoginServer
         //로그인(계정 로그인)
         public void HandleLogin(C_Login loginPacket)
         {
-            // TODO : 이런 저런 보안 체크
             if (ServerState != PlayerServerState.ServerStateLogin)
                 return;
 
             var accountDbId = int.Parse(JwtUtils.DecipherJwtAccessToken(loginPacket.JwtToken).Subject);
 
-            // TODO : 문제가 있긴 있다
-            // - 동시에 다른 사람이 같은 UniqueId을 보낸다면?
-            // - 악의적으로 여러번 보낸다면
-            // - 쌩뚱맞은 타이밍에 그냥 이 패킷을 보낸다면?
-
             LobbyPlayers.Clear();
-
 
             using (AppDbContext db = new AppDbContext())
             {
@@ -53,6 +46,15 @@ namespace LoginServer
                 //기존 계정
                 if (findAccountGame != null)
                 {
+                    findAccountGame.JwtToken = loginPacket.JwtToken;
+
+                    db.Entry(findAccountGame).Property(nameof(AccountGameDb.JwtToken)).IsModified = true;
+
+                    bool success = db.SaveChangesEx();
+
+                    if (success == false)
+                        return;
+
                     AccountDbId = findAccountGame.AccountGameDbId;
                 }
                 else
