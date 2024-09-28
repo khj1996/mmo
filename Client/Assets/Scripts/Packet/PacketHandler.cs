@@ -204,6 +204,14 @@ class PacketHandler
         (await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
     }
 
+    public static async void S_BuyItemHandler(PacketSession session, IMessage packet)
+    {
+        S_BuyItem buyPacket = (S_BuyItem)packet;
+        Debug.Log(buyPacket.Result);
+
+        //(await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
+    }
+
     public static void S_PingHandler(PacketSession session, IMessage packet)
     {
         C_Pong pongPacket = new C_Pong();

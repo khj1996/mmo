@@ -27,7 +27,7 @@ namespace GameServer.Game
             item.Count = amount;
         }
 
-        public Item Find(Func<Item, bool> condition)
+        public Item? Find(Func<Item, bool> condition)
         {
             foreach (Item item in Items.Values)
             {

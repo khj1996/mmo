@@ -36,6 +36,15 @@ public class UI_Shop_Item : UI_Base
 
     void Buyitem(PointerEventData evt)
     {
+        C_BuyItem buyPacket = new C_BuyItem()
+        {
+            Shop = 1,
+            ProductId = productInfo.id,
+            JwtToken = Managers.Network.Token
+        };
+
+        Managers.Network.Send(buyPacket);
+
         //Debug.Log($"아이템 구매 : {productInfo.}");
     }
 }

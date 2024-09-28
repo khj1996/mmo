@@ -33,6 +33,7 @@ public class ServerSession : PacketSession
 
 	public override void OnDisconnected(EndPoint endPoint)
 	{
+		//Managers.Scene.LoadScene("Login");
 		Debug.Log($"OnDisconnected : {endPoint}");
 	}
 
