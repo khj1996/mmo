@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class UI_Inventory : UI_Base
 {
     public List<UI_Item> Items { get; } = new List<UI_Item>();
 
+    [SerializeField] private TMP_Text _goldTMP;
+
+
     public override async void Init()
     {
         Items.Clear();
 
-        GameObject grid = transform.Find("ItemGrid").gameObject;
+        var grid = transform.Find("ItemGrid").gameObject;
         foreach (Transform child in grid.transform)
             Destroy(child.gameObject);
 
@@ -26,16 +30,22 @@ public class UI_Inventory : UI_Base
 
         Items.AddRange(await UniTask.WhenAll(newTask));
 
-        RefreshUI();
+        RefreshUI(Define.InvenRefreshType.All);
     }
 
-    public void RefreshUI()
+    public void RefreshUI(Define.InvenRefreshType type)
     {
+        if (type == Define.InvenRefreshType.Currency || type == Define.InvenRefreshType.All)
+        {
+            _goldTMP.text = Managers.Inven.Items.Values.First(x => x.TemplateId == 400000).Count.ToString();
+        }
+
+
         if (Items.Count == 0)
             return;
 
-        List<Item> items = Managers.Inven.Items.Values.ToList();
-        items.Sort((left, right) => { return left.Slot - right.Slot; });
+        var items = Managers.Inven.Items.Values.Where(x => x.Slot >= 0).ToList();
+        items.Sort((left, right) => left.Slot - right.Slot);
 
         foreach (Item item in items)
         {

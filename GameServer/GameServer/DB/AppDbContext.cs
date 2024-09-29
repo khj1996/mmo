@@ -62,6 +62,10 @@ namespace GameServer.DB
                 .HasIndex(s => s.ItemDataDbid)
                 .IsUnique();
 
+            builder.Entity<ItemDb>()
+                .HasIndex(s => s.ItemDbId)
+                .IsUnique();
+
             builder.Entity<ShopDb>()
                 .HasIndex(s => s.ShopDbId)
                 .IsUnique();

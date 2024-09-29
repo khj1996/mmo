@@ -96,7 +96,7 @@ public class MyPlayerController : PlayerController
             else
             {
                 invenUI.gameObject.SetActive(true);
-                invenUI.RefreshUI();
+                invenUI.RefreshUI(Define.InvenRefreshType.All);
             }
         }
         else if (Input.GetKeyDown(KeyCode.C))

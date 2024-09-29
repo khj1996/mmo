@@ -24,4 +24,11 @@ public class Define
         Click,
         Drag,
     }
+
+    public enum InvenRefreshType
+    {
+        All,
+        Currency,
+        Slot
+    }
 }

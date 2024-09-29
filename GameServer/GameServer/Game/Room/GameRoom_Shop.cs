@@ -52,29 +52,41 @@ namespace GameServer.Game
                     return;
                 }
 
-                var changeData = new List<ItemDb>();
+                var rewardDatas = new List<ItemDb>();
 
-                //소모값
-                changeData.Add(new ItemDb()
+                var costItem = new ItemDb()
                 {
                     ItemDbId = checkCost.ItemDbId,
                     TemplateId = checkCost.TemplateId,
                     Count = checkCost.Count - productData.cAmount,
                     Slot = checkCost.Slot,
                     OwnerDbId = player.PlayerDbId
-                });
+                };
 
-                //지급 아이템
-                changeData.Add(new ItemDb()
+                var test = player.Inven.Find(x => x.TemplateId == rewardData.id && x.Stackable);
+
+                //TODO : 보유 최대치 적용 필요
+                var rewardSlot = (test == null) ? player.Inven.GetEmptySlot() : player.Inven.GetAvailableSlot(test.TemplateId);
+                var rewardCount = (test == null) ? 1 : test.Count + 1;
+
+                var rewardItem = new ItemDb()
                 {
                     TemplateId = rewardData.id,
-                    Count = 1,
-                    Slot = (int)player.Inven.GetAvailableSlot(rewardData.id),
+                    Count = rewardCount,
+                    Slot = (int)rewardSlot,
                     OwnerDbId = player.PlayerDbId
-                });
+                };
+
+                if (test != null)
+                {
+                    rewardItem.ItemDbId = test.ItemDbId;
+                }
+
+                //지급 아이템
+                rewardDatas.Add(rewardItem);
 
 
-                DbTransaction.BuyItemNoti(player, changeData, player.Room);
+                DbTransaction.BuyItemNoti(player, costItem, rewardDatas, player.Room);
             }
         }
     }

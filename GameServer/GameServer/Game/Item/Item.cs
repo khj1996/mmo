@@ -56,12 +56,11 @@ namespace GameServer.Game
         }
 
         //아이템 데이터
-        public static Item MakeItem(ItemDb itemDb, int amount = 1)
+        public static Item? MakeItem(ItemDb itemDb, int amount = 1)
         {
             Item item = null;
 
-            ItemData itemData = null;
-            DataManager.ItemDict.TryGetValue(itemDb.TemplateId, out itemData);
+            DataManager.ItemDict.TryGetValue(itemDb.TemplateId, out var itemData);
 
             if (itemData == null)
                 return null;
@@ -181,7 +180,7 @@ namespace GameServer.Game
         }
     }
 
-    //소비타입
+    //재화타입
     public class Currency : Item
     {
         public int MaxCount { get; set; }
@@ -198,7 +197,7 @@ namespace GameServer.Game
             if (itemData.itemType != ItemType.Currency)
                 return;
 
-            ConsumableData data = (ConsumableData)itemData;
+            CurrencyData data = (CurrencyData)itemData;
             {
                 TemplateId = data.id;
                 Count = amount;

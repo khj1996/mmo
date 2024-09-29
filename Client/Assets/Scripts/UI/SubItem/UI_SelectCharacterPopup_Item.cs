@@ -44,7 +44,7 @@ public class UI_SelectCharacterPopup_Item : UI_Base
         GetTMP((int)TMP_Texts.PosY).text = $"Y: {Info.PosY:0.#}";
     }
 
-    void OnClickButton(PointerEventData evt)    
+    async void OnClickButton(PointerEventData evt)
     {
         if (Info.PlayerName != "캐릭터 추가")
         {
@@ -56,10 +56,9 @@ public class UI_SelectCharacterPopup_Item : UI_Base
             Managers.Scene.LoadScene("Game");
             Managers.UI.ClosePopupUI();
         }
-        else 
+        else
         {
-            Managers.UI.ShowPopupUI<UI_CreateCharacterPopup>();
+            await Managers.UI.ShowPopupUI<UI_CreateCharacterPopup>();
         }
-
     }
 }

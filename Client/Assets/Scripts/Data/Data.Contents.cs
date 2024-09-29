@@ -131,6 +131,10 @@ namespace Data
         public int value;
     }
 
+    public class CurrencyData : ItemData
+    {
+        public int maxCount;
+    }
 
     [Serializable]
     public class ItemLoader : ILoader<int, ItemData>
@@ -138,25 +142,32 @@ namespace Data
         public List<WeaponData> weapons = new List<WeaponData>();
         public List<ArmorData> armors = new List<ArmorData>();
         public List<ConsumableData> consumables = new List<ConsumableData>();
+        public List<CurrencyData> currency = new List<CurrencyData>();
 
         public Dictionary<int, ItemData> MakeDict()
         {
-            Dictionary<int, ItemData> dict = new Dictionary<int, ItemData>();
-            foreach (ItemData item in weapons)
+            var dict = new Dictionary<int, ItemData>();
+            foreach (var item in weapons)
             {
                 item.itemType = ItemType.Weapon;
                 dict.Add(item.id, item);
             }
 
-            foreach (ItemData item in armors)
+            foreach (var item in armors)
             {
                 item.itemType = ItemType.Armor;
                 dict.Add(item.id, item);
             }
 
-            foreach (ItemData item in consumables)
+            foreach (var item in consumables)
             {
                 item.itemType = ItemType.Consumable;
+                dict.Add(item.id, item);
+            }
+
+            foreach (var item in currency)
+            {
+                item.itemType = ItemType.Currency;
                 dict.Add(item.id, item);
             }
 

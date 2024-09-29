@@ -24,11 +24,11 @@ public class UI_Item : UI_Base
         {
             Debug.Log("Click Item");
 
-            Data.ItemData itemData = null;
-            Managers.Data.ItemDict.TryGetValue(TemplateId, out itemData);
+            Managers.Data.ItemDict.TryGetValue(TemplateId, out var itemData);
             if (itemData == null)
                 return;
-
+            if (itemData.itemType == ItemType.Currency)
+                return;
             // TODO : C_USE_ITEM 아이템 사용 패킷
             if (itemData.itemType == ItemType.Consumable)
                 return;

@@ -39,26 +39,32 @@ namespace GameServer.DB
         }
 
 
-        public static void BuyItemNoti(Player player, List<ItemDb> itemData, GameRoom room)
+        public static void BuyItemNoti(Player? player, ItemDb? costItem, List<ItemDb>? rewardItems, GameRoom? room)
         {
-            if (player == null || itemData == null || room == null)
+            if (player == null || costItem == null || rewardItems == null || room == null)
                 return;
 
 
             // You
             Instance.Push(() =>
             {
-                using (AppDbContext db = new AppDbContext())
+                using (var db = new AppDbContext())
                 {
-                    foreach (var costItem in itemData.Where(x => x.Count < 0))
-                    {
-                        db.Entry(costItem).State = EntityState.Unchanged;
-                        db.Entry(costItem).Property(nameof(ItemDb.Count)).IsModified = true;
-                    }
+                    db.Entry(costItem).State = EntityState.Unchanged;
+                    db.Entry(costItem).Property(nameof(ItemDb.Count)).IsModified = true;
 
-                    foreach (var getItem in itemData.Where(x => x.Count > 0))
+
+                    foreach (var getItem in rewardItems)
                     {
-                        db.Items.Add(getItem);
+                        if (getItem.ItemDbId != 0)
+                        {
+                            db.Entry(getItem).State = EntityState.Unchanged;
+                            db.Entry(getItem).Property(nameof(ItemDb.Count)).IsModified = true;
+                        }
+                        else
+                        {
+                            db.Items.Add(getItem);
+                        }
                     }
 
 
@@ -68,27 +74,33 @@ namespace GameServer.DB
                         // Me
                         room.Push(() =>
                         {
-                            foreach (var costItem in itemData.Where(x => x.Count < 0))
+                            S_BuyItem buyPacket = new S_BuyItem()
                             {
-                                player.Inven.SetItemAmount(costItem.TemplateId, costItem.Count);
-                            }
+                                Result = true
+                            };
 
-                            foreach (var getItem in itemData.Where(x => x.Count > 0))
                             {
-                                Item newItem = Item.MakeItem(getItem);
+                                var newItem = Item.MakeItem(costItem);
                                 player.Inven.Add(newItem);
+
+                                var rewardInfo = new ItemInfo() { };
+                                rewardInfo.MergeFrom(newItem.Info);
+                                buyPacket.Items.Add(rewardInfo);
                             }
 
 
-                            // Client Noti
+                            foreach (var getItem in rewardItems)
                             {
-                                S_BuyItem buyPacket = new S_BuyItem()
-                                {
-                                    Result = true
-                                };
+                                var newItem = Item.MakeItem(getItem);
+                                player.Inven.Add(newItem);
 
-                                player.Session.Send(buyPacket);
+                                var rewardInfo = new ItemInfo() { };
+                                rewardInfo.MergeFrom(newItem.Info);
+                                buyPacket.Items.Add(rewardInfo);
                             }
+
+
+                            player.Session.Send(buyPacket);
                         });
                     }
                 }

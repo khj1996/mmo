@@ -41,17 +41,16 @@ namespace GameServer
             using (AppDbContext db = new AppDbContext())
             {
                 //계정 정보 획득
-                AccountGameDb findAccountGame = db.Accounts
-                    .Include(a => a.Players)
-                    .Where(a => a.AccountGameDbId == accountDbId).FirstOrDefault();
+                var findAccountGame = db.Accounts
+                    .Include(a => a.Players).FirstOrDefault(a => a.AccountGameDbId == accountDbId);
 
                 // AccountDbId 메모리에 기억
                 AccountDbId = findAccountGame.AccountGameDbId;
 
-                S_EnterServer loginOk = new S_EnterServer();
-                foreach (PlayerDb playerDb in findAccountGame.Players)
+                var loginOk = new S_EnterServer();
+                foreach (var playerDb in findAccountGame.Players)
                 {
-                    LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
+                    var lobbyPlayer = new LobbyPlayerInfo()
                     {
                         PlayerDbId = playerDb.PlayerDbId,
                         Name = playerDb.PlayerName,
@@ -93,7 +92,8 @@ namespace GameServer
                 return;
 
             //선택 캐릭터 데이터 획득
-            LobbyPlayerInfo playerInfo = LobbyPlayers.Find(p => p.Name == enterGamePacket.Name);
+            var playerInfo = LobbyPlayers.Find(p => p.Name == enterGamePacket.Name);
+
             if (playerInfo == null)
                 return;
 
@@ -109,23 +109,24 @@ namespace GameServer
                 MyPlayer.Info.StatInfo.MergeFrom(playerInfo.StatInfo);
                 MyPlayer.Session = this;
 
-                S_ItemList itemListPacket = new S_ItemList();
+                var itemListPacket = new S_ItemList();
 
                 // 아이템 목록을 갖고 온다
                 using (AppDbContext db = new AppDbContext())
                 {
-                    List<ItemDb> items = db.Items
+                    var items = db.Items
                         .Where(i => i.OwnerDbId == playerInfo.PlayerDbId)
                         .ToList();
 
-                    foreach (ItemDb itemDb in items)
+                    foreach (var itemDb in items)
                     {
-                        Item item = Item.MakeItem(itemDb);
+                        var item = Item.MakeItem(itemDb);
+                        
                         if (item != null)
                         {
                             MyPlayer.Inven.Add(item);
 
-                            ItemInfo info = new ItemInfo();
+                            var info = new ItemInfo();
                             info.MergeFrom(item.Info);
                             itemListPacket.Items.Add(info);
                         }

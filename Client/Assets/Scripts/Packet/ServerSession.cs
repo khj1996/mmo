@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ServerSession : PacketSession
 {
@@ -33,6 +34,8 @@ public class ServerSession : PacketSession
 
 	public override void OnDisconnected(EndPoint endPoint)
 	{
+		Debug.Log(SceneManager.GetActiveScene());
+		
 		//Managers.Scene.LoadScene("Login");
 		Debug.Log($"OnDisconnected : {endPoint}");
 	}

@@ -154,6 +154,7 @@ message C_BuyItem {
 
 message S_BuyItem {
   bool result = 1;
+  repeated ItemInfo items = 2;
 }
 
 message S_Login {

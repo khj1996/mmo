@@ -9,42 +9,40 @@ namespace GameServer.Game
     {
         public Dictionary<int, Item> Items { get; } = new Dictionary<int, Item>();
 
-        public void Add(Item item)
+        public void Add(Item _item)
         {
-            Items.Add(item.ItemDbId, item);
+            if (Items.TryGetValue(_item.ItemDbId, out var item))
+            {
+                Items[item.ItemDbId] = _item;
+                return;
+            }
+
+            Items.Add(_item.ItemDbId, _item);
         }
 
-        public Item Get(int itemDbId)
-        {
-            Item item = null;
-            Items.TryGetValue(itemDbId, out item);
-            return item;
-        }
-
-        public void SetItemAmount(int itemDbId, int amount)
+        public Item? Get(int itemDbId)
         {
             Items.TryGetValue(itemDbId, out var item);
-            item.Count = amount;
+            return item;
         }
 
         public Item? Find(Func<Item, bool> condition)
         {
-            foreach (Item item in Items.Values)
-            {
-                if (condition.Invoke(item))
-                    return item;
-            }
-
-            return null;
+            return Items.Values.FirstOrDefault(item => condition.Invoke(item));
         }
 
-        public int? GetAvailableSlot(int TemplateId)
+        public int? GetAvailableSlot(int templateId)
         {
-            var item = Items.First(x => x.Value.TemplateId == TemplateId).Value;
+            if ((int)(templateId / 100000) == 4)
+            {
+                return -1;
+            }
+
+            var item = Items.FirstOrDefault(x => x.Value.TemplateId == templateId && x.Value.Stackable).Value;
 
             if (item != null)
             {
-                return item.TemplateId;
+                return item.Slot;
             }
 
             return GetEmptySlot();
@@ -54,7 +52,7 @@ namespace GameServer.Game
         {
             for (int slot = 0; slot < 20; slot++)
             {
-                Item item = Items.Values.FirstOrDefault(i => i.Slot == slot);
+                var item = Items.Values.FirstOrDefault(i => i.Slot == slot);
                 if (item == null)
                     return slot;
             }

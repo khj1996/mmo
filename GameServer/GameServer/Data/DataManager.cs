@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using GameServer.DB;
+using GameServer.Game;
 using Google.Protobuf.Protocol;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace GameServer.Data
         public static Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, MonsterData>();
         public static Dictionary<int, ShopData> ShopDict { get; private set; } = new Dictionary<int, ShopData>();
 
-        public static void LoadData()
+        public static void LoadData()   
         {
             StatDict = LoadJson<StatDataLoader, int, StatInfo>("StatData").MakeDict();
             SkillDict = LoadJson<SkillDataLoader, int, Skill>("SkillData").MakeDict();
@@ -208,6 +209,9 @@ namespace GameServer.Data
                             newItemData.maxCount = ((ConsumableData)itemDataKp.Value).maxCount;
                             newItemData.value = ((ConsumableData)itemDataKp.Value).value;
                             break;
+                        case 4:
+                            newItemData.maxCount = ((ConsumableData)itemDataKp.Value).maxCount;
+                            break;
                         default:
                             break;
                     }
@@ -224,39 +228,48 @@ namespace GameServer.Data
             {
                 foreach (var itemData in itemDatas)
                 {
-                    ItemType type = (ItemType)(itemData.id / 100000);
+                    ItemType type = (ItemType)(itemData.ItemDataDbid / 100000);
                     switch (type)
                     {
                         case ItemType.None:
                             break;
                         case ItemType.Weapon:
-                            ItemDict.Add(itemData.id, new WeaponData()
+                            ItemDict.Add(itemData.ItemDataDbid, new WeaponData()
                             {
                                 name = itemData.name,
-                                id = itemData.id,
+                                id = itemData.ItemDataDbid,
                                 damage = itemData.value,
                                 weaponType = (WeaponType)itemData.type,
                                 itemType = type
                             });
                             break;
                         case ItemType.Armor:
-                            ItemDict.Add(itemData.id, new ArmorData()
+                            ItemDict.Add(itemData.ItemDataDbid, new ArmorData()
                             {
                                 name = itemData.name,
-                                id = itemData.id,
+                                id = itemData.ItemDataDbid,
                                 defence = itemData.value,
                                 armorType = (ArmorType)itemData.type,
                                 itemType = type
                             });
                             break;
                         case ItemType.Consumable:
-                            ItemDict.Add(itemData.id, new ConsumableData()
+                            ItemDict.Add(itemData.ItemDataDbid, new ConsumableData()
                             {
                                 name = itemData.name,
-                                id = itemData.id,
+                                id = itemData.ItemDataDbid,
                                 maxCount = itemData.maxCount,
                                 value = itemData.value,
                                 consumableType = (ConsumableType)itemData.type,
+                                itemType = type
+                            });
+                            break;
+                        case ItemType.Currency:
+                            ItemDict.Add(itemData.ItemDataDbid, new CurrencyData()
+                            {
+                                name = itemData.name,
+                                id = itemData.ItemDataDbid,
+                                maxCount = itemData.maxCount,
                                 itemType = type
                             });
                             break;

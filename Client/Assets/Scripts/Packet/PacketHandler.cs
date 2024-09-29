@@ -9,7 +9,7 @@ class PacketHandler
 {
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
-        S_EnterGame enterGamePacket = packet as S_EnterGame;
+        var enterGamePacket = packet as S_EnterGame;
         Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
     }
 
@@ -163,7 +163,7 @@ class PacketHandler
         Debug.Log("아이템을 획득했습니다!");
 
         UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        gameSceneUI.InvenUI.RefreshUI();
+        gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
         gameSceneUI.StatUI.RefreshUI();
 
         if (Managers.Object.MyPlayer != null)
@@ -183,7 +183,7 @@ class PacketHandler
         Debug.Log("아이템 착용 변경!");
 
         UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        gameSceneUI.InvenUI.RefreshUI();
+        gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
         gameSceneUI.StatUI.RefreshUI();
 
         if (Managers.Object.MyPlayer != null)
@@ -209,7 +209,21 @@ class PacketHandler
         S_BuyItem buyPacket = (S_BuyItem)packet;
         Debug.Log(buyPacket.Result);
 
-        //(await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
+        if (!buyPacket.Result)
+            return;
+
+
+        // 메모리에 아이템 정보 적용
+        foreach (ItemInfo itemInfo in buyPacket.Items)
+        {
+            Item item = Item.MakeItem(itemInfo);
+            Managers.Inven.Add(item);
+        }
+
+        Debug.Log("아이템을 획득했습니다!");
+
+        var gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
+        if (gameSceneUI != null) gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
     }
 
     public static void S_PingHandler(PacketSession session, IMessage packet)
