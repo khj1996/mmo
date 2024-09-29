@@ -210,7 +210,7 @@ namespace GameServer.Data
                             newItemData.value = ((ConsumableData)itemDataKp.Value).value;
                             break;
                         case 4:
-                            newItemData.maxCount = ((ConsumableData)itemDataKp.Value).maxCount;
+                            newItemData.maxCount = ((CurrencyData)itemDataKp.Value).maxCount;
                             break;
                         default:
                             break;
