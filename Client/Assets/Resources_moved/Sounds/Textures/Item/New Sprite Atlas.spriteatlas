@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: New Sprite Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
+    - {fileID: 2800000, guid: 2f1eaeeaad36ee5469eff7ff158f37ba, type: 3}
+    - {fileID: 2800000, guid: 172774604c1bee84185a69041576525b, type: 3}
+    - {fileID: 2800000, guid: fe025e83f69d0b54f8a4fe3c7c128fd7, type: 3}
+    - {fileID: 2800000, guid: da09804303305f542a686824630e7269, type: 3}
+    - {fileID: 2800000, guid: ae496f5dad56ea645b72d374a0376368, type: 3}
+    - {fileID: 2800000, guid: e420c5bc93cb2604695a893500c897e3, type: 3}
+    - {fileID: 2800000, guid: 5d7061fc7da05ce44add317708ec7215, type: 3}
+    - {fileID: 21300000, guid: 5d7061fc7da05ce44add317708ec7215, type: 3}
+    - {fileID: 2800000, guid: 70a77abda853dd941a0c8debf1de9b04, type: 3}
+    - {fileID: 2800000, guid: 6fc27c9d7fc2d9448af6851bf935e6d2, type: 3}
+    - {fileID: 2800000, guid: 3676a0b185daeb54fb257f700ba7ead4, type: 3}
+    - {fileID: 2800000, guid: ed1074391f139544d941ae0870937dc0, type: 3}
+    - {fileID: 2800000, guid: e7d29a79bc7fae248887c8a08a160303, type: 3}
+    - {fileID: 2800000, guid: d4f5634edede200468fc1ccf30e6f3a1, type: 3}
+    - {fileID: 2800000, guid: fd6e4fc32c78509458fc45ea4a478ba8, type: 3}
+    - {fileID: 2800000, guid: e52ea25af699fd445b7046374f81a5b9, type: 3}
+    - {fileID: 2800000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
+    - {fileID: 2800000, guid: 4a39cb4b272639541b7bd5ac0649acf7, type: 3}
+    - {fileID: 2800000, guid: 6592b916f86b19e428db6f6847c7b6dd, type: 3}
+    - {fileID: 2800000, guid: 0e123cfdc54a3ca4684816a34167a566, type: 3}
+    - {fileID: 2800000, guid: b8fb302c5768e334ca82005f50e58121, type: 3}
+    - {fileID: 2800000, guid: 970324311431c794ca338446ea889948, type: 3}
+    - {fileID: 2800000, guid: db427fab3e94daf4caa704d9314a77a1, type: 3}
+    - {fileID: 2800000, guid: b97c91e8b348f3f4ebdc11f5c82182cd, type: 3}
+    - {fileID: 2800000, guid: f126324fd2486a641842ea5a8244c2d1, type: 3}
+    - {fileID: 2800000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 172774604c1bee84185a69041576525b, type: 3}
+  - {fileID: 21300000, guid: 970324311431c794ca338446ea889948, type: 3}
+  - {fileID: 21300000, guid: 3676a0b185daeb54fb257f700ba7ead4, type: 3}
+  - {fileID: 21300000, guid: da09804303305f542a686824630e7269, type: 3}
+  - {fileID: 21300000, guid: fe025e83f69d0b54f8a4fe3c7c128fd7, type: 3}
+  - {fileID: 21300000, guid: fd6e4fc32c78509458fc45ea4a478ba8, type: 3}
+  - {fileID: 21300000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
+  - {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+  - {fileID: 21300000, guid: 6592b916f86b19e428db6f6847c7b6dd, type: 3}
+  - {fileID: 21300000, guid: 5d9ba4e7d0964044ea54abe409d81dfd, type: 3}
+  - {fileID: 21300000, guid: b97c91e8b348f3f4ebdc11f5c82182cd, type: 3}
+  - {fileID: 21300000, guid: ed1074391f139544d941ae0870937dc0, type: 3}
+  - {fileID: 21300000, guid: e7d29a79bc7fae248887c8a08a160303, type: 3}
+  - {fileID: 21300000, guid: e52ea25af699fd445b7046374f81a5b9, type: 3}
+  - {fileID: 21300000, guid: 2f1eaeeaad36ee5469eff7ff158f37ba, type: 3}
+  - {fileID: 21300000, guid: 4a39cb4b272639541b7bd5ac0649acf7, type: 3}
+  - {fileID: 21300000, guid: db427fab3e94daf4caa704d9314a77a1, type: 3}
+  - {fileID: 21300000, guid: b8fb302c5768e334ca82005f50e58121, type: 3}
+  - {fileID: 21300000, guid: e420c5bc93cb2604695a893500c897e3, type: 3}
+  - {fileID: 21300000, guid: 5d7061fc7da05ce44add317708ec7215, type: 3}
+  - {fileID: 21300000, guid: ae496f5dad56ea645b72d374a0376368, type: 3}
+  - {fileID: 21300000, guid: 6fc27c9d7fc2d9448af6851bf935e6d2, type: 3}
+  - {fileID: 21300000, guid: 70a77abda853dd941a0c8debf1de9b04, type: 3}
+  - {fileID: 21300000, guid: 0e123cfdc54a3ca4684816a34167a566, type: 3}
+  - {fileID: 21300000, guid: d4f5634edede200468fc1ccf30e6f3a1, type: 3}
+  - {fileID: 21300000, guid: f126324fd2486a641842ea5a8244c2d1, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - axe
+  - rings
+  - coins
+  - belts
+  - bag
+  - helmets
+  - ingots
+  - sword
+  - mp
+  - apple
+  - shield
+  - f
+  - gem
+  - hp
+  - armor
+  - Meat
+  - scroll
+  - pants
+  - boots
+  - bow
+  - book
+  - cloaks
+  - bracers
+  - necklace
+  - gloves
+  - shoulders
+  m_RenderDataMap: {}
+  m_Tag: New Sprite Atlas
+  m_IsVariant: 0
