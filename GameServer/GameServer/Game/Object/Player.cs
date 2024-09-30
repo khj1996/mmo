@@ -110,6 +110,30 @@ namespace GameServer.Game
             RefreshAdditionalStat();
         }
 
+
+        public Vector2Float GetFrontPos()
+        {
+            var cellPos = CellPos;
+
+            switch (Info.PosInfo.MoveDir)
+            {
+                case MoveDir.Up:
+                    cellPos += Vector2Float.Up;
+                    break;
+                case MoveDir.Down:
+                    cellPos += Vector2Float.Down;
+                    break;
+                case MoveDir.Left:
+                    cellPos += Vector2Float.Left;
+                    break;
+                case MoveDir.Right:
+                    cellPos += Vector2Float.Right;
+                    break;
+            }
+
+            return cellPos;
+        }
+
         public void RefreshAdditionalStat()
         {
             WeaponDamage = 0;

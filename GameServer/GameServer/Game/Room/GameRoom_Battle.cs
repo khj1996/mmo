@@ -10,15 +10,13 @@ namespace GameServer.Game
 {
     public partial class GameRoom : JobSerializer
     {
-        public void HandleMove(Player player, C_Move movePacket)
+        public void HandleMove(Player? player, C_Move movePacket)
         {
             if (player == null)
                 return;
 
             // TODO : 검증
-            PositionInfo movePosInfo = movePacket.PosInfo;
-            ObjectInfo info = player.Info;
-
+            var movePosInfo = movePacket.PosInfo;
             player.State = movePosInfo.State;
 
             var result = Map.ApplyMove(player, new Vector2Float()
@@ -26,7 +24,7 @@ namespace GameServer.Game
                 x = movePacket.PosInfo.PosX,
                 y = movePacket.PosInfo.PosY,
             });
-            
+
             //이동 불가능지역 이동시 이전 위치 패킷 전송
             if (!result)
             {
@@ -34,52 +32,61 @@ namespace GameServer.Game
             }
 
             // 다른 플레이어한테도 알려준다
-            S_Move resMovePacket = new S_Move();
-            resMovePacket.ObjectId = player.Info.ObjectId;
-            resMovePacket.PosInfo = movePacket.PosInfo;
-
+            var resMovePacket = new S_Move
+            {
+                ObjectId = player.Info.ObjectId,
+                PosInfo = movePacket.PosInfo
+            };
 
 
             Broadcast(player.CellPos, resMovePacket, player.PlayerDbId);
         }
 
-        public void HandleSkill(Player player, C_Skill skillPacket)
+        public void HandleSkill(Player? player, C_Skill skillPacket)
         {
             if (player == null)
                 return;
 
-            ObjectInfo info = player.Info;
+            var info = player.Info;
+
             if (info.PosInfo.State != CreatureState.Idle)
                 return;
 
-            // TODO : 스킬 사용 가능 여부 체크
             info.PosInfo.State = CreatureState.Skill;
-            S_Skill skill = new S_Skill() { Info = new SkillInfo() };
-            skill.ObjectId = info.ObjectId;
-            skill.Info.SkillId = skillPacket.Info.SkillId;
-            skill.MoveDir = skillPacket.MoveDir;
+            var skill = new S_Skill
+            {
+                Info = new SkillInfo()
+                {
+                    SkillId = skillPacket.Info.SkillId
+                },
+                ObjectId = info.ObjectId,
+                MoveDir = skillPacket.MoveDir
+            };
             Broadcast(player.CellPos, skill);
 
-            Skill skillData = null;
-            if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
+            if (!DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out var skillData))
                 return;
 
             switch (skillData.skillType)
             {
                 case SkillType.SkillAuto:
                 {
-                    //TODO : 공격 가능하게 
-                    /*Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                    GameObject target = Map.Find(skillPos);
-                    if (target != null)
+                    var skillPos = player.GetFrontPos();
+                    var targets = player.Room?.FindSquarePlayer(skillPos, 0.5f);
+
+                    if (targets != null)
                     {
-                        Console.WriteLine("Hit GameObject !");
-                    }*/
+                        foreach (var target in targets)
+                        {
+                            target.OnDamaged(player, skillData.damage + player.TotalAttack);
+                            Console.WriteLine("Hit GameObject !");
+                        }
+                    }
                 }
                     break;
                 case SkillType.SkillProjectile:
                 {
-                    Arrow arrow = ObjectManager.Instance.Add<Arrow>();
+                    var arrow = ObjectManager.Instance.Add<Arrow>();
                     if (arrow == null)
                         return;
 

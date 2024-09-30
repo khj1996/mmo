@@ -105,7 +105,7 @@ namespace GameServer.Game
             }
 
             Vector2Float dir = _target.CellPos - CellPos;
-            float dist = dir.cellDistFromZero;
+            float dist = dir.CellDistFromZero;
             //대상이 멀어지면 추적 포기
             if (dist == 0 || dist > _chaseCellDist)
             {
@@ -168,7 +168,7 @@ namespace GameServer.Game
 
                 // 스킬이 아직 사용 가능한지
                 Vector2Float dir = (_target.CellPos - CellPos);
-                float dist = dir.cellDistFromZero;
+                float dist = dir.CellDistFromZero;
                 bool canUseSkill = (dist <= _skillRange && (dir.x == 0 || dir.y == 0));
                 if (canUseSkill == false)
                 {

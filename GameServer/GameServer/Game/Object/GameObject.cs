@@ -16,49 +16,47 @@ namespace GameServer.Game
         //id 반환
         public int Id
         {
-            get { return Info.ObjectId; }
-            set { Info.ObjectId = value; }
+            get => Info.ObjectId;
+            set => Info.ObjectId = value;
         }
 
         //게임룸
-        public GameRoom Room { get; set; }
+        public GameRoom? Room { get; set; }
 
         //오브젝트 정보
         public ObjectInfo Info { get; private set; } = new();
 
 
         //총 공격력
-        public virtual int TotalAttack
-        {
-            get { return Info.StatInfo.Attack; }
-        }
+        public virtual int TotalAttack => Info.StatInfo.Attack;
 
         //총 방어력
-        public virtual int TotalDefence
-        {
-            get { return 0; }
-        }
+        public virtual int TotalDefence => 0;
 
         //속도
         public float Speed
         {
-            get { return Info.StatInfo.Speed; }
-            set { Info.StatInfo.Speed = value; }
+            get => Info.StatInfo.Speed;
+            set => Info.StatInfo.Speed = value;
         }
 
         //체력
         public int Hp
         {
-            get { return Info.StatInfo.Hp; }
-            set { Info.StatInfo.Hp = Math.Clamp(value, 0, Info.StatInfo.MaxHp); }
+            get => Info.StatInfo.Hp;
+            set => Info.StatInfo.Hp = Math.Clamp(value, 0, Info.StatInfo.MaxHp);
         }
 
         //오브젝트 상태
         public CreatureState State
         {
-            get { return Info.PosInfo.State; }
-            set { Info.PosInfo.State = value; }
+            get => Info.PosInfo.State;
+            set => Info.PosInfo.State = value;
         }
+
+        //위치
+        public Vector2Float CellPos => new(Info.PosInfo.PosX, Info.PosInfo.PosY);
+
 
         //생성자
         public GameObject()
@@ -76,13 +74,6 @@ namespace GameServer.Game
         }
 
 
-        //위치
-        public Vector2Float CellPos
-        {
-            get { return new Vector2Float(Info.PosInfo.PosX, Info.PosInfo.PosY); }
-        }
-
-
         //피격
         public virtual void OnDamaged(GameObject attacker, int damage)
         {
@@ -92,7 +83,7 @@ namespace GameServer.Game
             damage = Math.Max(damage - TotalDefence, 0);
             Info.StatInfo.Hp = Math.Max(Info.StatInfo.Hp - damage, 0);
 
-            S_ChangeHp changePacket = new S_ChangeHp();
+            var changePacket = new S_ChangeHp();
             changePacket.ObjectId = Id;
             changePacket.Hp = Info.StatInfo.Hp;
             Room.Broadcast(CellPos, changePacket);
@@ -111,12 +102,12 @@ namespace GameServer.Game
             if (Room == null)
                 return;
 
-            S_Die diePacket = new S_Die();
+            var diePacket = new S_Die();
             diePacket.ObjectId = Id;
             diePacket.AttackerId = attacker.Id;
             Room.Broadcast(CellPos, diePacket);
 
-            GameRoom room = Room;
+            var room = Room;
             room.LeaveGame(Id);
 
             Info.StatInfo.Hp = Info.StatInfo.MaxHp;

@@ -222,6 +222,22 @@ namespace GameServer.Game
             return null;
         }
 
+        public List<Player> FindSquarePlayer(Vector2Float point, float radius)
+        {
+            float maxY = point.y + radius;
+            float minY = point.y - radius;
+            float maxX = point.x + radius;
+            float minX = point.x - radius;
+
+            var targetList = _players.Values.Where(x =>
+                x.Info.PosInfo.PosY >= minY &&
+                x.Info.PosInfo.PosY <= maxY &&
+                x.Info.PosInfo.PosX >= minX &&
+                x.Info.PosInfo.PosX <= maxX).ToList();
+
+            return targetList;
+        }
+
         // 살짝 부담스러운 함수
         public Player FindClosestPlayer(Vector2Float pos, int range)
         {
@@ -229,8 +245,8 @@ namespace GameServer.Game
 
             players.Sort((left, right) =>
             {
-                float leftDist = (left.CellPos - pos).cellDistFromZero;
-                float rightDist = (right.CellPos - pos).cellDistFromZero;
+                float leftDist = (left.CellPos - pos).CellDistFromZero;
+                float rightDist = (right.CellPos - pos).CellDistFromZero;
                 return (int)leftDist - (int)rightDist;
             });
 
@@ -255,7 +271,7 @@ namespace GameServer.Game
                 if (p.PlayerDbId == playerDbId)
                     continue;
 
-                var dis = (p.CellPos - pos).magnitude;
+                var dis = (p.CellPos - pos).Magnitude;
 
                 if (dis > VisionDis)
                     continue;

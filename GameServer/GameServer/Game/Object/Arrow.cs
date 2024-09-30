@@ -23,7 +23,7 @@ namespace GameServer.Game
             //다음 이동
             Room.PushAfter(tick, Update);
 
-            var target = Room.FindPlayer(x => (CellPos - x.CellPos).magnitude < 1f);
+            var target = Room.FindPlayer(x => (CellPos - x.CellPos).Magnitude < 1f);
 
             if (target != null && target.Id != Owner.Id)
             {

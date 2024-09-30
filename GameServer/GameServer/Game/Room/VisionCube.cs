@@ -40,7 +40,7 @@ namespace GameServer.Game.Room
                     if (player.PlayerDbId == Owner.PlayerDbId)
                         continue;
 
-                    var dis = (player.CellPos - cellPos).magnitude;
+                    var dis = (player.CellPos - cellPos).Magnitude;
 
                     if (dis > GameRoom.VisionDis)
                         continue;
@@ -50,7 +50,7 @@ namespace GameServer.Game.Room
 
                 foreach (Monster monster in zone.Monsters)
                 {
-                    var dis = (monster.CellPos - cellPos).magnitude;
+                    var dis = (monster.CellPos - cellPos).Magnitude;
 
                     if (dis > GameRoom.VisionDis)
                         continue;
@@ -60,7 +60,7 @@ namespace GameServer.Game.Room
 
                 foreach (Projectile projectile in zone.Projectiles)
                 {
-                    var dis = (projectile.CellPos - cellPos).magnitude;
+                    var dis = (projectile.CellPos - cellPos).Magnitude;
 
                     if (dis > GameRoom.VisionDis)
                         continue;

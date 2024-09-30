@@ -69,6 +69,11 @@ namespace GameServer.Game
             this.y = y;
         }
 
+        public static Vector2Float Up => new(0, 1);
+        public static Vector2Float Down => new(0, -1);
+        public static Vector2Float Left => new(-1, 0);
+        public static Vector2Float Right => new(1, 0);
+
         public static Vector2Float operator +(Vector2Float a, Vector2Float b)
         {
             return new Vector2Float(a.x + b.x, a.y + b.y);
@@ -79,20 +84,11 @@ namespace GameServer.Game
             return new Vector2Float(a.x - b.x, a.y - b.y);
         }
 
-        public float magnitude
-        {
-            get { return MathF.Sqrt(sqrMagnitude); }
-        }
+        public float Magnitude => MathF.Sqrt(SqrMagnitude);
 
-        public float sqrMagnitude
-        {
-            get { return (x * x + y * y); }
-        }
+        public float SqrMagnitude => (x * x + y * y);
 
-        public float cellDistFromZero
-        {
-            get { return Math.Abs(x) + Math.Abs(y); }
-        }
+        public float CellDistFromZero => Math.Abs(x) + Math.Abs(y);
     }
 
     public class Map

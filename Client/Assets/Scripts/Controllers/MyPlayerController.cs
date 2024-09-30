@@ -43,7 +43,6 @@ public class MyPlayerController : PlayerController
         {
             var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
             var clickPos = new Vector3(mPos.origin.x, mPos.origin.y, 0);
-            Debug.Log(clickPos);
 
 
             var moveDir = (clickPos - transform.position).normalized;
@@ -65,6 +64,19 @@ public class MyPlayerController : PlayerController
             Managers.Network.Send(skill);
 
             _coSkillCooltime = StartCoroutine(nameof(CoInputCooltime), 0.2f);
+        }
+        else if (_coSkillCooltime == null && Input.GetKeyDown(KeyCode.Space))
+        {
+            C_Skill skill = new C_Skill()
+            {
+                Info = new SkillInfo
+                {
+                    SkillId = 1
+                }
+            };
+            Managers.Network.Send(skill);
+
+            _coSkillCooltime = StartCoroutine(nameof(CoInputCooltime), 0.5f);
         }
     }
 
