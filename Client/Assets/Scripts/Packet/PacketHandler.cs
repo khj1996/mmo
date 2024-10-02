@@ -204,7 +204,7 @@ class PacketHandler
         (await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
     }
 
-    public static async void S_BuyItemHandler(PacketSession session, IMessage packet)
+    public static void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
         S_BuyItem buyPacket = (S_BuyItem)packet;
         Debug.Log(buyPacket.Result);

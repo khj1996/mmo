@@ -29,9 +29,9 @@ public class CreatureController : BaseController
         }
     }
 
-    protected async void AddHpBar()
+    protected void AddHpBar()
     {
-        GameObject go = await Managers.Resource.Instantiate("UI/HpBar.prefab", transform);
+        GameObject go = Managers.Resource.Instantiate("UI/HpBar.prefab", transform);
         go.transform.localPosition = new Vector3(0, 0.5f, 0);
         go.name = "HpBar";
         _hpBar = go.GetComponent<HpBar>();
@@ -60,11 +60,11 @@ public class CreatureController : BaseController
     {
     }
 
-    public virtual async void OnDead()
+    public virtual void OnDead()
     {
         State = CreatureState.Dead;
 
-        GameObject effect = await Managers.Resource.Instantiate("Effect/DieEffect.prefab");
+        GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect.prefab");
         effect.transform.position = transform.position;
         effect.GetComponent<Animator>().Play("START");
         GameObject.Destroy(effect, 0.5f);

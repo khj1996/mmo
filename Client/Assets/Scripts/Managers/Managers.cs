@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class Managers : MonoBehaviour
 {
@@ -23,11 +26,11 @@ public class Managers : MonoBehaviour
 
     #region Contents
 
-    InventoryManager _inven = new InventoryManager();
-    MapManager _map = new MapManager();
-    ObjectManager _obj = new ObjectManager();
-    NetworkManager _network = new NetworkManager();
-    WebManager _web = new WebManager();
+    private InventoryManager _inven;
+    private MapManager _map;
+    private ObjectManager _obj;
+    private NetworkManager _network;
+    private WebManager _web;
 
     public static InventoryManager Inven
     {
@@ -58,12 +61,15 @@ public class Managers : MonoBehaviour
 
     #region Core
 
-    [SerializeField] DataManager _data = new DataManager() ;
-    [SerializeField] PoolManager _pool = new PoolManager();
-    [SerializeField] ResourceManager _resource = new ResourceManager();
+    DataManager _data;
+    PoolManager _pool;
+    ResourceManager _resource;
+    SoundManager _sound;
+    UIManager _ui;
     [SerializeField] SceneLoader _scene;
-    [SerializeField] SoundManager _sound = new SoundManager();
-    [SerializeField] UIManager _ui = new UIManager();
+
+    [SerializeField] TMP_Text testText;
+
 
     public static DataManager Data
     {
@@ -105,10 +111,28 @@ public class Managers : MonoBehaviour
     void Update()
     {
         _network.Update();
+
+
+        if (EventSystem.current.currentSelectedGameObject != null)
+        {
+            testText.text = EventSystem.current.currentSelectedGameObject.name;
+        }
     }
 
     void Init()
     {
+        _data = new DataManager();
+        _pool = new PoolManager();
+        _resource = new ResourceManager();
+        _sound = new SoundManager();
+        _ui = new UIManager();
+        _inven = new InventoryManager();
+        _map = new MapManager();
+        _obj = new ObjectManager();
+        _network = new NetworkManager();
+        _web = new WebManager();
+
+        _inven.Init();
         _data.Init();
         _pool.Init();
         _sound.Init();

@@ -22,28 +22,26 @@ public class DataManager
 
     public ItemImageSO ItemImageSO { get; private set; }
 
-    public async void Init()
+    public void Init()
     {
         ItemDict = LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData").MakeDict();
         SkillDict = LoadJson<Data.SkillDataLoader, int, Data.Skill>("SkillData").MakeDict();
         MonsterDict = LoadJson<Data.MonsterLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         ShopDict = LoadJson<Data.ShopLoader, int, Data.ShopData>("ShopData").MakeDict();
 
-        ItemImageSO = await LoadSO<ItemImageSO>("ItemImageSO");
+        ItemImageSO = LoadSO<ItemImageSO>("ItemImageSO");
     }
 
     Loader LoadJson<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
     {
-        var handleTextAsset = Addressables.LoadAssetAsync<TextAsset>($"Data/{name}.json");
+        var textAsset = Util.HandleAndRelease<TextAsset>($"Data/{name}.json");
 
-        var result = handleTextAsset.WaitForCompletion();
-
-        return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(result.text);
+        return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(textAsset.text);
     }
 
-    async UniTask<T> LoadSO<T>(string name) where T : ScriptableObject
+    T LoadSO<T>(string name) where T : ScriptableObject
     {
-        T sO = await Addressables.LoadAssetAsync<T>($"ScriptableObject/{name}.asset").ToUniTask();
+        T sO = Util.HandleAndRelease<T>($"ScriptableObject/{name}.asset");
         return sO;
     }
 }

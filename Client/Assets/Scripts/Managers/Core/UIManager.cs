@@ -39,12 +39,12 @@ public class UIManager
         }
     }
 
-    public async UniTask<T> MakeWorldSpaceUI<T>(Transform parent, string name = null) where T : UI_Base
+    public T MakeWorldSpaceUI<T>(Transform parent, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = await Managers.Resource.Instantiate($"UI/WorldSpace/{name}.prefab", Root.transform);
+        GameObject go = Managers.Resource.Instantiate($"UI/WorldSpace/{name}.prefab", Root.transform);
 
         Canvas canvas = go.GetOrAddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;

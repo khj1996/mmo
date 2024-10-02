@@ -3,9 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager
 {
-    public Dictionary<int, Item> Items { get; } = new Dictionary<int, Item>();
+    public Dictionary<int, Item> Items { get; private set; }
+
+    public void Init()
+    {
+        Items = new Dictionary<int, Item>();
+    }
+
 
     public void Add(Item _item)
     {
@@ -20,8 +26,7 @@ public class InventoryManager : MonoBehaviour
 
     public Item Get(int itemDbId)
     {
-        Item item = null;
-        Items.TryGetValue(itemDbId, out item);
+        Items.TryGetValue(itemDbId, out var item);
         return item;
     }
 

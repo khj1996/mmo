@@ -43,9 +43,9 @@ public class SoundManager
         _audioClips.Clear();
     }
 
-    public async void Play(string path, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
+    public void Play(string path, Define.Sound type = Define.Sound.Effect, float pitch = 1.0f)
     {
-        AudioClip audioClip = await GetOrAddAudioClip(path, type);
+        AudioClip audioClip = GetOrAddAudioClip(path, type);
         Play(audioClip, type, pitch);
     }
 
@@ -72,7 +72,7 @@ public class SoundManager
         }
     }
 
-    async UniTask<AudioClip> GetOrAddAudioClip(string path, Define.Sound type = Define.Sound.Effect)
+    AudioClip GetOrAddAudioClip(string path, Define.Sound type = Define.Sound.Effect)
     {
         if (path.Contains("Sounds/") == false)
             path = $"Sounds/{path}";
@@ -81,13 +81,13 @@ public class SoundManager
 
         if (type == Define.Sound.Bgm)
         {
-            audioClip = await Managers.Resource.Load<AudioClip>(path);
+            audioClip = Managers.Resource.Load<AudioClip>(path);
         }
         else
         {
             if (_audioClips.TryGetValue(path, out audioClip) == false)
             {
-                audioClip = await Managers.Resource.Load<AudioClip>(path);
+                audioClip = Managers.Resource.Load<AudioClip>(path);
                 _audioClips.Add(path, audioClip);
             }
         }

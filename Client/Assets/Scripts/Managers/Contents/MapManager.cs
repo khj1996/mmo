@@ -77,7 +77,7 @@ public class MapManager
         CurrentGrid = go.GetComponent<Grid>();
 
         // Collision 관련 파일
-        TextAsset txt = await Managers.Resource.Load<TextAsset>($"Map/{mapName}.txt");
+        TextAsset txt = Util.HandleAndRelease<TextAsset>($"Map/{mapName}.txt");
         StringReader reader = new StringReader(txt.text);
 
         MinX = int.Parse(reader.ReadLine());

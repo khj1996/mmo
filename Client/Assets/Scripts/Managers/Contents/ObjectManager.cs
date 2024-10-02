@@ -15,7 +15,7 @@ public class ObjectManager
         return (GameObjectType)type;
     }
 
-    public async void Add(ObjectInfo info, bool myPlayer = false)
+    public void Add(ObjectInfo info, bool myPlayer = false)
     {
         if (MyPlayer != null && MyPlayer.Id == info.ObjectId)
             return;
@@ -27,7 +27,7 @@ public class ObjectManager
         {
             if (myPlayer)
             {
-                GameObject go = await Managers.Resource.Instantiate("Creature/MyPlayer.prefab");
+                GameObject go = Managers.Resource.Instantiate("Creature/MyPlayer.prefab");
                 go.name = info.Name;
                 _objects.Add(info.ObjectId, go);
 
@@ -38,7 +38,7 @@ public class ObjectManager
             }
             else
             {
-                GameObject go = await Managers.Resource.Instantiate("Creature/Player.prefab");
+                GameObject go = Managers.Resource.Instantiate("Creature/Player.prefab");
                 go.name = info.Name;
                 _objects.Add(info.ObjectId, go);
 
@@ -50,7 +50,7 @@ public class ObjectManager
         }
         else if (objectType == GameObjectType.Monster)
         {
-            GameObject go = await Managers.Resource.Instantiate("Creature/Monster.prefab");
+            GameObject go = Managers.Resource.Instantiate("Creature/Monster.prefab");
             go.name = info.Name;
             _objects.Add(info.ObjectId, go);
 
@@ -61,7 +61,7 @@ public class ObjectManager
         }
         else if (objectType == GameObjectType.Projectile)
         {
-            GameObject go = await Managers.Resource.Instantiate("Creature/Arrow.prefab");
+            GameObject go = Managers.Resource.Instantiate("Creature/Arrow.prefab");
             go.name = "Arrow";
             _objects.Add(info.ObjectId, go);
 

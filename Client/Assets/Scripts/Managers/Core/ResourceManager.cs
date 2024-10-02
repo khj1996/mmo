@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 
 public class ResourceManager
 {
-    public async UniTask<T> Load<T>(string path) where T : Object
+    public T Load<T>(string path) where T : Object
     {
         if (typeof(T) == typeof(GameObject))
         {
@@ -21,7 +21,7 @@ public class ResourceManager
                 return go as T;
         }
 
-        var data = await Addressables.LoadAssetAsync<T>(path);
+        var data = Util.HandleAndRelease<T>(path);
 
         if (!data)
         {
@@ -32,9 +32,9 @@ public class ResourceManager
         return data;
     }
 
-    public async UniTask<GameObject> Instantiate(string path, Transform parent = null)
+    public GameObject Instantiate(string path, Transform parent = null)
     {
-        GameObject original = await Load<GameObject>($"Prefabs/{path}");
+        GameObject original = Load<GameObject>($"Prefabs/{path}");
         if (original == null)
         {
             Debug.Log($"Failed to load prefab : {path}");
