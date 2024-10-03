@@ -20,7 +20,7 @@ namespace GameServer.Data
         public static Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, MonsterData>();
         public static Dictionary<int, ShopData> ShopDict { get; private set; } = new Dictionary<int, ShopData>();
 
-        public static void LoadData()   
+        public static void LoadData()
         {
             StatDict = LoadJson<StatDataLoader, int, StatInfo>("StatData").MakeDict();
             SkillDict = LoadJson<SkillDataLoader, int, Skill>("SkillData").MakeDict();
@@ -98,8 +98,8 @@ namespace GameServer.Data
         {
             using AppDbContext db = new AppDbContext();
 
-            List<MonsterDataDb> monsterDatas =
-                db.MonsterDatas.Include(x => x.rewards).Where(x => x.MonsterDataDbid != -1).ToList();
+            List<MonsterDb> monsterDatas =
+                db.MonsterDatas.Include(x => x.rewards).Where(x => x.MonsterDbId != -1).ToList();
 
             if (monsterDatas.Count == 0)
             {
@@ -107,26 +107,26 @@ namespace GameServer.Data
 
                 foreach (var monsterDataKp in MonsterDict)
                 {
-                    var newMonsterData = new MonsterDataDb()
+                    var newMonsterData = new MonsterDb()
                     {
-                        MonsterDataDbid = monsterDataKp.Key,
+                        MonsterDbId = monsterDataKp.Key,
                         name = monsterDataKp.Value.name,
                         Level = monsterDataKp.Value.stat.Level,
                         MaxHp = monsterDataKp.Value.stat.MaxHp,
                         Attack = monsterDataKp.Value.stat.Attack,
                         Speed = monsterDataKp.Value.stat.Speed,
                         TotalExp = monsterDataKp.Value.stat.TotalExp,
-                        rewards = new List<DB.RewardDataDb>()
+                        rewards = new List<DB.MonsterRewardDb>()
                     };
 
                     foreach (var rewardData in monsterDataKp.Value.rewards)
                     {
-                        var newRewardData = new RewardDataDb()
+                        var newRewardData = new MonsterRewardDb()
                         {
                             count = rewardData.count,
                             probability = rewardData.probability,
                             itemId = rewardData.itemId,
-                            OwnerDbId = monsterDataKp.Key
+                            MonsterDbId = monsterDataKp.Key
                         };
                         db.RewardDatas.Add(newRewardData);
                     }
@@ -155,7 +155,7 @@ namespace GameServer.Data
                             MaxHp = monsterData.MaxHp,
                             Speed = monsterData.Speed,
                         },
-                        id = monsterData.MonsterDataDbid,
+                        id = monsterData.MonsterDbId,
                     };
                     foreach (var reward in monsterData.rewards)
                     {
@@ -167,7 +167,7 @@ namespace GameServer.Data
                         });
                     }
 
-                    MonsterDict.Add(monsterData.MonsterDataDbid, newMonsterData);
+                    MonsterDict.Add(monsterData.MonsterDbId, newMonsterData);
                 }
             }
         }
@@ -178,7 +178,7 @@ namespace GameServer.Data
 
 
             List<ItemDataDb> itemDatas =
-                db.ItemDatas.Where(x => x.ItemDataDbid != -1).ToList();
+                db.ItemDatas.Where(x => x.ItemTemplateId != -1).ToList();
 
             if (itemDatas.Count == 0)
             {
@@ -189,10 +189,10 @@ namespace GameServer.Data
                     var newItemData = new ItemDataDb()
                     {
                         name = itemDataKp.Value.name,
-                        ItemDataDbid = itemDataKp.Key,
+                        ItemTemplateId = itemDataKp.Key,
                     };
 
-                    int type = newItemData.ItemDataDbid / 100000;
+                    int type = newItemData.ItemTemplateId / 100000;
 
                     switch (type)
                     {
@@ -228,36 +228,36 @@ namespace GameServer.Data
             {
                 foreach (var itemData in itemDatas)
                 {
-                    ItemType type = (ItemType)(itemData.ItemDataDbid / 100000);
+                    ItemType type = (ItemType)(itemData.ItemTemplateId / 100000);
                     switch (type)
                     {
                         case ItemType.None:
                             break;
                         case ItemType.Weapon:
-                            ItemDict.Add(itemData.ItemDataDbid, new WeaponData()
+                            ItemDict.Add(itemData.ItemTemplateId, new WeaponData()
                             {
                                 name = itemData.name,
-                                id = itemData.ItemDataDbid,
+                                id = itemData.ItemTemplateId,
                                 damage = itemData.value,
                                 weaponType = (WeaponType)itemData.type,
                                 itemType = type
                             });
                             break;
                         case ItemType.Armor:
-                            ItemDict.Add(itemData.ItemDataDbid, new ArmorData()
+                            ItemDict.Add(itemData.ItemTemplateId, new ArmorData()
                             {
                                 name = itemData.name,
-                                id = itemData.ItemDataDbid,
+                                id = itemData.ItemTemplateId,
                                 defence = itemData.value,
                                 armorType = (ArmorType)itemData.type,
                                 itemType = type
                             });
                             break;
                         case ItemType.Consumable:
-                            ItemDict.Add(itemData.ItemDataDbid, new ConsumableData()
+                            ItemDict.Add(itemData.ItemTemplateId, new ConsumableData()
                             {
                                 name = itemData.name,
-                                id = itemData.ItemDataDbid,
+                                id = itemData.ItemTemplateId,
                                 maxCount = itemData.maxCount,
                                 value = itemData.value,
                                 consumableType = (ConsumableType)itemData.type,
@@ -265,10 +265,10 @@ namespace GameServer.Data
                             });
                             break;
                         case ItemType.Currency:
-                            ItemDict.Add(itemData.ItemDataDbid, new CurrencyData()
+                            ItemDict.Add(itemData.ItemTemplateId, new CurrencyData()
                             {
                                 name = itemData.name,
-                                id = itemData.ItemDataDbid,
+                                id = itemData.ItemTemplateId,
                                 maxCount = itemData.maxCount,
                                 itemType = type
                             });

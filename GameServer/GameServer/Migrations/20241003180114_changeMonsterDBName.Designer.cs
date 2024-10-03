@@ -4,6 +4,7 @@ using GameServer.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003180114_changeMonsterDBName")]
+    partial class changeMonsterDBName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,13 +48,13 @@ namespace GameServer.Migrations
 
             modelBuilder.Entity("GameServer.DB.ItemDataDb", b =>
                 {
-                    b.Property<int>("ItemDataDbId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemDataDbId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("ItemTemplateId")
+                    b.Property<int>("ItemDataDbid")
                         .HasColumnType("int");
 
                     b.Property<int>("maxCount")
@@ -67,9 +70,9 @@ namespace GameServer.Migrations
                     b.Property<int>("value")
                         .HasColumnType("int");
 
-                    b.HasKey("ItemDataDbId");
+                    b.HasKey("id");
 
-                    b.HasIndex("ItemDataDbId")
+                    b.HasIndex("ItemDataDbid")
                         .IsUnique();
 
                     b.ToTable("ItemData");
@@ -140,7 +143,7 @@ namespace GameServer.Migrations
 
             modelBuilder.Entity("GameServer.DB.MonsterDb", b =>
                 {
-                    b.Property<int>("MonsterDbId")
+                    b.Property<int>("MonsterDbid")
                         .HasColumnType("int");
 
                     b.Property<int>("Attack")
@@ -162,9 +165,9 @@ namespace GameServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MonsterDbId");
+                    b.HasKey("MonsterDbid");
 
-                    b.HasIndex("MonsterDbId")
+                    b.HasIndex("MonsterDbid")
                         .IsUnique();
 
                     b.ToTable("Monster");
@@ -172,11 +175,11 @@ namespace GameServer.Migrations
 
             modelBuilder.Entity("GameServer.DB.MonsterRewardDb", b =>
                 {
-                    b.Property<int>("MonsterRewardDbId")
+                    b.Property<int>("MonsterRewardDbid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MonsterRewardDbId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MonsterRewardDbid"));
 
                     b.Property<int?>("MonsterDbId")
                         .HasColumnType("int");
@@ -190,11 +193,11 @@ namespace GameServer.Migrations
                     b.Property<int>("probability")
                         .HasColumnType("int");
 
-                    b.HasKey("MonsterRewardDbId");
+                    b.HasKey("MonsterRewardDbid");
 
                     b.HasIndex("MonsterDbId");
 
-                    b.HasIndex("MonsterRewardDbId")
+                    b.HasIndex("MonsterRewardDbid")
                         .IsUnique();
 
                     b.ToTable("MonsterReward");

@@ -2,19 +2,19 @@
     "skills": [
         {
             "id": "1",
-            "name": "ÆòÅ¸",
+            "name": "í‰íƒ€",
             "cooldown": "0.5",
             "damage": "10",
             "skillType": "SkillAuto"
         },
         {
             "id": "2",
-            "name": "È­»ì °ø°İ",
+            "name": "í™”ì‚´ ê³µê²©",
             "cooldown": "0.5",
             "damage": "5",
             "skillType": "SkillProjectile",
             "projectile": {
-                "name": "È­»ì",
+                "name": "í™”ì‚´",
                 "speed": "20.0",
                 "range": "10",
                 "prefab": "Creature/Arrow"

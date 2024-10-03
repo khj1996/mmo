@@ -4,6 +4,7 @@ using GameServer.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003174856_updateShop")]
+    partial class updateShop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,13 +48,13 @@ namespace GameServer.Migrations
 
             modelBuilder.Entity("GameServer.DB.ItemDataDb", b =>
                 {
-                    b.Property<int>("ItemDataDbId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemDataDbId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("ItemTemplateId")
+                    b.Property<int>("ItemDataDbid")
                         .HasColumnType("int");
 
                     b.Property<int>("maxCount")
@@ -67,9 +70,9 @@ namespace GameServer.Migrations
                     b.Property<int>("value")
                         .HasColumnType("int");
 
-                    b.HasKey("ItemDataDbId");
+                    b.HasKey("id");
 
-                    b.HasIndex("ItemDataDbId")
+                    b.HasIndex("ItemDataDbid")
                         .IsUnique();
 
                     b.ToTable("ItemData");
@@ -138,9 +141,9 @@ namespace GameServer.Migrations
                     b.ToTable("MapInfo");
                 });
 
-            modelBuilder.Entity("GameServer.DB.MonsterDb", b =>
+            modelBuilder.Entity("GameServer.DB.MonsterDataDb", b =>
                 {
-                    b.Property<int>("MonsterDbId")
+                    b.Property<int>("MonsterDataDbid")
                         .HasColumnType("int");
 
                     b.Property<int>("Attack")
@@ -162,42 +165,12 @@ namespace GameServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MonsterDbId");
+                    b.HasKey("MonsterDataDbid");
 
-                    b.HasIndex("MonsterDbId")
+                    b.HasIndex("MonsterDataDbid")
                         .IsUnique();
 
                     b.ToTable("Monster");
-                });
-
-            modelBuilder.Entity("GameServer.DB.MonsterRewardDb", b =>
-                {
-                    b.Property<int>("MonsterRewardDbId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MonsterRewardDbId"));
-
-                    b.Property<int?>("MonsterDbId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("count")
-                        .HasColumnType("int");
-
-                    b.Property<int>("itemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("probability")
-                        .HasColumnType("int");
-
-                    b.HasKey("MonsterRewardDbId");
-
-                    b.HasIndex("MonsterDbId");
-
-                    b.HasIndex("MonsterRewardDbId")
-                        .IsUnique();
-
-                    b.ToTable("MonsterReward");
                 });
 
             modelBuilder.Entity("GameServer.DB.PlayerDb", b =>
@@ -253,6 +226,36 @@ namespace GameServer.Migrations
                         .IsUnique();
 
                     b.ToTable("Player");
+                });
+
+            modelBuilder.Entity("GameServer.DB.RewardDataDb", b =>
+                {
+                    b.Property<int>("RewardDataDbid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RewardDataDbid"));
+
+                    b.Property<int?>("OwnerDbId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("itemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("probability")
+                        .HasColumnType("int");
+
+                    b.HasKey("RewardDataDbid");
+
+                    b.HasIndex("OwnerDbId");
+
+                    b.HasIndex("RewardDataDbid")
+                        .IsUnique();
+
+                    b.ToTable("RewardData");
                 });
 
             modelBuilder.Entity("GameServer.DB.ServerDb", b =>
@@ -341,15 +344,6 @@ namespace GameServer.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("GameServer.DB.MonsterRewardDb", b =>
-                {
-                    b.HasOne("GameServer.DB.MonsterDb", "Monster")
-                        .WithMany("rewards")
-                        .HasForeignKey("MonsterDbId");
-
-                    b.Navigation("Monster");
-                });
-
             modelBuilder.Entity("GameServer.DB.PlayerDb", b =>
                 {
                     b.HasOne("GameServer.DB.AccountGameDb", "AccountGame")
@@ -359,6 +353,15 @@ namespace GameServer.Migrations
                         .IsRequired();
 
                     b.Navigation("AccountGame");
+                });
+
+            modelBuilder.Entity("GameServer.DB.RewardDataDb", b =>
+                {
+                    b.HasOne("GameServer.DB.MonsterDataDb", "Owner")
+                        .WithMany("rewards")
+                        .HasForeignKey("OwnerDbId");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("GameServer.DB.ShopProductDb", b =>
@@ -377,7 +380,7 @@ namespace GameServer.Migrations
                     b.Navigation("Players");
                 });
 
-            modelBuilder.Entity("GameServer.DB.MonsterDb", b =>
+            modelBuilder.Entity("GameServer.DB.MonsterDataDb", b =>
                 {
                     b.Navigation("rewards");
                 });

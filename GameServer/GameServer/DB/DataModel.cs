@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameServer.DB
 {
@@ -51,10 +52,10 @@ namespace GameServer.DB
     }
 
     [Table("Monster")]
-    public class MonsterDataDb
+    public class MonsterDb
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int MonsterDataDbid { get; set; }
+        public int MonsterDbId { get; set; }
 
         public string name { get; set; }
 
@@ -64,27 +65,27 @@ namespace GameServer.DB
         public float Speed { get; set; }
         public int TotalExp { get; set; }
 
-        public ICollection<RewardDataDb> rewards { get; set; }
+        public ICollection<MonsterRewardDb> rewards { get; set; }
     }
 
-    [Table("RewardData")]
-    public class RewardDataDb
+    [Table("MonsterReward")]
+    public class MonsterRewardDb
     {
-        public int RewardDataDbid { get; set; }
+        public int MonsterRewardDbId { get; set; }
         public int probability { get; set; }
         public int itemId { get; set; }
         public int count { get; set; }
 
 
-        [ForeignKey("Owner")] public int? OwnerDbId { get; set; }
-        public MonsterDataDb Owner { get; set; }
+        [ForeignKey("Monster")] public int? MonsterDbId { get; set; }
+        public MonsterDb Monster { get; set; }
     }
 
     [Table("ItemData")]
     public class ItemDataDb
     {
-        public int ItemDataDbid { get; set; }
-        public int id { get; set; }
+        public int ItemDataDbId { get; set; }
+        public int ItemTemplateId { get; set; }
         public string name { get; set; }
         public int type { get; set; }
         public int maxCount { get; set; }
@@ -113,7 +114,7 @@ namespace GameServer.DB
         public int MinY { get; set; }
         public string TileInfo { get; set; }
     }
-    
+
     [Table("Shop")]
     public class ShopDb
     {
@@ -121,24 +122,27 @@ namespace GameServer.DB
         public int ShopDbId { get; set; }
 
         public string Name { get; set; }
-        
+
         public ICollection<ShopProductDb> ShopProducts { get; set; }
     }
-    
+
     [Table("ShopProduct")]
+    [PrimaryKey(nameof(ShopProductDbId), nameof(ShopDbId))]
     public class ShopProductDb
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ShopProductDbId { get; set; }
 
+        public int Quantity { get; set; }
         public int PId { get; set; }
         public int CType { get; set; }
         public int CAmount { get; set; }
+
+
+        [ForeignKey("Shop")] public int? ShopDbId { get; set; }
+        public ShopDb Shop { get; set; }
     }
-    
-   
-    
-    
+
 
     /*[Table("MapObject")]
     public class MapOnjectDb

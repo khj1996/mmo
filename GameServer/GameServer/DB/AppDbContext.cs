@@ -13,8 +13,8 @@ namespace GameServer.DB
         public DbSet<PlayerDb> Players { get; set; }
         public DbSet<ItemDb> Items { get; set; }
         public DbSet<MapDb> MapDatas { get; set; }
-        public DbSet<MonsterDataDb> MonsterDatas { get; set; }
-        public DbSet<RewardDataDb> RewardDatas { get; set; }
+        public DbSet<MonsterDb> MonsterDatas { get; set; }
+        public DbSet<MonsterRewardDb> RewardDatas { get; set; }
         public DbSet<ItemDataDb> ItemDatas { get; set; }
         public DbSet<ShopDb> ShopDatas { get; set; }
         public DbSet<ShopProductDb> ShopProductDatas { get; set; }
@@ -50,28 +50,29 @@ namespace GameServer.DB
                 .HasIndex(s => s.MapDbId)
                 .IsUnique();
 
-            builder.Entity<MonsterDataDb>()
-                .HasIndex(s => s.MonsterDataDbid)
+            builder.Entity<MonsterDb>()
+                .HasIndex(s => s.MonsterDbId)
                 .IsUnique();
 
-            builder.Entity<RewardDataDb>()
-                .HasIndex(s => s.RewardDataDbid)
+            builder.Entity<MonsterRewardDb>()
+                .HasIndex(s => s.MonsterRewardDbId)
                 .IsUnique();
 
             builder.Entity<ItemDataDb>()
-                .HasIndex(s => s.ItemDataDbid)
+                .HasIndex(s => s.ItemDataDbId)
                 .IsUnique();
 
             builder.Entity<ItemDb>()
-                .HasIndex(s => s.ItemDbId)
+                .HasIndex(s => new { s.ItemDbId, s.OwnerDbId })
                 .IsUnique();
+
 
             builder.Entity<ShopDb>()
                 .HasIndex(s => s.ShopDbId)
                 .IsUnique();
 
             builder.Entity<ShopProductDb>()
-                .HasIndex(s => s.ShopProductDbId)
+                .HasIndex(s => new { s.ShopProductDbId, s.ShopDbId })
                 .IsUnique();
         }
     }
