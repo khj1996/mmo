@@ -68,9 +68,6 @@ public class Managers : MonoBehaviour
     UIManager _ui;
     [SerializeField] SceneLoader _scene;
 
-    [SerializeField] TMP_Text testText;
-
-
     public static DataManager Data
     {
         get { return Instance._data; }
@@ -111,12 +108,6 @@ public class Managers : MonoBehaviour
     void Update()
     {
         _network.Update();
-
-
-        if (EventSystem.current.currentSelectedGameObject != null)
-        {
-            testText.text = EventSystem.current.currentSelectedGameObject.name;
-        }
     }
 
     void Init()

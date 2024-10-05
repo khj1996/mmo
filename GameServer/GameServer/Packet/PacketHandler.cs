@@ -61,14 +61,14 @@ class PacketHandler
 
     public static void C_EquipItemHandler(PacketSession session, IMessage packet)
     {
-        C_EquipItem equipPacket = (C_EquipItem)packet;
-        ClientSession clientSession = (ClientSession)session;
+        var equipPacket = (C_EquipItem)packet;
+        var clientSession = (ClientSession)session;
 
-        Player player = clientSession.MyPlayer;
+        var player = clientSession.MyPlayer;
         if (player == null)
             return;
 
-        GameRoom room = player.Room;
+        var room = player.Room;
         if (room == null)
             return;
 
@@ -77,14 +77,14 @@ class PacketHandler
 
     public static void C_BuyItemHandler(PacketSession session, IMessage packet)
     {
-        C_BuyItem buyItemPacket = (C_BuyItem)packet;
-        ClientSession clientSession = (ClientSession)session;
+        var buyItemPacket = (C_BuyItem)packet;
+        var clientSession = (ClientSession)session;
 
-        Player player = clientSession.MyPlayer;
+        var player = clientSession.MyPlayer;
         if (player == null)
             return;
 
-        GameRoom room = player.Room;
+        var room = player.Room;
         if (room == null)
             return;
 

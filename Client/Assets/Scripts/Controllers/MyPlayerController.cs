@@ -126,10 +126,10 @@ public class MyPlayerController : PlayerController
                 statUI.RefreshUI();
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-            UI_Shop shopUI = gameSceneUI.ShopUI;
+            var gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
+            var shopUI = gameSceneUI.ShopUI;
 
             if (shopUI.gameObject.activeSelf)
             {

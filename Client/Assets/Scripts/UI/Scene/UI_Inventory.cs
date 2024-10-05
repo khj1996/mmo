@@ -12,7 +12,7 @@ public class UI_Inventory : UI_Base
     [SerializeField] private TMP_Text _goldTMP;
 
 
-    public override async void Init()
+    public override void Init()
     {
         Items.Clear();
 
@@ -20,15 +20,11 @@ public class UI_Inventory : UI_Base
         foreach (Transform child in grid.transform)
             Destroy(child.gameObject);
 
-
-        var newTask = new List<UniTask<UI_Item>>();
-
         for (int i = 0; i < 20; i++)
         {
-            newTask.Add(Managers.UI.MakeSubItem<UI_Item>(grid.transform));
+            var sc = Managers.UI.MakeSubItem<UI_Item>(grid.transform);
+            Items.Add(sc);
         }
-
-        Items.AddRange(await UniTask.WhenAll(newTask));
 
         RefreshUI(Define.InvenRefreshType.All);
     }

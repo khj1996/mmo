@@ -4,40 +4,50 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Shop : UI_Base
 {
-    public List<UI_Shop_Item> Products { get; } = new List<UI_Shop_Item>();
+    public ScrollRect scrollRect;
 
-    private ShopData shopdata;
+    public Dictionary<int, UI_Shop_Sub> Shops { get; } = new Dictionary<int, UI_Shop_Sub>();
 
-    public override async void Init()
+    private float currentYPos = 0f;
+
+    public override void Init()
     {
-        Products.Clear();
+        Shops.Clear();
 
-        GameObject grid = transform.Find("ItemGrid").gameObject;
-        foreach (Transform child in grid.transform)
+        foreach (Transform child in scrollRect.content.transform)
             Destroy(child.gameObject);
 
-        Managers.Data.ShopDict.TryGetValue(1, out shopdata);
 
-        var newTask = new List<UniTask<UI_Shop_Item>>();
-
-        for (int i = 0; i < shopdata.productList.Count; i++)
+        foreach (var shopData in Managers.Data.ShopDict)
         {
-            newTask.Add(Managers.UI.MakeSubItem<UI_Shop_Item>(grid.transform));
-        }
+            var hCount = (shopData.Value.productList.Count / 3);
+            //TODO : 스크립터블 오브젝트로 빼기 가능
+            //스페이싱 + 마진 + 오브젝트 크기
+            var addY = 50f + (hCount - 1f) * 15f + 163.3f * hCount;
+            var goYpos = currentYPos + addY / 2f;
 
-        Products.AddRange(await UniTask.WhenAll(newTask));
+            var sc = Managers.UI.MakeSubItem<UI_Shop_Sub>(scrollRect.content.transform);
+            var pos = sc.transform.position;
+            //sc.transform.position = new Vector3(pos.x, pos.y + goYpos);
+
+            sc.SetData(shopData.Value);
+
+            Shops.Add(shopData.Key, sc);
+            currentYPos += addY;
+        }
 
         RefreshUI();
     }
 
     public void RefreshUI()
     {
-        for (int i = 0; i < Products.Count; i++)
+        foreach (var shop in Shops)
         {
-            Products[i].SetData(shopdata.productList[i]);
+            shop.Value.RefreshUI();
         }
     }
 }

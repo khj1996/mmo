@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_Shop_Item : UI_Base
+public class UI_Shop_Product : UI_Base
 {
     private ProductData productInfo;
 

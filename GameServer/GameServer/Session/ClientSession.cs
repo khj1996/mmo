@@ -20,7 +20,7 @@ namespace GameServer
         public PlayerServerState ServerState { get; private set; } = PlayerServerState.ServerStateLogin;
 
         //세션에 해당하는 플레이어가 조작하는 유저
-        public Player MyPlayer { get; set; }
+        public Player? MyPlayer { get; set; }
         //할당된 세션 id
         public int SessionId { get; set; }
 

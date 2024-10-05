@@ -53,12 +53,13 @@ public class UIManager
         return Util.GetOrAddComponent<T>(go);
     }
 
-    public async UniTask<T> MakeSubItem<T>(Transform parent, string name = null) where T : UI_Base
+    public T MakeSubItem<T>(Transform parent, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        var go = await Addressables.InstantiateAsync($"Prefabs/UI/SubItem/{name}.prefab", Root.transform).ToUniTask();
+        var go = Object.Instantiate(Util.HandleAndRelease<GameObject>($"Prefabs/UI/SubItem/{name}.prefab"));
+
 
         if (parent != null)
             go.transform.SetParent(parent);
