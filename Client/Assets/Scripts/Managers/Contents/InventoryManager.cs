@@ -7,6 +7,8 @@ public class InventoryManager
 {
     public Dictionary<int, Item> Items { get; private set; }
 
+    //public int SlotLen { get; private set; }
+
     public void Init()
     {
         Items = new Dictionary<int, Item>();
