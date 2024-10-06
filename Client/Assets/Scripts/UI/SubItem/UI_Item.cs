@@ -41,15 +41,18 @@ public class UI_Item : UI_Base
         });
     }
 
-    public void SetItem(ItemData item)
+    public void SetItem(ItemData item, int itemCount)
     {
         TemplateId = item.id;
-        
+        Count = itemCount;
+
+
         _icon.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == TemplateId).Image;
+        _quantity.text = Count.ToString();
 
         _icon.gameObject.SetActive(true);
         _frame.gameObject.SetActive(false);
-        _quantity.gameObject.SetActive(false);
+        _quantity.gameObject.SetActive(Count != 1);
     }
 
     public void SetItem(Item item)

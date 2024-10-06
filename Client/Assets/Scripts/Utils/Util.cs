@@ -5,6 +5,13 @@ using UnityEngine.AddressableAssets;
 
 public class Util
 {
+    public static class StaticValues
+    {
+        //TODO : 인벤토리 길이 매니저로 체크 필요
+        public static readonly int InventorySize = 76;
+    }
+
+
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();

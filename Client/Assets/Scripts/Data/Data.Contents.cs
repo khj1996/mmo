@@ -41,6 +41,7 @@ namespace Data
     {
         public int id;
         public int pId;
+        public int quantity;
         public int cType;
         public int cAmount;
     }
