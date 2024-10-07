@@ -29,7 +29,7 @@ public class UI_Inventory : UI_Base
 
 
         //임시 76칸 고정 = 16줄 8줄만 만들고 오브젝트 풀링
-        maxLine = Util.StaticValues.InventorySize / 5 + 1;
+        maxLine = Managers.Inven.SlotLen / 5 + 1;
 
         //최대로 생성하려는 인벤토리 줄(오브젝트 풀링)
         poolSize = (maxLine >= 10) ? 10 : maxLine;
@@ -68,7 +68,6 @@ public class UI_Inventory : UI_Base
 
         //현재 contentRect의 y값에 맞춰 최소 인덱스를 구한다.
         int firstIndex = Mathf.Max(0, Mathf.FloorToInt(contentY / prefabH));
-        Debug.Log(currentIndex);
 
         //만약 이전 위치와 현재 위치가 달라졌다면?
         if (currentIndex != firstIndex)
@@ -76,17 +75,13 @@ public class UI_Inventory : UI_Base
             //위치 인덱스의 차이를 구한다.
             int diffIndex = currentIndex - firstIndex;
 
-            //현재 인덱스가 더 크다면?
             if (diffIndex < 0)
             {
                 //그 인덱스 차이 만큼 반복해서 슬롯의 위치를 위에서 아래로 이동시킨다.
                 for (int i = 0, cnt = Mathf.Abs(diffIndex); i < cnt; i++)
                 {
                     var item = InventorySubs.First.Value;
-                    item.gameObject.SetActive(true);
-                    InventorySubs.RemoveFirst();
-                    InventorySubs.AddLast(item);
-                    item.transform.localPosition = new Vector3(0, (-(currentIndex + poolSize + i) * prefabH) - prefabH * 0.5f, 0);
+
                     if (maxLine < (firstIndex + poolSize + i))
                     {
                         item.gameObject.SetActive(false);
@@ -94,11 +89,15 @@ public class UI_Inventory : UI_Base
                     else
                     {
                         item.gameObject.SetActive(true);
+                        item.line = (poolSize - 1) + firstIndex;
+                        item.RefreshUI(Define.InvenRefreshType.Slot);
                     }
+
+                    InventorySubs.RemoveFirst();
+                    InventorySubs.AddLast(item);
+                    item.transform.localPosition = new Vector3(0, (-(currentIndex + poolSize + i) * prefabH) - prefabH * 0.5f, 0);
                 }
             }
-
-            //이전 인덱스가 더 크다면?
             else if (diffIndex > 0)
             {
                 //그 인덱스 차이 만큼 반복해서 슬롯의 위치를 아래에서 위로 이동시킨다.
@@ -109,6 +108,8 @@ public class UI_Inventory : UI_Base
                     InventorySubs.RemoveLast();
                     InventorySubs.AddFirst(item);
                     item.transform.localPosition = new Vector3(0, (-(firstIndex - i) * prefabH) - prefabH * 0.5f, 0);
+                    item.line = firstIndex;
+                    item.RefreshUI(Define.InvenRefreshType.Slot);
                 }
             }
 
@@ -128,18 +129,9 @@ public class UI_Inventory : UI_Base
         if (Managers.Inven.Items.Count == 0)
             return;
 
-        /*
-        fore
-
-        var items = Managers.Inven.Items.Values.Where(x => x.Slot >= 0).ToList();
-        items.Sort((left, right) => left.Slot - right.Slot);
-
-        foreach (Item item in items)
+        foreach (var sub in InventorySubs)
         {
-            if (item.Slot < 0 || item.Slot >= 20)
-                continue;
-
-            Items[item.Slot].SetItem(item);
-        }*/
+            sub.RefreshUI(Define.InvenRefreshType.Slot);
+        }
     }
 }

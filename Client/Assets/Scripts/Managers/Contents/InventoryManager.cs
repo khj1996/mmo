@@ -7,7 +7,15 @@ public class InventoryManager
 {
     public Dictionary<int, Item> Items { get; private set; }
 
-    //public int SlotLen { get; private set; }
+    public int SlotLen
+    {
+        get { return Util.StaticValues.InventorySize; }
+        private set
+        {
+            if (value < 0) throw new ArgumentOutOfRangeException(nameof(value));
+            SlotLen = value;
+        }
+    }
 
     public void Init()
     {

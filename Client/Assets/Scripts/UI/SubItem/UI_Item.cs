@@ -43,16 +43,30 @@ public class UI_Item : UI_Base
 
     public void SetItem(ItemData item, int itemCount)
     {
-        TemplateId = item.id;
-        Count = itemCount;
+        if (item == null)
+        {
+            ItemDbId = 0;
+            TemplateId = 0;
+            Count = 0;
+            Equipped = false;
+
+            _icon.gameObject.SetActive(false);
+            _frame.gameObject.SetActive(false);
+            _quantity.gameObject.SetActive(false);
+        }
+        else
+        {
+            TemplateId = item.id;
+            Count = itemCount;
 
 
-        _icon.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == TemplateId).Image;
-        _quantity.text = Count.ToString();
+            _icon.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == TemplateId).Image;
+            _quantity.text = Count.ToString();
 
-        _icon.gameObject.SetActive(true);
-        _frame.gameObject.SetActive(false);
-        _quantity.gameObject.SetActive(Count != 1);
+            _icon.gameObject.SetActive(true);
+            _frame.gameObject.SetActive(false);
+            _quantity.gameObject.SetActive(Count != 1);
+        }
     }
 
     public void SetItem(Item item)

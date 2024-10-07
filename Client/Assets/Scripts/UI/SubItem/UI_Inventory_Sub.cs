@@ -5,29 +5,21 @@ using UnityEngine;
 
 public class UI_Inventory_Sub : UI_Base
 {
-    public List<UI_Item> Items { get; } = new List<UI_Item>();
+    [SerializeField] public UI_Item[] items = new UI_Item[] { };
 
     public int line;
-    
+
     public override void Init()
     {
     }
-    
+
     public void RefreshUI(Define.InvenRefreshType type)
     {
+        var slotDatas = Managers.Inven.Items.Values.Where(x => x.Slot < (line + 1) * 5 && x.Slot >= line * 5).ToList();
 
-        if (Items.Count == 0)
-            return;
-
-        var items = Managers.Inven.Items.Values.Where(x => x.Slot >= 0).ToList();
-        items.Sort((left, right) => left.Slot - right.Slot);
-
-        foreach (Item item in items)
+        for (int i = 0; i < 5; i++)
         {
-            if (item.Slot < 0 || item.Slot >= 20)
-                continue;
-
-            Items[item.Slot].SetItem(item);
+            items[i].SetItem(slotDatas.FirstOrDefault(x => x.Slot == line * 5 + i));
         }
     }
 }
