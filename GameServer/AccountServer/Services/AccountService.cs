@@ -12,9 +12,9 @@ namespace AccountServer.Services
     {
         AppDbContext _context;
         FacebookService _fb;
-        JwtTokenService _token;
+        PasswordService _token;
 
-        public AccountService(AppDbContext context, FacebookService fb, JwtTokenService token)
+        public AccountService(AppDbContext context, FacebookService fb, PasswordService token)
         {
             _context = context;
             _fb = fb;
@@ -23,60 +23,66 @@ namespace AccountServer.Services
 
         public bool CreateEmailAccount(CreateAccountPacketReq packet)
         {
-            AccountDb account = _context.Accounts
+            var hashedPassword = PasswordService.HashPassword(packet.Password);
+
+            var account = _context.Accounts
                 .AsNoTracking()
-                .FirstOrDefault(a => a.LoginProviderUserId == packet.AccountName);
+                .FirstOrDefault(a => a.AccountName == packet.AccountName && a.Password == packet.Password);
 
             if (account == null)
             {
                 _context.Accounts.Add(new AccountDb()
                 {
-                    LoginProviderUserId = packet.AccountName,
-                    LoginProviderType = ProviderType.Email
+                    AccountName = packet.AccountName,
+                    Password = hashedPassword,
+                    LoginProviderType = ProviderType.Email,
                 });
 
                 bool success = _context.SaveChangesEx();
                 return success;
             }
 
-            return false; 
+            return false;
         }
 
 
-        public string LoginEmailAccount(LoginAccountPacketReq packet)
+        public string? LoginEmailAccount(LoginAccountPacketReq? packet)
         {
+            
             if (packet == null)
                 return null;
 
-            AccountDb accountDb = _context.Accounts.FirstOrDefault(
-                a => a.LoginProviderUserId == packet.AccountName
+            var accountDb = _context.Accounts.FirstOrDefault(
+                a => a.AccountName == packet.AccountName
                      && a.LoginProviderType == ProviderType.Email);
 
-            if (accountDb == null)
+            //비밀번호가 틀리거나 계정이 없을시
+            if (accountDb == null || !PasswordService.VerifyPassword(packet.Password, accountDb.Password))
             {
                 return null;
             }
 
-            string jwtToken = _token.CreateJwtAccessToken(accountDb.AccountDbId);
+
+            var jwtToken = _token.CreateJwtAccessToken(accountDb.AccountDbId);
             return jwtToken;
         }
 
 
         public async Task<string> LoginFacebookAccount(string token)
         {
-            FacebookTokenData tokenData = await _fb.GetUserTokenData(token);
+            var tokenData = await _fb.GetUserTokenData(token);
             if (tokenData == null || tokenData.is_valid == false)
                 return null;
 
-            AccountDb accountDb = _context.Accounts.FirstOrDefault(
-                a => a.LoginProviderUserId == tokenData.user_id
+            var accountDb = _context.Accounts.FirstOrDefault(
+                a => a.AccountName == tokenData.user_id
                      && a.LoginProviderType == ProviderType.Facebook);
 
             if (accountDb == null)
             {
                 accountDb = new AccountDb()
                 {
-                    LoginProviderUserId = tokenData.user_id,
+                    AccountName = tokenData.user_id,
                     LoginProviderType = ProviderType.Facebook
                 };
 

@@ -7,11 +7,11 @@ using System.Text;
 
 namespace AccountServer.Services
 {
-    public class JwtTokenService
+    public class PasswordService
     {
         IConfiguration _config;
 
-        public JwtTokenService(IConfiguration config)
+        public PasswordService(IConfiguration config)
         {
             _config = config;
         }
@@ -33,7 +33,7 @@ namespace AccountServer.Services
                 SecurityAlgorithms.HmacSha256);
 
             var jwt = new JwtSecurityToken(claims: claims, signingCredentials: credentials);
-            
+
             string token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
 
@@ -59,16 +59,27 @@ namespace AccountServer.Services
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
             };
 
-            SecurityToken validatedToken;
             try
             {
-                var claims = handler.ValidateToken(token, validationParams, out validatedToken);
+                var claims = handler.ValidateToken(token, validationParams, out SecurityToken validatedToken);
                 return true;
             }
             catch
             {
                 return false;
             }
+        }
+
+        // 비밀번호 해싱
+        public static string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        // 비밀번호 검증
+        public static bool VerifyPassword(string password, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
     }
 }

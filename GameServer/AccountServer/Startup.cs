@@ -31,7 +31,7 @@ namespace AccountServer
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<FacebookService>();
-            services.AddSingleton<JwtTokenService>();
+            services.AddSingleton<PasswordService>();
             services.AddScoped<AccountService>();
         }
 

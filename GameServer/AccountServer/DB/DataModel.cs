@@ -15,7 +15,9 @@ namespace AccountServer.DB
     {
         public int AccountDbId { get; set; }
 
-        [Required] public string LoginProviderUserId { get; set; }
+        [Required] [MaxLength(20)] public string AccountName { get; set; }
+
+        [Required] public string Password { get; set; }
         [Required] public ProviderType LoginProviderType { get; set; }
     }
 }
