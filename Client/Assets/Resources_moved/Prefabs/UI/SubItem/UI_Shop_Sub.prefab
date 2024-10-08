@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4596693632632047657}
   - component: {fileID: 4797614890743197446}
   - component: {fileID: 3900538819184586753}
-  - component: {fileID: 7331014133701492179}
+  - component: {fileID: 7003162992215920112}
   m_Layer: 0
   m_Name: UI_Shop_Sub
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
---- !u!114 &7331014133701492179
+--- !u!114 &7003162992215920112
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -262,10 +262,10 @@ RectTransform:
   m_Father: {fileID: 4596693632632047657}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 657, y: -35}
-  m_SizeDelta: {x: 425, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 960, y: 0}
+  m_SizeDelta: {x: 600, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4026177751237765407
 MonoBehaviour:
@@ -287,7 +287,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 115, y: 163.3}
+  m_CellSize: {x: 173.33333, y: 246.13333}
   m_Spacing: {x: 15, y: 15}
   m_Constraint: 1
   m_ConstraintCount: 3

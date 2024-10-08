@@ -39,8 +39,8 @@ public class UI_Inventory : UI_Base
         for (int i = 0; i < poolSize; i++)
         {
             var sc = Managers.UI.MakeSubItem<UI_Inventory_Sub>(scrollRect.content.transform);
-            sc.line = i;
             sc.gameObject.transform.localScale = Vector3.one;
+            sc.line = i;
             InventorySubs.AddLast(sc);
         }
 

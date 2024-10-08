@@ -31,6 +31,7 @@ public class UI_Shop_Sub : UI_Base
         foreach (var productData in _shopData.productList)
         {
             var sc = Managers.UI.MakeSubItem<UI_Shop_Product>(grid.transform);
+            sc.gameObject.transform.localScale = Vector3.one;
 
             sc.SetData(productData);
 

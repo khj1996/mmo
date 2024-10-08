@@ -27,6 +27,7 @@ public class UI_SelectCharacterPopup : UI_Popup
         for (int i = 0; i < playerInfos.Count; i++)
         {
             var sc = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
+            sc.gameObject.transform.localScale = Vector3.one;
             sc.Info = new CharacterInfo()
             {
                 PlayerName = playerInfos[i].Name,
@@ -41,10 +42,11 @@ public class UI_SelectCharacterPopup : UI_Popup
 
         if (playerInfos.Count < 8)
         {
-            var item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
-            Items.Add(item);
+            var sc = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
+            sc.gameObject.transform.localScale = Vector3.one;
+            Items.Add(sc);
 
-            item.Info = new CharacterInfo()
+            sc.Info = new CharacterInfo()
             {
                 PlayerName = "캐릭터 추가",
                 Lv = 1,
@@ -71,10 +73,11 @@ public class UI_SelectCharacterPopup : UI_Popup
         if (Items.Count < 8)
         {
             GameObject grid = GetComponentInChildren<GridLayoutGroup>().gameObject;
-            UI_SelectCharacterPopup_Item item = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
-            Items.Add(item);
+            UI_SelectCharacterPopup_Item sc = Managers.UI.MakeSubItem<UI_SelectCharacterPopup_Item>(grid.transform);
+            sc.gameObject.transform.localScale = Vector3.one;
+            Items.Add(sc);
 
-            item.Info = new CharacterInfo()
+            sc.Info = new CharacterInfo()
             {
                 PlayerName = "캐릭터 추가",
                 Lv = 1,

@@ -27,6 +27,7 @@ public class UI_SelectServerPopup : UI_Popup
         for (int i = 0; i < servers.Count; i++)
         {
             var sc = Managers.UI.MakeSubItem<UI_SelectServerPopup_Item>(grid.transform);
+            sc.gameObject.transform.localScale = Vector3.one;
 
             sc.Info = new ServerInfo()
             {

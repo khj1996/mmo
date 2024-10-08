@@ -24,20 +24,11 @@ public class UI_Shop : UI_Base
 
         foreach (var shopData in Managers.Data.ShopDict)
         {
-            var hCount = (shopData.Value.productList.Count / 3);
-            //TODO : 스크립터블 오브젝트로 빼기 가능
-            //스페이싱 + 마진 + 오브젝트 크기
-            var addY = 50f + (hCount - 1f) * 15f + 163.3f * hCount;
-            var goYpos = currentYPos + addY / 2f;
 
             var sc = Managers.UI.MakeSubItem<UI_Shop_Sub>(scrollRect.content.transform);
-            var pos = sc.transform.position;
-            //sc.transform.position = new Vector3(pos.x, pos.y + goYpos);
-
+            sc.gameObject.transform.localScale = Vector3.one;
             sc.SetData(shopData.Value);
-
             Shops.Add(shopData.Key, sc);
-            currentYPos += addY;
         }
 
         RefreshUI();
