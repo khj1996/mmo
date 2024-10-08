@@ -13,7 +13,7 @@ public class LoginScene : MonoBehaviour
 
     protected async void Init()
     {
-        Screen.SetResolution(640, 480, false);
+        Screen.SetResolution(1280, 720, false);
 
         _sceneUI = await Managers.UI.ShowSceneUI<UI_LoginScene>();
     }

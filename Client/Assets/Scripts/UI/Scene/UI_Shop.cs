@@ -12,7 +12,6 @@ public class UI_Shop : UI_Base
 
     public Dictionary<int, UI_Shop_Sub> Shops { get; } = new Dictionary<int, UI_Shop_Sub>();
 
-    private float currentYPos = 0f;
 
     public override void Init()
     {

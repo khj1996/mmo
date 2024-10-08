@@ -275,7 +275,6 @@ namespace GameServer.Game
 
                 if (dis > VisionDis)
                     continue;
-                Console.WriteLine(p.PlayerDbId);
 
                 p.Session.Send(packet);
             }

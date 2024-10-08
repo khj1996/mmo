@@ -12,6 +12,7 @@ public class UI_SelectCharacterPopup : UI_Popup
 
     public override void Init()
     {
+        gameObject.name = "UI_SelectCharacterPopup";
         base.Init();
     }
 
