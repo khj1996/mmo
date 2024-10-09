@@ -93,7 +93,6 @@ public class MyPlayerController : PlayerController
     {
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
-
     void GetUIKeyInput()
     {
         if (Input.GetKeyDown(KeyCode.I))

@@ -8,28 +8,19 @@ using UnityEngine.UI;
 
 public class UI_SelectCharacterPopup_Item : UI_Base
 {
+    public Button SelectCharacterButton;
+    public TMP_Text NameText;
+    public TMP_Text LvText;
+    public TMP_Text Map;
+    public TMP_Text PosX;
+    public TMP_Text PosY;
+
     public CharacterInfo Info { get; set; }
 
-    enum Buttons
-    {
-        SelectCharacterButton
-    }
-
-    enum TMP_Texts
-    {
-        NameText,
-        LvText,
-        Map,
-        PosX,
-        PosY,
-    }
 
     public override void Init()
     {
-        Bind<Button>(typeof(Buttons));
-        Bind<TMP_Text>(typeof(TMP_Texts));
-
-        GetButton((int)Buttons.SelectCharacterButton).gameObject.BindEvent(OnClickButton);
+        SelectCharacterButton.gameObject.BindEvent(OnClickButton);
     }
 
     public void RefreshUI()
@@ -37,11 +28,11 @@ public class UI_SelectCharacterPopup_Item : UI_Base
         if (Info == null)
             return;
 
-        GetTMP((int)TMP_Texts.NameText).text = Info.PlayerName;
-        GetTMP((int)TMP_Texts.LvText).text = $"레벨: {Info.Lv.ToString()}";
-        GetTMP((int)TMP_Texts.Map).text = $"맵: {Info.CurMap.ToString()}";
-        GetTMP((int)TMP_Texts.PosX).text = $"X: {Info.PosX:0.#}";
-        GetTMP((int)TMP_Texts.PosY).text = $"Y: {Info.PosY:0.#}";
+        NameText.text = Info.PlayerName;
+        LvText.text = $"레벨: {Info.Lv.ToString()}";
+        Map.text = $"맵: {Info.CurMap.ToString()}";
+        PosX.text = $"X: {Info.PosX:0.#}";
+        PosY.text = $"Y: {Info.PosY:0.#}";
     }
 
     async void OnClickButton(PointerEventData evt)

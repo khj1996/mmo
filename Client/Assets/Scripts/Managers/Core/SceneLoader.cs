@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class SceneLoader : MonoBehaviour
     private AssetReference currentlyLoadedScene;
 
     AsyncOperationHandle<SceneInstance> SceneLoadOperationHandle;
+
+    [FormerlySerializedAs("currentScene")] public string currentSceneName;
 
     private void OnNewSceneLoaded(AsyncOperationHandle<SceneInstance> obj)
     {
@@ -38,7 +41,8 @@ public class SceneLoader : MonoBehaviour
 
             isLoading = true;
 
-
+            currentSceneName = sceneName;
+            
             StartCoroutine(UnloadPreviousScene());
         }
         else

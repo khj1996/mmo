@@ -36,7 +36,7 @@ public class ServerSession : PacketSession
 	{
 		Debug.Log($"OnDisconnected : {endPoint}");
 
-		if (SceneManager.GetActiveScene().name == "Game")
+		if (Managers.Scene.currentSceneName == "Game")
 		{
 			Managers.Scene.LoadScene("Login");
 		}

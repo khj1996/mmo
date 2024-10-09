@@ -235,7 +235,7 @@ public class BaseController : MonoBehaviour
         }
         else
         {
-            transform.position += moveDir.normalized * (Speed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, destPos, Speed * Time.fixedDeltaTime);
         }
     }
 
