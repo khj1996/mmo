@@ -30,19 +30,8 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
         UpdateScrollViewSize();
         UpdateVisibleRect();
 
-        if (maxIndex.Equals(0))
-        {
-            var node = items.First;
-
-            while (node != null)
-            {
-                node.Value.gameObject.SetActive(false);
-
-                node = node.Next;
-            }
-
-            return;
-        }
+        
+        if (maxIndex == 0) return;
 
         float spacing = 0;
 
