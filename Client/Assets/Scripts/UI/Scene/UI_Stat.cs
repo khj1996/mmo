@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
@@ -15,7 +16,7 @@ public class UI_Stat : UI_Base
     public Image Slot_Armor;
     public Image Slot_Boots;
     public Image Slot_Weapon;
-    public Image Slot_Shield;
+    public Image Slot_Gloves;
 
     public TMP_Text NameText;
     public TMP_Text AttackValueText;
@@ -40,7 +41,7 @@ public class UI_Stat : UI_Base
         Slot_Armor.enabled = false;
         Slot_Boots.enabled = false;
         Slot_Weapon.enabled = false;
-        Slot_Shield.enabled = false;
+        Slot_Gloves.enabled = false;
 
         foreach (Item item in Managers.Inven.Items.Values)
         {
@@ -72,6 +73,10 @@ public class UI_Stat : UI_Base
                     case ArmorType.Boots:
                         Slot_Boots.enabled = true;
                         Slot_Boots.sprite = icon;
+                        break;
+                    case ArmorType.Gloves:
+                        Slot_Gloves.enabled = true;
+                        Slot_Gloves.sprite = icon;
                         break;
                 }
             }

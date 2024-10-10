@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8451403128161805479}
   - component: {fileID: 1097929238800070426}
   m_Layer: 0
-  m_Name: Slot_Shield_BG
+  m_Name: Slot_Gloves_BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1520,7 +1520,7 @@ GameObject:
   - component: {fileID: 3098500320295071275}
   - component: {fileID: 4719484277141741527}
   m_Layer: 0
-  m_Name: Slot_Shield
+  m_Name: Slot_Gloves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

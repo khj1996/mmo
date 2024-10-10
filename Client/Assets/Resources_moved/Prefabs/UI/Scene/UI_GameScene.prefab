@@ -233,6 +233,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2385281295399645811, guid: 19b295e8f6df4bd48aed79621009fe05,
+        type: 3}
+      propertyPath: Slot_Gloves
+      value: 
+      objectReference: {fileID: 6089187114249271652}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19b295e8f6df4bd48aed79621009fe05, type: 3}
 --- !u!224 &2204840157226634489 stripped
@@ -241,6 +246,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1585225952401925811}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6089187114249271652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4719484277141741527, guid: 19b295e8f6df4bd48aed79621009fe05,
+    type: 3}
+  m_PrefabInstance: {fileID: 1585225952401925811}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4646752417428092239
 PrefabInstance:
   m_ObjectHideFlags: 0
