@@ -166,12 +166,12 @@ PrefabInstance:
     - target: {fileID: 821608870452865610, guid: 19b295e8f6df4bd48aed79621009fe05,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 463.6
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 821608870452865610, guid: 19b295e8f6df4bd48aed79621009fe05,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 378.3381
+      value: 489.6524
       objectReference: {fileID: 0}
     - target: {fileID: 821608870452865610, guid: 19b295e8f6df4bd48aed79621009fe05,
         type: 3}
@@ -525,6 +525,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UI_Shop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838081361268486777, guid: a8453ad0931358c498e197ccb3d730f7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8453ad0931358c498e197ccb3d730f7, type: 3}

@@ -8,27 +8,18 @@ using UnityEngine.UI;
 
 public class UI_CreateCharacterPopup : UI_Popup
 {
-    enum GameObjects
-    {
-        CharacterName,
-    }
-
-    enum Buttons
-    {
-        CreateBtn,
-        CancelBtn
-    }
+    public TMP_InputField CharacterName;
+    public Button CreateBtn;
+    public Button CancelBtn;
 
 
     public override void Init()
     {
         base.Init();
-        
-        Bind<Button>(typeof(Buttons));
-        Bind<GameObject>(typeof(GameObjects));
 
-        GetButton((int)Buttons.CreateBtn).gameObject.BindEvent(OnClickCreate);
-        GetButton((int)Buttons.CancelBtn).gameObject.BindEvent(OnClickCancel);
+
+        CreateBtn.gameObject.BindEvent(OnClickCreate);
+        CancelBtn.gameObject.BindEvent(OnClickCancel);
     }
 
 
@@ -36,10 +27,10 @@ public class UI_CreateCharacterPopup : UI_Popup
     {
         C_CreatePlayer createPacket = new C_CreatePlayer()
         {
-            Name = Get<GameObject>((int)GameObjects.CharacterName).GetComponent<TMP_InputField>().text
+            Name = CharacterName.text
         };
         Managers.Network.Send(createPacket);
-        
+
         Managers.UI.ClosePopupUI();
     }
 

@@ -1,106 +1,99 @@
 ﻿using Facebook.Unity;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UI_LoginScene : UI_Scene
 {
-	enum GameObjects
-	{
-		AccountName,
-		Password
-	}
+    public TMP_InputField AccountName;
+    public TMP_InputField Password;
 
-	enum Images
-	{
-		CreateBtn,
-		LoginBtn
-	}
+    public Button CreateBtn;
+    public Button LoginBtn;
+
 
     public override void Init()
-	{
+    {
         base.Init();
 
-		Bind<GameObject>(typeof(GameObjects));
-		Bind<Image>(typeof(Images));
+        CreateBtn.gameObject.BindEvent(OnClickCreateButton);
+        LoginBtn.gameObject.BindEvent(OnClickLoginButton);
 
-		GetImage((int)Images.CreateBtn).gameObject.BindEvent(OnClickCreateButton);
-		GetImage((int)Images.LoginBtn).gameObject.BindEvent(OnClickLoginButton);
+       // FB.Init("", "");
+    }
 
-		FB.Init("2271097109703692", "1b54316978c0a5b6143ead29e921d92b");
-	}
+    public void OnClickCreateButton(PointerEventData evt)
+    {
+        string account = AccountName.text;
+        string password = Password.text;
 
-	public void OnClickCreateButton(PointerEventData evt)
-	{
-		string account = Get<GameObject>((int)GameObjects.AccountName).GetComponent<InputField>().text;
-		string password = Get<GameObject>((int)GameObjects.Password).GetComponent<InputField>().text;
+        CreateAccountPacketReq packet = new CreateAccountPacketReq()
+        {
+            AccountName = account,
+            Password = password
+        };
 
-		CreateAccountPacketReq packet = new CreateAccountPacketReq()
-		{
-			AccountName = account,
-			Password = password
-		};
+        Managers.Web.SendPostRequest<CreateAccountPacketRes>("account/create", packet, (res) =>
+        {
+            Debug.Log(res.CreateOk);
+            AccountName.text = "";
+            Password.text = "";
+        });
+    }
 
-		Managers.Web.SendPostRequest<CreateAccountPacketRes>("account/create", packet, (res) =>
-		{
-			Debug.Log(res.CreateOk);
-			Get<GameObject>((int)GameObjects.AccountName).GetComponent<InputField>().text = "";
-			Get<GameObject>((int)GameObjects.Password).GetComponent<InputField>().text = "";
-		});
-	}
+    public void OnClickLoginButton(PointerEventData evt)
+    {
+        Debug.Log("OnClickLoginButton");
 
-	public void OnClickLoginButton(PointerEventData evt)
-	{
-		Debug.Log("OnClickLoginButton");
+        string account = AccountName.text;
+        string password = Password.text;
 
-		string account = Get<GameObject>((int)GameObjects.AccountName).GetComponent<InputField>().text;
-		string password = Get<GameObject>((int)GameObjects.Password).GetComponent<InputField>().text;
 
-		
-		LoginAccountPacketReq packet = new LoginAccountPacketReq()
-		{
-			AccountName = account,
-			Password = password
-		};
+        LoginAccountPacketReq packet = new LoginAccountPacketReq()
+        {
+            AccountName = account,
+            Password = password
+        };
 
-		Managers.Web.SendPostRequest<LoginFacebookAccountPacketRes>("account/login", packet, (res) =>
-		{
-			Debug.Log(res.LoginOK);
-			Get<GameObject>((int)GameObjects.AccountName).GetComponent<InputField>().text = "";
-			Get<GameObject>((int)GameObjects.Password).GetComponent<InputField>().text = "";
+        Managers.Web.SendPostRequest<LoginFacebookAccountPacketRes>("account/login", packet, (res) =>
+        {
+            Debug.Log(res.LoginOK);
+            AccountName.text = "";
+            Password.text = "";
 
-			if (res.LoginOK)
-			{
-				Managers.Network.Token = res.JwtAccessToken;
-				Managers.Network.Connect(new ServerInfo()
-				{
-					Port = res.Port,
-					IpAddress = res.IpAddress
-				});
-				
-				gameObject.SetActive(false);
-			}
-		});
-		
-		//FB.LogInWithPublishPermissions(new List<string>() { "email" }, OnFacebookResponse);
-	}
+            if (res.LoginOK)
+            {
+                Managers.Network.Token = res.JwtAccessToken;
+                Managers.Network.Connect(new ServerInfo()
+                {
+                    Port = res.Port,
+                    IpAddress = res.IpAddress
+                });
 
-	public void OnFacebookResponse(ILoginResult result)
-	{
-		Debug.Log("Connected FB");
+                gameObject.SetActive(false);
+            }
+        });
 
-		LoginFacebookAccountPacketReq packet = new LoginFacebookAccountPacketReq()
-		{
-			Token = result.AccessToken.TokenString
-		};
+        //FB.LogInWithPublishPermissions(new List<string>() { "email" }, OnFacebookResponse);
+    }
 
-		Managers.Web.SendPostRequest<LoginFacebookAccountPacketRes>("account/login/facebook", packet, (res) =>
-		{
-			Debug.Log(res.LoginOK);
+    public void OnFacebookResponse(ILoginResult result)
+    {
+        Debug.Log("Connected FB");
 
-			// TODO
-		});
-	}
+        LoginFacebookAccountPacketReq packet = new LoginFacebookAccountPacketReq()
+        {
+            Token = result.AccessToken.TokenString
+        };
+
+        Managers.Web.SendPostRequest<LoginFacebookAccountPacketRes>("account/login/facebook", packet, (res) =>
+        {
+            Debug.Log(res.LoginOK);
+
+            // TODO
+        });
+    }
 }

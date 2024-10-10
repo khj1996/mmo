@@ -6,39 +6,29 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_IngameShop_Item : UI_Base
+public class UI_SelectServerPopup_Item : UI_Base
 {
-	public ServerInfo Info { get; set; }
+    public Button SelectServerButton;
+    public TMP_Text NameText;
 
-	enum Buttons
-	{
-		SelectServerButton
-	}
+    public ServerInfo Info { get; set; }
 
-	enum TMP_Texts
-	{ 
-		NameText
-	}
+    public override void Init()
+    {
+        SelectServerButton.gameObject.BindEvent(OnClickButton);
+    }
 
-	public override void Init()
-	{
-		Bind<Button>(typeof(Buttons));
-		Bind<TMP_Text>(typeof(TMP_Texts));
+    public void RefreshUI()
+    {
+        if (Info == null)
+            return;
 
-		GetButton((int)Buttons.SelectServerButton).gameObject.BindEvent(OnClickButton);
-	}
+        NameText.text = Info.Name;
+    }
 
-	public void RefreshUI()
-	{
-		if (Info == null)
-			return;
-
-		GetTMP((int)TMP_Texts.NameText).text = Info.Name;
-	}
-
-	void OnClickButton(PointerEventData evt)
-	{
-		Managers.Network.Connect(Info);
-		Managers.UI.ClosePopupUI();
-	}
+    void OnClickButton(PointerEventData evt)
+    {
+        Managers.Network.Connect(Info);
+        Managers.UI.ClosePopupUI();
+    }
 }

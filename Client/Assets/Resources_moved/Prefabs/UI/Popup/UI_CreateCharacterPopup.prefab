@@ -1168,6 +1168,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f093da9887c734382cddb6163dd868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterName: {fileID: 9044726936654724577}
+  CreateBtn: {fileID: 477316821216391345}
+  CancelBtn: {fileID: 7969415877645051775}
 --- !u!1 &7367543308234364319
 GameObject:
   m_ObjectHideFlags: 0

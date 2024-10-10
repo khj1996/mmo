@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -10,30 +11,21 @@ using Image = UnityEngine.UI.Image;
 
 public class UI_Stat : UI_Base
 {
-    enum Images
-    {
-        Slot_Helmet,
-        Slot_Armor,
-        Slot_Boots,
-        Slot_Weapon,
-        Slot_Shield
-    }
+    public Image Slot_Helmet;
+    public Image Slot_Armor;
+    public Image Slot_Boots;
+    public Image Slot_Weapon;
+    public Image Slot_Shield;
 
-    enum Texts
-    {
-        NameText,
-        AttackValueText,
-        DefenceValueText
-    }
+    public TMP_Text NameText;
+    public TMP_Text AttackValueText;
+    public TMP_Text DefenceValueText;
+
 
     bool _init = false;
 
     public override void Init()
     {
-        Bind<Image>(typeof(Images));
-        Bind<Text>(typeof(Texts));
-
-
         _init = true;
         RefreshUI();
     }
@@ -44,11 +36,11 @@ public class UI_Stat : UI_Base
         if (_init == false)
             return;
 
-        Get<Image>((int)Images.Slot_Helmet).enabled = false;
-        Get<Image>((int)Images.Slot_Armor).enabled = false;
-        Get<Image>((int)Images.Slot_Boots).enabled = false;
-        Get<Image>((int)Images.Slot_Weapon).enabled = false;
-        Get<Image>((int)Images.Slot_Shield).enabled = false;
+        Slot_Helmet.enabled = false;
+        Slot_Armor.enabled = false;
+        Slot_Boots.enabled = false;
+        Slot_Weapon.enabled = false;
+        Slot_Shield.enabled = false;
 
         foreach (Item item in Managers.Inven.Items.Values)
         {
@@ -61,8 +53,8 @@ public class UI_Stat : UI_Base
 
             if (item.ItemType == ItemType.Weapon)
             {
-                Get<Image>((int)Images.Slot_Weapon).enabled = true;
-                Get<Image>((int)Images.Slot_Weapon).sprite = icon;
+                Slot_Weapon.enabled = true;
+                Slot_Weapon.sprite = icon;
             }
             else if (item.ItemType == ItemType.Armor)
             {
@@ -70,16 +62,16 @@ public class UI_Stat : UI_Base
                 switch (armor.ArmorType)
                 {
                     case ArmorType.Helmet:
-                        Get<Image>((int)Images.Slot_Helmet).enabled = true;
-                        Get<Image>((int)Images.Slot_Helmet).sprite = icon;
+                        Slot_Helmet.enabled = true;
+                        Slot_Helmet.sprite = icon;
                         break;
                     case ArmorType.Armor:
-                        Get<Image>((int)Images.Slot_Armor).enabled = true;
-                        Get<Image>((int)Images.Slot_Armor).sprite = icon;
+                        Slot_Armor.enabled = true;
+                        Slot_Armor.sprite = icon;
                         break;
                     case ArmorType.Boots:
-                        Get<Image>((int)Images.Slot_Boots).enabled = true;
-                        Get<Image>((int)Images.Slot_Boots).sprite = icon;
+                        Slot_Boots.enabled = true;
+                        Slot_Boots.sprite = icon;
                         break;
                 }
             }
@@ -89,10 +81,10 @@ public class UI_Stat : UI_Base
         MyPlayerController player = Managers.Object.MyPlayer;
         player.RefreshAdditionalStat();
 
-        Get<Text>((int)Texts.NameText).text = player.name;
+        NameText.text = player.name;
 
         int totalDamage = player.Stat.Attack + player.WeaponDamage;
-        Get<Text>((int)Texts.AttackValueText).text = $"{totalDamage}(+{player.WeaponDamage})";
-        Get<Text>((int)Texts.DefenceValueText).text = $"{player.ArmorDefence}";
+        AttackValueText.text = $"{totalDamage}(+{player.WeaponDamage})";
+        DefenceValueText.text = $"{player.ArmorDefence}";
     }
 }
