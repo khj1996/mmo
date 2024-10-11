@@ -153,6 +153,16 @@ public class MyPlayerController : PlayerController
 
         Move.X = Input.GetAxisRaw("Horizontal");
         Move.Y = Input.GetAxisRaw("Vertical");
+
+
+        if (Move.X == 0 && Move.Y == 0) return;
+
+        LookDir = new Vec2()
+        {
+            X = Move.X,
+            Y = Move.Y,
+        };
+        ;
     }
 
     protected override void UpdateIdle()
@@ -189,7 +199,7 @@ public class MyPlayerController : PlayerController
         currTime += Time.deltaTime;
 
         //초당 5번 위치 데이터 갱신
-        if (currTime >= 0.2f)
+        if (statusChanged || currTime >= 2.0f)
         {
             C_Move movePacket = new C_Move
             {
@@ -233,15 +243,16 @@ public class MyPlayerController : PlayerController
     }
 
     public override void UpdatePosition(S_Move movePacket)
-    {/*
-        PosInfo = new PositionInfo()
-        {
-            PosX = movePacket.PosInfo.PosX,
-            PosY = movePacket.PosInfo.PosY,
-            PosZ = movePacket.PosInfo.PosZ,
-            MoveDir = movePacket.PosInfo.MoveDir,
-            State = State
-        };
-        transform.position = new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY, movePacket.PosInfo.PosZ);*/
+    {
+        /*
+            PosInfo = new PositionInfo()
+            {
+                PosX = movePacket.PosInfo.PosX,
+                PosY = movePacket.PosInfo.PosY,
+                PosZ = movePacket.PosInfo.PosZ,
+                MoveDir = movePacket.PosInfo.MoveDir,
+                State = State
+            };
+            transform.position = new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY, movePacket.PosInfo.PosZ);*/
     }
 }

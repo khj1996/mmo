@@ -87,6 +87,7 @@ public class BaseController : MonoBehaviour
             if (_positionInfo.Move.Equals(value))
                 return;
             _positionInfo.Move = value;
+            UpdateAnimation();
         }
     }
 
@@ -95,45 +96,36 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.LookDir;
         set
         {
-            if (_positionInfo.Move.Equals(value))
+            Debug.Log(value);
+            if (_positionInfo.LookDir.Equals(value))
                 return;
-            _positionInfo.Move = value;
+            _positionInfo.LookDir = value;
+            UpdateAnimation();
         }
     }
+
 
     protected MoveDirection CheckDirection(Vec2 direction)
     {
-        // 벡터의 방향을 결정할 임계값 (오차 허용 범위)
-        float threshold = 0.1f;
+        // 이동 벡터가 (0, 0)이면 아래 방향으로 취급
+        if (direction.X == 0 && direction.Y == 0)
+            return MoveDirection.Down;
 
-        // 각 방향에 대해 벡터를 확인하는 스위치문
-        if (Mathf.Abs(direction.X) > Mathf.Abs(direction.Y))
+        // 수평 방향을 우선으로 계산
+        if (Mathf.Abs(direction.X) > Mathf.Epsilon) // 수평 이동이 있는지 먼저 확인
         {
-            // 좌우 방향 확인 (x값이 더 클 때)
-            switch (direction.X)
-            {
-                case var x when x > threshold:
-                    return MoveDirection.Right;
-                case var x when x < -threshold:
-                    return MoveDirection.Left;
-            }
-        }
-        else
-        {
-            // 상하 방향 확인 (y값이 더 클 때)
-            switch (direction.Y)
-            {
-                case var y when y > threshold:
-                    return MoveDirection.Up;
-
-                    break;
-                case var y when y < -threshold:
-                    return MoveDirection.Down;
-            }
+            return direction.X > 0 ? MoveDirection.Right : MoveDirection.Left;
         }
 
-        return MoveDirection.None;
+        if (Mathf.Abs(direction.Y) > Mathf.Epsilon) // 수평 이동이 없을 경우에만 수직 확인
+        {
+            return direction.Y > 0 ? MoveDirection.Up : MoveDirection.Down;
+        }
+
+        // 기본적으로 (0, 0)이면 아래로
+        return MoveDirection.Down;
     }
+
 
     protected virtual void UpdateAnimation()
     {
@@ -231,6 +223,13 @@ public class BaseController : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
 
         transform.position = new Vector3(Pos.X, Pos.Y, 0);
+        _positionInfo = new PositionInfo()
+        {
+            State = CreatureState.Idle,
+            Move = new Vec2(),
+            Pos = new Vec2(),
+            LookDir = new Vec2(),
+        };
 
         UpdateAnimation();
     }

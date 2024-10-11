@@ -23,7 +23,8 @@ public class PlayerController : CreatureController
 
 
         var dir = CheckDirection(LookDir);
-        
+
+        Debug.Log(1);
         switch (State)
         {
             case CreatureState.Idle:
@@ -93,11 +94,6 @@ public class PlayerController : CreatureController
 
                 break;
         }
-    }
-
-    protected override void UpdateController()
-    {
-        base.UpdateController();
     }
 
     public override void UseSkill(int skillId)

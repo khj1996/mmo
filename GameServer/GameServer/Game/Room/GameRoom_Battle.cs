@@ -12,7 +12,7 @@ namespace GameServer.Game
     public partial class GameRoom : JobSerializer
     {
         /// <summary>
-        /// 위치 정보만 갱신해주고ㅓ실질적인 오브젝트의 이동은 으브젝트 함수 내에서 실행
+        /// 위치 정보만 갱신해주고 실질적인 오브젝트의 이동은 으브젝트 함수 내에서 실행
         /// </summary>
         /// <param name="player"></param>
         /// <param name="movePacket"></param>
@@ -22,9 +22,6 @@ namespace GameServer.Game
                 return;
 
             var movePosInfo = movePacket.PosInfo;
-            player.State = movePosInfo.State;
-            player.State = movePosInfo.State;
-            player.State = movePosInfo.State;
             player.State = movePosInfo.State;
         }
 
