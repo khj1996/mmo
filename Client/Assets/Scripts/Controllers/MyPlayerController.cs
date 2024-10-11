@@ -8,11 +8,15 @@ using static Define;
 
 public class MyPlayerController : PlayerController
 {
+    private bool statusChanged = false;
+
     private bool _moveKeyPressed = false;
 
     private float currTime = 0.0f;
 
     private Rigidbody2D _rigid;
+
+    Coroutine _coSkillCooltime;
 
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
@@ -54,11 +58,10 @@ public class MyPlayerController : PlayerController
                 {
                     SkillId = 2
                 },
-                MoveDir = new Dir()
+                MoveDir = new Vec2()
                 {
                     X = moveDir.x,
                     Y = moveDir.y,
-                    Z = moveDir.z,
                 }
             };
             Managers.Network.Send(skill);
@@ -81,8 +84,6 @@ public class MyPlayerController : PlayerController
     }
 
 
-    Coroutine _coSkillCooltime;
-
     IEnumerator CoInputCooltime(float time)
     {
         yield return new WaitForSeconds(time);
@@ -93,6 +94,7 @@ public class MyPlayerController : PlayerController
     {
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
+
     void GetUIKeyInput()
     {
         if (Input.GetKeyDown(KeyCode.I))
@@ -149,22 +151,8 @@ public class MyPlayerController : PlayerController
             return;
         }
 
-        if (Input.GetAxisRaw("Vertical") > 0)
-        {
-            MoveDir = MoveDir.Up;
-        }
-        else if (Input.GetAxisRaw("Vertical") < 0)
-        {
-            MoveDir = MoveDir.Down;
-        }
-        else if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            MoveDir = MoveDir.Left;
-        }
-        else if (Input.GetAxisRaw("Horizontal") > 0)
-        {
-            MoveDir = MoveDir.Right;
-        }
+        Move.X = Input.GetAxisRaw("Horizontal");
+        Move.Y = Input.GetAxisRaw("Vertical");
     }
 
     protected override void UpdateIdle()
@@ -207,11 +195,13 @@ public class MyPlayerController : PlayerController
             {
                 PosInfo = new PositionInfo()
                 {
-                    PosX = transform.position.x,
-                    PosY = transform.position.y,
-                    PosZ = transform.position.z,
+                    Pos = new Vec2()
+                    {
+                        X = transform.position.x,
+                        Y = transform.position.y
+                    },
                     State = State,
-                    MoveDir = MoveDir
+                    Move = Move,
                 }
             };
             Managers.Network.Send(movePacket);
@@ -243,7 +233,7 @@ public class MyPlayerController : PlayerController
     }
 
     public override void UpdatePosition(S_Move movePacket)
-    {
+    {/*
         PosInfo = new PositionInfo()
         {
             PosX = movePacket.PosInfo.PosX,
@@ -252,6 +242,6 @@ public class MyPlayerController : PlayerController
             MoveDir = movePacket.PosInfo.MoveDir,
             State = State
         };
-        transform.position = new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY, movePacket.PosInfo.PosZ);
+        transform.position = new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY, movePacket.PosInfo.PosZ);*/
     }
 }

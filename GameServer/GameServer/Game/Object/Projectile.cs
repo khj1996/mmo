@@ -7,7 +7,7 @@ namespace GameServer.Game
     {
         public Data.Skill Data { get; set; }
 
-        public Vector3 moveDir { get; set; }
+        public Vector2Float moveDir { get; set; }
 
         public Projectile()
         {

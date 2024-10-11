@@ -54,8 +54,26 @@ namespace GameServer.Game
             set => Info.PosInfo.State = value;
         }
 
+        public Vec2 Pos
+        {
+            get => Info.PosInfo.Pos;
+            set => Info.PosInfo.Pos = value;
+        }
+
+        public Vec2 Move
+        {
+            get => Info.PosInfo.Move;
+            set => Info.PosInfo.Move = value;
+        }
+
+        public Vec2 LookDir
+        {
+            get => Info.PosInfo.LookDir;
+            set => Info.PosInfo.LookDir = value;
+        }
+
         //위치
-        public Vector2Float CellPos => new(Info.PosInfo.PosX, Info.PosInfo.PosY);
+        public Vector2Float CellPos => new(Info.PosInfo.Pos.X, Info.PosInfo.Pos.Y);
 
 
         //생성자
@@ -112,7 +130,7 @@ namespace GameServer.Game
 
             Info.StatInfo.Hp = Info.StatInfo.MaxHp;
             Info.PosInfo.State = CreatureState.Idle;
-            Info.PosInfo.MoveDir = MoveDir.Down;
+            Info.PosInfo.LookDir = new Vec2();
 
             room.EnterGame(this);
         }

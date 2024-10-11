@@ -11,36 +11,21 @@ namespace GameServer.Game
 {
     public partial class GameRoom : JobSerializer
     {
+        /// <summary>
+        /// 위치 정보만 갱신해주고ㅓ실질적인 오브젝트의 이동은 으브젝트 함수 내에서 실행
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="movePacket"></param>
         public void HandleMove(Player? player, C_Move movePacket)
         {
             if (player == null)
                 return;
 
-            // TODO : 검증
             var movePosInfo = movePacket.PosInfo;
             player.State = movePosInfo.State;
-
-            var result = Map.ApplyMove(player, new Vector2Float()
-            {
-                x = movePacket.PosInfo.PosX,
-                y = movePacket.PosInfo.PosY,
-            });
-
-            //이동 불가능지역 이동시 이전 위치 패킷 전송
-            if (!result)
-            {
-                return;
-            }
-
-            // 다른 플레이어한테도 알려준다
-            var resMovePacket = new S_Move
-            {
-                ObjectId = player.Info.ObjectId,
-                PosInfo = movePacket.PosInfo
-            };
-
-
-            Broadcast(player.CellPos, resMovePacket, player.PlayerDbId);
+            player.State = movePosInfo.State;
+            player.State = movePosInfo.State;
+            player.State = movePosInfo.State;
         }
 
         public void HandleSkill(Player? player, C_Skill skillPacket)
@@ -74,7 +59,7 @@ namespace GameServer.Game
                 {
                     var skillPos = player.GetFrontPos();
                     var targets = player.Room?.FindSquarePlayer(skillPos, 0.5f);
-                    
+
 
                     if (targets != null)
                     {
@@ -96,11 +81,10 @@ namespace GameServer.Game
                     arrow.Owner = player;
                     arrow.Data = skillData;
                     arrow.Info.PosInfo.State = CreatureState.Moving;
-                    arrow.Info.PosInfo.MoveDir = player.Info.PosInfo.MoveDir;
-                    arrow.Info.PosInfo.PosX = player.Info.PosInfo.PosX;
-                    arrow.Info.PosInfo.PosY = player.Info.PosInfo.PosY;
+                    arrow.Move = player.Info.PosInfo.Move;
+                    arrow.Pos = player.Info.PosInfo.Pos;
                     arrow.Info.PosInfo.LookDir = skillPacket.MoveDir;
-                    arrow.moveDir = new Vector3(skillPacket.MoveDir.X, skillPacket.MoveDir.Y, skillPacket.MoveDir.Z);
+                    arrow.Move = skillPacket.MoveDir;
                     arrow.Speed = skillData.projectile.speed;
                     Push(EnterGame, arrow);
                 }

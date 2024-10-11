@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static Define;
 
 public class PlayerController : CreatureController
@@ -21,24 +22,26 @@ public class PlayerController : CreatureController
             return;
 
 
+        var dir = CheckDirection(LookDir);
+        
         switch (State)
         {
             case CreatureState.Idle:
-                switch (MoveDir)
+                switch (dir)
                 {
-                    case MoveDir.Up:
+                    case MoveDirection.Up:
                         _animator.Play("IDLE_BACK");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Down:
+                    case MoveDirection.Down:
                         _animator.Play("IDLE_FRONT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Right:
+                    case MoveDirection.Right:
                         _animator.Play("IDLE_RIGHT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Left:
+                    case MoveDirection.Left:
                         _animator.Play("IDLE_RIGHT");
                         _sprite.flipX = true;
                         break;
@@ -46,21 +49,21 @@ public class PlayerController : CreatureController
 
                 break;
             case CreatureState.Moving:
-                switch (MoveDir)
+                switch (dir)
                 {
-                    case MoveDir.Up:
+                    case MoveDirection.Up:
                         _animator.Play("WALK_BACK");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Down:
+                    case MoveDirection.Down:
                         _animator.Play("WALK_FRONT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Right:
+                    case MoveDirection.Right:
                         _animator.Play("WALK_RIGHT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Left:
+                    case MoveDirection.Left:
                         _animator.Play("WALK_RIGHT");
                         _sprite.flipX = true;
                         break;
@@ -68,21 +71,21 @@ public class PlayerController : CreatureController
 
                 break;
             case CreatureState.Skill:
-                switch (MoveDir)
+                switch (dir)
                 {
-                    case MoveDir.Up:
+                    case MoveDirection.Up:
                         _animator.Play(_rangedSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Down:
+                    case MoveDirection.Down:
                         _animator.Play(_rangedSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Right:
+                    case MoveDirection.Right:
                         _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Left:
+                    case MoveDirection.Left:
                         _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
                         _sprite.flipX = true;
                         break;

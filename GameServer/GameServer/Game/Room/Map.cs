@@ -173,9 +173,9 @@ namespace GameServer.Game
                 return false;
 
             PositionInfo posInfo = gameObject.Info.PosInfo;
-            if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
+            if (posInfo.Pos.X < MinX || posInfo.Pos.X > MaxX)
                 return false;
-            if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
+            if (posInfo.Pos.Y < MinY || posInfo.Pos.Y > MaxY)
                 return false;
 
             // Zone
@@ -239,8 +239,8 @@ namespace GameServer.Game
             }
 
             // 실제 좌표 이동
-            posInfo.PosX = dest.x;
-            posInfo.PosY = dest.y;
+            gameObject.Pos.X = dest.x;
+            gameObject.Pos.Y = dest.y;
             return true;
         }
 

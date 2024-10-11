@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static Define;
 
 public class BaseController : MonoBehaviour
@@ -56,7 +57,7 @@ public class BaseController : MonoBehaviour
 
     public CreatureState State
     {
-        get { return _positionInfo.State; }
+        get => _positionInfo.State;
         set
         {
             if (_positionInfo.State == value)
@@ -67,43 +68,98 @@ public class BaseController : MonoBehaviour
         }
     }
 
-    public MoveDir MoveDir
+    public Vec2 Pos
     {
-        get { return _positionInfo.MoveDir; }
+        get => _positionInfo.Pos;
         set
         {
-            if (_positionInfo.MoveDir == value)
+            if (_positionInfo.Pos.Equals(value))
                 return;
-
-            _positionInfo.MoveDir = value;
-            UpdateAnimation();
+            _positionInfo.Pos = value;
         }
     }
 
+    public Vec2 Move
+    {
+        get => _positionInfo.Move;
+        set
+        {
+            if (_positionInfo.Move.Equals(value))
+                return;
+            _positionInfo.Move = value;
+        }
+    }
+
+    public Vec2 LookDir
+    {
+        get => _positionInfo.LookDir;
+        set
+        {
+            if (_positionInfo.Move.Equals(value))
+                return;
+            _positionInfo.Move = value;
+        }
+    }
+
+    protected MoveDirection CheckDirection(Vec2 direction)
+    {
+        // 벡터의 방향을 결정할 임계값 (오차 허용 범위)
+        float threshold = 0.1f;
+
+        // 각 방향에 대해 벡터를 확인하는 스위치문
+        if (Mathf.Abs(direction.X) > Mathf.Abs(direction.Y))
+        {
+            // 좌우 방향 확인 (x값이 더 클 때)
+            switch (direction.X)
+            {
+                case var x when x > threshold:
+                    return MoveDirection.Right;
+                case var x when x < -threshold:
+                    return MoveDirection.Left;
+            }
+        }
+        else
+        {
+            // 상하 방향 확인 (y값이 더 클 때)
+            switch (direction.Y)
+            {
+                case var y when y > threshold:
+                    return MoveDirection.Up;
+
+                    break;
+                case var y when y < -threshold:
+                    return MoveDirection.Down;
+            }
+        }
+
+        return MoveDirection.None;
+    }
 
     protected virtual void UpdateAnimation()
     {
         if (!_animator || !_sprite)
             return;
 
+        var dir = CheckDirection(LookDir);
+
         switch (State)
         {
             case CreatureState.Idle:
-                switch (MoveDir)
+                switch (dir)
                 {
-                    case MoveDir.Up:
+                    case MoveDirection.Up:
                         _animator.Play("IDLE_BACK");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Down:
+                    case MoveDirection.Down:
                         _animator.Play("IDLE_FRONT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Right:
+                    case MoveDirection.Right:
                         _animator.Play("IDLE_RIGHT");
                         _sprite.flipX = true;
                         break;
-                    case MoveDir.Left:
+                    case MoveDirection.Left:
                         _animator.Play("IDLE_RIGHT");
                         _sprite.flipX = false;
                         break;
@@ -111,21 +167,21 @@ public class BaseController : MonoBehaviour
 
                 break;
             case CreatureState.Moving:
-                switch (MoveDir)
+                switch (dir)
                 {
-                    case MoveDir.Up:
+                    case MoveDirection.Up:
                         _animator.Play("WALK_BACK");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Down:
+                    case MoveDirection.Down:
                         _animator.Play("WALK_FRONT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Right:
+                    case MoveDirection.Right:
                         _animator.Play("WALK_RIGHT");
                         _sprite.flipX = true;
                         break;
-                    case MoveDir.Left:
+                    case MoveDirection.Left:
                         _animator.Play("WALK_RIGHT");
                         _sprite.flipX = false;
                         break;
@@ -133,21 +189,21 @@ public class BaseController : MonoBehaviour
 
                 break;
             case CreatureState.Skill:
-                switch (MoveDir)
+                switch (dir)
                 {
-                    case MoveDir.Up:
+                    case MoveDirection.Up:
                         _animator.Play("ATTACK_BACK");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Down:
+                    case MoveDirection.Down:
                         _animator.Play("ATTACK_FRONT");
                         _sprite.flipX = false;
                         break;
-                    case MoveDir.Right:
+                    case MoveDirection.Right:
                         _animator.Play("ATTACK_RIGHT");
                         _sprite.flipX = true;
                         break;
-                    case MoveDir.Left:
+                    case MoveDirection.Left:
                         _animator.Play("ATTACK_RIGHT");
                         _sprite.flipX = false;
                         break;
@@ -173,16 +229,8 @@ public class BaseController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
-        transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
 
-        UpdateAnimation();
-    }
-
-    protected virtual void Init(Vector3 dir)
-    {
-        _animator = GetComponent<Animator>();
-        _sprite = GetComponent<SpriteRenderer>();
-        transform.position = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
+        transform.position = new Vector3(Pos.X, Pos.Y, 0);
 
         UpdateAnimation();
     }
@@ -208,7 +256,7 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateIdle()
     {
-        Vector3 destPos = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
+        Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
         Vector3 moveDir = destPos - transform.position;
 
         // 도착 여부 체크
@@ -223,7 +271,7 @@ public class BaseController : MonoBehaviour
     // 스르륵 이동하는 것을 처리
     protected virtual void UpdateMoving()
     {
-        Vector3 destPos = new Vector3(PosInfo.PosX, PosInfo.PosY, PosInfo.PosZ);
+        Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
         Vector3 moveDir = destPos - transform.position;
 
         // 도착 여부 체크
@@ -254,13 +302,6 @@ public class BaseController : MonoBehaviour
 
     public virtual void UpdatePosition(S_Move movePacket)
     {
-        PosInfo = new PositionInfo()
-        {
-            PosX = movePacket.PosInfo.PosX,
-            PosY = movePacket.PosInfo.PosY,
-            PosZ = movePacket.PosInfo.PosZ,
-            MoveDir = movePacket.PosInfo.MoveDir,
-            State = movePacket.PosInfo.State
-        };
+        PosInfo.MergeFrom(movePacket.PosInfo);
     }
 }

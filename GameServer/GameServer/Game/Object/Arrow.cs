@@ -37,8 +37,8 @@ namespace GameServer.Game
 
             var tickSpeed = Speed * tick / 1000;
 
-            var destPos = new Vector2Float(Info.PosInfo.PosX + moveDir.X * tickSpeed,
-                Info.PosInfo.PosY + moveDir.Y * tickSpeed);
+            var destPos = new Vector2Float(Pos.X + Move.X * tickSpeed,
+                Pos.Y + Move.Y * tickSpeed);
 
             if (!Room.Map.ApplyMove(this, destPos))
             {

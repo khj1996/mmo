@@ -29,6 +29,7 @@ namespace GameServer.Game
             get { return ArmorDefence; }
         }
 
+
         public Player()
         {
             ObjectType = GameObjectType.Player;
@@ -114,21 +115,19 @@ namespace GameServer.Game
         public Vector2Float GetFrontPos()
         {
             var cellPos = CellPos;
-
-            switch (Info.PosInfo.MoveDir)
+            if (Math.Abs(LookDir.X) >= Math.Abs(LookDir.Y))
             {
-                case MoveDir.Up:
-                    cellPos += Vector2Float.Up;
-                    break;
-                case MoveDir.Down:
-                    cellPos += Vector2Float.Down;
-                    break;
-                case MoveDir.Left:
-                    cellPos += Vector2Float.Left;
-                    break;
-                case MoveDir.Right:
-                    cellPos += Vector2Float.Right;
-                    break;
+                if (LookDir.X > 0)
+                    return cellPos + Vector2Float.Right;
+                else
+                    return cellPos + Vector2Float.Left;
+            }
+            else
+            {
+                if (LookDir.Y > 0)
+                    return cellPos + Vector2Float.Up;
+                else
+                    return cellPos + Vector2Float.Down;
             }
 
             return cellPos;

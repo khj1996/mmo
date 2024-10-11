@@ -65,9 +65,11 @@ namespace GameServer
                         },
                         PosInfo = new PositionInfo()
                         {
-                            PosX = playerDb.PosX,
-                            PosY = playerDb.PosY,
-                            PosZ = 0
+                            Pos = new Vec2()
+                            {
+                                X = playerDb.PosX,
+                                Y = playerDb.PosY,
+                            }
                         }
                     };
 
@@ -103,9 +105,8 @@ namespace GameServer
                 MyPlayer.PlayerDbId = playerInfo.PlayerDbId;
                 MyPlayer.Info.Name = playerInfo.Name;
                 MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-                MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
-                MyPlayer.Info.PosInfo.PosX = playerInfo.PosInfo.PosX;
-                MyPlayer.Info.PosInfo.PosY = playerInfo.PosInfo.PosY;
+                MyPlayer.Move = playerInfo.PosInfo.Move;
+                MyPlayer.Pos = playerInfo.PosInfo.Pos;
                 MyPlayer.Info.StatInfo.MergeFrom(playerInfo.StatInfo);
                 MyPlayer.Session = this;
 
@@ -121,7 +122,7 @@ namespace GameServer
                     foreach (var itemDb in items)
                     {
                         var item = Item.MakeItem(itemDb);
-                        
+
                         if (item != null)
                         {
                             MyPlayer.Inven.Add(item);
@@ -208,9 +209,11 @@ namespace GameServer
                         },
                         PosInfo = new PositionInfo()
                         {
-                            PosX = 0,
-                            PosY = 0,
-                            PosZ = 0
+                            Pos = new Vec2()
+                            {
+                                X = 0,
+                                Y = 0,
+                            }
                         }
                     };
 

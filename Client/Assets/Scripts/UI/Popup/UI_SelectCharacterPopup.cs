@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Google.Protobuf.Collections;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,8 +35,8 @@ public class UI_SelectCharacterPopup : UI_Popup
                 PlayerName = playerInfos[i].Name,
                 Lv = playerInfos[i].StatInfo.Level,
                 CurMap = playerInfos[i].PosInfo.Map,
-                PosX = playerInfos[i].PosInfo.PosX,
-                PosY = playerInfos[i].PosInfo.PosY,
+                PosX = playerInfos[i].PosInfo.Pos.X,
+                PosY = playerInfos[i].PosInfo.Pos.Y,
             };
 
             Items.Add(sc);
@@ -60,15 +61,15 @@ public class UI_SelectCharacterPopup : UI_Popup
         RefreshUI();
     }
 
-    public void AddCharacter(Google.Protobuf.Protocol.LobbyPlayerInfo playerInfos)
+    public void AddCharacter(LobbyPlayerInfo playerInfos)
     {
         Items.Last().Info = new CharacterInfo()
         {
             PlayerName = playerInfos.Name,
             Lv = playerInfos.StatInfo.Level,
             CurMap = playerInfos.PosInfo.Map,
-            PosX = playerInfos.PosInfo.PosX,
-            PosY = playerInfos.PosInfo.PosY,
+            PosX = playerInfos.PosInfo.Pos.X,
+            PosY = playerInfos.PosInfo.Pos.Y,
         };
 
         if (Items.Count < 8)

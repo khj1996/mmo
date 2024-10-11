@@ -85,10 +85,8 @@ namespace GameServer.Game
 
         public void SetRandomPos(GameObject gameObject)
         {
-            //gameObject.Info.PosInfo.PosX = _rand.Next(Map.MinX, Map.MaxX + 1);
-            //gameObject.Info.PosInfo.PosY = _rand.Next(Map.MinY, Map.MaxY + 1);
-            gameObject.Info.PosInfo.PosX = 5;
-            gameObject.Info.PosInfo.PosY = 5;
+            gameObject.Pos.X = 5;
+            gameObject.Pos.Y = 5;
         }
 
         public void EnterGame(GameObject gameObject)
@@ -97,8 +95,8 @@ namespace GameServer.Game
                 return;
 
             Vector2Float spawnPos;
-            spawnPos.x = gameObject.Info.PosInfo.PosX;
-            spawnPos.y = gameObject.Info.PosInfo.PosY;
+            spawnPos.x = gameObject.Pos.X;
+            spawnPos.y = gameObject.Pos.Y;
 
 
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
@@ -230,10 +228,10 @@ namespace GameServer.Game
             float minX = point.x - radius;
 
             var targetList = _players.Values.Where(x =>
-                x.Info.PosInfo.PosY >= minY &&
-                x.Info.PosInfo.PosY <= maxY &&
-                x.Info.PosInfo.PosX >= minX &&
-                x.Info.PosInfo.PosX <= maxX).ToList();
+                x.Pos.Y >= minY &&
+                x.Pos.Y <= maxY &&
+                x.Pos.X >= minX &&
+                x.Pos.X <= maxX).ToList();
 
             return targetList;
         }
