@@ -8,8 +8,6 @@ using static Define;
 
 public class MyPlayerController : PlayerController
 {
-    private bool statusChanged = false;
-
     private bool _moveKeyPressed = false;
 
     private float currTime = 0.0f;
@@ -155,7 +153,11 @@ public class MyPlayerController : PlayerController
         Move.Y = Input.GetAxisRaw("Vertical");
 
 
-        if (Move.X == 0 && Move.Y == 0) return;
+        if (Move.X == 0 && Move.Y == 0)
+        {
+            State = CreatureState.Idle;
+            return;
+        }
 
         LookDir = new Vec2()
         {
@@ -175,32 +177,34 @@ public class MyPlayerController : PlayerController
         }
     }
 
+    public float interpolationSpeed = 5.0f; // 보간 속도
+
     protected override void UpdateMoving()
     {
-        if (State == CreatureState.Skill)
+        Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
+        Vector3 moveDir = destPos - transform.position;
+
+        // 도착 여부 체크
+        float dist = moveDir.magnitude;
+
+        if (dist < Speed * Time.deltaTime)
         {
-            return;
+            transform.position = destPos;
         }
-
-        _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-        if (!_moveKeyPressed)
+        else
         {
-            State = CreatureState.Idle;
-            return;
+            _rigid.DOMove(destPos, interpolationSpeed * Time.deltaTime);
         }
-
-        var moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
-
-        _rigid.DOMove(transform.position + moveDir.normalized * (Time.deltaTime * Speed), Time.deltaTime);
     }
 
     protected override void CheckUpdatedFlag()
     {
         currTime += Time.deltaTime;
 
-        //초당 5번 위치 데이터 갱신
         if (statusChanged || currTime >= 2.0f)
         {
+            var moveDir = new Vector2(Move.X, Move.Y).normalized;
+
             C_Move movePacket = new C_Move
             {
                 PosInfo = new PositionInfo()
@@ -211,7 +215,11 @@ public class MyPlayerController : PlayerController
                         Y = transform.position.y
                     },
                     State = State,
-                    Move = Move,
+                    Move = new Vec2()
+                    {
+                        X = moveDir.x,
+                        Y = moveDir.y
+                    },
                 }
             };
             Managers.Network.Send(movePacket);
@@ -244,15 +252,6 @@ public class MyPlayerController : PlayerController
 
     public override void UpdatePosition(S_Move movePacket)
     {
-        /*
-            PosInfo = new PositionInfo()
-            {
-                PosX = movePacket.PosInfo.PosX,
-                PosY = movePacket.PosInfo.PosY,
-                PosZ = movePacket.PosInfo.PosZ,
-                MoveDir = movePacket.PosInfo.MoveDir,
-                State = State
-            };
-            transform.position = new Vector3(movePacket.PosInfo.PosX, movePacket.PosInfo.PosY, movePacket.PosInfo.PosZ);*/
+        Pos = movePacket.PosInfo.Pos;
     }
 }

@@ -218,7 +218,6 @@ message PositionInfo {
   Vec2 lookDir = 2;
   Vec2 pos = 3;
   Vec2 move = 4;
-  int32 Map = 5;
 }
 
 message StatInfo {

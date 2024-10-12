@@ -21,8 +21,16 @@ namespace GameServer.Game
             if (player == null)
                 return;
 
+            player.Pos = movePacket.PosInfo.Pos;
+            player.Move = movePacket.PosInfo.Move;
+            player.LookDir = movePacket.PosInfo.LookDir;
+            player.State = movePacket.PosInfo.State;
+
             var movePosInfo = movePacket.PosInfo;
             player.State = movePosInfo.State;
+
+
+            Broadcast(player.CellPos, movePacket, player.PlayerDbId);
         }
 
         public void HandleSkill(Player? player, C_Skill skillPacket)

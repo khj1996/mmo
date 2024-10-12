@@ -19,7 +19,7 @@ namespace GameServer.Game
                 return;
 
             //이동 틱
-            int tick = (int)(1000 / GameLogic.Instance.updateFrame);
+            int tick = (int)Room.tickInterval;
             //다음 이동
             Room.PushAfter(tick, Update);
 
@@ -27,7 +27,7 @@ namespace GameServer.Game
 
             if (target != null && target.Id != Owner.Id)
             {
-                target.OnDamaged(this, Data.damage + Owner.TotalAttack);
+                target.OnDamaged(Owner, Data.damage + Owner.TotalAttack);
 
 
                 // 소멸

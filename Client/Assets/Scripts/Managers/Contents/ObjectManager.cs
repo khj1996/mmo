@@ -33,7 +33,13 @@ public class ObjectManager
 
                 MyPlayer = go.GetComponent<MyPlayerController>();
                 MyPlayer.Id = info.ObjectId;
-                MyPlayer.PosInfo = info.PosInfo;
+                MyPlayer.PosInfo = new PositionInfo()
+                {
+                    State = info.PosInfo.State,
+                    Pos = info.PosInfo.Pos,
+                    Move = info.PosInfo.Pos,
+                    LookDir = new Vec2(),
+                };
                 MyPlayer.Stat.MergeFrom(info.StatInfo);
             }
             else

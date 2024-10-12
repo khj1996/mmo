@@ -92,6 +92,27 @@ namespace GameServer.Game
         }
 
 
+        public void UpdatePosition()
+        {
+            // 속도 보정 후 프레임당 이동 거리 계산
+            float moveX = Speed * Move.X * Room.tickInterval / 1000;
+            float moveY = Speed * Move.Y * Room.tickInterval / 1000;
+            
+
+            // 새로운 위치 계산
+            Pos.X += moveX;
+            Pos.Y += moveY;
+        }
+
+        public virtual void UpdatePositionData(C_Move movePacket)
+        {
+            //위치 오류 확인 필요
+            Move = movePacket.PosInfo.Move;
+            LookDir = movePacket.PosInfo.LookDir;
+            State = movePacket.PosInfo.State;
+        }
+
+
         //피격
         public virtual void OnDamaged(GameObject attacker, int damage)
         {

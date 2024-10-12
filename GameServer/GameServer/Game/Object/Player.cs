@@ -10,6 +10,9 @@ namespace GameServer.Game
 {
     public class Player : GameObject
     {
+        IJob _job;
+
+
         public int PlayerDbId { get; set; }
         public ClientSession Session { get; set; }
         public VisionCube Vision { get; private set; }
@@ -32,8 +35,62 @@ namespace GameServer.Game
 
         public Player()
         {
+            State = CreatureState.Idle;
             ObjectType = GameObjectType.Player;
             Vision = new VisionCube(this);
+        }
+
+
+        public override void Update()
+        {
+            switch (State)
+            {
+                case CreatureState.Idle:
+                    UpdateIdle();
+                    break;
+                case CreatureState.Moving:
+                    UpdateMoving();
+                    break;
+                case CreatureState.Skill:
+                    //UpdateSkill();
+                    break;
+                case CreatureState.Dead:
+                    UpdateDead();
+                    break;
+            }
+
+            // 5프레임 (0.2초마다 한번씩 Update)
+            if (Room != null)
+                _job = Room.PushAfter(Room.tickInterval, Update);
+        }
+
+        protected virtual void UpdateIdle()
+        {
+            Console.WriteLine(Pos.X + "      " + Pos.Y);
+        }
+
+        protected virtual void UpdateMoving()
+        {
+            Console.WriteLine(Move.X + "      " + Move.Y);
+            UpdatePosition();
+
+            BroadcastMove();
+        }
+
+
+        void BroadcastMove()
+        {
+            // 다른 플레이어한테도 알려준다
+            S_Move resMovePacket = new S_Move();
+            resMovePacket.ObjectId = Info.ObjectId;
+            resMovePacket.PosInfo = Info.PosInfo;
+
+            Room.Broadcast(CellPos, resMovePacket);
+        }
+
+
+        protected virtual void UpdateDead()
+        {
         }
 
         public void OnLeaveGame()
@@ -63,19 +120,19 @@ namespace GameServer.Game
             // 착용 요청이라면, 겹치는 부위 해제
             if (equipPacket.Equipped)
             {
-                Item unequipItem = null;
+                Item? unequipItem = null;
 
-                if (item.ItemType == ItemType.Weapon)
+                switch (item.ItemType)
                 {
-                    unequipItem = Inven.Find(
-                        i => i.Equipped && i.ItemType == ItemType.Weapon);
-                }
-                else if (item.ItemType == ItemType.Armor)
-                {
-                    ArmorType armorType = ((Armor)item).ArmorType;
-                    unequipItem = Inven.Find(
-                        i => i.Equipped && i.ItemType == ItemType.Armor
-                                        && ((Armor)i).ArmorType == armorType);
+                    case ItemType.Weapon:
+                        unequipItem = Inven.Find(x => x.Equipped && x.ItemType == ItemType.Weapon);
+                        break;
+                    case ItemType.Armor:
+                    {
+                        var armorType = ((Armor)item).ArmorType;
+                        unequipItem = Inven.Find(x => x.Equipped && x.ItemType == ItemType.Armor && ((Armor)x).ArmorType == armorType);
+                        break;
+                    }
                 }
 
                 if (unequipItem != null)

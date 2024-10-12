@@ -15,6 +15,8 @@ namespace GameServer.Game
 
         //방 id
         public int RoomId { get; set; }
+        public float tickRate = 20f; // 20틱 per second (50ms 간격)
+        public int tickInterval => (int)(1000 / tickRate);
 
 
         //방 객체 관리를 위한 딕셔너리
@@ -117,6 +119,7 @@ namespace GameServer.Game
                     S_EnterGame enterPacket = new S_EnterGame();
 
                     enterPacket.Player = player.Info;
+                    enterPacket.Player.PosInfo.Move = enterPacket.Player.PosInfo.Pos;
                     player.Session.Send(enterPacket);
                     player.Vision.Update();
                     player.Update();

@@ -9,6 +9,10 @@ using static Define;
 
 public class BaseController : MonoBehaviour
 {
+    protected Animator _animator;
+    protected SpriteRenderer _sprite;
+
+    protected bool statusChanged = false;
     public int Id { get; set; }
 
     StatInfo _stat = new StatInfo();
@@ -52,8 +56,6 @@ public class BaseController : MonoBehaviour
         }
     }
 
-    protected Animator _animator;
-    protected SpriteRenderer _sprite;
 
     public CreatureState State
     {
@@ -64,6 +66,7 @@ public class BaseController : MonoBehaviour
                 return;
 
             _positionInfo.State = value;
+            statusChanged = true;
             UpdateAnimation();
         }
     }
@@ -86,6 +89,7 @@ public class BaseController : MonoBehaviour
         {
             if (_positionInfo.Move.Equals(value))
                 return;
+            statusChanged = true;
             _positionInfo.Move = value;
             UpdateAnimation();
         }
@@ -96,9 +100,9 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.LookDir;
         set
         {
-            Debug.Log(value);
             if (_positionInfo.LookDir.Equals(value))
                 return;
+            statusChanged = true;
             _positionInfo.LookDir = value;
             UpdateAnimation();
         }
@@ -108,7 +112,7 @@ public class BaseController : MonoBehaviour
     protected MoveDirection CheckDirection(Vec2 direction)
     {
         // 이동 벡터가 (0, 0)이면 아래 방향으로 취급
-        if (direction.X == 0 && direction.Y == 0)
+        if (direction == null || (direction.X == 0 && direction.Y == 0))
             return MoveDirection.Down;
 
         // 수평 방향을 우선으로 계산
@@ -223,13 +227,6 @@ public class BaseController : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
 
         transform.position = new Vector3(Pos.X, Pos.Y, 0);
-        _positionInfo = new PositionInfo()
-        {
-            State = CreatureState.Idle,
-            Move = new Vec2(),
-            Pos = new Vec2(),
-            LookDir = new Vec2(),
-        };
 
         UpdateAnimation();
     }
