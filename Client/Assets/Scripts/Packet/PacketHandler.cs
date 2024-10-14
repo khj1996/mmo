@@ -10,6 +10,7 @@ class PacketHandler
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
         var enterGamePacket = packet as S_EnterGame;
+        
         Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
     }
 

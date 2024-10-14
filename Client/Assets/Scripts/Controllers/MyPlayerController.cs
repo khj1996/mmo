@@ -12,18 +12,21 @@ public class MyPlayerController : PlayerController
 
     private float currTime = 0.0f;
 
-    private Rigidbody2D _rigid;
+    private Camera _camera;
+
 
     Coroutine _coSkillCooltime;
 
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
+    
+    
 
     protected override void Init()
     {
-        _rigid = GetComponent<Rigidbody2D>();
         base.Init();
         RefreshAdditionalStat();
+        _camera = Camera.main;
     }
 
     protected override void UpdateController()
@@ -90,7 +93,10 @@ public class MyPlayerController : PlayerController
 
     void LateUpdate()
     {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+        if (Camera.main != null)
+        {
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+        }
     }
 
     void GetUIKeyInput()
@@ -193,7 +199,7 @@ public class MyPlayerController : PlayerController
         }
         else
         {
-            _rigid.DOMove(destPos, interpolationSpeed * Time.deltaTime);
+            transform.DOMove(destPos, interpolationSpeed * Time.deltaTime);
         }
     }
 

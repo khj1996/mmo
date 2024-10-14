@@ -17,7 +17,7 @@ public class MapEditor
     [MenuItem("Tools/GenerateMap %#g")]
     private static void GenerateMap()
     {
-        GenerateByPath("Assets/Resources/Map");
+        GenerateByPath("Assets/Resources_moved/Map");
         GenerateByPath("../Common/MapData");
     }
 

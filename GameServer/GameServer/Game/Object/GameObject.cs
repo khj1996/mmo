@@ -94,14 +94,11 @@ namespace GameServer.Game
 
         public void UpdatePosition()
         {
-            // 속도 보정 후 프레임당 이동 거리 계산
-            float moveX = Speed * Move.X * Room.tickInterval / 1000;
-            float moveY = Speed * Move.Y * Room.tickInterval / 1000;
-            
+            if (Room == null) return;
 
-            // 새로운 위치 계산
-            Pos.X += moveX;
-            Pos.Y += moveY;
+            var speedScale = Speed * Room.SpeedScale;
+
+            Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
         }
 
         public virtual void UpdatePositionData(C_Move movePacket)

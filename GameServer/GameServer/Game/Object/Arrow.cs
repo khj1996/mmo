@@ -19,7 +19,7 @@ namespace GameServer.Game
                 return;
 
             //이동 틱
-            int tick = (int)Room.tickInterval;
+            int tick = (int)Room.TickInterval;
             //다음 이동
             Room.PushAfter(tick, Update);
 

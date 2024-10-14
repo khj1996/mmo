@@ -15,8 +15,9 @@ namespace GameServer.Game
 
         //방 id
         public int RoomId { get; set; }
-        public float tickRate = 20f; // 20틱 per second (50ms 간격)
-        public int tickInterval => (int)(1000 / tickRate);
+        public readonly float TickRate = 20f; // 20틱 per second (50ms 간격)
+        public int TickInterval => (int)(1000 / TickRate);
+        public float SpeedScale => TickInterval / 900f;
 
 
         //방 객체 관리를 위한 딕셔너리

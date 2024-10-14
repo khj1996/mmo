@@ -186,19 +186,48 @@ namespace GameServer.Game
         }
 
         //이동 적용
-        public bool ApplyMove(GameObject gameObject, Vector2Float dest)
+        public bool ApplyMove(GameObject gameObject, Vector2Float dest, Vec2? moveDirection = null)
         {
             if (gameObject.Room == null)
                 return false;
             if (gameObject.Room.Map != this)
                 return false;
 
-            PositionInfo posInfo = gameObject.Info.PosInfo;
-            //TODO : 충돌체크
-            
-            if (CanGo(dest, gameObject.CellPos) == false)
-            {
+            Vector2Float currentPos = gameObject.CellPos;
+
+
+            //타일맵 크기
+            if (currentPos.x < MinX || currentPos.x > MaxX)
                 return false;
+            if (currentPos.y < MinY || currentPos.y > MaxY)
+                return false;
+
+
+            //이동하려는 타일맵의 좌표
+            var tileX = (int)(dest.x - MinX);
+            var tileY = (int)(MaxY - dest.y);
+
+
+            if (moveDirection != null && _collision[tileY, tileX])
+            {
+                if (moveDirection.X > 0)
+                {
+                    dest.x = MathF.Floor(dest.x) - 0.001f;
+                }
+                else if (moveDirection.X < 0)
+                {
+                    dest.x = MathF.Floor(dest.x) + 1.001f;
+                }
+
+                if (moveDirection.Y > 0)
+                {
+                    dest.y = MathF.Floor(dest.y) - 0.001f;
+                }
+                else if (moveDirection.Y < 0)
+                {
+                    dest.y = MathF.Floor(dest.y) + 1.001f;
+                    ;
+                }
             }
 
 

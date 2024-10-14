@@ -61,17 +61,15 @@ namespace GameServer.Game
 
             // 5프레임 (0.2초마다 한번씩 Update)
             if (Room != null)
-                _job = Room.PushAfter(Room.tickInterval, Update);
+                _job = Room.PushAfter(Room.TickInterval, Update);
         }
 
         protected virtual void UpdateIdle()
         {
-            Console.WriteLine(Pos.X + "      " + Pos.Y);
         }
 
         protected virtual void UpdateMoving()
         {
-            Console.WriteLine(Move.X + "      " + Move.Y);
             UpdatePosition();
 
             BroadcastMove();
