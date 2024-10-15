@@ -120,7 +120,7 @@ namespace GameServer.Game
                     S_EnterGame enterPacket = new S_EnterGame();
 
                     enterPacket.Player = player.Info;
-                    enterPacket.Player.PosInfo.Move = enterPacket.Player.PosInfo.Pos;
+                    enterPacket.Player.PosInfo.Move = new Vec2();
                     player.Session.Send(enterPacket);
                     player.Vision.Update();
                     player.Update();

@@ -252,16 +252,6 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateIdle()
     {
-        Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
-        Vector3 moveDir = destPos - transform.position;
-
-        // 도착 여부 체크
-        float dist = moveDir.magnitude;
-
-        if (dist >= Speed * Time.deltaTime)
-        {
-            State = CreatureState.Moving;
-        }
     }
 
     // 스르륵 이동하는 것을 처리

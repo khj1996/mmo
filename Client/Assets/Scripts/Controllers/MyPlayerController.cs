@@ -199,6 +199,7 @@ public class MyPlayerController : PlayerController
         }
         else
         {
+            transform.DOKill();
             transform.DOMove(destPos, interpolationSpeed * Time.deltaTime);
         }
     }
@@ -230,7 +231,7 @@ public class MyPlayerController : PlayerController
             };
             Managers.Network.Send(movePacket);
 
-            currTime -= 0.2f;
+            currTime =0;
         }
     }
 

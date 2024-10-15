@@ -113,56 +113,6 @@ namespace GameServer.Game
         //벽등 충돌체
         bool[,] _collision;
 
-        //이동 가능 여부 체크
-        public bool CanGo(Vector2Float cellPos)
-        {
-            if (cellPos.x < MinX || cellPos.x > MaxX)
-                return false;
-            if (cellPos.y < MinY || cellPos.y > MaxY)
-                return false;
-
-
-            var x = (int)((cellPos.x < 0) ? cellPos.x - MinX - 1 : cellPos.x - MinX);
-            var y = (int)((cellPos.y < 0) ? MaxY - cellPos.y - 1 : MaxY - cellPos.y);
-
-            return !_collision[y, x];
-        }
-
-
-        //이동 가능 여부 체크
-        public bool CanGo(Vector2Float destPos, Vector2Float curPos)
-        {
-            if (destPos.x < MinX || destPos.x > MaxX)
-                return false;
-            if (destPos.y < MinY || destPos.y > MaxY)
-                return false;
-
-
-            var curX = (int)((curPos.x < 0) ? curPos.x - MinX - 1 : curPos.x - MinX);
-            var curY = (int)((curPos.y < 0) ? MaxY - curPos.y - 1 : MaxY - curPos.y);
-            var destX = (int)((destPos.x < 0) ? destPos.x - MinX - 1 : destPos.x - MinX);
-            var destY = (int)((destPos.y < 0) ? MaxY - destPos.y - 1 : MaxY - destPos.y);
-
-
-            var minX = (curX > destX) ? destX : curX;
-            var maxX = (curX < destX) ? destX : curX;
-            var minY = (curY > destY) ? destY : curY;
-            var maxY = (curY < destY) ? destY : curY;
-
-
-            for (int x = minX; x <= maxX; x++)
-            {
-                for (int y = minY; y <= maxY; y++)
-                {
-                    if (_collision[y, x])
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
 
         //객체 제거시
         public bool ApplyLeave(GameObject gameObject)
@@ -185,93 +135,155 @@ namespace GameServer.Game
             return true;
         }
 
-        //이동 적용
-        public bool ApplyMove(GameObject gameObject, Vector2Float dest, Vec2? moveDirection = null)
+        private const float Tolerance = 0.001f; // 작은 오차 값
+
+        // 맵 경계 확인 함수
+        private bool IsWithinBounds(Vector2Float pos)
         {
-            if (gameObject.Room == null)
-                return false;
-            if (gameObject.Room.Map != this)
-                return false;
+            return pos.x >= MinX && pos.x <= MaxX && pos.y >= MinY && pos.y <= MaxY;
+        }
+
+        // 충돌 검사 함수
+        private (bool, Vector2Float?) CanGo(Vector2Float currentPos, Vector2Float destPos, Vec2? moveDirection)
+        {
+            // 타일맵 크기 범위 확인
+            if (!IsWithinBounds(destPos))
+                return (false, null);
+
+            int x0 = (int)Math.Floor(currentPos.x);
+            int y0 = (int)Math.Floor(currentPos.y);
+            int x1 = (int)Math.Floor(destPos.x);
+            int y1 = (int)Math.Floor(destPos.y);
+
+            float dx = Math.Abs(destPos.x - currentPos.x);
+            float dy = Math.Abs(destPos.y - currentPos.y);
+
+            int sx = currentPos.x < destPos.x ? 1 : -1;
+            int sy = currentPos.y < destPos.y ? 1 : -1;
+
+            float err = dx - dy;
+
+            var current = new Vector2Float(currentPos.x, currentPos.y);
+
+            while (true)
+            {
+                if (_collision[y0, x0])
+                {
+                    return (false, current); // 충돌 위치 반환
+                }
+
+                if (x0 == x1 && y0 == y1) break;
+
+                float e2 = 2 * err;
+                if (e2 > -dy)
+                {
+                    err -= dy;
+                    current.x += sx;
+                    x0 += sx;
+                }
+
+                if (e2 < dx)
+                {
+                    err += dx;
+                    current.y += sy;
+                    y0 += sy;
+                }
+            }
+
+            return (true, null); // 충돌 없음
+        }
+
+        // 충돌 시 좌표 조정 함수
+        private void AdjustDestinationForCollision(ref Vector2Float dest, Vec2? moveDirection)
+        {
+            if (moveDirection.X > 0)
+            {
+                dest.x = MathF.Floor(dest.x) - Tolerance;
+            }
+            else if (moveDirection.X < 0)
+            {
+                dest.x = MathF.Floor(dest.x) + 1 + Tolerance;
+            }
+
+            if (moveDirection.Y > 0)
+            {
+                dest.y = MathF.Floor(dest.y) - Tolerance;
+            }
+            else if (moveDirection.Y < 0)
+            {
+                dest.y = MathF.Floor(dest.y) + 1 + Tolerance;
+            }
+        }
+
+        // 존 이동 처리 함수
+        private void HandleZoneTransition(GameObject gameObject, Vector2Float currentPos, Vector2Float dest)
+        {
+            GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
+
+            var nowZone = gameObject.Room.GetZone(currentPos);
+            var afterZone = gameObject.Room.GetZone(dest);
+
+            if (nowZone != afterZone)
+            {
+                switch (type)
+                {
+                    case GameObjectType.Player:
+                        nowZone.Players.Remove((Player)gameObject);
+                        afterZone.Players.Add((Player)gameObject);
+                        break;
+                    case GameObjectType.Monster:
+                        nowZone.Monsters.Remove((Monster)gameObject);
+                        afterZone.Monsters.Add((Monster)gameObject);
+                        break;
+                    case GameObjectType.Projectile:
+                        nowZone.Projectiles.Remove((Projectile)gameObject);
+                        afterZone.Projectiles.Add((Projectile)gameObject);
+                        break;
+                }
+            }
+        }
+
+        // 이동 및 충돌 처리 함수
+        public (bool, Vector2Float?) ApplyMove(GameObject gameObject, Vector2Float dest, Vec2? moveDirection = null)
+        {
+            if (gameObject.Room == null || gameObject.Room.Map != this)
+                return (false, null);
 
             Vector2Float currentPos = gameObject.CellPos;
-
-
-            //타일맵 크기
-            if (currentPos.x < MinX || currentPos.x > MaxX)
-                return false;
-            if (currentPos.y < MinY || currentPos.y > MaxY)
-                return false;
-
-
-            //이동하려는 타일맵의 좌표
-            var tileX = (int)(dest.x - MinX);
-            var tileY = (int)(MaxY - dest.y);
-
-
-            if (moveDirection != null && _collision[tileY, tileX])
-            {
-                if (moveDirection.X > 0)
-                {
-                    dest.x = MathF.Floor(dest.x) - 0.001f;
-                }
-                else if (moveDirection.X < 0)
-                {
-                    dest.x = MathF.Floor(dest.x) + 1.001f;
-                }
-
-                if (moveDirection.Y > 0)
-                {
-                    dest.y = MathF.Floor(dest.y) - 0.001f;
-                }
-                else if (moveDirection.Y < 0)
-                {
-                    dest.y = MathF.Floor(dest.y) + 1.001f;
-                    ;
-                }
-            }
-
-
-            //존 이동으로 인한 갱신
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
-            if (type == GameObjectType.Player)
+
+            // 플레이어나 몬스터인 경우에만 충돌 시 좌표 조정
+            if ((type == GameObjectType.Player || type == GameObjectType.Monster) && moveDirection != null)
             {
-                Player player = (Player)gameObject;
-                Zone now = gameObject.Room.GetZone(gameObject.CellPos);
-                Zone after = gameObject.Room.GetZone(dest);
-                if (now != after)
+                var tileX = (int)(dest.x - MinX);
+                var tileY = (int)(MaxY - dest.y);
+
+                if (_collision[tileY, tileX])
                 {
-                    now.Players.Remove(player);
-                    after.Players.Add(player);
+                    AdjustDestinationForCollision(ref dest, moveDirection);
                 }
             }
-            else if (type == GameObjectType.Monster)
+
+            // 투사체인 경우 경로상의 충돌 감지 실행
+            if (type == GameObjectType.Projectile)
             {
-                Monster monster = (Monster)gameObject;
-                Zone now = gameObject.Room.GetZone(gameObject.CellPos);
-                Zone after = gameObject.Room.GetZone(dest);
-                if (now != after)
+                var result = CanGo(currentPos, dest, moveDirection);
+
+                if (result.Item1)
                 {
-                    now.Monsters.Remove(monster);
-                    after.Monsters.Add(monster);
+                    return result; // 투사체는 경로상에 충돌이 없으면 이동 가능
                 }
             }
-            else if (type == GameObjectType.Projectile)
-            {
-                Projectile projectile = (Projectile)gameObject;
-                Zone now = gameObject.Room.GetZone(gameObject.CellPos);
-                Zone after = gameObject.Room.GetZone(dest);
-                if (now != after)
-                {
-                    now.Projectiles.Remove(projectile);
-                    after.Projectiles.Add(projectile);
-                }
-            }
+
+            // 존 이동 처리
+            HandleZoneTransition(gameObject, currentPos, dest);
 
             // 실제 좌표 이동
             gameObject.Pos.X = dest.x;
             gameObject.Pos.Y = dest.y;
-            return true;
+            return (true, dest); // 성공적으로 이동
         }
+
 
         //맵 데이터 획득
         public void LoadMap(int mapId, string pathPrefix)
@@ -416,8 +428,8 @@ namespace GameServer.Game
                     // 벽으로 막혀서 갈 수 없으면 스킵
                     if (next.Y != dest.Y || next.X != dest.X)
                     {
-                        if (CanGo(Pos2Cell(next)) == false) // CellPos
-                            continue;
+                        /*if (CanGo(Pos2Cell(next)) == false) // CellPos
+                            continue;*/
                     }
 
                     // 이미 방문한 곳이면 스킵

@@ -37,7 +37,7 @@ public class ObjectManager
                 {
                     State = info.PosInfo.State,
                     Pos = info.PosInfo.Pos,
-                    Move = info.PosInfo.Pos,
+                    Move = new Vec2(),
                     LookDir = new Vec2(),
                 };
                 MyPlayer.Stat.MergeFrom(info.StatInfo);

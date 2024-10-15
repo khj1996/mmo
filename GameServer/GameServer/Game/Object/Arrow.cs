@@ -40,7 +40,7 @@ namespace GameServer.Game
             var destPos = new Vector2Float(Pos.X + Move.X * tickSpeed,
                 Pos.Y + Move.Y * tickSpeed);
 
-            if (!Room.Map.ApplyMove(this, destPos))
+            if (!Room.Map.ApplyMove(this, destPos).Item1)
             {
                 Room.Push(Room.LeaveGame, Id);
                 return;

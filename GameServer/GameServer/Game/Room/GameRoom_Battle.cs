@@ -26,9 +26,6 @@ namespace GameServer.Game
             player.LookDir = movePacket.PosInfo.LookDir;
             player.State = movePacket.PosInfo.State;
 
-            var movePosInfo = movePacket.PosInfo;
-            player.State = movePosInfo.State;
-
 
             Broadcast(player.CellPos, movePacket, player.PlayerDbId);
         }
