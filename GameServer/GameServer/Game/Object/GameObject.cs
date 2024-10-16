@@ -92,21 +92,27 @@ namespace GameServer.Game
         }
 
 
-        public void UpdatePosition()
+        public bool UpdatePosition()
         {
-            if (Room == null) return;
+            if (Room == null) return false;
 
             var speedScale = Speed * Room.SpeedScale;
 
-            Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
+            var result = Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
+            return result;
         }
-
-        public virtual void UpdatePositionData(C_Move movePacket)
+        
+        protected void BroadcastMove()
         {
-            //위치 오류 확인 필요
-            Move = movePacket.PosInfo.Move;
-            LookDir = movePacket.PosInfo.LookDir;
-            State = movePacket.PosInfo.State;
+            if (Move.X == 0 && Move.Y == 0)
+                return;
+
+            // 다른 플레이어한테도 알려준다
+            S_Move resMovePacket = new S_Move();
+            resMovePacket.ObjectId = Info.ObjectId;
+            resMovePacket.PosInfo = Info.PosInfo;
+
+            Room.Broadcast(CellPos, resMovePacket);
         }
 
 

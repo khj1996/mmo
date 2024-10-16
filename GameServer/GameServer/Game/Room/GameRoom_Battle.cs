@@ -83,8 +83,8 @@ namespace GameServer.Game
                     arrow.Owner = player;
                     arrow.Data = skillData;
                     arrow.Info.PosInfo.State = CreatureState.Moving;
-                    arrow.Move = player.Info.PosInfo.Move;
-                    arrow.Pos = player.Info.PosInfo.Pos;
+                    arrow.Pos = player.Pos;
+                    arrow.Move = skillPacket.MoveDir;
                     arrow.Info.PosInfo.LookDir = skillPacket.MoveDir;
                     arrow.Move = skillPacket.MoveDir;
                     arrow.Speed = skillData.projectile.speed;

@@ -143,54 +143,56 @@ namespace GameServer.Game
             return pos.x >= MinX && pos.x <= MaxX && pos.y >= MinY && pos.y <= MaxY;
         }
 
-        // 충돌 검사 함수
-        private (bool, Vector2Float?) CanGo(Vector2Float currentPos, Vector2Float destPos, Vec2? moveDirection)
+        private (int, int) GetTilePos(float x, float y)
         {
-            // 타일맵 크기 범위 확인
+            var tileX = (int)Math.Floor(x - MinX);
+            var tileY = (int)Math.Floor(MaxY - y);
+            return (tileX, tileY);
+        }
+
+        // 충돌 검사 함수
+        public bool CanGo(Vector2Float curPos, Vector2Float destPos)
+        {
+            // 범위 확인
             if (!IsWithinBounds(destPos))
-                return (false, null);
+                return false;
 
-            int x0 = (int)Math.Floor(currentPos.x);
-            int y0 = (int)Math.Floor(currentPos.y);
-            int x1 = (int)Math.Floor(destPos.x);
-            int y1 = (int)Math.Floor(destPos.y);
+            // 좌표 변환
+            var (curX, curY) = GetTilePos(curPos.x, curPos.y);
+            var (destX, destY) = GetTilePos(destPos.x, destPos.y);
 
-            float dx = Math.Abs(destPos.x - currentPos.x);
-            float dy = Math.Abs(destPos.y - currentPos.y);
-
-            int sx = currentPos.x < destPos.x ? 1 : -1;
-            int sy = currentPos.y < destPos.y ? 1 : -1;
-
-            float err = dx - dy;
-
-            var current = new Vector2Float(currentPos.x, currentPos.y);
+            // Bresenham 알고리즘을 사용해 경로 상의 타일을 검사
+            int dx = Math.Abs(destX - curX);
+            int dy = Math.Abs(destY - curY);
+            int sx = curX < destX ? 1 : -1;
+            int sy = curY < destY ? 1 : -1;
+            int err = dx - dy;
 
             while (true)
             {
-                if (_collision[y0, x0])
-                {
-                    return (false, current); // 충돌 위치 반환
-                }
+                // 현재 타일이 충돌 타일인지 검사
+                if (_collision[curY, curX])
+                    return false;
 
-                if (x0 == x1 && y0 == y1) break;
+                // 도착지에 도달했을 경우 종료
+                if (curX == destX && curY == destY) break;
 
-                float e2 = 2 * err;
+                // Bresenham의 알고리즘에 따라 이동
+                int e2 = 2 * err;
                 if (e2 > -dy)
                 {
                     err -= dy;
-                    current.x += sx;
-                    x0 += sx;
+                    curX += sx;
                 }
 
                 if (e2 < dx)
                 {
                     err += dx;
-                    current.y += sy;
-                    y0 += sy;
+                    curY += sy;
                 }
             }
 
-            return (true, null); // 충돌 없음
+            return true; // 충돌 없이 도착
         }
 
         // 충돌 시 좌표 조정 함수
@@ -244,34 +246,37 @@ namespace GameServer.Game
         }
 
         // 이동 및 충돌 처리 함수
-        public (bool, Vector2Float?) ApplyMove(GameObject gameObject, Vector2Float dest, Vec2? moveDirection = null)
+        public bool ApplyMove(GameObject gameObject, Vector2Float dest, Vec2? moveDirection = null)
         {
             if (gameObject.Room == null || gameObject.Room.Map != this)
-                return (false, null);
+                return false;
 
             Vector2Float currentPos = gameObject.CellPos;
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
 
-            // 플레이어나 몬스터인 경우에만 충돌 시 좌표 조정
-            if ((type == GameObjectType.Player || type == GameObjectType.Monster) && moveDirection != null)
+            switch (type)
             {
-                var tileX = (int)(dest.x - MinX);
-                var tileY = (int)(MaxY - dest.y);
-
-                if (_collision[tileY, tileX])
+                case GameObjectType.Player or GameObjectType.Monster when moveDirection != null:
                 {
-                    AdjustDestinationForCollision(ref dest, moveDirection);
+                    var (tileX, tileY) = GetTilePos(dest.x, dest.y);
+
+                    if (_collision[tileY, tileX])
+                    {
+                        AdjustDestinationForCollision(ref dest, moveDirection);
+                    }
+
+                    break;
                 }
-            }
-
-            // 투사체인 경우 경로상의 충돌 감지 실행
-            if (type == GameObjectType.Projectile)
-            {
-                var result = CanGo(currentPos, dest, moveDirection);
-
-                if (result.Item1)
+                case GameObjectType.Projectile:
                 {
-                    return result; // 투사체는 경로상에 충돌이 없으면 이동 가능
+                    var result = CanGo(currentPos, dest);
+
+                    if (!result)
+                    {
+                        return result;
+                    }
+
+                    break;
                 }
             }
 
@@ -281,7 +286,7 @@ namespace GameServer.Game
             // 실제 좌표 이동
             gameObject.Pos.X = dest.x;
             gameObject.Pos.Y = dest.y;
-            return (true, dest); // 성공적으로 이동
+            return true; // 성공적으로 이동
         }
 
 
@@ -350,7 +355,7 @@ namespace GameServer.Game
                 string line = tileData[y];
                 for (int x = 0; x < xCount; x++)
                 {
-                    _collision[y, x] = (line[x] == '1' ? true : false);
+                    _collision[y, x] = (line[x] == '1');
                 }
             }
         }

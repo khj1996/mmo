@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using static Define;
 
@@ -46,6 +47,11 @@ public class MyPlayerController : PlayerController
     {
         if (_coSkillCooltime == null && Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+            
             var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
             var clickPos = new Vector3(mPos.origin.x, mPos.origin.y, 0);
 

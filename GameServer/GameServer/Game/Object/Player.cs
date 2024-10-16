@@ -78,18 +78,7 @@ namespace GameServer.Game
         }
 
 
-        void BroadcastMove()
-        {
-            if (Move.X == 0 && Move.Y == 0)
-                return;
-
-            // 다른 플레이어한테도 알려준다
-            S_Move resMovePacket = new S_Move();
-            resMovePacket.ObjectId = Info.ObjectId;
-            resMovePacket.PosInfo = Info.PosInfo;
-
-            Room.Broadcast(CellPos, resMovePacket);
-        }
+        
 
 
         protected virtual void UpdateDead()

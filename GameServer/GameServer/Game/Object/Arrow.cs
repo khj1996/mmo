@@ -18,10 +18,6 @@ namespace GameServer.Game
             if (Data == null || Data.projectile == null || Owner == null || Room == null)
                 return;
 
-            //이동 틱
-            int tick = (int)Room.TickInterval;
-            //다음 이동
-            Room.PushAfter(tick, Update);
 
             var target = Room.FindPlayer(x => (CellPos - x.CellPos).Magnitude < 1f);
 
@@ -35,22 +31,15 @@ namespace GameServer.Game
                 return;
             }
 
-            var tickSpeed = Speed * tick / 1000;
-
-            var destPos = new Vector2Float(Pos.X + Move.X * tickSpeed,
-                Pos.Y + Move.Y * tickSpeed);
-
-            if (!Room.Map.ApplyMove(this, destPos).Item1)
+            if (!UpdatePosition())
             {
                 Room.Push(Room.LeaveGame, Id);
                 return;
             }
 
+            BroadcastMove();
 
-            S_Move movePacket = new S_Move();
-            movePacket.ObjectId = Id;
-            movePacket.PosInfo = Info.PosInfo;
-            Room.Broadcast(CellPos, movePacket);
+            Room.PushAfter(Room.TickInterval, Update);
         }
 
         public override GameObject GetOwner()

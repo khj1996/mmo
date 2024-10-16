@@ -50,7 +50,7 @@ namespace GameServer.Game
 
         public int? GetEmptySlot()
         {
-            for (int slot = 0; slot < 20; slot++)
+            for (int slot = 0; slot < 76; slot++)
             {
                 var item = Items.Values.FirstOrDefault(i => i.Slot == slot);
                 if (item == null)

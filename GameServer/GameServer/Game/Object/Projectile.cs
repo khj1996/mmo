@@ -14,7 +14,6 @@ namespace GameServer.Game
 
         public void Start(int delay)
         {
-            Console.WriteLine(Pos.X + "      " + Pos.Y);
             Room.PushAfter(delay, Update);
         }
 
