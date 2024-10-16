@@ -47,6 +47,15 @@ namespace GameServer.Game
             set => Info.StatInfo.Hp = Math.Clamp(value, 0, Info.StatInfo.MaxHp);
         }
 
+
+        public ObjectSize size = new()
+        {
+            Top = 0.33f,
+            Bottom = 0.77f,
+            Left = 0.35f,
+            Right = 0.35f,
+        };
+
         //오브젝트 상태
         public CreatureState State
         {
@@ -101,7 +110,7 @@ namespace GameServer.Game
             var result = Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
             return result;
         }
-        
+
         protected void BroadcastMove()
         {
             if (Move.X == 0 && Move.Y == 0)

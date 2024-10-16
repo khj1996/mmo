@@ -258,6 +258,14 @@ message Vec2 {
   float y = 2;
 }
 
+message ObjectSize{
+  float top = 1;
+  float bottom = 2;
+  float left = 3;
+  float right = 4;
+
+}
+
 message ItemInfo {
   int32 itemDbId = 1;
   int32 templateId = 2;
