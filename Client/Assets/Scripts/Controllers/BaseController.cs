@@ -6,6 +6,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Define;
+using Pos_1 = Pos;
 
 public class BaseController : MonoBehaviour
 {
@@ -52,7 +53,6 @@ public class BaseController : MonoBehaviour
                 return;
 
             _positionInfo = value;
-            UpdateAnimation();
         }
     }
 
@@ -67,7 +67,6 @@ public class BaseController : MonoBehaviour
 
             _positionInfo.State = value;
             statusChanged = true;
-            UpdateAnimation();
         }
     }
 
@@ -91,7 +90,6 @@ public class BaseController : MonoBehaviour
                 return;
             statusChanged = true;
             _positionInfo.Move = value;
-            UpdateAnimation();
         }
     }
 
@@ -100,11 +98,10 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.LookDir;
         set
         {
-            if (_positionInfo.LookDir.Equals(value))
+            if (_positionInfo.LookDir.Equals(value) || (value.X == 0 && value.Y == 0))
                 return;
             statusChanged = true;
             _positionInfo.LookDir = value;
-            UpdateAnimation();
         }
     }
 
@@ -233,6 +230,7 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateController()
     {
+        Debug.Log(State);
         switch (State)
         {
             case CreatureState.Idle:
@@ -258,24 +256,12 @@ public class BaseController : MonoBehaviour
     protected virtual void UpdateMoving()
     {
         Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
-        Vector3 moveDir = destPos - transform.position;
+        float step = Speed * Time.deltaTime;
 
-        // 도착 여부 체크
-        float dist = moveDir.magnitude;
-
-        if (dist < Speed * Time.deltaTime)
-        {
-            transform.position = destPos;
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(transform.position, destPos, Speed * Time.fixedDeltaTime);
-        }
+        // 목표 방향으로 등속 이동
+        transform.position = Vector3.MoveTowards(transform.position, destPos, step);
     }
 
-    protected virtual void MoveToNextPos()
-    {
-    }
 
     protected virtual void UpdateSkill()
     {
@@ -285,9 +271,51 @@ public class BaseController : MonoBehaviour
     {
     }
 
+    private Coroutine _moveCoroutine;
+    private Vector3 lastDestination;
+
+    private IEnumerator CheckArrivalAndSetIdle()
+    {
+        lastDestination = new Vector3(Pos.X, Pos.Y, transform.position.z);
+
+        while (Vector3.Distance(transform.position, lastDestination) > Speed * Time.deltaTime)
+        {
+            yield return null; // 아직 도착하지 않았으면 계속 대기
+        }
+
+        State = CreatureState.Idle;
+
+        yield return null; // 한번 상태가 변경된 후 다음 목표로 대기
+    }
+
 
     public virtual void UpdatePosition(S_Move movePacket)
     {
-        PosInfo.MergeFrom(movePacket.PosInfo);
+        Pos = movePacket.PosInfo.Pos;
+        Move = movePacket.PosInfo.Move;
+
+        if (Move.X != 0 && Move.Y != 0)
+            LookDir = movePacket.PosInfo.Move;
+
+
+        if (movePacket.PosInfo.State == CreatureState.Idle)
+        {
+            State = CreatureState.Idle;
+            if (_moveCoroutine != null)
+            {
+                lastDestination = new Vector3(Pos.X, Pos.Y, transform.position.z);
+            }
+            else
+            {
+                _moveCoroutine = StartCoroutine(CheckArrivalAndSetIdle());
+            }
+        }
+        else
+        {
+            State = movePacket.PosInfo.State;
+            
+        }
+
+        UpdateAnimation();
     }
 }

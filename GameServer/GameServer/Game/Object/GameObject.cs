@@ -60,7 +60,11 @@ namespace GameServer.Game
         public CreatureState State
         {
             get => Info.PosInfo.State;
-            set => Info.PosInfo.State = value;
+            set
+            {
+                Console.WriteLine(value);
+                Info.PosInfo.State = value;
+            }
         }
 
         public Vec2 Pos
@@ -69,10 +73,19 @@ namespace GameServer.Game
             set => Info.PosInfo.Pos = value;
         }
 
+        public Vec2 ClientPos
+        {
+            set => Info.PosInfo.Pos = value;
+        }
+
         public Vec2 Move
         {
             get => Info.PosInfo.Move;
-            set => Info.PosInfo.Move = value;
+            set
+            {
+                Console.WriteLine(value);
+                Info.PosInfo.Move = value;
+            }
         }
 
         public Vec2 LookDir
@@ -113,13 +126,15 @@ namespace GameServer.Game
 
         protected void BroadcastMove()
         {
-            if (Move.X == 0 && Move.Y == 0)
-                return;
-
             // 다른 플레이어한테도 알려준다
-            S_Move resMovePacket = new S_Move();
-            resMovePacket.ObjectId = Info.ObjectId;
-            resMovePacket.PosInfo = Info.PosInfo;
+            S_Move resMovePacket = new S_Move
+            {
+                ObjectId = Info.ObjectId,
+                PosInfo = Info.PosInfo,
+                
+            };
+            
+            Console.WriteLine(Info.PosInfo.State +"    "+resMovePacket.PosInfo.State);
 
             Room.Broadcast(CellPos, resMovePacket);
         }

@@ -290,7 +290,7 @@ namespace GameServer.Game
                     if (!result.canMove)
                     {
                         // 충돌 발생 시 목적지 조정
-                        AdjustDestinationForCollision(ref dest, gameObject.Move, gameObject.size, result.diffX, result.diffY);
+                       // AdjustDestinationForCollision(ref dest, gameObject.Move, gameObject.size, result.diffX, result.diffY);
                     }
 
                     break;

@@ -33,8 +33,6 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
         
         if (maxIndex == 0) return;
 
-        float spacing = 0;
-
         if (items.Count < 1)
         {
             ItemPosY = new float[maxIndex];

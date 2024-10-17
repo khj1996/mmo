@@ -66,19 +66,31 @@ namespace GameServer.Game
 
         protected virtual void UpdateIdle()
         {
+            if (State == CreatureState.Skill)
+                return;
+
             if (Move.X != 0 || Move.Y != 0)
                 State = CreatureState.Moving;
         }
 
         protected virtual void UpdateMoving()
         {
-            UpdatePosition();
+            if (State == CreatureState.Skill)
+                return;
+            if (Move is { X: 0, Y: 0 })
+            {
+                Console.WriteLine($"StopPos : {Move.X},{Move.Y}");
+                Console.WriteLine($"StopPos : {Pos.X},{Pos.Y}");
+                State = CreatureState.Idle;
+                BroadcastMove();
+            }
+            else
+            {
+                UpdatePosition();
+                BroadcastMove();
+            }
 
-            BroadcastMove();
         }
-
-
-        
 
 
         protected virtual void UpdateDead()

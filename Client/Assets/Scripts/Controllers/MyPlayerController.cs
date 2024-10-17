@@ -9,7 +9,6 @@ using static Define;
 
 public class MyPlayerController : PlayerController
 {
-    private bool _moveKeyPressed = false;
 
     private float currTime = 0.0f;
 
@@ -20,8 +19,7 @@ public class MyPlayerController : PlayerController
 
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
-    
-    
+
 
     protected override void Init()
     {
@@ -51,7 +49,7 @@ public class MyPlayerController : PlayerController
             {
                 return;
             }
-            
+
             var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
             var clickPos = new Vector3(mPos.origin.x, mPos.origin.y, 0);
 
@@ -99,9 +97,13 @@ public class MyPlayerController : PlayerController
 
     void LateUpdate()
     {
-        if (Camera.main != null)
+        if (_camera)
         {
-            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+            _camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+        }
+        else
+        {
+            _camera = Camera.main;
         }
     }
 
@@ -161,53 +163,17 @@ public class MyPlayerController : PlayerController
             return;
         }
 
-        Move.X = Input.GetAxisRaw("Horizontal");
-        Move.Y = Input.GetAxisRaw("Vertical");
-
-
-        if (Move.X == 0 && Move.Y == 0)
+        Move = new Vec2()
         {
-            State = CreatureState.Idle;
-            return;
-        }
+            X = Input.GetAxisRaw("Horizontal"),
+            Y = Input.GetAxisRaw("Vertical")
+        };
 
         LookDir = new Vec2()
         {
             X = Move.X,
             Y = Move.Y,
         };
-        ;
-    }
-
-    protected override void UpdateIdle()
-    {
-        _moveKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-
-        if (_moveKeyPressed)
-        {
-            State = CreatureState.Moving;
-        }
-    }
-
-    public float interpolationSpeed = 5.0f; // 보간 속도
-
-    protected override void UpdateMoving()
-    {
-        Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
-        Vector3 moveDir = destPos - transform.position;
-
-        // 도착 여부 체크
-        float dist = moveDir.magnitude;
-
-        if (dist < Speed * Time.deltaTime)
-        {
-            transform.position = destPos;
-        }
-        else
-        {
-            transform.DOKill();
-            transform.DOMove(destPos, interpolationSpeed * Time.deltaTime);
-        }
     }
 
     protected override void CheckUpdatedFlag()
@@ -227,7 +193,6 @@ public class MyPlayerController : PlayerController
                         X = transform.position.x,
                         Y = transform.position.y
                     },
-                    State = State,
                     Move = new Vec2()
                     {
                         X = moveDir.x,
@@ -237,7 +202,8 @@ public class MyPlayerController : PlayerController
             };
             Managers.Network.Send(movePacket);
 
-            currTime =0;
+            statusChanged = false;
+            currTime = 0;
         }
     }
 
@@ -261,10 +227,5 @@ public class MyPlayerController : PlayerController
                     break;
             }
         }
-    }
-
-    public override void UpdatePosition(S_Move movePacket)
-    {
-        Pos = movePacket.PosInfo.Pos;
     }
 }

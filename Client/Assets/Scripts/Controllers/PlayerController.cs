@@ -24,7 +24,6 @@ public class PlayerController : CreatureController
 
         var dir = CheckDirection(LookDir);
 
-        Debug.Log(1);
         switch (State)
         {
             case CreatureState.Idle:
