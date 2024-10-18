@@ -200,23 +200,23 @@ namespace GameServer.Game
         {
             Console.WriteLine(diffX + "   " + diffY);
             // X 방향 이동 처리
-            if (moveDirection.X > 0) // 오른쪽으로 이동 중
+            if (moveDirection.X > 0 && diffX != 0) // 오른쪽으로 이동 중
             {
-                dest.x = MathF.Floor(dest.x - size.Right) + diffX - Tolerance;
+                dest.x = MathF.Floor(dest.x - size.Right) - diffX - Tolerance;
             }
-            else if (moveDirection.X < 0) // 왼쪽으로 이동 중
+            else if (moveDirection.X < 0 && diffX != 0) // 왼쪽으로 이동 중
             {
-                dest.x = MathF.Floor(dest.x + size.Left) + diffX + 1 + Tolerance;
+                dest.x = MathF.Floor(dest.x + size.Left) - diffX + 1 + Tolerance;
             }
 
             // Y 방향 이동 처리
-            if (moveDirection.Y > 0) // 위로 이동 중
+            if (moveDirection.Y > 0 && diffY != 0) // 위로 이동 중
             {
-                dest.y = MathF.Floor(dest.y - size.Top) - diffY - Tolerance;
+                dest.y = MathF.Floor(dest.y - size.Top) + diffY - Tolerance;
             }
-            else if (moveDirection.Y < 0) // 아래로 이동 중
+            else if (moveDirection.Y < 0 && diffY != 0) // 아래로 이동 중
             {
-                dest.y = MathF.Floor(dest.y + size.Bottom) - diffY + 1 + Tolerance;
+                dest.y = MathF.Floor(dest.y + size.Bottom) + diffY + 1 + Tolerance;
             }
         }
 
@@ -290,7 +290,7 @@ namespace GameServer.Game
                     if (!result.canMove)
                     {
                         // 충돌 발생 시 목적지 조정
-                       // AdjustDestinationForCollision(ref dest, gameObject.Move, gameObject.size, result.diffX, result.diffY);
+                        AdjustDestinationForCollision(ref dest, gameObject.Move, gameObject.size, result.diffX, result.diffY);
                     }
 
                     break;

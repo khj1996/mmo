@@ -59,7 +59,6 @@ namespace GameServer.Game
                     break;
             }
 
-            // 5프레임 (0.2초마다 한번씩 Update)
             if (Room != null)
                 _job = Room.PushAfter(Room.TickInterval, Update);
         }
@@ -79,17 +78,18 @@ namespace GameServer.Game
                 return;
             if (Move is { X: 0, Y: 0 })
             {
-                Console.WriteLine($"StopPos : {Move.X},{Move.Y}");
-                Console.WriteLine($"StopPos : {Pos.X},{Pos.Y}");
                 State = CreatureState.Idle;
-                BroadcastMove();
             }
             else
             {
                 UpdatePosition();
-                BroadcastMove();
             }
+        }
 
+        public void RefreshMoveData()
+        {
+            _job.Cancel = true;
+            _job = Room.PushAfter(Room.TickInterval, Update);
         }
 
 

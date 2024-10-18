@@ -66,7 +66,6 @@ public class BaseController : MonoBehaviour
                 return;
 
             _positionInfo.State = value;
-            statusChanged = true;
         }
     }
 
@@ -230,7 +229,6 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateController()
     {
-        Debug.Log(State);
         switch (State)
         {
             case CreatureState.Idle:
@@ -252,16 +250,23 @@ public class BaseController : MonoBehaviour
     {
     }
 
-    // 스르륵 이동하는 것을 처리
+
     protected virtual void UpdateMoving()
     {
-        Vector3 destPos = new Vector3(Pos.X, Pos.Y, 0);
         float step = Speed * Time.deltaTime;
+        var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
+        var distance = (destPos - transform.position).magnitude;
 
-        // 목표 방향으로 등속 이동
-        transform.position = Vector3.MoveTowards(transform.position, destPos, step);
+        if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
+        {
+            State = CreatureState.Idle;
+            UpdateAnimation();
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destPos, Mathf.Min(step, distance));
+        }
     }
-
 
     protected virtual void UpdateSkill()
     {
@@ -271,51 +276,22 @@ public class BaseController : MonoBehaviour
     {
     }
 
-    private Coroutine _moveCoroutine;
     private Vector3 lastDestination;
-
-    private IEnumerator CheckArrivalAndSetIdle()
-    {
-        lastDestination = new Vector3(Pos.X, Pos.Y, transform.position.z);
-
-        while (Vector3.Distance(transform.position, lastDestination) > Speed * Time.deltaTime)
-        {
-            yield return null; // 아직 도착하지 않았으면 계속 대기
-        }
-
-        State = CreatureState.Idle;
-
-        yield return null; // 한번 상태가 변경된 후 다음 목표로 대기
-    }
-
 
     public virtual void UpdatePosition(S_Move movePacket)
     {
         Pos = movePacket.PosInfo.Pos;
         Move = movePacket.PosInfo.Move;
-
-        if (Move.X != 0 && Move.Y != 0)
+        
+        
+        if (!(Move.X == 0 && Move.Y == 0))
             LookDir = movePacket.PosInfo.Move;
 
 
-        if (movePacket.PosInfo.State == CreatureState.Idle)
-        {
-            State = CreatureState.Idle;
-            if (_moveCoroutine != null)
-            {
-                lastDestination = new Vector3(Pos.X, Pos.Y, transform.position.z);
-            }
-            else
-            {
-                _moveCoroutine = StartCoroutine(CheckArrivalAndSetIdle());
-            }
-        }
-        else
+        if (movePacket.PosInfo.State != CreatureState.Idle)
         {
             State = movePacket.PosInfo.State;
-            
         }
-
         UpdateAnimation();
     }
 }

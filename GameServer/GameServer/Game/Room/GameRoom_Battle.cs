@@ -21,9 +21,10 @@ namespace GameServer.Game
             if (player == null)
                 return;
 
-            player.ClientPos = movePacket.PosInfo.Pos;
             player.Move = movePacket.PosInfo.Move;
             player.LookDir = movePacket.PosInfo.Move;
+
+            player.RefreshMoveData();
         }
 
         public void HandleSkill(Player? player, C_Skill skillPacket)

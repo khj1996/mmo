@@ -267,7 +267,7 @@ namespace GameServer.Game
         public void Broadcast(Vector2Float pos, IMessage packet, int playerDbId = -1)
         {
             List<Zone> zones = GetAdjacentZones(pos);
-
+            
             foreach (var p in zones.SelectMany(z => z.Players))
             {
                 if (p.PlayerDbId == playerDbId)

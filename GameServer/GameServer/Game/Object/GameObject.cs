@@ -62,8 +62,18 @@ namespace GameServer.Game
             get => Info.PosInfo.State;
             set
             {
-                Console.WriteLine(value);
+                if (State == value)
+                    return;
+                //상태진입전
                 Info.PosInfo.State = value;
+                //상태진입후
+                switch (value)
+                {
+                    case CreatureState.Moving:
+                        BroadcastMove();
+                        break;
+                }
+
             }
         }
 
@@ -81,11 +91,7 @@ namespace GameServer.Game
         public Vec2 Move
         {
             get => Info.PosInfo.Move;
-            set
-            {
-                Console.WriteLine(value);
-                Info.PosInfo.Move = value;
-            }
+            set { Info.PosInfo.Move = value; }
         }
 
         public Vec2 LookDir
@@ -121,20 +127,22 @@ namespace GameServer.Game
             var speedScale = Speed * Room.SpeedScale;
 
             var result = Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
+
+            BroadcastMove();
+
             return result;
         }
 
         protected void BroadcastMove()
         {
-            // 다른 플레이어한테도 알려준다
             S_Move resMovePacket = new S_Move
             {
                 ObjectId = Info.ObjectId,
                 PosInfo = Info.PosInfo,
-                
             };
-            
-            Console.WriteLine(Info.PosInfo.State +"    "+resMovePacket.PosInfo.State);
+
+
+            Console.WriteLine($"endPos : {resMovePacket.PosInfo.Pos.X},{resMovePacket.PosInfo.Pos.Y}");
 
             Room.Broadcast(CellPos, resMovePacket);
         }
