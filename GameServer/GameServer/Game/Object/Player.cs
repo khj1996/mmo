@@ -88,8 +88,6 @@ namespace GameServer.Game
 
         public void RefreshMoveData()
         {
-            _job.Cancel = true;
-            _job = Room.PushAfter(Room.TickInterval, Update);
         }
 
 

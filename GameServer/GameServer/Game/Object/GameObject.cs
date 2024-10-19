@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -125,7 +126,7 @@ namespace GameServer.Game
             if (Room == null) return false;
 
             var speedScale = Speed * Room.SpeedScale;
-
+            
             var result = Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
 
             BroadcastMove();
@@ -142,7 +143,7 @@ namespace GameServer.Game
             };
 
 
-            Console.WriteLine($"endPos : {resMovePacket.PosInfo.Pos.X},{resMovePacket.PosInfo.Pos.Y}");
+            //Console.WriteLine($"endPos : {resMovePacket.PosInfo.Pos.X},{resMovePacket.PosInfo.Pos.Y}");
 
             Room.Broadcast(CellPos, resMovePacket);
         }

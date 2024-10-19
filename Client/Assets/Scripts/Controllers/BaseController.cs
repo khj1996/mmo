@@ -282,8 +282,8 @@ public class BaseController : MonoBehaviour
     {
         Pos = movePacket.PosInfo.Pos;
         Move = movePacket.PosInfo.Move;
-        
-        
+
+
         if (!(Move.X == 0 && Move.Y == 0))
             LookDir = movePacket.PosInfo.Move;
 
@@ -292,6 +292,17 @@ public class BaseController : MonoBehaviour
         {
             State = movePacket.PosInfo.State;
         }
+        else
+        {
+            var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
+            var distance = (destPos - transform.position).magnitude;
+            if (distance < 0.05f && Move.X == 0 && Move.Y == 0)
+            {
+                State = CreatureState.Idle;
+                UpdateAnimation();
+            }
+        }
+
         UpdateAnimation();
     }
 }

@@ -143,12 +143,6 @@ namespace GameServer.Game
             return pos.x >= MinX && pos.x <= MaxX && pos.y >= MinY && pos.y <= MaxY;
         }
 
-        private (int tileX, int tileY) GetTilePos(float x, float y)
-        {
-            var tileX = (int)Math.Floor(x - MinX);
-            var tileY = (int)Math.Floor(MaxY - y);
-            return (tileX, tileY);
-        }
 
         // 충돌 검사 함수
         public bool CanGo(Vector2Float curPos, Vector2Float destPos)
@@ -195,30 +189,6 @@ namespace GameServer.Game
             return true; // 충돌 없이 도착
         }
 
-        // 충돌 시 좌표 조정 함수
-        private void AdjustDestinationForCollision(ref Vector2Float dest, Vec2 moveDirection, ObjectSize size, int diffX, int diffY)
-        {
-            Console.WriteLine(diffX + "   " + diffY);
-            // X 방향 이동 처리
-            if (moveDirection.X > 0 && diffX != 0) // 오른쪽으로 이동 중
-            {
-                dest.x = MathF.Floor(dest.x - size.Right) - diffX - Tolerance;
-            }
-            else if (moveDirection.X < 0 && diffX != 0) // 왼쪽으로 이동 중
-            {
-                dest.x = MathF.Floor(dest.x + size.Left) - diffX + 1 + Tolerance;
-            }
-
-            // Y 방향 이동 처리
-            if (moveDirection.Y > 0 && diffY != 0) // 위로 이동 중
-            {
-                dest.y = MathF.Floor(dest.y - size.Top) + diffY - Tolerance;
-            }
-            else if (moveDirection.Y < 0 && diffY != 0) // 아래로 이동 중
-            {
-                dest.y = MathF.Floor(dest.y + size.Bottom) + diffY + 1 + Tolerance;
-            }
-        }
 
         // 존 이동 처리 함수
         private void HandleZoneTransition(GameObject gameObject, Vector2Float currentPos, Vector2Float dest)
@@ -248,26 +218,98 @@ namespace GameServer.Game
             }
         }
 
-        private (bool canMove, int diffX, int diffY) CheckCollisionInTiles(Vector2Float pos, ObjectSize size)
+        private (int tileX, int tileY) GetTilePos(float x, float y)
         {
-            var (leftBottomX, leftBottomY) = GetTilePos(pos.x - size.Left, pos.y - size.Bottom);
-            var (rightTopX, rightTopY) = GetTilePos(pos.x + size.Right, pos.y + size.Top);
+            int tileX = (int)MathF.Floor(x - MinX);
+            int tileY = (int)MathF.Floor(MaxY - y);
+            return (tileX, tileY);
+        }
 
-            //x는 좌에서 우로
-            for (int x = leftBottomX; x <= rightTopX; x++)
+        private void AdjustDestinationForCollision(ref Vector2Float dest, Vec2 moveDirection, float diffX, float diffY)
+        {
+            float epsilon = 0.2f;
+
+            // X 방향 이동 처리 (오른쪽 이동 중)
+            if (moveDirection.X > 0 && diffX > 0)
             {
-                //y는 위에서 아래로
-                for (int y = rightTopY; y <= leftBottomY; y++)
+                dest.x = dest.x - diffX - epsilon;
+            }
+            else if (moveDirection.X < 0 && diffX > 0)
+            {
+                dest.x = dest.x + diffX + epsilon;
+            }
+
+            if (moveDirection.Y > 0 && diffY > 0)
+            {
+                dest.y = dest.y - (1 - diffY) - epsilon;
+            }
+            else if (moveDirection.Y < 0 && diffY > 0)
+            {
+                dest.y = dest.y + (1 - diffY) + epsilon;
+            }
+        }
+
+        private bool CheckCollisionInTiles(ref Vector2Float pos, Vec2 move, ObjectSize size)
+        {
+            float leftBottomX = pos.x - size.Left;
+            float leftBottomY = pos.y - size.Bottom;
+            float rightTopX = pos.x + size.Right;
+            float rightTopY = pos.y + size.Top;
+
+            var (tileLeftBottomX, tileLeftBottomY) = GetTilePos(leftBottomX, leftBottomY);
+            var (tileRightTopX, tileRightTopY) = GetTilePos(rightTopX, rightTopY);
+
+            for (int x = tileLeftBottomX; x <= tileRightTopX; x++)
+            {
+                for (int y = tileRightTopY; y <= tileLeftBottomY; y++)
                 {
                     if (_collision[y, x])
                     {
-                        var currentPos = GetTilePos(pos.x, pos.y);
-                        return (false, x - currentPos.tileX, y - currentPos.tileY);
+                        float tileMinX = x + MinX;
+                        float tileMaxX = x + MinX + 1;
+                        float tileMinY = MaxY - (y + 1);
+                        float tileMaxY = MaxY - y;
+
+                        float diffX = 0f;
+                        float diffY = 0f;
+
+                        if (rightTopX > tileMinX)
+                        {
+                            if (leftBottomX < tileMaxX)
+                            {
+                                if (rightTopX > tileMaxX)
+                                {
+                                    diffX = rightTopX - tileMaxX;
+                                }
+                                else
+                                {
+                                    diffX = tileMinX - leftBottomX;
+                                }
+                            }
+                        }
+
+                        if (rightTopY > tileMinY)
+                        {
+                            if (leftBottomY < tileMaxY)
+                            {
+                                if (rightTopY > tileMaxY)
+                                {
+                                    diffY = rightTopY - tileMaxY;
+                                }
+                                else
+                                {
+                                    diffY = tileMinY - leftBottomY;
+                                }
+                            }
+                        }
+
+                        AdjustDestinationForCollision(ref pos, move, diffX, diffY);
+                        return false;
                     }
                 }
             }
 
-            return (true, 0, 0);
+            return true;
         }
 
         // 이동 및 충돌 처리 함수
@@ -283,15 +325,7 @@ namespace GameServer.Game
             {
                 case GameObjectType.Player or GameObjectType.Monster when moveDirection != null:
                 {
-                    var result = CheckCollisionInTiles(dest, gameObject.size);
-
-
-                    // 오브젝트의 크기를 고려하여 충돌 검사
-                    if (!result.canMove)
-                    {
-                        // 충돌 발생 시 목적지 조정
-                        AdjustDestinationForCollision(ref dest, gameObject.Move, gameObject.size, result.diffX, result.diffY);
-                    }
+                    CheckCollisionInTiles(ref dest, gameObject.Move, gameObject.size);
 
                     break;
                 }
