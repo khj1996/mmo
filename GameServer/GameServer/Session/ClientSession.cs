@@ -140,6 +140,7 @@ namespace GameServer
                 room.Push(room.LeaveGame, MyPlayer.Info.ObjectId);
             });
 
+            SessionManager.Instance._redisDb.KeyDelete($"user:{AccountDbId}:isLoggedIn");
             SessionManager.Instance.Remove(this);
         }
 

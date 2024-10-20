@@ -31,11 +31,18 @@ namespace LoginServer
 
             var checkUser = SessionManager.Instance.FindByAccountDbId(SessionId, accountDbId);
 
+
+            Console.WriteLine("전"+SessionManager.Instance._redisDb.StringGet($"user:{accountDbId}:isLoggedIn") );
             //중복 유저 로그인시 연결 해제
             if (checkUser != null)
             {
                 checkUser.Disconnect();
             }
+
+            //redis를 이용하여 추가
+            SessionManager.Instance._redisDb.StringSet($"user:{accountDbId}:isLoggedIn", true, TimeSpan.FromHours(1));
+            
+            Console.WriteLine("후"+SessionManager.Instance._redisDb.StringGet($"user:{accountDbId}:isLoggedIn") );
 
 
             LobbyPlayers.Clear();

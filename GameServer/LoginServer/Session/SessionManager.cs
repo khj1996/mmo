@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LoginServer.Game;
+using StackExchange.Redis;
 
 namespace LoginServer
 {
@@ -15,8 +16,24 @@ namespace LoginServer
         {
             get { return _session; }
         }
-
+        
+        public SessionManager()
+        {
+            try
+            {
+                _redis = ConnectionMultiplexer.Connect("localhost:6380");
+                _redisDb = _redis.GetDatabase();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to connect to Redis: {ex.Message}");
+                throw;
+            }
+        }
         #endregion
+
+        
+
 
         //세션생성시 id 설정을 위한 값
         int _sessionId = 0;
@@ -24,6 +41,10 @@ namespace LoginServer
         //클라이언트 세션 딕셔너리
         Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
 
+        private ConnectionMultiplexer _redis;
+        public IDatabase _redisDb;
+        
+        
         //락
         object _lock = new object();
 
@@ -36,7 +57,7 @@ namespace LoginServer
             {
                 sessions = _sessions.Values.ToList();
             }
-            
+
             return sessions;
         }
 
@@ -88,6 +109,7 @@ namespace LoginServer
         {
             lock (_lock)
             {
+                //redis를 이용하여 제거
                 _sessions.Remove(session.SessionId);
                 Console.WriteLine($"Connected ({_sessions.Count}) Players");
             }

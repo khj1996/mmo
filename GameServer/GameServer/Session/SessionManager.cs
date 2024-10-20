@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StackExchange.Redis;
 
 namespace GameServer
 {
@@ -14,9 +15,24 @@ namespace GameServer
         {
             get { return _session; }
         }
-
+        public SessionManager()
+        {
+            try
+            {
+                _redis = ConnectionMultiplexer.Connect("localhost:6380");
+                _redisDb = _redis.GetDatabase();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to connect to Redis: {ex.Message}");
+                throw;
+            }
+        }
         #endregion
 
+        private ConnectionMultiplexer _redis;
+        public IDatabase _redisDb;
+        
         //세션생성시 id 설정을 위한 값
         int _sessionId = 0;
         //클라이언트 세션 딕셔너리
