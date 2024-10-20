@@ -28,7 +28,15 @@ public class UI_SelectServerPopup_Item : UI_Base
 
     void OnClickButton(PointerEventData evt)
     {
-        Managers.Network.Connect(Info);
+        if (Managers.Network.isConnected)
+        {
+            Managers.Network.Connect(Info);
+        }
+        else
+        {
+            Managers.Scene.LoadScene("Login");
+        }
+
         Managers.UI.ClosePopupUI();
     }
 }

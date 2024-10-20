@@ -282,8 +282,8 @@ public class BaseController : MonoBehaviour
     {
         Pos = movePacket.PosInfo.Pos;
         Move = movePacket.PosInfo.Move;
-
-
+        
+        
         if (!(Move.X == 0 && Move.Y == 0))
             LookDir = movePacket.PosInfo.Move;
 
@@ -302,7 +302,7 @@ public class BaseController : MonoBehaviour
                 UpdateAnimation();
             }
         }
-
+        
         UpdateAnimation();
     }
 }

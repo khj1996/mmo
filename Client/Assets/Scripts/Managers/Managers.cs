@@ -110,7 +110,7 @@ public class Managers : MonoBehaviour
         _network.Update();
     }
 
-    void Init()
+    public void Init()
     {
         _data = new DataManager();
         _pool = new PoolManager();

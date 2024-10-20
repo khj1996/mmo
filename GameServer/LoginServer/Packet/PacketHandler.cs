@@ -23,16 +23,10 @@ class PacketHandler
 
     public static void C_EnterGameHandler(PacketSession session, IMessage packet)
     {
-        C_EnterGame enterGamePacket = (C_EnterGame)packet;
-        ClientSession clientSession = (ClientSession)session;
-        clientSession.HandleEnterGame(enterGamePacket);
     }
 
     public static void C_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
-        C_CreatePlayer createPlayerPacket = (C_CreatePlayer)packet;
-        ClientSession clientSession = (ClientSession)session;
-        clientSession.HandleCreatePlayer(createPlayerPacket);
     }
 
     public static void C_EquipItemHandler(PacketSession session, IMessage packet)
@@ -42,7 +36,6 @@ class PacketHandler
     public static void C_PongHandler(PacketSession session, IMessage packet)
     {
         ClientSession clientSession = (ClientSession)session;
-        clientSession.HandlePong();
     }
     public static void C_BuyItemHandler(PacketSession session, IMessage packet)
     {/*

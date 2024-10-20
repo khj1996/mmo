@@ -35,12 +35,7 @@ public class ServerSession : PacketSession
 	public override void OnDisconnected(EndPoint endPoint)
 	{
 		Debug.Log($"OnDisconnected : {endPoint}");
-
-		if (Managers.Scene.currentSceneName == "Game")
-		{
-			Managers.Scene.LoadScene("Login");
-		}
-		
+		Managers.Network.isConnected = false;
 	}
 
 	public override void OnRecvPacket(ArraySegment<byte> buffer)

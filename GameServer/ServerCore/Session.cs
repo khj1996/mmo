@@ -105,7 +105,6 @@ namespace ServerCore
 
             lock (_lock)
             {
-                //
                 foreach (ArraySegment<byte> sendBuff in sendBuffList)
                     _sendQueue.Enqueue(sendBuff);
 

@@ -28,19 +28,28 @@ namespace LoginServer
 
             var accountDbId = int.Parse(JwtUtils.DecipherJwtAccessToken(loginPacket.JwtToken).Subject);
 
+
+            var test = SessionManager.Instance.FindByAccountDbId(SessionId, accountDbId);
+
+            //중복 유저 로그인시 연결 해제
+            if (test != null)
+            {
+                test.Disconnect();
+            }
+
+
             LobbyPlayers.Clear();
 
             using (AppDbContext db = new AppDbContext())
             {
                 //계정 정보 획득
-                AccountGameDb findAccountGame = db.Accounts
-                    .Include(a => a.Players)
-                    .Where(a => a.AccountGameDbId == accountDbId).FirstOrDefault();
+                var findAccountGame = db.Accounts
+                    .Include(a => a.Players).FirstOrDefault(a => a.AccountGameDbId == accountDbId);
 
 
                 //서버 정보 획득
-                List<ServerDb> serverDbs = db.Servers
-                    .Where(i => i.ServerDbId != null)
+                var serverDbs = db.Servers
+                    .Where(x => true)
                     .ToList();
 
                 //기존 계정
@@ -96,41 +105,6 @@ namespace LoginServer
                 // 로비로 이동
                 ServerState = PlayerServerState.ServerStateLobby;
             }
-
-
-            /*foreach (PlayerDb playerDb in findAccount.Players)
-            {
-                LobbyPlayerInfo lobbyPlayer = new LobbyPlayerInfo()
-                {
-                    PlayerDbId = playerDb.PlayerDbId,
-                    Name = playerDb.PlayerName,
-                    StatInfo = new StatInfo()
-                    {
-                        Level = playerDb.Level,
-                        Hp = playerDb.Hp,
-                        MaxHp = playerDb.MaxHp,
-                        Attack = playerDb.Attack,
-                        Speed = playerDb.Speed,
-                        TotalExp = playerDb.TotalExp
-                    }
-                };
-
-                // 메모리에도 들고 있다
-                LobbyPlayers.Add(lobbyPlayer);
-
-                // 패킷에 넣어준다
-                loginOk.Players.Add(lobbyPlayer);*/
-        }
-
-
-        //인게임 입장
-        public void HandleEnterGame(C_EnterGame enterGamePacket)
-        {
-        }
-
-        //유저 생성
-        public void HandleCreatePlayer(C_CreatePlayer createPacket)
-        {
         }
     }
 }

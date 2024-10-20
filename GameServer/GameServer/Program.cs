@@ -9,15 +9,6 @@ using ServerCore;
 
 namespace GameServer
 {
-    // 1. GameRoom 방식의 간단한 동기화 <- OK
-    // 2. 더 넓은 영역 관리
-    // 3. 심리스 MMO
-
-    // 1. Recv (N개)     서빙
-    // 2. GameLogic (1)  요리사
-    // 3. Send (1개)     서빙
-    // 4. DB (1)         결제/장부
-
     class Program
     {
         //연결 처리를 위한 리스너

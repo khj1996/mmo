@@ -19,7 +19,7 @@ public class SceneLoader : MonoBehaviour
 
     AsyncOperationHandle<SceneInstance> SceneLoadOperationHandle;
 
-    [FormerlySerializedAs("currentScene")] public string currentSceneName;
+    public string currentSceneName;
 
     private void OnNewSceneLoaded(AsyncOperationHandle<SceneInstance> obj)
     {
@@ -42,7 +42,7 @@ public class SceneLoader : MonoBehaviour
             isLoading = true;
 
             currentSceneName = sceneName;
-            
+
             StartCoroutine(UnloadPreviousScene());
         }
         else

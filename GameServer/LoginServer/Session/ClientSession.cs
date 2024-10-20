@@ -23,41 +23,16 @@ namespace LoginServer
 
         //락
         object _lock = new object();
+
         //세션에 해당하는 유저에게 보낼 패킷
         List<ArraySegment<byte>> _reserveQueue = new List<ArraySegment<byte>>();
 
         // 패킷 모아 보내기
         int _reservedSendBytes = 0;
+
         //마지막으로 보낸 틱
         long _lastSendTick = 0;
 
-        //유저 접속 체크용 틱
-        //강종등으로 인한 유저 연결 해제용
-        long _pingpongTick = 0;
-
-        //유저 접속 체크용
-        public void Ping()
-        {
-            if (_pingpongTick > 0)
-            {
-                long delta = (System.Environment.TickCount64 - _pingpongTick);
-                if (delta > 3600 * 1000)
-                {
-                    Console.WriteLine("Disconnected by PingCheck");
-                    Disconnect();
-                    return;
-                }
-            }
-
-            S_Ping pingPacket = new S_Ping();
-            Send(pingPacket);
-        }
-
-        //클라이언트에서 핑 패킷을 받으면 틱 갱신
-        public void HandlePong()
-        {
-            _pingpongTick = System.Environment.TickCount64;
-        }
 
         #region Network
 
@@ -106,12 +81,9 @@ namespace LoginServer
         //유저가 연결시 실행
         public override void OnConnected(EndPoint endPoint)
         {
+            S_Connected connectedPacket = new S_Connected();
+            Send(connectedPacket);
             Console.WriteLine($"OnConnected : {endPoint}");
-
-            {
-                S_Connected connectedPacket = new S_Connected();
-                Send(connectedPacket);
-            }
         }
 
         //패킷 수신
@@ -123,6 +95,7 @@ namespace LoginServer
         //연결 해제
         public override void OnDisconnected(EndPoint endPoint)
         {
+            Console.WriteLine($"SessionId : {SessionId}");
             SessionManager.Instance.Remove(this);
         }
 
