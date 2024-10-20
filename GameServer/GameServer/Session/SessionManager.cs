@@ -69,16 +69,29 @@ namespace GameServer
             }
         }
 
-        //특정 유저 세션 검색
-        //TODO : 기능 체크
-        public ClientSession Find(int id)
+        public ClientSession FindBySessionId(int id)
         {
             lock (_lock)
             {
-                ClientSession session = null;
-                _sessions.TryGetValue(id, out session);
+                _sessions.TryGetValue(id, out var session);
                 return session;
             }
+        }
+
+        public ClientSession? FindByAccountDbId(int sessionId, int accountDbId)
+        {
+            lock (_lock)
+            {
+                foreach (var session in _sessions.Values)
+                {
+                    if (session.AccountDbId == accountDbId && session.SessionId != sessionId)
+                    {
+                        return session;
+                    }
+                }
+            }
+
+            return null;
         }
 
         //세션 제거

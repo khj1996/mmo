@@ -17,7 +17,7 @@ namespace GameServer
     public partial class ClientSession : PacketSession
     {
         //유저 현재 상태 체크용 
-        public PlayerServerState ServerState { get; private set; } = PlayerServerState.ServerStateLogin;
+        public PlayerServerState ServerState { get; private set; } = PlayerServerState.ServerStateLobby;
 
         //세션에 해당하는 플레이어가 조작하는 유저
         public Player? MyPlayer { get; set; }

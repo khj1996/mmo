@@ -29,12 +29,12 @@ namespace LoginServer
             var accountDbId = int.Parse(JwtUtils.DecipherJwtAccessToken(loginPacket.JwtToken).Subject);
 
 
-            var test = SessionManager.Instance.FindByAccountDbId(SessionId, accountDbId);
+            var checkUser = SessionManager.Instance.FindByAccountDbId(SessionId, accountDbId);
 
             //중복 유저 로그인시 연결 해제
-            if (test != null)
+            if (checkUser != null)
             {
-                test.Disconnect();
+                checkUser.Disconnect();
             }
 
 
