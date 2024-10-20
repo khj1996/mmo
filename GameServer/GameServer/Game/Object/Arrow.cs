@@ -36,7 +36,7 @@ namespace GameServer.Game
                 Room.Push(Room.LeaveGame, Id);
                 return;
             }
-
+            
             BroadcastMove();
 
             Room.PushAfter(Room.TickInterval, Update);

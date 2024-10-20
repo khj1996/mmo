@@ -103,6 +103,7 @@ namespace GameServer.Game
 
 
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
+            Console.WriteLine(gameObject.Id);
 
             if (type == GameObjectType.Player)
             {
@@ -213,7 +214,7 @@ namespace GameServer.Game
             }
         }
 
-        public Player FindPlayer(Func<GameObject, bool> condition)
+        public Player? FindPlayer(Func<GameObject, bool> condition)
         {
             foreach (Player player in _players.Values)
             {

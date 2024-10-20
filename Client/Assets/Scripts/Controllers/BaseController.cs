@@ -66,6 +66,7 @@ public class BaseController : MonoBehaviour
                 return;
 
             _positionInfo.State = value;
+            UpdateAnimation();
         }
     }
 

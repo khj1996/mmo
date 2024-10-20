@@ -38,6 +38,7 @@ namespace GameServer.Game
                 return;
 
             info.PosInfo.State = CreatureState.Skill;
+
             var skill = new S_Skill
             {
                 Info = new SkillInfo()
@@ -51,7 +52,9 @@ namespace GameServer.Game
 
             if (!DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out var skillData))
                 return;
-
+            //딜레이 설정
+            player.coolTick = Environment.TickCount64 + (int)(1000 * skillData.cooldown);
+            
             switch (skillData.skillType)
             {
                 case SkillType.SkillAuto:
@@ -80,7 +83,11 @@ namespace GameServer.Game
                     arrow.Owner = player;
                     arrow.Data = skillData;
                     arrow.Info.PosInfo.State = CreatureState.Moving;
-                    arrow.Pos = player.Pos;
+                    arrow.Pos = new Vec2()
+                    {
+                        X = player.Pos.X,
+                        Y = player.Pos.Y,
+                    };
                     arrow.Move = skillPacket.MoveDir;
                     arrow.Info.PosInfo.LookDir = skillPacket.MoveDir;
                     arrow.Move = skillPacket.MoveDir;

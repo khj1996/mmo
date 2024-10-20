@@ -138,12 +138,9 @@ namespace GameServer.Game
         {
             S_Move resMovePacket = new S_Move
             {
-                ObjectId = Info.ObjectId,
+                ObjectId = Id,
                 PosInfo = Info.PosInfo,
             };
-
-
-            //Console.WriteLine($"endPos : {resMovePacket.PosInfo.Pos.X},{resMovePacket.PosInfo.Pos.Y}");
 
             Room.Broadcast(CellPos, resMovePacket);
         }

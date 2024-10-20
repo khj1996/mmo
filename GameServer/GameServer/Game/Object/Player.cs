@@ -52,7 +52,7 @@ namespace GameServer.Game
                     UpdateMoving();
                     break;
                 case CreatureState.Skill:
-                    //UpdateSkill();
+                    UpdateSkill();
                     break;
                 case CreatureState.Dead:
                     UpdateDead();
@@ -90,6 +90,15 @@ namespace GameServer.Game
         {
         }
 
+        public long coolTick = 0;
+
+        protected virtual void UpdateSkill()
+        {
+            if (coolTick > Environment.TickCount64)
+                return;
+
+            State = CreatureState.Idle;
+        }
 
         protected virtual void UpdateDead()
         {
