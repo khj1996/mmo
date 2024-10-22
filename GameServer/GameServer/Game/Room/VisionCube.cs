@@ -110,7 +110,6 @@ namespace GameServer.Game.Room
 
                 Owner.Session.Send(despawnPacket);
             }
-            Console.WriteLine(currentObjects.Count);
 
             // 교체
             PreviousObjects = currentObjects;

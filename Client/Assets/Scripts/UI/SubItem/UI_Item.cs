@@ -1,11 +1,14 @@
 ﻿using System.Linq;
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using Google.Protobuf.Protocol;
 using Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_Item : UI_Base
+public class UI_Item : UI_Base, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] Image _icon = null;
 
@@ -18,11 +21,16 @@ public class UI_Item : UI_Base
     public int Count { get; private set; }
     public bool Equipped { get; private set; }
 
+    private bool isInput = false;
+    private bool startDrag = false;
+
     public override void Init()
     {
         _icon.gameObject.BindEvent((e) =>
         {
-            Debug.Log("Click Item");
+            if (startDrag)
+
+                Debug.Log("Click Item");
 
             Managers.Data.ItemDict.TryGetValue(TemplateId, out var itemData);
             if (itemData == null)
@@ -99,5 +107,51 @@ public class UI_Item : UI_Base
             _frame.gameObject.SetActive(Equipped);
             _quantity.gameObject.SetActive(itemData.itemType == ItemType.Consumable);
         }
+    }
+
+    public async void OnBtnDown()
+    {
+        if (isInput)
+            return;
+
+        startDrag = false;
+        isInput = true;
+        float waitTime = 0;
+        var startPos = Input.mousePosition;
+        Vector3 mousePos;
+        while (Input.GetMouseButton(0))
+        {
+            waitTime += Time.deltaTime;
+            await UniTask.Yield();
+            mousePos = Input.mousePosition;
+            if ((startPos - mousePos).y > 30 || (startPos - mousePos).y < -30)
+            {
+                startDrag = true;
+                break;
+            }
+
+            if (waitTime > 0.3f)
+                break;
+        }
+    }
+
+    public void OnBtnUp()
+    {
+        if (!isInput)
+            return;
+
+
+        startDrag = false;
+        isInput = false;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        OnBtnDown();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        OnBtnUp();
     }
 }
