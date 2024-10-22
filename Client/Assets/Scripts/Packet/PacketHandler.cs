@@ -3,6 +3,8 @@ using Google.Protobuf.Protocol;
 using ServerCore;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Google.Protobuf.Collections;
 using UnityEngine;
 
 class PacketHandler
@@ -213,18 +215,26 @@ class PacketHandler
         if (!buyPacket.Result)
             return;
 
-
-        // 메모리에 아이템 정보 적용
         foreach (ItemInfo itemInfo in buyPacket.Items)
         {
             Item item = Item.MakeItem(itemInfo);
+            Debug.Log(item.Count);
             Managers.Inven.Add(item);
         }
 
         Debug.Log("아이템을 획득했습니다!");
 
         var gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        if (gameSceneUI != null) gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
+        
+        if (gameSceneUI != null)
+        {
+            gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
+            gameSceneUI.GetItemPopUp.gameObject.SetActive(true);
+
+            var remainingItems = buyPacket.Items.Skip(1).ToList(); 
+
+            gameSceneUI.GetItemPopUp.OpenPopUpMultiItem(remainingItems);
+        }
     }
 
     public static void S_PingHandler(PacketSession session, IMessage packet)
