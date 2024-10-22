@@ -19,19 +19,19 @@ namespace GameServer
         {
             try
             {
-                _redis = ConnectionMultiplexer.Connect("localhost:6380");
-                _redisDb = _redis.GetDatabase();
+                /*_redis = ConnectionMultiplexer.Connect("localhost:6380");
+                _redisDb = _redis.GetDatabase();*/
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to connect to Redis: {ex.Message}");
+                //Console.WriteLine($"Failed to connect to Redis: {ex.Message}");
                 throw;
             }
         }
         #endregion
 
-        private ConnectionMultiplexer _redis;
-        public IDatabase _redisDb;
+        /*private ConnectionMultiplexer _redis;
+        public IDatabase _redisDb;*/
         
         //세션생성시 id 설정을 위한 값
         int _sessionId = 0;

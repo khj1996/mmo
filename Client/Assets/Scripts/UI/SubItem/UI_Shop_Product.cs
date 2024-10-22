@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class UI_Shop_Product : UI_Base
 {
     private ProductData productInfo;
+    private int shopId;
 
     [SerializeField] UI_Item _item;
 
@@ -21,16 +22,17 @@ public class UI_Shop_Product : UI_Base
         gameObject.BindEvent(Buyitem);
     }
 
-    public void SetData(ProductData _productData)
+    public void SetData(int _shopId, ProductData _productData)
     {
         productInfo = _productData;
+        shopId = _shopId;
 
         if (Managers.Data.ItemDict.TryGetValue(productInfo.pId, out ItemData item))
         {
             _itemCost.text = productInfo.cAmount.ToString();
             _name.text = item.name;
             _costImg.sprite = Managers.Data.ItemImageSO.ItemImageStructs.First(x => x.DataKey == _productData.cType).Image;
-            _item.SetItem(item,productInfo.quantity);
+            _item.SetItem(item, productInfo.quantity);
         }
     }
 
@@ -38,7 +40,7 @@ public class UI_Shop_Product : UI_Base
     {
         C_BuyItem buyPacket = new C_BuyItem()
         {
-            Shop = 1,
+            Shop = shopId,
             ProductId = productInfo.id,
             JwtToken = Managers.Network.Token
         };

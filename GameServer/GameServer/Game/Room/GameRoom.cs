@@ -15,7 +15,7 @@ namespace GameServer.Game
 
         //방 id
         public int RoomId { get; set; }
-        public readonly float TickRate = 20f; // 20틱 per second (50ms 간격)
+        public readonly float TickRate = 20f; 
         public int TickInterval => (int)(1000 / TickRate);
         public float SpeedScale => TickInterval / 900f;
 
@@ -31,9 +31,6 @@ namespace GameServer.Game
         public Map Map { get; private set; } = new Map();
 
 
-        // ㅁㅁㅁ
-        // ㅁㅁㅁ
-        // ㅁㅁㅁ
         public Zone GetZone(Vector2Float cellPos)
         {
             float x = (cellPos.x - Map.MinX) / ZoneCells;

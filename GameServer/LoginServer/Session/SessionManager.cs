@@ -21,12 +21,12 @@ namespace LoginServer
         {
             try
             {
-                _redis = ConnectionMultiplexer.Connect("localhost:6380");
-                _redisDb = _redis.GetDatabase();
+                /*_redis = ConnectionMultiplexer.Connect("localhost:6380");
+                _redisDb = _redis.GetDatabase();*/
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to connect to Redis: {ex.Message}");
+                //Console.WriteLine($"Failed to connect to Redis: {ex.Message}");
                 throw;
             }
         }
@@ -41,8 +41,8 @@ namespace LoginServer
         //클라이언트 세션 딕셔너리
         Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
 
-        private ConnectionMultiplexer _redis;
-        public IDatabase _redisDb;
+        /*private ConnectionMultiplexer _redis;
+        public IDatabase _redisDb;*/
         
         
         //락

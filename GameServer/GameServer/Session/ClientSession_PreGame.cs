@@ -37,7 +37,7 @@ namespace GameServer
             {
                 checkUser.Disconnect();
             }
-            SessionManager.Instance._redisDb.StringSet($"user:{accountDbId}:isLoggedIn", true, TimeSpan.FromHours(1));
+            //SessionManager.Instance._redisDb.StringSet($"user:{accountDbId}:isLoggedIn", true, TimeSpan.FromHours(1));
 
             LobbyPlayers.Clear();
 

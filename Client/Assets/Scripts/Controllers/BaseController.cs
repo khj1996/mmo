@@ -224,6 +224,11 @@ public class BaseController : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
 
         transform.position = new Vector3(Pos.X, Pos.Y, 0);
+        _positionInfo.LookDir = new Vec2()
+        {
+            X = 0,
+            Y = 0
+        };
 
         UpdateAnimation();
     }
@@ -283,8 +288,8 @@ public class BaseController : MonoBehaviour
     {
         Pos = movePacket.PosInfo.Pos;
         Move = movePacket.PosInfo.Move;
-        
-        
+
+
         if (!(Move.X == 0 && Move.Y == 0))
             LookDir = movePacket.PosInfo.Move;
 
@@ -303,7 +308,7 @@ public class BaseController : MonoBehaviour
                 UpdateAnimation();
             }
         }
-        
+
         UpdateAnimation();
     }
 }

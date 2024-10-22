@@ -95,7 +95,7 @@ namespace LoginServer
         //연결 해제
         public override void OnDisconnected(EndPoint endPoint)
         {
-            SessionManager.Instance._redisDb.KeyDelete($"user:{AccountDbId}:isLoggedIn");
+            //SessionManager.Instance._redisDb.KeyDelete($"user:{AccountDbId}:isLoggedIn");
             Console.WriteLine($"SessionId : {SessionId}");
             SessionManager.Instance.Remove(this);
         }

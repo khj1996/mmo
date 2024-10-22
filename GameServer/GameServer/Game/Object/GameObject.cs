@@ -73,6 +73,9 @@ namespace GameServer.Game
                     case CreatureState.Moving:
                         BroadcastMove();
                         break;
+                    case CreatureState.Idle:
+                        BroadcastMove();
+                        break;
                 }
 
             }

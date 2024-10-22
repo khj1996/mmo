@@ -16,7 +16,7 @@ public class UI_Shop_Sub : UI_Base
     }
 
     public void SetData(ShopData _shopData)
-    {   
+    {
         shopdata = _shopData;
 
         GameObject grid = transform.Find("Grid").gameObject;
@@ -33,7 +33,7 @@ public class UI_Shop_Sub : UI_Base
             var sc = Managers.UI.MakeSubItem<UI_Shop_Product>(grid.transform);
             sc.gameObject.transform.localScale = Vector3.one;
 
-            sc.SetData(productData);
+            sc.SetData(shopdata.id, productData);
 
             Products.Add(sc);
         }
@@ -43,7 +43,7 @@ public class UI_Shop_Sub : UI_Base
     {
         for (int i = 0; i < Products.Count; i++)
         {
-            Products[i].SetData(shopdata.productList[i]);
+            Products[i].SetData(shopdata.id, shopdata.productList[i]);
         }
     }
 }

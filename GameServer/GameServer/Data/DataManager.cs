@@ -55,7 +55,8 @@ namespace GameServer.Data
                             ShopProductDbId = productInfo.id,
                             PId = productInfo.pId,
                             CType = productInfo.cType,
-                            CAmount = productInfo.cAmount
+                            CAmount = productInfo.cAmount,
+                            Quantity = productInfo.quantity
                         });
                     }
 
@@ -85,7 +86,8 @@ namespace GameServer.Data
                             id = product.ShopProductDbId,
                             cAmount = product.CAmount,
                             cType = product.CType,
-                            pId = product.PId
+                            pId = product.PId,
+                            quantity = product.Quantity
                         });
                     }
 

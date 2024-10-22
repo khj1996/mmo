@@ -39,7 +39,7 @@ namespace LoginServer
             }
 
             //redis를 이용하여 추가
-            SessionManager.Instance._redisDb.StringSet($"user:{accountDbId}:isLoggedIn", true, TimeSpan.FromHours(1));
+            //SessionManager.Instance._redisDb.StringSet($"user:{accountDbId}:isLoggedIn", true, TimeSpan.FromHours(1));
             
 
             LobbyPlayers.Clear();
