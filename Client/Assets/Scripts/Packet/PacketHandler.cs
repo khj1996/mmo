@@ -207,7 +207,7 @@ class PacketHandler
         (await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
     }
 
-    public static void S_BuyItemHandler(PacketSession session, IMessage packet)
+    public async static void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
         S_BuyItem buyPacket = (S_BuyItem)packet;
         Debug.Log(buyPacket.Result);
@@ -225,15 +225,13 @@ class PacketHandler
         Debug.Log("아이템을 획득했습니다!");
 
         var gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        
+
         if (gameSceneUI != null)
         {
             gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
-            gameSceneUI.GetItemPopUp.gameObject.SetActive(true);
 
-            var remainingItems = buyPacket.Items.Skip(1).ToList(); 
-
-            gameSceneUI.GetItemPopUp.OpenPopUpMultiItem(remainingItems);
+            var remainingItems = buyPacket.Items.Skip(1).ToList();
+            (await Managers.UI.ShowPopupUI<UI_GetItemPopUp>()).OpenPopUpMultiItem(remainingItems);
         }
     }
 

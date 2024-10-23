@@ -8,11 +8,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UI_GetItemPopUp : UI_Base
+public class UI_GetItemPopUp : UI_Popup
 {
     public ScrollRect _scrollRect;
     public AnimCurve _animCurve;
-    public Button CloseBtn;
     public UI_Item itemPrefab;
     public List<UI_Item> items = new List<UI_Item>();
 
@@ -20,13 +19,9 @@ public class UI_GetItemPopUp : UI_Base
 
     public override void Init()
     {
-        CloseBtn.gameObject.BindEvent(OnClickButton);
+        CloseBtn.gameObject.BindEvent(ClosePopupUI);
     }
 
-    void OnClickButton(PointerEventData evt)
-    {
-        gameObject.SetActive(false);
-    }
 
     public void OpenPopUpMultiItem(List<ItemInfo> itemDatas)
     {

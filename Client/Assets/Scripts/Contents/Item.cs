@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using UnityEngine;
 public class Item
 {
     public ItemInfo Info { get; } = new ItemInfo();
+    public Action useItem;
 
     public int ItemDbId
     {
@@ -38,8 +40,15 @@ public class Item
         set { Info.Equipped = value; }
     }
 
+    public string Description
+    {
+        get => description;
+        set => description = value;
+    }
+
     public ItemType ItemType { get; private set; }
     public bool Stackable { get; protected set; }
+    private string description;
 
     public Item(ItemType itemType)
     {
@@ -109,6 +118,17 @@ public class Weapon : Item
             Damage = data.damage;
             Stackable = false;
         }
+
+        useItem += () =>
+        {
+            C_EquipItem equipPacket = new C_EquipItem();
+            equipPacket.ItemDbId = ItemDbId;
+            equipPacket.Equipped = !Equipped;
+
+            Managers.Network.Send(equipPacket);
+        };
+
+        Description = $"장착부위 : 무기\n공격력 : {data.damage}증가";
     }
 }
 
@@ -137,6 +157,16 @@ public class Armor : Item
             Defence = data.defence;
             Stackable = false;
         }
+        useItem += () =>
+        {
+            C_EquipItem equipPacket = new C_EquipItem();
+            equipPacket.ItemDbId = ItemDbId;
+            equipPacket.Equipped = !Equipped;
+
+            Managers.Network.Send(equipPacket);
+        };
+
+        Description = $"장착부위 : {data.armorType}\n방어력 : {data.defence}증가";
     }
 }
 
@@ -166,6 +196,10 @@ public class Consumable : Item
                 ConsumableType = data.consumableType;
                 Stackable = (data.maxCount > 1);
             }
+
+            useItem += () => { Debug.Log("포션 사용 패킷 전송 필요"); };
+
+            Description = $"소모아이템 : 포션\n생명력 : {data.value}회복";
         }
     }
 }
@@ -193,6 +227,7 @@ public class Currency : Item
                 MaxCount = data.maxCount;
                 Stackable = (data.maxCount > 1);
             }
+            Description = "재화";
         }
     }
 }

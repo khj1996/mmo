@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class UI_SimpleTextPopup : UI_Popup
 {
-    public Button CloseBtn;
-    public TMP_Text Title;
     public TMP_Text Content;
 
     public override void Init()
@@ -18,17 +16,12 @@ public class UI_SimpleTextPopup : UI_Popup
         base.Init();
 
 
-        CloseBtn.gameObject.BindEvent(OnClickButton);
+        CloseBtn.gameObject.BindEvent(ClosePopupUI);
     }
 
     public void SetText(string title, string text)
     {
         Title.text = title;
         Content.text = text;
-    }
-
-    void OnClickButton(PointerEventData evt)
-    {
-        Managers.UI.ClosePopupUI();
     }
 }

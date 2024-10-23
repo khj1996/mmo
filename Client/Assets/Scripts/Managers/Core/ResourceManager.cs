@@ -41,7 +41,8 @@ public class ResourceManager
             return null;
         }
 
-        if (original.GetComponent<Poolable>() != null)
+        Poolable poolable = original.GetComponent<Poolable>();
+        if (poolable != null)
             return Managers.Pool.Pop(original, parent).gameObject;
 
         GameObject go = Object.Instantiate(original, parent);
