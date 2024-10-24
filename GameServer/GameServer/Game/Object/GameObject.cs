@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using GameServer.Data;
 using static GameServer.Game.GameLogic;
 
 namespace GameServer.Game
@@ -33,6 +34,33 @@ namespace GameServer.Game
 
         //총 방어력
         public virtual int TotalDefence => 0;
+
+
+        public int Level
+        {
+            get => Info.StatInfo.Level;
+            set => Info.StatInfo.Level = value;
+        }
+
+        public int Exp
+        {
+            get => Info.StatInfo.TotalExp;
+            set
+            {
+                var data = DataManager.StatDict
+                    .Where(x => x.Value.TotalExp <= value)
+                    .OrderByDescending(x => x.Value.TotalExp)
+                    .FirstOrDefault();
+
+                if (data.Key != null)
+                {
+                    UpdateLevel(data.Value);
+                }
+
+                // 최종적으로 TotalExp 값 설정
+                Info.StatInfo.TotalExp = value;
+            }
+        }
 
         //속도
         public float Speed
@@ -77,7 +105,6 @@ namespace GameServer.Game
                         BroadcastMove();
                         break;
                 }
-
             }
         }
 
@@ -123,13 +150,18 @@ namespace GameServer.Game
         {
         }
 
+        public virtual void UpdateLevel(StatInfo statInfo)
+        {
+
+        }
+
 
         public bool UpdatePosition()
         {
             if (Room == null) return false;
 
             var speedScale = Speed * Room.SpeedScale;
-            
+
             var result = Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
 
             BroadcastMove();

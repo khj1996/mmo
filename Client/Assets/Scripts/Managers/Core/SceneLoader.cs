@@ -12,7 +12,7 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private SceneDataSO SceneDataSO;
 
-    private bool isLoading = false; //씬 로드 여부 확인
+    public bool isLoading { get; private set; } = false;
 
     private AssetReference sceneToLoad;
     private AssetReference currentlyLoadedScene;
@@ -24,10 +24,10 @@ public class SceneLoader : MonoBehaviour
     private void OnNewSceneLoaded(AsyncOperationHandle<SceneInstance> obj)
     {
         currentlyLoadedScene = sceneToLoad;
-        isLoading = false;
 
         Scene s = obj.Result.Scene;
         SceneManager.SetActiveScene(s);
+        isLoading = false;
     }
 
     public void LoadScene(string sceneName)
@@ -75,9 +75,5 @@ public class SceneLoader : MonoBehaviour
     {
         SceneLoadOperationHandle = sceneToLoad.LoadSceneAsync(LoadSceneMode.Additive, true, 0);
         SceneLoadOperationHandle.Completed += OnNewSceneLoaded;
-    }
-
-    public void TransitScene()
-    {
     }
 }

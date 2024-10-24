@@ -58,7 +58,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SEnterServer, MakePacket<S_EnterServer>);
 		_handler.Add((ushort)MsgId.SEnterServer, PacketHandler.S_EnterServerHandler);		
 		_onRecv.Add((ushort)MsgId.SBuyItem, MakePacket<S_BuyItem>);
-		_handler.Add((ushort)MsgId.SBuyItem, PacketHandler.S_BuyItemHandler);
+		_handler.Add((ushort)MsgId.SBuyItem, PacketHandler.S_BuyItemHandler);		
+		_onRecv.Add((ushort)MsgId.SUpdateLevel, MakePacket<S_UpdateLevel>);
+		_handler.Add((ushort)MsgId.SUpdateLevel, PacketHandler.S_UpdateLevelHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

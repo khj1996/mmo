@@ -30,6 +30,7 @@ enum MsgId {
   S_Enter_Server = 23;
   S_Buy_Item = 24;
   C_Buy_Item = 25;
+  S_Update_Level = 26;
 }
 
 enum CreatureState {
@@ -191,6 +192,11 @@ message S_EquipItem {
 
 message S_ChangeStat {
   StatInfo statInfo = 1;
+}
+
+message S_UpdateLevel {
+  int32 level = 1;
+  StatInfo statInfo = 2;
 }
 
 message S_Ping {

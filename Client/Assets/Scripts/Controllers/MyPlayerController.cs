@@ -1,15 +1,10 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
-using static Define;
 
 public class MyPlayerController : PlayerController
 {
-
     private float currTime = 0.0f;
 
     private Camera _camera;
@@ -20,13 +15,38 @@ public class MyPlayerController : PlayerController
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
 
+    private UI_GameScene gameSceneUI;
+    [SerializeField] UI_ExpBar uiExpBar;
+
+    public int Exp
+    {
+        get => Stat.TotalExp;
+        set
+        {
+            Stat.TotalExp = value;
+            UpdateExpBar();
+        }
+    }
+
+    public void UpdateExpBar()
+    {
+        if (!uiExpBar)
+        {
+            uiExpBar = FindObjectOfType<UI_ExpBar>();
+        }
+
+        uiExpBar.SetExpBar(Exp);
+    }
+
 
     protected override void Init()
     {
         base.Init();
         RefreshAdditionalStat();
         _camera = Camera.main;
+        gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
     }
+
 
     protected override void UpdateController()
     {
@@ -111,7 +131,6 @@ public class MyPlayerController : PlayerController
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
             UI_Inventory invenUI = gameSceneUI.InvenUI;
 
             if (invenUI.gameObject.activeSelf)
@@ -126,7 +145,6 @@ public class MyPlayerController : PlayerController
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
-            UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
             UI_Stat statUI = gameSceneUI.StatUI;
 
             if (statUI.gameObject.activeSelf)
@@ -141,7 +159,6 @@ public class MyPlayerController : PlayerController
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            var gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
             var shopUI = gameSceneUI.ShopUI;
 
             if (shopUI.gameObject.activeSelf)

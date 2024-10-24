@@ -232,6 +232,8 @@ namespace GameServer.Game
                     Player player = (Player)owner;
                     DbTransaction.RewardPlayer(player, rewardData, Room);
                 }
+
+                owner.Exp += 5;
             }
         }
 

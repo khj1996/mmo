@@ -20,7 +20,8 @@ namespace GameServer.DB
             //플레이어 정보
             PlayerDb playerDb = new PlayerDb();
             playerDb.PlayerDbId = player.PlayerDbId;
-            playerDb.Hp = player.Info.StatInfo.Hp;
+            playerDb.Hp = player.Hp;
+            playerDb.TotalExp = player.Exp;
             playerDb.CurMap = player.Room.Map.MapId;
             playerDb.PosX = player.Pos.X;
             playerDb.PosY = player.Pos.Y;
@@ -34,6 +35,7 @@ namespace GameServer.DB
                     db.Entry(playerDb).State = EntityState.Unchanged;
                     db.Entry(playerDb).Property(nameof(PlayerDb.Hp)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.CurMap)).IsModified = true;
+                    db.Entry(playerDb).Property(nameof(PlayerDb.TotalExp)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.PosX)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.PosY)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.PosZ)).IsModified = true;
@@ -51,35 +53,51 @@ namespace GameServer.DB
             if (player == null || rewardData == null || room == null)
                 return;
 
-            // TODO : 살짝 문제가 있긴 하다...
-            // 1) DB에다가 저장 요청
-            // 2) DB 저장 OK
-            // 3) 메모리에 적용
-            int? slot = player.Inven.GetEmptySlot();
-            if (slot == null)
+
+            var test = player.Inven.Find(x => x.TemplateId == rewardData.itemId && x.Stackable);
+
+            var rewardSlot = (test == null) ? player.Inven.GetEmptySlot() : player.Inven.GetAvailableSlot(test.TemplateId);
+            var rewardCount = (test == null) ? rewardData.count : test.Count + rewardData.count;
+
+
+            if (rewardSlot == null)
                 return;
 
-            ItemDb itemDb = new ItemDb()
+            var rewardItem = new ItemDb()
             {
                 TemplateId = rewardData.itemId,
-                Count = rewardData.count,
-                Slot = slot.Value,
+                Count = rewardCount,
+                Slot = (int)rewardSlot,
                 OwnerDbId = player.PlayerDbId
             };
+
+            if (test != null)
+            {
+                rewardItem.ItemDbId = test.ItemDbId;
+            }
 
             // You
             Instance.Push(() =>
             {
                 using (AppDbContext db = new AppDbContext())
                 {
-                    db.Items.Add(itemDb);
+                    if (rewardItem.ItemDbId != 0)
+                    {
+                        db.Entry(rewardItem).State = EntityState.Unchanged;
+                        db.Entry(rewardItem).Property(nameof(ItemDb.Count)).IsModified = true;
+                    }
+                    else
+                    {
+                        db.Items.Add(rewardItem);
+                    }
+
                     bool success = db.SaveChangesEx();
                     if (success)
                     {
                         // Me
                         room.Push(() =>
                         {
-                            Item newItem = Item.MakeItem(itemDb);
+                            var newItem = Item.MakeItem(rewardItem);
                             player.Inven.Add(newItem);
 
                             // Client Noti

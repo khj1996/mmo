@@ -1,12 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
-using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Define;
-using Pos_1 = Pos;
 
 public class BaseController : MonoBehaviour
 {
@@ -55,6 +49,8 @@ public class BaseController : MonoBehaviour
             _positionInfo = value;
         }
     }
+    
+    
 
 
     public CreatureState State
@@ -302,7 +298,7 @@ public class BaseController : MonoBehaviour
         {
             var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
             var distance = (destPos - transform.position).magnitude;
-            if (distance < 0.05f && Move.X == 0 && Move.Y == 0)
+            if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
             {
                 State = CreatureState.Idle;
                 UpdateAnimation();

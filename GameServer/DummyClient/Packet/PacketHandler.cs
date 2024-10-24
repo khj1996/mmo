@@ -127,10 +127,16 @@ class PacketHandler
     {
         C_Pong pongPacket = new C_Pong();
     }
+
     public static void S_EnterServerHandler(PacketSession session, IMessage packet)
     {
     }
+
     public static void S_BuyItemHandler(PacketSession session, IMessage packet)
+    {
+    }
+
+    public static void S_UpdateLevelHandler(PacketSession session, IMessage packet)
     {
     }
 }

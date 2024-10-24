@@ -286,10 +286,6 @@ namespace GameServer.Game
             return zones.SelectMany(z => z.Players).ToList();
         }
 
-        // ㅁㅁㅁㅁㅁㅁ
-        // ㅁㅁㅁㅁㅁㅁ
-        // ㅁㅁㅁㅁㅁㅁ
-        // ㅁㅁㅁㅁㅁㅁ
         public List<Zone> GetAdjacentZones(Vector2Float cellPos, int range = GameRoom.VisionDis)
         {
             HashSet<Zone> zones = new HashSet<Zone>();

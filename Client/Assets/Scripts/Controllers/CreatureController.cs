@@ -28,6 +28,8 @@ public class CreatureController : BaseController
             UpdateHpBar();
         }
     }
+    
+    
 
     protected void AddHpBar()
     {
@@ -37,7 +39,7 @@ public class CreatureController : BaseController
         _hpBar = go.GetComponent<HpBar>();
         UpdateHpBar();
     }
-
+    
     void UpdateHpBar()
     {
         if (_hpBar == null)

@@ -5,12 +5,13 @@ using GameServer.Game.Room;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GameServer.Data;
 
 namespace GameServer.Game
 {
     public class Player : GameObject
     {
-        IJob _job;
+        IJob? _job;
 
 
         public int PlayerDbId { get; set; }
@@ -102,6 +103,36 @@ namespace GameServer.Game
 
         protected virtual void UpdateDead()
         {
+        }
+
+        public override void UpdateLevel(StatInfo statInfo)
+        {
+            if (Level == statInfo.Level || Room == null)
+            {
+                return;
+            }
+
+            Info.StatInfo.Level = statInfo.Level;
+            Info.StatInfo.MaxHp = statInfo.MaxHp;
+            Info.StatInfo.Hp = statInfo.MaxHp;
+            Info.StatInfo.Attack = statInfo.Attack;
+            Info.StatInfo.Speed = statInfo.Speed;
+
+            S_UpdateLevel levelPacket = new S_UpdateLevel()
+            {
+                Level = statInfo.Level,
+                StatInfo = statInfo
+            };
+            Session.Send(levelPacket);
+
+
+            var changePacket = new S_ChangeHp
+            {
+                ObjectId = Id,
+                Hp = Info.StatInfo.Hp
+            };
+            
+            Room.Broadcast(CellPos, changePacket, PlayerDbId);
         }
 
         public void OnLeaveGame()
@@ -199,6 +230,50 @@ namespace GameServer.Game
             }
 
             return cellPos;
+        }
+
+        public override void OnDead(GameObject attacker)
+        {
+            if (_job != null)
+            {
+                _job.Cancel = true;
+                _job = null;
+            }
+
+            base.OnDead(attacker);
+
+            GameObject owner = attacker.GetOwner();
+            if (owner.ObjectType == GameObjectType.Player)
+            {
+                var rewardData = GetRandomReward();
+                if (rewardData != null)
+                {
+                    Player player = (Player)owner;
+                    DbTransaction.RewardPlayer(player, rewardData, Room);
+                }
+
+                owner.Exp += 3;
+            }
+        }
+
+        RewardData? GetRandomReward()
+        {
+            DataManager.MonsterDict.TryGetValue(1, out var monsterData);
+
+            var rand = new Random().Next(0, 101);
+
+            var sum = 0;
+            foreach (RewardData rewardData in monsterData.rewards)
+            {
+                sum += rewardData.probability;
+
+                if (rand <= sum)
+                {
+                    return rewardData;
+                }
+            }
+
+            return null;
         }
 
         public void RefreshAdditionalStat()

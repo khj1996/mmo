@@ -6,7 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
-public class StartManager : MonoBehaviour
+public class StartScene : MonoBehaviour
 {
     [SerializeField] AssetReference persistentScene = default;
 

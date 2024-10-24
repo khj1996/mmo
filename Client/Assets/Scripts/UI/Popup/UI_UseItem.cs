@@ -15,8 +15,6 @@ public class UI_UseItem : UI_Popup
     public UI_Item _item;
     public TMP_Text description;
 
-    private float tweenInterval = 0.1f;
-
     public override void Init()
     {
         CloseBtn.gameObject.BindEvent(ClosePopupUI);

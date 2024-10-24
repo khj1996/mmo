@@ -17,10 +17,14 @@ public class UI_LoginScene : UI_Scene
 
     public override void Init()
     {
-        base.Init();
+        base.Init();       
+        SceneName = "UI_LoginScene";
+
 
         CreateBtn.gameObject.BindEvent(OnClickCreateButton);
         LoginBtn.gameObject.BindEvent(OnClickLoginButton);
+        
+        isInitComplete = true;
 
        // FB.Init("", "");
     }

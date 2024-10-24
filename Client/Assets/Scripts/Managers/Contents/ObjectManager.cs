@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ObjectManager
@@ -17,12 +18,21 @@ public class ObjectManager
 
     public void Add(ObjectInfo info, bool myPlayer = false)
     {
-        if (MyPlayer != null && MyPlayer.Id == info.ObjectId)
-            return;
+        Managers.Instance.StartCoroutine(AddCoroutine(info, myPlayer));
+    }
+
+    IEnumerator AddCoroutine(ObjectInfo info, bool myPlayer = false)
+    {
+        yield return new WaitUntil(() => !Managers.Scene.isLoading && Managers.UI.CurrentSceneUI.isInitComplete && Managers.UI.CurrentSceneUI.SceneName == "UI_GameScene");
+
+        if (MyPlayer && MyPlayer.Id == info.ObjectId)
+            yield break;
         if (_objects.ContainsKey(info.ObjectId))
-            return;
+            yield break;
+
 
         GameObjectType objectType = GetObjectTypeById(info.ObjectId);
+
         if (objectType == GameObjectType.Player)
         {
             if (myPlayer)
@@ -41,6 +51,7 @@ public class ObjectManager
                     LookDir = new Vec2(),
                 };
                 MyPlayer.Stat.MergeFrom(info.StatInfo);
+                MyPlayer.UpdateExpBar();
             }
             else
             {

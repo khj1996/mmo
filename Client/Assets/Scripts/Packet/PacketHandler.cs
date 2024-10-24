@@ -170,7 +170,10 @@ class PacketHandler
         gameSceneUI.StatUI.RefreshUI();
 
         if (Managers.Object.MyPlayer != null)
+        {
             Managers.Object.MyPlayer.RefreshAdditionalStat();
+            Managers.Object.MyPlayer.Exp += 3;
+        }
     }
 
     public static void S_EquipItemHandler(PacketSession session, IMessage packet)
@@ -233,6 +236,18 @@ class PacketHandler
             var remainingItems = buyPacket.Items.Skip(1).ToList();
             (await Managers.UI.ShowPopupUI<UI_GetItemPopUp>()).OpenPopUpMultiItem(remainingItems);
         }
+    }
+    
+    public static void S_UpdateLevelHandler(PacketSession session, IMessage packet)
+    {
+        S_UpdateLevel updateLevelPacket = (S_UpdateLevel)packet;
+
+
+        if (Managers.Object.MyPlayer != null)
+        {
+            Managers.Object.MyPlayer.Stat = updateLevelPacket.StatInfo;
+        }
+
     }
 
     public static void S_PingHandler(PacketSession session, IMessage packet)

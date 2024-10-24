@@ -1255,7 +1255,6 @@ MonoBehaviour:
   Title: {fileID: 0}
   ok: {fileID: 6187258274858617391}
   _item: {fileID: 4163341545274885276}
-  items: []
   description: {fileID: 5197593853311072143}
 --- !u!1 &7809924055877277891
 GameObject:
@@ -1559,22 +1558,22 @@ PrefabInstance:
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
@@ -1624,12 +1623,12 @@ PrefabInstance:
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 960
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -435
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
