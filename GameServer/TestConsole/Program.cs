@@ -1,113 +1,63 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace AccountServer
+public class Solution
 {
-    public class Program
+    public string[] solution(string[,] plans)
     {
-        public static int Main(string[] args)
+        List<string> answer = new List<string>();
+        var data = new List<(string name, int start, int cost)>();
+
+        for (int i = 0; i < plans.GetLength(0); i++)
         {
-            Console.WriteLine(Math.Truncate(0.5f));
-            Console.WriteLine(Math.Truncate(-0.5f));
+            var name = plans[i, 0];
+            var splitTime = plans[i, 1].Split(":");
+            int start = Convert.ToInt32(splitTime[0]) * 60 + Convert.ToInt32(splitTime[1]);
+            int cost = Convert.ToInt32(plans[i, 2]);
 
-            return 0;
-            Stopwatch sw = new Stopwatch();
-
-            Random rand = new Random();
-
-            double sum = 0.0;
-
-            int cnt = 0;
-
-
-            var num = 0.0f;
-            for (int i = 0; i < 100000000; i++)
-            {
-                /*var first = rand.Next();
-                var send = rand.Next();*/
-
-                var first = rand.NextDouble();
-                var send = rand.NextDouble();
-                long startTicks = DateTime.UtcNow.Ticks;
-
-                var test = Math.Abs(first - send) < 0.0f;
-
-                long endTicks = DateTime.UtcNow.Ticks;
-
-
-                // 측정된 시간 출력
-                long elapsedTicks = endTicks - startTicks;
-                TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
-                sum += elapsedSpan.TotalMilliseconds;
-            }
-
-            Console.WriteLine("측정된 시간: {0}ms", sum);
-
-
-            /*
-            long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            long expired = now -1000;
-
-            var claims = new Claim[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, "435634"), // Subject
-                new Claim(JwtRegisteredClaimNames.Iat, now.ToString()), // Issued At
-                new Claim(JwtRegisteredClaimNames.Exp, expired.ToString()) // Expiration
-            };
-
-
-            var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes("dskfnglskjdnf;ogkjsndofignjdkfngolsjd")),
-                SecurityAlgorithms.HmacSha256);
-
-            var jwt = new JwtSecurityToken(claims: claims, signingCredentials: credentials);
-
-            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            Console.Write(token);
-
-            var test1 = DecipherJwtAccessToken(token);
-            var test2 = ValidateJwtAccessToken(token, "dskfnglskjdnf;ogkjsndofignjdkfngolsjd");
-
-            return int.Parse(test1.Subject);*/
-            return 0;
+            data.Add((name, start, cost));
         }
 
+        data = data.OrderBy(p => p.start).ToList();
 
-        public static JwtSecurityToken DecipherJwtAccessToken(string token)
+        Stack<(string name, int start, int cost)> stack = new Stack<(string name, int start, int cost)>();
+
+        int currentTime = 0;
+
+        foreach (var current in data)
         {
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken decipher = handler.ReadJwtToken(token);
-            return decipher;
+            //현재 진행중인 과제가 있을경우
+            while (stack.Count > 0)
+            {
+                //진행중인 과제
+                var process = stack.Peek();
+
+                //현재 진행중인 과제가 새로운 과제보다 먼저 끝날경우
+                if (currentTime + process.cost <= current.start)
+                {
+                    answer.Add(stack.Pop().name);
+                    currentTime += process.cost;
+                }
+                else
+                {
+                    //소모시간 제외
+                    var renew = stack.Pop();
+                    renew.cost -= current.start - currentTime;
+                    stack.Push(renew);
+                    break;
+                }
+            }
+
+            stack.Push(current);
+            currentTime = current.start;
         }
 
-        public static bool ValidateJwtAccessToken(string token, string key)
+        while (stack.Count > 0)
         {
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-
-            TokenValidationParameters validationParams = new TokenValidationParameters()
-            {
-                ValidateLifetime = true,
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-            };
-
-            SecurityToken validatedToken;
-            try
-            {
-                var claims = handler.ValidateToken(token, validationParams, out validatedToken);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            answer.Add(stack.Pop().name);
         }
+
+        return answer.ToArray();
     }
 }

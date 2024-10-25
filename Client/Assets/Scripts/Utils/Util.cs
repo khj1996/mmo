@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

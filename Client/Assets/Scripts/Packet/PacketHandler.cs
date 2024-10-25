@@ -210,7 +210,7 @@ class PacketHandler
         (await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
     }
 
-    public async static void S_BuyItemHandler(PacketSession session, IMessage packet)
+    public static async void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
         S_BuyItem buyPacket = (S_BuyItem)packet;
         Debug.Log(buyPacket.Result);
@@ -237,17 +237,17 @@ class PacketHandler
             (await Managers.UI.ShowPopupUI<UI_GetItemPopUp>()).OpenPopUpMultiItem(remainingItems);
         }
     }
-    
-    public static void S_UpdateLevelHandler(PacketSession session, IMessage packet)
+
+    public static async void S_UpdateLevelHandler(PacketSession session, IMessage packet)
     {
         S_UpdateLevel updateLevelPacket = (S_UpdateLevel)packet;
 
 
         if (Managers.Object.MyPlayer != null)
         {
+            (await Managers.UI.ShowPopupUI<UI_LevelUp>()).LevelUp(Managers.Object.MyPlayer.Stat, updateLevelPacket.StatInfo);
             Managers.Object.MyPlayer.Stat = updateLevelPacket.StatInfo;
         }
-
     }
 
     public static void S_PingHandler(PacketSession session, IMessage packet)
