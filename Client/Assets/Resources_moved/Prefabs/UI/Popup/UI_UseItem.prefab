@@ -618,7 +618,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544\uC774\uD15C \uD68D\uB4DD"
+  m_text: "\uC544\uC774\uD15C \uC815\uBCF4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d5070f402859214a9d17b980dc2ed5c, type: 2}
   m_sharedMaterial: {fileID: -7280185422972614662, guid: 8d5070f402859214a9d17b980dc2ed5c,
@@ -1540,6 +1540,17 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6132999609505853473, guid: b38a10960a8e58540a6feb6b5d46086f,
+        type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6132999609505853473, guid: b38a10960a8e58540a6feb6b5d46086f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300136, guid: 1e627bcafe9e32d40ad554880f36b5eb,
+        type: 3}
     - target: {fileID: 6132999610687794582, guid: b38a10960a8e58540a6feb6b5d46086f,
         type: 3}
       propertyPath: m_Pivot.x

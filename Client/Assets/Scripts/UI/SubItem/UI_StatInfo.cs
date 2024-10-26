@@ -23,16 +23,15 @@ public class UI_StatInfo : UI_Base
     {
         StatBefore.text = before.ToString();
         StatAfter.text = after.ToString();
-        StatGrow.text = (after - before).ToString();
+        StatGrow.text = $"+{(after - before)}";
 
 
         Arrows[0].DOKill();
         Arrows[1].DOKill();
 
-
-        Arrows[1].DOFade(0, animDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
-        Arrows[0].DOFade(1, animDuration * .5f).OnComplete(() =>
-            Arrows[0].DOFade(0, animDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo)
+        Arrows[0].DOFade(0, animDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
+        Arrows[1].DOFade(1, animDuration * .5f).OnComplete(() =>
+            Arrows[1].DOFade(0, animDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo)
         );
     }
 }

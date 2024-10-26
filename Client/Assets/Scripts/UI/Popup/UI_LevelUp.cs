@@ -13,7 +13,7 @@ public class UI_LevelUp : UI_Popup
     public void LevelUp(StatInfo beforeStat, StatInfo afterStat)
     {
         CanvasGroup.alpha = 1;
-        rectTransform.DOSizeDelta(new Vector2(rectTransform.sizeDelta.x, 870f), 0.2f)
+        rectTransform.DOSizeDelta(new Vector2(rectTransform.sizeDelta.x, 870f), 1f)
             .SetEase(Ease.InOutSine);
 
         // UI_StatInfo 요소들을 순서대로 나타나게 설정
