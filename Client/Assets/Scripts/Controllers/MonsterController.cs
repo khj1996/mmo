@@ -24,9 +24,11 @@ public class MonsterController : CreatureController
 		//Managers.Resource.Destroy(gameObject);
 	}
 
-	public override void UseSkill(int skillId)
+	public override void UseSkill(S_Skill skillPacket)
 	{
-		if (skillId == 1)
+		LookDir = skillPacket.MoveDir;
+		
+		if (skillPacket.Info.SkillId == 1)
 		{
 			State = CreatureState.Skill;
 		}

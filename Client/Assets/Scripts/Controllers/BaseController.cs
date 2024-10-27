@@ -94,7 +94,8 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.LookDir;
         set
         {
-            if (_positionInfo.LookDir.Equals(value) || (value.X == 0 && value.Y == 0))
+            if (_positionInfo.LookDir.Equals(value) || 
+                (value.X == 0 && value.Y == 0))
                 return;
             statusChanged = true;
             _positionInfo.LookDir = value;

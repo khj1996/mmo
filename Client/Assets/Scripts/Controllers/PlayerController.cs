@@ -95,13 +95,15 @@ public class PlayerController : CreatureController
         }
     }
 
-    public override void UseSkill(int skillId)
+    public override void UseSkill(S_Skill skillPacket)
     {
-        if (skillId == 1)
+        LookDir = skillPacket.MoveDir;
+
+        if (skillPacket.Info.SkillId == 1)
         {
             _coSkill = StartCoroutine(nameof(CoStartPunch));
         }
-        else if (skillId == 2)
+        else if (skillPacket.Info.SkillId == 2)
         {
             _coSkill = StartCoroutine(nameof(CoStartShootArrow));
         }
