@@ -36,6 +36,7 @@ public struct PQNode : IComparable<PQNode>
 public class MapManager
 {
     public Grid CurrentGrid { get; private set; }
+    public PolygonCollider2D CameraClamp { get; private set; }
 
     public int MinX { get; set; }
     public int MaxX { get; set; }
@@ -75,6 +76,7 @@ public class MapManager
         go.name = "Map";
 
         CurrentGrid = go.GetComponent<Grid>();
+        CameraClamp = go.GetComponent<PolygonCollider2D>();
 
         // Collision 관련 파일
         TextAsset txt = Util.HandleAndRelease<TextAsset>($"Map/{mapName}.txt");

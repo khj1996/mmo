@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +8,7 @@ public class MyPlayerController : PlayerController
 {
     private float currTime = 0.0f;
 
-    private Camera _camera;
+    private Rigidbody2D _rigidbody2D;
 
 
     Coroutine _coSkillCooltime;
@@ -43,7 +44,7 @@ public class MyPlayerController : PlayerController
     {
         base.Init();
         RefreshAdditionalStat();
-        _camera = Camera.main;
+        _rigidbody2D = GetComponent<Rigidbody2D>();
         gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
     }
 
@@ -115,18 +116,6 @@ public class MyPlayerController : PlayerController
         _coSkillCooltime = null;
     }
 
-    void LateUpdate()
-    {
-        if (_camera)
-        {
-            _camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-        }
-        else
-        {
-            _camera = Camera.main;
-        }
-    }
-
     void GetUIKeyInput()
     {
         if (Input.GetKeyDown(KeyCode.I))
@@ -191,6 +180,53 @@ public class MyPlayerController : PlayerController
             X = Move.X,
             Y = Move.Y,
         };
+    }
+
+
+    private Tween moveTween;
+
+    protected override void UpdateMoving()
+    {
+        var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
+        var distance = Vector2.Distance(_rigidbody2D.position, destPos);
+
+        if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
+        {
+            if (moveTween != null)
+            {
+                moveTween.Kill();
+                moveTween = null;
+            }
+
+            State = CreatureState.Idle;
+            UpdateAnimation();
+        }
+        else if (moveTween == null || !moveTween.IsPlaying())
+        {
+            // 이동 스텝을 계산
+            float step = Speed * Time.deltaTime;
+
+            // 이동을 DOTween으로 설정
+            if (moveTween == null || !moveTween.IsPlaying())
+            {
+                // 기존 트윈이 존재하면 종료
+                if (moveTween != null)
+                {
+                    moveTween.Kill();
+                }
+
+                // duration 계산
+                float duration = distance / Speed;
+
+                // 이동 트윈 설정
+                moveTween = _rigidbody2D.DOMove(destPos, duration)
+                    .SetEase(Ease.Linear) // 선형 이동
+                    .OnComplete(() =>
+                    {
+                        moveTween = null; // 트윈 완료 시 null로 설정
+                    });
+            }
+        }
     }
 
     protected override void CheckUpdatedFlag()
