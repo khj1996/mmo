@@ -9,9 +9,6 @@ public class MyPlayerController : PlayerController
     private UI_Joystick _Joystick;
     private float currTime = 0.0f;
 
-    private Rigidbody2D _rigidbody2D;
-
-
     Coroutine _coSkillCooltime;
 
     public int WeaponDamage { get; private set; }
@@ -46,7 +43,6 @@ public class MyPlayerController : PlayerController
         base.Init();
         RefreshAdditionalStat();
         gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        _rigidbody2D = GetComponent<Rigidbody2D>();
         _Joystick = FindObjectOfType<UI_Joystick>();
     }
 
@@ -197,52 +193,6 @@ public class MyPlayerController : PlayerController
         };
     }
 
-
-    private Tween moveTween;
-
-    protected override void UpdateMoving()
-    {
-        var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
-        var distance = Vector2.Distance(_rigidbody2D.position, destPos);
-
-        if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
-        {
-            if (moveTween != null)
-            {
-                moveTween.Kill();
-                moveTween = null;
-            }
-
-            State = CreatureState.Idle;
-            UpdateAnimation();
-        }
-        else if (moveTween == null || !moveTween.IsPlaying())
-        {
-            // 이동 스텝을 계산
-            float step = Speed * Time.deltaTime;
-
-            // 이동을 DOTween으로 설정
-            if (moveTween == null || !moveTween.IsPlaying())
-            {
-                // 기존 트윈이 존재하면 종료
-                if (moveTween != null)
-                {
-                    moveTween.Kill();
-                }
-
-                // duration 계산
-                float duration = distance / Speed;
-
-                // 이동 트윈 설정
-                moveTween = _rigidbody2D.DOMove(destPos, duration)
-                    .SetEase(Ease.Linear) // 선형 이동
-                    .OnComplete(() =>
-                    {
-                        moveTween = null; // 트윈 완료 시 null로 설정
-                    });
-            }
-        }
-    }
 
     protected override void CheckUpdatedFlag()
     {
