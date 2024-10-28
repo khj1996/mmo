@@ -91,6 +91,7 @@ public class UIManager
 
         T popup = Util.GetOrAddComponent<T>(go);
         _popupStack.Push(popup);
+        
 
         return popup;
     }

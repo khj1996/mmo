@@ -10,6 +10,13 @@ public class UI_LevelUp : UI_Popup
     public RectTransform rectTransform;
     public UI_StatInfo[] StatInfos;
 
+
+    public override void Init()
+    {
+        base.Init();
+        CloseBtn.gameObject.BindEvent((evt) => { Managers.UI.ClosePopupUI(this); });
+    }
+
     public void LevelUp(StatInfo beforeStat, StatInfo afterStat)
     {
         CanvasGroup.alpha = 1;

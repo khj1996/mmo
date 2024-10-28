@@ -19,6 +19,7 @@ public class UI_GetItemPopUp : UI_Popup
 
     public override void Init()
     {
+        base.Init();
         CloseBtn.gameObject.BindEvent(ClosePopupUI);
     }
 

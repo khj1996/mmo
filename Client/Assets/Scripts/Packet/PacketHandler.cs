@@ -152,7 +152,7 @@ class PacketHandler
             Managers.Object.MyPlayer.RefreshAdditionalStat();
     }
 
-    public static void S_AddItemHandler(PacketSession session, IMessage packet)
+    public async static void S_AddItemHandler(PacketSession session, IMessage packet)
     {
         S_AddItem itemList = (S_AddItem)packet;
 
@@ -165,9 +165,13 @@ class PacketHandler
 
         Debug.Log("아이템을 획득했습니다!");
 
+
         UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
         gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
         gameSceneUI.StatUI.RefreshUI();
+
+        var remainingItems = itemList.Items.ToList();
+        (await Managers.UI.ShowPopupUI<UI_GetItemPopUp>()).OpenPopUpMultiItem(remainingItems);
 
         if (Managers.Object.MyPlayer != null)
         {

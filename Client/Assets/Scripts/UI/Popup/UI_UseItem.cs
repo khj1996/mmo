@@ -17,6 +17,7 @@ public class UI_UseItem : UI_Popup
 
     public override void Init()
     {
+        base.Init();
         CloseBtn.gameObject.BindEvent(ClosePopupUI);
     }
 
