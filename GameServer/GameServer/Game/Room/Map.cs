@@ -229,23 +229,28 @@ namespace GameServer.Game
         {
             float epsilon = 0.2f;
 
-            // X 방향 이동 처리 (오른쪽 이동 중)
-            if (moveDirection.X > 0 && diffX > 0)
+            if (diffX > epsilon)
             {
-                dest.x = dest.x - diffX - epsilon;
-            }
-            else if (moveDirection.X < 0 && diffX > 0)
-            {
-                dest.x = dest.x + diffX + epsilon;
+                if (moveDirection.X > 0)
+                {
+                    dest.x = dest.x - diffX - epsilon;
+                }
+                else if (moveDirection.X < 0)
+                {
+                    dest.x = dest.x + diffX + epsilon;
+                }
             }
 
-            if (moveDirection.Y > 0 && diffY > 0)
+            if (diffY > epsilon)
             {
-                dest.y = dest.y - (1 - diffY) - epsilon;
-            }
-            else if (moveDirection.Y < 0 && diffY > 0)
-            {
-                dest.y = dest.y + (1 - diffY) + epsilon;
+                if (moveDirection.Y > 0)
+                {
+                    dest.y = dest.y - (1 - diffY) - epsilon;
+                }
+                else if (moveDirection.Y < 0)
+                {
+                    dest.y = dest.y + (1 - diffY) + epsilon;
+                }
             }
         }
 
@@ -258,59 +263,51 @@ namespace GameServer.Game
 
             var (tileLeftBottomX, tileLeftBottomY) = GetTilePos(leftBottomX, leftBottomY);
             var (tileRightTopX, tileRightTopY) = GetTilePos(rightTopX, rightTopY);
+            var (currentTileX, currentTileY) = GetTilePos(pos.x, pos.y);
 
+            float diffX = 0f;
+            float diffY = 0f;
+
+            // X 축 우선 충돌 처리
             for (int x = tileLeftBottomX; x <= tileRightTopX; x++)
             {
-                for (int y = tileRightTopY; y <= tileLeftBottomY; y++)
+                if (_collision[currentTileY, x])
                 {
-                    if (_collision[y, x])
+                    float tileMinX = x + MinX;
+                    float tileMaxX = x + MinX + 1;
+
+                    // X 충돌 체크
+                    if (rightTopX > tileMinX && leftBottomX < tileMaxX)
                     {
-                        float tileMinX = x + MinX;
-                        float tileMaxX = x + MinX + 1;
-                        float tileMinY = MaxY - (y + 1);
-                        float tileMaxY = MaxY - y;
-
-                        float diffX = 0f;
-                        float diffY = 0f;
-
-                        if (rightTopX > tileMinX)
-                        {
-                            if (leftBottomX < tileMaxX)
-                            {
-                                if (rightTopX > tileMaxX)
-                                {
-                                    diffX = rightTopX - tileMaxX;
-                                }
-                                else
-                                {
-                                    diffX = tileMinX - leftBottomX;
-                                }
-                            }
-                        }
-
-                        if (rightTopY > tileMinY)
-                        {
-                            if (leftBottomY < tileMaxY)
-                            {
-                                if (rightTopY > tileMaxY)
-                                {
-                                    diffY = rightTopY - tileMaxY;
-                                }
-                                else
-                                {
-                                    diffY = tileMinY - leftBottomY;
-                                }
-                            }
-                        }
-
-                        AdjustDestinationForCollision(ref pos, move, diffX, diffY);
-                        return false;
+                        diffX = (rightTopX > tileMaxX) ? rightTopX - tileMaxX : tileMinX - leftBottomX;
                     }
+
+                    AdjustDestinationForCollision(ref pos, move, diffX, 0);
+                    break; // X 축 충돌 처리 후 Y 축으로 이동
+                }
+            }
+
+            for (int y = tileRightTopY; y <= tileLeftBottomY; y++)
+            {
+                if (_collision[y, currentTileX])
+                {
+                    float tileMinY = MaxY - (y + 1);
+                    float tileMaxY = MaxY - y;
+
+                    // Y 충돌 체크
+                    if (rightTopY > tileMinY && leftBottomY < tileMaxY)
+                    {
+                        diffY = (rightTopY > tileMaxY) ? rightTopY - tileMaxY : tileMinY - leftBottomY;
+                    }
+
+                    AdjustDestinationForCollision(ref pos, move, 0, diffY);
+                    return false;
                 }
             }
 
             return true;
         }
+
 
         // 이동 및 충돌 처리 함수
         public bool ApplyMove(GameObject gameObject, Vector2Float dest, Vec2? moveDirection = null)

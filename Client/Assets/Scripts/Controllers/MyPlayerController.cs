@@ -171,11 +171,24 @@ public class MyPlayerController : PlayerController
             return;
         }
 
-        Move = new Vec2()
+
+        if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
         {
-            X = _Joystick.inputDirection.x,
-            Y = _Joystick.inputDirection.y
-        };
+            Move = new Vec2()
+            {
+                X = _Joystick.inputDirection.x,
+                Y = _Joystick.inputDirection.y
+            };
+        }
+        else
+        {
+            Move = new Vec2()
+            {
+                X = Input.GetAxisRaw("Horizontal"),
+                Y = Input.GetAxisRaw("Vertical")
+            };
+        }
+
 
         LookDir = new Vec2()
         {
