@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class MyPlayerController : PlayerController
 {
+    private UI_Joystick _Joystick;
     private float currTime = 0.0f;
 
     private Rigidbody2D _rigidbody2D;
@@ -44,8 +45,9 @@ public class MyPlayerController : PlayerController
     {
         base.Init();
         RefreshAdditionalStat();
-        _rigidbody2D = GetComponent<Rigidbody2D>();
         gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _Joystick = FindObjectOfType<UI_Joystick>();
     }
 
 
@@ -171,8 +173,8 @@ public class MyPlayerController : PlayerController
 
         Move = new Vec2()
         {
-            X = Input.GetAxisRaw("Horizontal"),
-            Y = Input.GetAxisRaw("Vertical")
+            X = _Joystick.inputDirection.x,
+            Y = _Joystick.inputDirection.y
         };
 
         LookDir = new Vec2()
