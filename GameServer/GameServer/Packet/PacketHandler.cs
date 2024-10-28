@@ -59,9 +59,9 @@ class PacketHandler
         clientSession.HandleCreatePlayer(createPlayerPacket);
     }
 
-    public static void C_EquipItemHandler(PacketSession session, IMessage packet)
+    public static void C_UseItemHandler(PacketSession session, IMessage packet)
     {
-        var equipPacket = (C_EquipItem)packet;
+        var equipPacket = (C_UseItem)packet;
         var clientSession = (ClientSession)session;
 
         var player = clientSession.MyPlayer;
@@ -72,7 +72,7 @@ class PacketHandler
         if (room == null)
             return;
 
-        room.Push(room.HandleEquipItem, player, equipPacket);
+        room.Push(room.HandleUseItem, player, equipPacket);
     }
 
     public static void C_BuyItemHandler(PacketSession session, IMessage packet)

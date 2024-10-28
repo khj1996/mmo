@@ -38,14 +38,36 @@ namespace GameServer.DB
             });
         }
 
+        public static void UseItemNoti(Player? player, ItemDb? useItem)
+        {
+            if (player == null || useItem == null)
+                return;
+
+            // You
+            Instance.Push(() =>
+            {
+                using (AppDbContext db = new AppDbContext())
+                {
+                    db.Entry(useItem).State = EntityState.Unchanged;
+                    db.Entry(useItem).Property(nameof(ItemDb.Count)).IsModified = true;
+                    
+                    
+
+                    bool success = db.SaveChangesEx();
+                    if (!success)
+                    {
+                        // 실패했으면 Kick
+                    }
+                }
+            });
+        }
+
 
         public static void BuyItemNoti(Player? player, ItemDb? costItem, List<ItemDb>? rewardItems, GameRoom? room)
         {
             if (player == null || costItem == null || rewardItems == null || room == null)
                 return;
 
-
-            // You
             Instance.Push(() =>
             {
                 using (var db = new AppDbContext())
@@ -53,58 +75,53 @@ namespace GameServer.DB
                     db.Entry(costItem).State = EntityState.Unchanged;
                     db.Entry(costItem).Property(nameof(ItemDb.Count)).IsModified = true;
 
-
-                    foreach (var getItem in rewardItems)
+                    foreach (var item in rewardItems)
                     {
-                        if (getItem.ItemDbId != 0)
+                        if (item.ItemDbId != 0)
                         {
-                            db.Entry(getItem).State = EntityState.Unchanged;
-                            db.Entry(getItem).Property(nameof(ItemDb.Count)).IsModified = true;
+                            db.Entry(item).State = EntityState.Unchanged;
+                            db.Entry(item).Property(nameof(ItemDb.Count)).IsModified = true;
                         }
                         else
                         {
-                            db.Items.Add(getItem);
+                            db.Items.Add(item);
                         }
                     }
-
 
                     bool success = db.SaveChangesEx();
                     if (success)
                     {
-                        // Me
-                        room.Push(() =>
-                        {
-                            S_BuyItem buyPacket = new S_BuyItem()
-                            {
-                                Result = true
-                            };
-
-                            {
-                                var newItem = Item.MakeItem(costItem);
-                                player.Inven.Add(newItem);
-
-                                var rewardInfo = new ItemInfo() { };
-                                rewardInfo.MergeFrom(newItem.Info);
-                                buyPacket.Items.Add(rewardInfo);
-                            }
-
-
-                            foreach (var getItem in rewardItems)
-                            {
-                                var newItem = Item.MakeItem(getItem);
-                                player.Inven.Add(newItem);
-
-                                var rewardInfo = new ItemInfo() { };
-                                rewardInfo.MergeFrom(newItem.Info);
-                                buyPacket.Items.Add(rewardInfo);
-                            }
-
-
-                            player.Session.Send(buyPacket);
-                        });
+                        NotifyPlayerOfPurchase(player, costItem, rewardItems, room);
                     }
                 }
             });
+        }
+
+        private static void NotifyPlayerOfPurchase(Player player, ItemDb costItem, List<ItemDb> rewardItems, GameRoom room)
+        {
+            room.Push(() =>
+            {
+                var buyPacket = new S_BuyItem { Result = true };
+
+                AddItemToPacket(player, costItem, buyPacket);
+
+                foreach (var item in rewardItems)
+                {
+                    AddItemToPacket(player, item, buyPacket);
+                }
+
+                player.Session.Send(buyPacket);
+            });
+        }
+
+        private static void AddItemToPacket(Player player, ItemDb itemDb, S_BuyItem packet)
+        {
+            var newItem = Item.MakeItem(itemDb);
+            player.Inven.Add(newItem);
+
+            var rewardInfo = new ItemInfo();
+            rewardInfo.MergeFrom(newItem.Info);
+            packet.Items.Add(rewardInfo);
         }
     }
 }

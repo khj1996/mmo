@@ -29,7 +29,7 @@ class PacketHandler
     {
     }
 
-    public static void C_EquipItemHandler(PacketSession session, IMessage packet)
+    public static void C_UseItemHandler(PacketSession session, IMessage packet)
     {
     }
 

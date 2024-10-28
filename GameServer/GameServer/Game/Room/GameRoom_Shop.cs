@@ -6,87 +6,69 @@ namespace GameServer.Game
 {
     public partial class GameRoom : JobSerializer
     {
-        //장비 장착
         public void HandleBuyItem(Player? player, C_BuyItem buyItemPacket)
         {
-            if (player == null)
+            if (player == null || !DataManager.ShopDict.TryGetValue(buyItemPacket.Shop, out var shopData))
                 return;
 
-            if (!DataManager.ShopDict.TryGetValue(buyItemPacket.Shop, out var shopData)) return;
-
-            //상품 존재여부 확인
             var productData = shopData.productList.FirstOrDefault(x => x.id == buyItemPacket.ProductId);
             if (productData == null)
             {
-                var packet = new S_BuyItem()
-                {
-                    Result = false
-                };
-
-                player.Session.Send(packet);
+                SendBuyItemResult(player, false);
                 return;
             }
 
-            //재화 확인
-            var checkCost = player.Inven.Find(x => x.TemplateId == productData.cType && x.Count >= productData.cAmount);
-            if (checkCost == null)
+            var costItem = player.Inven.Find(x => x.TemplateId == productData.cType && x.Count >= productData.cAmount);;
+            if (costItem == null)
             {
-                var packet = new S_BuyItem()
-                {
-                    Result = false
-                };
-
-                player.Session.Send(packet);
+                SendBuyItemResult(player, false);
                 return;
             }
 
-            //지급아이템 확인
             if (!DataManager.ItemDict.TryGetValue(productData.pId, out var rewardData))
             {
-                var packet = new S_BuyItem()
-                {
-                    Result = false
-                };
-
-                player.Session.Send(packet);
+                SendBuyItemResult(player, false);
                 return;
             }
 
             var rewardDatas = new List<ItemDb>();
 
-            var costItem = new ItemDb()
+            var updatedCostItem = new ItemDb()
             {
-                ItemDbId = checkCost.ItemDbId,
-                TemplateId = checkCost.TemplateId,
-                Count = checkCost.Count - productData.cAmount,
-                Slot = checkCost.Slot,
+                ItemDbId = costItem.ItemDbId,
+                TemplateId = costItem.TemplateId,
+                Count = costItem.Count - productData.cAmount,
+                Slot = costItem.Slot,
                 OwnerDbId = player.PlayerDbId
             };
 
-            var test = player.Inven.Find(x => x.TemplateId == rewardData.id && x.Stackable);
-
-            //TODO : 보유 최대치 적용 필요
-            var rewardSlot = (test == null) ? player.Inven.GetEmptySlot() : player.Inven.GetAvailableSlot(test.TemplateId);
-            var rewardCount = (test == null) ? productData.quantity : test.Count + productData.quantity;
+            // Find an available slot for the reward item, handling stackable items
+            var existingItem = player.Inven.Find(x => x.TemplateId == rewardData.id && x.Stackable);
+            var rewardSlot = existingItem == null ? player.Inven.GetEmptySlot() : player.Inven.GetAvailableSlot(existingItem.TemplateId);
+            var rewardCount = existingItem == null ? productData.quantity : existingItem.Count + productData.quantity;
 
             var rewardItem = new ItemDb()
             {
                 TemplateId = rewardData.id,
                 Count = rewardCount,
                 Slot = (int)rewardSlot,
-                OwnerDbId = player.PlayerDbId
+                OwnerDbId = player.PlayerDbId,
             };
-
-            if (test != null)
+            
+            if (existingItem != null)
             {
-                rewardItem.ItemDbId = test.ItemDbId;
+                rewardItem.ItemDbId = existingItem.ItemDbId;
             }
 
-            //지급 아이템
             rewardDatas.Add(rewardItem);
 
+            DbTransaction.BuyItemNoti(player, updatedCostItem, rewardDatas, player.Room);
+        }
 
-            DbTransaction.BuyItemNoti(player, costItem, rewardDatas, player.Room);
+        private void SendBuyItemResult(Player player, bool result)
+        {
+            var packet = new S_BuyItem() { Result = result };
+            player.Session.Send(packet);
         }
     }
 }

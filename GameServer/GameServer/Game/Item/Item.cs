@@ -43,6 +43,7 @@ namespace GameServer.Game
             set { Info.Equipped = value; }
         }
 
+
         //아이템 타입
         public ItemType ItemType { get; private set; }
 
@@ -156,6 +157,7 @@ namespace GameServer.Game
     {
         public ConsumableType ConsumableType { get; private set; }
         public int MaxCount { get; set; }
+        public int Value { get; set; }
 
         public Consumable(int templateId) : base(ItemType.Consumable)
         {
@@ -176,6 +178,7 @@ namespace GameServer.Game
                 MaxCount = data.maxCount;
                 ConsumableType = data.consumableType;
                 Stackable = (data.maxCount > 1);
+                Value = data.value;
             }
         }
     }

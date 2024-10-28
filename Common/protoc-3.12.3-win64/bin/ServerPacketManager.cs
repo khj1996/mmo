@@ -33,8 +33,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.CEnterGame, PacketHandler.C_EnterGameHandler);		
 		_onRecv.Add((ushort)MsgId.CCreatePlayer, MakePacket<C_CreatePlayer>);
 		_handler.Add((ushort)MsgId.CCreatePlayer, PacketHandler.C_CreatePlayerHandler);		
-		_onRecv.Add((ushort)MsgId.CEquipItem, MakePacket<C_EquipItem>);
-		_handler.Add((ushort)MsgId.CEquipItem, PacketHandler.C_EquipItemHandler);		
+		_onRecv.Add((ushort)MsgId.CUseItem, MakePacket<C_UseItem>);
+		_handler.Add((ushort)MsgId.CUseItem, PacketHandler.C_UseItemHandler);		
 		_onRecv.Add((ushort)MsgId.CPong, MakePacket<C_Pong>);
 		_handler.Add((ushort)MsgId.CPong, PacketHandler.C_PongHandler);		
 		_onRecv.Add((ushort)MsgId.CBuyItem, MakePacket<C_BuyItem>);

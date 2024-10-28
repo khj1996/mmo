@@ -48,60 +48,60 @@ namespace Google.Protobuf.Protocol {
             "IAEoCzIZLlByb3RvY29sLkxvYmJ5UGxheWVySW5mbyIbCgtDX0VudGVyR2Ft",
             "ZRIMCgRuYW1lGAEgASgJIi8KClNfSXRlbUxpc3QSIQoFaXRlbXMYASADKAsy",
             "Ei5Qcm90b2NvbC5JdGVtSW5mbyIuCglTX0FkZEl0ZW0SIQoFaXRlbXMYASAD",
-            "KAsyEi5Qcm90b2NvbC5JdGVtSW5mbyIxCgtDX0VxdWlwSXRlbRIQCghpdGVt",
-            "RGJJZBgBIAEoBRIQCghlcXVpcHBlZBgCIAEoCCIxCgtTX0VxdWlwSXRlbRIQ",
-            "CghpdGVtRGJJZBgBIAEoBRIQCghlcXVpcHBlZBgCIAEoCCI0CgxTX0NoYW5n",
-            "ZVN0YXQSJAoIc3RhdEluZm8YASABKAsyEi5Qcm90b2NvbC5TdGF0SW5mbyJE",
-            "Cg1TX1VwZGF0ZUxldmVsEg0KBWxldmVsGAEgASgFEiQKCHN0YXRJbmZvGAIg",
-            "ASgLMhIuUHJvdG9jb2wuU3RhdEluZm8iCAoGU19QaW5nIggKBkNfUG9uZyKC",
-            "AQoPTG9iYnlQbGF5ZXJJbmZvEhIKCnBsYXllckRiSWQYASABKAUSDAoEbmFt",
-            "ZRgCIAEoCRIkCghzdGF0SW5mbxgDIAEoCzISLlByb3RvY29sLlN0YXRJbmZv",
-            "EicKB3Bvc0luZm8YBCABKAsyFi5Qcm90b2NvbC5Qb3NpdGlvbkluZm8iewoK",
-            "T2JqZWN0SW5mbxIQCghvYmplY3RJZBgBIAEoBRIMCgRuYW1lGAIgASgJEicK",
-            "B3Bvc0luZm8YAyABKAsyFi5Qcm90b2NvbC5Qb3NpdGlvbkluZm8SJAoIc3Rh",
-            "dEluZm8YBSABKAsyEi5Qcm90b2NvbC5TdGF0SW5mbyKSAQoMUG9zaXRpb25J",
-            "bmZvEiYKBXN0YXRlGAEgASgOMhcuUHJvdG9jb2wuQ3JlYXR1cmVTdGF0ZRIf",
-            "Cgdsb29rRGlyGAIgASgLMg4uUHJvdG9jb2wuVmVjMhIbCgNwb3MYAyABKAsy",
-            "Di5Qcm90b2NvbC5WZWMyEhwKBG1vdmUYBCABKAsyDi5Qcm90b2NvbC5WZWMy",
-            "ImUKCFN0YXRJbmZvEg0KBWxldmVsGAEgASgFEgoKAmhwGAIgASgFEg0KBW1h",
-            "eEhwGAMgASgFEg4KBmF0dGFjaxgEIAEoBRINCgVzcGVlZBgFIAEoAhIQCgh0",
-            "b3RhbEV4cBgGIAEoBSJUCghTaG9wSW5mbxIKCgJpZBgBIAEoBRIMCgRuYW1l",
-            "GAIgASgJEi4KC3Byb2R1Y3RMaXN0GAMgAygLMhkuUHJvdG9jb2wuU2hvcFBy",
-            "b2R1Y3RJbmZvIkoKD1Nob3BQcm9kdWN0SW5mbxIKCgJpZBgBIAEoBRILCgNw",
-            "SWQYAiABKAUSDQoFY1R5cGUYAyABKAUSDwoHY0Ftb3VudBgEIAEoBSIcCglT",
-            "a2lsbEluZm8SDwoHc2tpbGxJZBgBIAEoBSJOCgpTZXJ2ZXJJbmZvEgwKBG5h",
-            "bWUYASABKAkSEQoJaXBBZGRyZXNzGAIgASgJEgwKBHBvcnQYAyABKAUSEQoJ",
-            "YnVzeVNjb3JlGAQgASgFIhwKBFZlYzISCQoBeBgBIAEoAhIJCgF5GAIgASgC",
-            "IkYKCk9iamVjdFNpemUSCwoDdG9wGAEgASgCEg4KBmJvdHRvbRgCIAEoAhIM",
-            "CgRsZWZ0GAMgASgCEg0KBXJpZ2h0GAQgASgCIl8KCEl0ZW1JbmZvEhAKCGl0",
-            "ZW1EYklkGAEgASgFEhIKCnRlbXBsYXRlSWQYAiABKAUSDQoFY291bnQYAyAB",
-            "KAUSDAoEc2xvdBgEIAEoBRIQCghlcXVpcHBlZBgFIAEoCCq0AwoFTXNnSWQS",
-            "EAoMU19FTlRFUl9HQU1FEAASEAoMU19MRUFWRV9HQU1FEAESCwoHU19TUEFX",
-            "ThACEg0KCVNfREVTUEFXThADEgoKBkNfTU9WRRAEEgoKBlNfTU9WRRAFEgsK",
-            "B0NfU0tJTEwQBhILCgdTX1NLSUxMEAcSDwoLU19DSEFOR0VfSFAQCBIJCgVT",
-            "X0RJRRAJEg8KC1NfQ09OTkVDVEVEEAoSCwoHQ19MT0dJThALEgsKB1NfTE9H",
-            "SU4QDBIQCgxDX0VOVEVSX0dBTUUQDRITCg9DX0NSRUFURV9QTEFZRVIQDhIT",
-            "Cg9TX0NSRUFURV9QTEFZRVIQDxIPCgtTX0lURU1fTElTVBAQEg4KClNfQURE",
-            "X0lURU0QERIQCgxDX0VRVUlQX0lURU0QEhIQCgxTX0VRVUlQX0lURU0QExIR",
-            "Cg1TX0NIQU5HRV9TVEFUEBQSCgoGU19QSU5HEBUSCgoGQ19QT05HEBYSEgoO",
-            "U19FbnRlcl9TZXJ2ZXIQFxIOCgpTX0J1eV9JdGVtEBgSDgoKQ19CdXlfSXRl",
-            "bRAZEhIKDlNfVXBkYXRlX0xldmVsEBoqOgoNQ3JlYXR1cmVTdGF0ZRIICgRJ",
-            "RExFEAASCgoGTU9WSU5HEAESCQoFU0tJTEwQAhIICgRERUFEEAMqQwoOR2Ft",
-            "ZU9iamVjdFR5cGUSCAoETk9ORRAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQ",
-            "AhIOCgpQUk9KRUNUSUxFEAMqQQoJU2tpbGxUeXBlEg4KClNLSUxMX05PTkUQ",
-            "ABIOCgpTS0lMTF9BVVRPEAESFAoQU0tJTExfUFJPSkVDVElMRRACKloKEVBs",
-            "YXllclNlcnZlclN0YXRlEhYKElNFUlZFUl9TVEFURV9MT0dJThAAEhYKElNF",
-            "UlZFUl9TVEFURV9MT0JCWRABEhUKEVNFUlZFUl9TVEFURV9HQU1FEAIqewoI",
-            "SXRlbVR5cGUSEgoOSVRFTV9UWVBFX05PTkUQABIUChBJVEVNX1RZUEVfV0VB",
-            "UE9OEAESEwoPSVRFTV9UWVBFX0FSTU9SEAISGAoUSVRFTV9UWVBFX0NPTlNV",
-            "TUFCTEUQAxIWChJJVEVNX1RZUEVfQ1VSUkVOQ1kQBCpOCgpXZWFwb25UeXBl",
-            "EhQKEFdFQVBPTl9UWVBFX05PTkUQABIVChFXRUFQT05fVFlQRV9TV09SRBAB",
-            "EhMKD1dFQVBPTl9UWVBFX0JPVxACKnoKCUFybW9yVHlwZRITCg9BUk1PUl9U",
-            "WVBFX05PTkUQABIVChFBUk1PUl9UWVBFX0hFTE1FVBABEhQKEEFSTU9SX1RZ",
-            "UEVfQVJNT1IQAhIUChBBUk1PUl9UWVBFX0JPT1RTEAMSFQoRQVJNT1JfVFlQ",
-            "RV9HTE9WRVMQBCpGCg5Db25zdW1hYmxlVHlwZRIYChRDT05TVU1BQkxFX1RZ",
-            "UEVfTk9ORRAAEhoKFkNPTlNVTUFCTEVfVFlQRV9QT1RJT04QAUIbqgIYR29v",
-            "Z2xlLlByb3RvYnVmLlByb3RvY29sYgZwcm90bzM="));
+            "KAsyEi5Qcm90b2NvbC5JdGVtSW5mbyIvCglDX1VzZUl0ZW0SEAoIaXRlbURi",
+            "SWQYASABKAUSEAoIZXF1aXBwZWQYAiABKAgiLwoJU19Vc2VJdGVtEhAKCGl0",
+            "ZW1EYklkGAEgASgFEhAKCGVxdWlwcGVkGAIgASgIIjQKDFNfQ2hhbmdlU3Rh",
+            "dBIkCghzdGF0SW5mbxgBIAEoCzISLlByb3RvY29sLlN0YXRJbmZvIkQKDVNf",
+            "VXBkYXRlTGV2ZWwSDQoFbGV2ZWwYASABKAUSJAoIc3RhdEluZm8YAiABKAsy",
+            "Ei5Qcm90b2NvbC5TdGF0SW5mbyIICgZTX1BpbmciCAoGQ19Qb25nIoIBCg9M",
+            "b2JieVBsYXllckluZm8SEgoKcGxheWVyRGJJZBgBIAEoBRIMCgRuYW1lGAIg",
+            "ASgJEiQKCHN0YXRJbmZvGAMgASgLMhIuUHJvdG9jb2wuU3RhdEluZm8SJwoH",
+            "cG9zSW5mbxgEIAEoCzIWLlByb3RvY29sLlBvc2l0aW9uSW5mbyJ7CgpPYmpl",
+            "Y3RJbmZvEhAKCG9iamVjdElkGAEgASgFEgwKBG5hbWUYAiABKAkSJwoHcG9z",
+            "SW5mbxgDIAEoCzIWLlByb3RvY29sLlBvc2l0aW9uSW5mbxIkCghzdGF0SW5m",
+            "bxgFIAEoCzISLlByb3RvY29sLlN0YXRJbmZvIpIBCgxQb3NpdGlvbkluZm8S",
+            "JgoFc3RhdGUYASABKA4yFy5Qcm90b2NvbC5DcmVhdHVyZVN0YXRlEh8KB2xv",
+            "b2tEaXIYAiABKAsyDi5Qcm90b2NvbC5WZWMyEhsKA3BvcxgDIAEoCzIOLlBy",
+            "b3RvY29sLlZlYzISHAoEbW92ZRgEIAEoCzIOLlByb3RvY29sLlZlYzIiZQoI",
+            "U3RhdEluZm8SDQoFbGV2ZWwYASABKAUSCgoCaHAYAiABKAUSDQoFbWF4SHAY",
+            "AyABKAUSDgoGYXR0YWNrGAQgASgFEg0KBXNwZWVkGAUgASgCEhAKCHRvdGFs",
+            "RXhwGAYgASgFIlQKCFNob3BJbmZvEgoKAmlkGAEgASgFEgwKBG5hbWUYAiAB",
+            "KAkSLgoLcHJvZHVjdExpc3QYAyADKAsyGS5Qcm90b2NvbC5TaG9wUHJvZHVj",
+            "dEluZm8iSgoPU2hvcFByb2R1Y3RJbmZvEgoKAmlkGAEgASgFEgsKA3BJZBgC",
+            "IAEoBRINCgVjVHlwZRgDIAEoBRIPCgdjQW1vdW50GAQgASgFIhwKCVNraWxs",
+            "SW5mbxIPCgdza2lsbElkGAEgASgFIk4KClNlcnZlckluZm8SDAoEbmFtZRgB",
+            "IAEoCRIRCglpcEFkZHJlc3MYAiABKAkSDAoEcG9ydBgDIAEoBRIRCglidXN5",
+            "U2NvcmUYBCABKAUiHAoEVmVjMhIJCgF4GAEgASgCEgkKAXkYAiABKAIiRgoK",
+            "T2JqZWN0U2l6ZRILCgN0b3AYASABKAISDgoGYm90dG9tGAIgASgCEgwKBGxl",
+            "ZnQYAyABKAISDQoFcmlnaHQYBCABKAIiXwoISXRlbUluZm8SEAoIaXRlbURi",
+            "SWQYASABKAUSEgoKdGVtcGxhdGVJZBgCIAEoBRINCgVjb3VudBgDIAEoBRIM",
+            "CgRzbG90GAQgASgFEhAKCGVxdWlwcGVkGAUgASgIKrADCgVNc2dJZBIQCgxT",
+            "X0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQARILCgdTX1NQQVdOEAIS",
+            "DQoJU19ERVNQQVdOEAMSCgoGQ19NT1ZFEAQSCgoGU19NT1ZFEAUSCwoHQ19T",
+            "S0lMTBAGEgsKB1NfU0tJTEwQBxIPCgtTX0NIQU5HRV9IUBAIEgkKBVNfRElF",
+            "EAkSDwoLU19DT05ORUNURUQQChILCgdDX0xPR0lOEAsSCwoHU19MT0dJThAM",
+            "EhAKDENfRU5URVJfR0FNRRANEhMKD0NfQ1JFQVRFX1BMQVlFUhAOEhMKD1Nf",
+            "Q1JFQVRFX1BMQVlFUhAPEg8KC1NfSVRFTV9MSVNUEBASDgoKU19BRERfSVRF",
+            "TRAREg4KCkNfVVNFX0lURU0QEhIOCgpTX1VTRV9JVEVNEBMSEQoNU19DSEFO",
+            "R0VfU1RBVBAUEgoKBlNfUElORxAVEgoKBkNfUE9ORxAWEhIKDlNfRW50ZXJf",
+            "U2VydmVyEBcSDgoKU19CdXlfSXRlbRAYEg4KCkNfQnV5X0l0ZW0QGRISCg5T",
+            "X1VwZGF0ZV9MZXZlbBAaKjoKDUNyZWF0dXJlU3RhdGUSCAoESURMRRAAEgoK",
+            "Bk1PVklORxABEgkKBVNLSUxMEAISCAoEREVBRBADKkMKDkdhbWVPYmplY3RU",
+            "eXBlEggKBE5PTkUQABIKCgZQTEFZRVIQARILCgdNT05TVEVSEAISDgoKUFJP",
+            "SkVDVElMRRADKkEKCVNraWxsVHlwZRIOCgpTS0lMTF9OT05FEAASDgoKU0tJ",
+            "TExfQVVUTxABEhQKEFNLSUxMX1BST0pFQ1RJTEUQAipaChFQbGF5ZXJTZXJ2",
+            "ZXJTdGF0ZRIWChJTRVJWRVJfU1RBVEVfTE9HSU4QABIWChJTRVJWRVJfU1RB",
+            "VEVfTE9CQlkQARIVChFTRVJWRVJfU1RBVEVfR0FNRRACKnsKCEl0ZW1UeXBl",
+            "EhIKDklURU1fVFlQRV9OT05FEAASFAoQSVRFTV9UWVBFX1dFQVBPThABEhMK",
+            "D0lURU1fVFlQRV9BUk1PUhACEhgKFElURU1fVFlQRV9DT05TVU1BQkxFEAMS",
+            "FgoSSVRFTV9UWVBFX0NVUlJFTkNZEAQqTgoKV2VhcG9uVHlwZRIUChBXRUFQ",
+            "T05fVFlQRV9OT05FEAASFQoRV0VBUE9OX1RZUEVfU1dPUkQQARITCg9XRUFQ",
+            "T05fVFlQRV9CT1cQAip6CglBcm1vclR5cGUSEwoPQVJNT1JfVFlQRV9OT05F",
+            "EAASFQoRQVJNT1JfVFlQRV9IRUxNRVQQARIUChBBUk1PUl9UWVBFX0FSTU9S",
+            "EAISFAoQQVJNT1JfVFlQRV9CT09UUxADEhUKEUFSTU9SX1RZUEVfR0xPVkVT",
+            "EAQqRgoOQ29uc3VtYWJsZVR5cGUSGAoUQ09OU1VNQUJMRV9UWVBFX05PTkUQ",
+            "ABIaChZDT05TVU1BQkxFX1RZUEVfUE9USU9OEAFCG6oCGEdvb2dsZS5Qcm90",
+            "b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.SkillType), typeof(global::Google.Protobuf.Protocol.PlayerServerState), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.WeaponType), typeof(global::Google.Protobuf.Protocol.ArmorType), typeof(global::Google.Protobuf.Protocol.ConsumableType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -126,8 +126,8 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterGame), global::Google.Protobuf.Protocol.C_EnterGame.Parser, new[]{ "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ItemList), global::Google.Protobuf.Protocol.S_ItemList.Parser, new[]{ "Items" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_AddItem), global::Google.Protobuf.Protocol.S_AddItem.Parser, new[]{ "Items" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EquipItem), global::Google.Protobuf.Protocol.C_EquipItem.Parser, new[]{ "ItemDbId", "Equipped" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_EquipItem), global::Google.Protobuf.Protocol.S_EquipItem.Parser, new[]{ "ItemDbId", "Equipped" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_UseItem), global::Google.Protobuf.Protocol.C_UseItem.Parser, new[]{ "ItemDbId", "Equipped" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_UseItem), global::Google.Protobuf.Protocol.S_UseItem.Parser, new[]{ "ItemDbId", "Equipped" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ChangeStat), global::Google.Protobuf.Protocol.S_ChangeStat.Parser, new[]{ "StatInfo" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_UpdateLevel), global::Google.Protobuf.Protocol.S_UpdateLevel.Parser, new[]{ "Level", "StatInfo" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Ping), global::Google.Protobuf.Protocol.S_Ping.Parser, null, null, null, null, null),
@@ -168,8 +168,8 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("S_CREATE_PLAYER")] SCreatePlayer = 15,
     [pbr::OriginalName("S_ITEM_LIST")] SItemList = 16,
     [pbr::OriginalName("S_ADD_ITEM")] SAddItem = 17,
-    [pbr::OriginalName("C_EQUIP_ITEM")] CEquipItem = 18,
-    [pbr::OriginalName("S_EQUIP_ITEM")] SEquipItem = 19,
+    [pbr::OriginalName("C_USE_ITEM")] CUseItem = 18,
+    [pbr::OriginalName("S_USE_ITEM")] SUseItem = 19,
     [pbr::OriginalName("S_CHANGE_STAT")] SChangeStat = 20,
     [pbr::OriginalName("S_PING")] SPing = 21,
     [pbr::OriginalName("C_PONG")] CPong = 22,
@@ -3189,11 +3189,11 @@ namespace Google.Protobuf.Protocol {
 
   }
 
-  public sealed partial class C_EquipItem : pb::IMessage<C_EquipItem> {
-    private static readonly pb::MessageParser<C_EquipItem> _parser = new pb::MessageParser<C_EquipItem>(() => new C_EquipItem());
+  public sealed partial class C_UseItem : pb::IMessage<C_UseItem> {
+    private static readonly pb::MessageParser<C_UseItem> _parser = new pb::MessageParser<C_UseItem>(() => new C_UseItem());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<C_EquipItem> Parser { get { return _parser; } }
+    public static pb::MessageParser<C_UseItem> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -3206,22 +3206,22 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_EquipItem() {
+    public C_UseItem() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_EquipItem(C_EquipItem other) : this() {
+    public C_UseItem(C_UseItem other) : this() {
       itemDbId_ = other.itemDbId_;
       equipped_ = other.equipped_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public C_EquipItem Clone() {
-      return new C_EquipItem(this);
+    public C_UseItem Clone() {
+      return new C_UseItem(this);
     }
 
     /// <summary>Field number for the "itemDbId" field.</summary>
@@ -3248,11 +3248,11 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as C_EquipItem);
+      return Equals(other as C_UseItem);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(C_EquipItem other) {
+    public bool Equals(C_UseItem other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3311,7 +3311,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(C_EquipItem other) {
+    public void MergeFrom(C_UseItem other) {
       if (other == null) {
         return;
       }
@@ -3346,11 +3346,11 @@ namespace Google.Protobuf.Protocol {
 
   }
 
-  public sealed partial class S_EquipItem : pb::IMessage<S_EquipItem> {
-    private static readonly pb::MessageParser<S_EquipItem> _parser = new pb::MessageParser<S_EquipItem>(() => new S_EquipItem());
+  public sealed partial class S_UseItem : pb::IMessage<S_UseItem> {
+    private static readonly pb::MessageParser<S_UseItem> _parser = new pb::MessageParser<S_UseItem>(() => new S_UseItem());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<S_EquipItem> Parser { get { return _parser; } }
+    public static pb::MessageParser<S_UseItem> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -3363,22 +3363,22 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_EquipItem() {
+    public S_UseItem() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_EquipItem(S_EquipItem other) : this() {
+    public S_UseItem(S_UseItem other) : this() {
       itemDbId_ = other.itemDbId_;
       equipped_ = other.equipped_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public S_EquipItem Clone() {
-      return new S_EquipItem(this);
+    public S_UseItem Clone() {
+      return new S_UseItem(this);
     }
 
     /// <summary>Field number for the "itemDbId" field.</summary>
@@ -3405,11 +3405,11 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as S_EquipItem);
+      return Equals(other as S_UseItem);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(S_EquipItem other) {
+    public bool Equals(S_UseItem other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3468,7 +3468,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(S_EquipItem other) {
+    public void MergeFrom(S_UseItem other) {
       if (other == null) {
         return;
       }

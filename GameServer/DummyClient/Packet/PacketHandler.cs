@@ -112,7 +112,7 @@ class PacketHandler
     {
     }
 
-    public static void S_EquipItemHandler(PacketSession session, IMessage packet)
+    public static void S_UseItemHandler(PacketSession session, IMessage packet)
     {
     }
 

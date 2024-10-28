@@ -131,7 +131,7 @@ namespace GameServer.Game
                 ObjectId = Id,
                 Hp = Info.StatInfo.Hp
             };
-            
+
             Room.Broadcast(CellPos, changePacket, PlayerDbId);
         }
 
@@ -150,64 +150,92 @@ namespace GameServer.Game
             DbTransaction.SavePlayerStatus(this, Room);
         }
 
-        public void HandleEquipItem(C_EquipItem equipPacket)
+        public void HandleUseItem(C_UseItem usePacket)
         {
-            Item item = Inven.Get(equipPacket.ItemDbId);
+            var item = Inven.Get(usePacket.ItemDbId);
             if (item == null)
                 return;
 
             if (item.ItemType == ItemType.Consumable)
-                return;
-
-            // 착용 요청이라면, 겹치는 부위 해제
-            if (equipPacket.Equipped)
             {
-                Item? unequipItem = null;
-
-                switch (item.ItemType)
+                var updatedCostItem = new ItemDb()
                 {
-                    case ItemType.Weapon:
-                        unequipItem = Inven.Find(x => x.Equipped && x.ItemType == ItemType.Weapon);
-                        break;
-                    case ItemType.Armor:
+                    ItemDbId = item.ItemDbId,
+                    TemplateId = item.TemplateId,
+                    Count = item.Count - 1,
+                    Slot = item.Slot,
+                    OwnerDbId = PlayerDbId
+                };
+                // DB에 Noti
+                DbTransaction.UseItemNoti(this, updatedCostItem);
+                S_UseItem equipOkItem = new S_UseItem();
+                equipOkItem.ItemDbId = updatedCostItem.ItemDbId;
+
+                Hp += ((Consumable)item).Value;
+
+                Session.Send(equipOkItem);
+
+                var changePacket = new S_ChangeHp
+                {
+                    ObjectId = Id,
+                    Hp = Info.StatInfo.Hp
+                };
+
+                Room.Broadcast(CellPos, changePacket);
+            }
+            else if (item.ItemType == ItemType.Armor || item.ItemType == ItemType.Weapon)
+            {
+                // 착용 요청이라면, 겹치는 부위 해제
+                if (usePacket.Equipped)
+                {
+                    Item? unequipItem = null;
+
+                    switch (item.ItemType)
                     {
-                        var armorType = ((Armor)item).ArmorType;
-                        unequipItem = Inven.Find(x => x.Equipped && x.ItemType == ItemType.Armor && ((Armor)x).ArmorType == armorType);
-                        break;
+                        case ItemType.Weapon:
+                            unequipItem = Inven.Find(x => x.Equipped && x.ItemType == ItemType.Weapon);
+                            break;
+                        case ItemType.Armor:
+                        {
+                            var armorType = ((Armor)item).ArmorType;
+                            unequipItem = Inven.Find(x => x.Equipped && x.ItemType == ItemType.Armor && ((Armor)x).ArmorType == armorType);
+                            break;
+                        }
+                    }
+
+                    if (unequipItem != null)
+                    {
+                        // 메모리 선적용
+                        unequipItem.Equipped = false;
+
+                        // DB에 Noti
+                        DbTransaction.EquipItemNoti(this, unequipItem);
+
+                        // 클라에 통보
+                        S_UseItem equipOkItem = new S_UseItem();
+                        equipOkItem.ItemDbId = unequipItem.ItemDbId;
+                        equipOkItem.Equipped = unequipItem.Equipped;
+                        Session.Send(equipOkItem);
                     }
                 }
 
-                if (unequipItem != null)
+
                 {
                     // 메모리 선적용
-                    unequipItem.Equipped = false;
+                    item.Equipped = usePacket.Equipped;
 
                     // DB에 Noti
-                    DbTransaction.EquipItemNoti(this, unequipItem);
+                    DbTransaction.EquipItemNoti(this, item);
 
                     // 클라에 통보
-                    S_EquipItem equipOkItem = new S_EquipItem();
-                    equipOkItem.ItemDbId = unequipItem.ItemDbId;
-                    equipOkItem.Equipped = unequipItem.Equipped;
+                    S_UseItem equipOkItem = new S_UseItem();
+                    equipOkItem.ItemDbId = usePacket.ItemDbId;
+                    equipOkItem.Equipped = usePacket.Equipped;
                     Session.Send(equipOkItem);
                 }
+
+                RefreshAdditionalStat();
             }
-
-            {
-                // 메모리 선적용
-                item.Equipped = equipPacket.Equipped;
-
-                // DB에 Noti
-                DbTransaction.EquipItemNoti(this, item);
-
-                // 클라에 통보
-                S_EquipItem equipOkItem = new S_EquipItem();
-                equipOkItem.ItemDbId = equipPacket.ItemDbId;
-                equipOkItem.Equipped = equipPacket.Equipped;
-                Session.Send(equipOkItem);
-            }
-
-            RefreshAdditionalStat();
         }
 
 

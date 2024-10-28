@@ -176,24 +176,32 @@ class PacketHandler
         }
     }
 
-    public static void S_EquipItemHandler(PacketSession session, IMessage packet)
+    public static void S_UseItemHandler(PacketSession session, IMessage packet)
     {
-        S_EquipItem equipItemOk = (S_EquipItem)packet;
+        S_UseItem equipItemOk = (S_UseItem)packet;
 
         // 메모리에 아이템 정보 적용
         Item item = Managers.Inven.Get(equipItemOk.ItemDbId);
         if (item == null)
             return;
 
-        item.Equipped = equipItemOk.Equipped;
-        Debug.Log("아이템 착용 변경!");
+        if (item.ItemType != ItemType.Consumable)
+        {
+            item.Equipped = equipItemOk.Equipped;
+            Debug.Log("아이템 착용 변경!");
+
+
+            if (Managers.Object.MyPlayer != null)
+                Managers.Object.MyPlayer.RefreshAdditionalStat();
+        }
+        else if (item.ItemType == ItemType.Consumable)
+        {
+            item.Count -= 1;
+        }
 
         UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
         gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
         gameSceneUI.StatUI.RefreshUI();
-
-        if (Managers.Object.MyPlayer != null)
-            Managers.Object.MyPlayer.RefreshAdditionalStat();
     }
 
     public static void S_ChangeStatHandler(PacketSession session, IMessage packet)

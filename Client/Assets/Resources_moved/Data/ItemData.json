@@ -51,7 +51,7 @@
       "name": "HP 물약",
       "consumableType": "Potion",
       "maxCount": "10",
-      "value": "10"
+      "value": "25"
     }
   ],
   "currency": [

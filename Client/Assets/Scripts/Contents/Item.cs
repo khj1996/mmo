@@ -121,7 +121,7 @@ public class Weapon : Item
 
         useItem += () =>
         {
-            C_EquipItem equipPacket = new C_EquipItem();
+            C_UseItem equipPacket = new C_UseItem();
             equipPacket.ItemDbId = ItemDbId;
             equipPacket.Equipped = !Equipped;
 
@@ -159,7 +159,7 @@ public class Armor : Item
         }
         useItem += () =>
         {
-            C_EquipItem equipPacket = new C_EquipItem();
+            C_UseItem equipPacket = new C_UseItem();
             equipPacket.ItemDbId = ItemDbId;
             equipPacket.Equipped = !Equipped;
 
@@ -197,7 +197,15 @@ public class Consumable : Item
                 Stackable = (data.maxCount > 1);
             }
 
-            useItem += () => { Debug.Log("포션 사용 패킷 전송 필요"); };
+            useItem += () =>
+            {
+                if (Count <= 0)
+                    return;
+                C_UseItem equipPacket = new C_UseItem();
+                equipPacket.ItemDbId = ItemDbId;
+
+                Managers.Network.Send(equipPacket);
+            };
 
             Description = $"소모아이템 : 포션\n생명력 : {data.value}회복";
         }
