@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 6952505378393934322}
   - component: {fileID: 8652605225801882730}
   - component: {fileID: 5114321902417286618}
+  - component: {fileID: 5415271435747329831}
   m_Layer: 11
   m_Name: MyPlayer
   m_TagString: Untagged
@@ -223,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58df44f80eca19748b09e1ded610f8bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLevelUp: 0
   uiExpBar: {fileID: 0}
 --- !u!50 &8652605225801882730
 Rigidbody2D:
@@ -271,6 +273,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 1.1}
   m_EdgeRadius: 0
+--- !u!114 &5415271435747329831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923636134709301267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55c9233126d84b4cb39571feffcace7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reflectionAxis: 2
+  reflectionOffset: 0
+  reflectionLayer: 27
+  reflectionSprite: {fileID: 0}
+  updatePerFrame: 0
 --- !u!1 &7562689765774996509
 GameObject:
   m_ObjectHideFlags: 0
