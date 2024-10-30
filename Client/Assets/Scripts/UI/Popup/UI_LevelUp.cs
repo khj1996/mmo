@@ -14,7 +14,12 @@ public class UI_LevelUp : UI_Popup
     public override void Init()
     {
         base.Init();
-        CloseBtn.gameObject.BindEvent((evt) => { Managers.UI.ClosePopupUI(this); });
+        CloseBtn.gameObject.BindEvent((evt) =>
+        {
+            Managers.Object.MyPlayer.isLevelUp = false;
+            Managers.UI.ClosePopupUI(this);
+            
+        });
     }
 
     public void LevelUp(StatInfo beforeStat, StatInfo afterStat)

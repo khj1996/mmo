@@ -26,6 +26,11 @@ public class UI_GetItemPopUp : UI_Popup
 
     public void OpenPopUpMultiItem(List<ItemInfo> itemDatas)
     {
+        if (Managers.Object.MyPlayer.isLevelUp)
+        {
+            Managers.UI.ClosePopupUI(this);
+        }
+        
         int itemDataCount = itemDatas.Count;
 
         if (items.Count < itemDataCount)

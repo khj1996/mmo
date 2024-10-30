@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class MyPlayerController : PlayerController
 {
+    public bool isLevelUp = false;
+    
     private UI_Joystick _Joystick;
     private float currTime = 0.0f;
 

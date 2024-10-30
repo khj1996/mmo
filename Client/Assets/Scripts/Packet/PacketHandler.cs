@@ -259,6 +259,7 @@ class PacketHandler
         {
             (await Managers.UI.ShowPopupUI<UI_LevelUp>()).LevelUp(Managers.Object.MyPlayer.Stat, updateLevelPacket.StatInfo);
             Managers.Object.MyPlayer.Stat = updateLevelPacket.StatInfo;
+            Managers.Object.MyPlayer.isLevelUp = true;
         }
     }
 
