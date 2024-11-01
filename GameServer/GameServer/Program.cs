@@ -95,6 +95,7 @@ namespace GameServer
 
             //방 생성
             GameLogic.Instance.Push(() => { GameLogic.Instance.Add(1); });
+            GameLogic.Instance.Push(() => { GameLogic.Instance.Add(2); });
 
             // GameLogic
             Thread.CurrentThread.Name = "GameLogic";
