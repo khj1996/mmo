@@ -6,6 +6,7 @@ namespace GameServer.Game
     public class Projectile : GameObject
     {
         public Data.Skill Data { get; set; }
+        public bool isDestory = false;
 
         public Projectile()
         {

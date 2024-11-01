@@ -33,6 +33,7 @@ public class UI_SelectCharacterPopup : UI_Popup
             sc.Info = new CharacterInfo()
             {
                 PlayerName = playerInfos[i].Name,
+                CurMap = playerInfos[i].Map,
                 Lv = playerInfos[i].StatInfo.Level,
                 PosX = playerInfos[i].PosInfo.Pos.X,
                 PosY = playerInfos[i].PosInfo.Pos.Y,

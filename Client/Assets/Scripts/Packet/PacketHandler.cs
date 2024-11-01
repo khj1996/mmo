@@ -9,9 +9,12 @@ using UnityEngine;
 
 class PacketHandler
 {
-    public static void S_EnterGameHandler(PacketSession session, IMessage packet)
+    public static async void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
         var enterGamePacket = packet as S_EnterGame;
+
+        Managers.Map.LoadMap(enterGamePacket.MapId);
+
 
         Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
     }

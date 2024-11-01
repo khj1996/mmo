@@ -156,7 +156,7 @@ namespace GameServer.Game
         }
 
 
-        public bool UpdatePosition()
+        public virtual bool UpdatePosition()
         {
             if (Room == null) return false;
 

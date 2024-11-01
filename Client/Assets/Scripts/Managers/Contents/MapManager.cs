@@ -38,6 +38,8 @@ public class MapManager
     public Grid CurrentGrid { get; private set; }
     public PolygonCollider2D CameraClamp { get; private set; }
 
+    public Action MapChangeAction;
+
     public int MinX { get; set; }
     public int MaxX { get; set; }
     public int MinY { get; set; }
@@ -72,6 +74,7 @@ public class MapManager
         DestroyMap();
 
         string mapName = "Map_" + mapId.ToString("000");
+        
         GameObject go = await Addressables.InstantiateAsync($"Prefabs/Map/{mapName}.prefab").ToUniTask();
         go.name = "Map";
 
@@ -99,6 +102,7 @@ public class MapManager
                 _collision[y, x] = (line[x] == '1' ? true : false);
             }
         }
+        MapChangeAction?.Invoke();
     }
 
     public void DestroyMap()

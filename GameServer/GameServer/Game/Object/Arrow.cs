@@ -18,6 +18,12 @@ namespace GameServer.Game
             if (Data == null || Data.projectile == null || Owner == null || Room == null)
                 return;
 
+            if (isDestory)
+            {
+                Room.Push(Room.LeaveGame, Id);
+                return;
+            }
+
 
             var target = Room.FindPlayer(x => (CellPos - x.CellPos).Magnitude < 1f);
 
@@ -33,11 +39,8 @@ namespace GameServer.Game
 
             if (!UpdatePosition())
             {
-                Room.Push(Room.LeaveGame, Id);
-                return;
+                isDestory = true;
             }
-            
-            BroadcastMove();
 
             Room.PushAfter(Room.TickInterval, Update);
         }

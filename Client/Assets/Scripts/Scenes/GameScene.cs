@@ -14,8 +14,6 @@ public class GameScene : MonoBehaviour
 
     protected async void Init()
     {
-        Managers.Map.LoadMap(1);
-
         Screen.SetResolution(1280, 720, false);
 
         _sceneUI = await Managers.UI.ShowSceneUI<UI_GameScene>();

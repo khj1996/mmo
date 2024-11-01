@@ -15,7 +15,7 @@ namespace GameServer.Game
 
         //방 id
         public int RoomId { get; set; }
-        public readonly float TickRate = 20f; 
+        public readonly float TickRate = 20f;
         public int TickInterval => (int)(1000 / TickRate);
         public float SpeedScale => TickInterval / 900f;
 
@@ -94,11 +94,6 @@ namespace GameServer.Game
             if (gameObject == null)
                 return;
 
-            Vector2Float spawnPos;
-            spawnPos.x = gameObject.Pos.X;
-            spawnPos.y = gameObject.Pos.Y;
-
-
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
             Console.WriteLine(gameObject.Id);
 
@@ -117,11 +112,11 @@ namespace GameServer.Game
                 {
                     S_EnterGame enterPacket = new S_EnterGame();
 
+                    enterPacket.MapId = Map.MapId;
                     enterPacket.Player = player.Info;
                     enterPacket.Player.PosInfo.Move = new Vec2();
                     player.Session.Send(enterPacket);
-                    player.Vision.Update();
-                    player.Update();
+                    player.StartUpdate();
                 }
 
                 S_Spawn spawnPacket = new S_Spawn();
@@ -162,6 +157,7 @@ namespace GameServer.Game
 
             if (type == GameObjectType.Player)
             {
+                Console.WriteLine(_players.Count);
                 Player player = null;
                 if (_players.Remove(objectId, out player) == false)
                     return;
@@ -171,12 +167,14 @@ namespace GameServer.Game
                 player.OnLeaveGame();
                 Map.ApplyLeave(player);
                 player.Room = null;
+                
 
                 // 본인한테 정보 전송
                 {
                     S_LeaveGame leavePacket = new S_LeaveGame();
                     player.Session.Send(leavePacket);
                 }
+                Console.WriteLine(_players.Count);
             }
             else if (type == GameObjectType.Monster)
             {
@@ -265,7 +263,7 @@ namespace GameServer.Game
         public void Broadcast(Vector2Float pos, IMessage packet, int playerDbId = -1)
         {
             List<Zone> zones = GetAdjacentZones(pos);
-            
+
             foreach (var p in zones.SelectMany(z => z.Players))
             {
                 if (p.PlayerDbId == playerDbId)
@@ -318,6 +316,28 @@ namespace GameServer.Game
             }
 
             return zones.ToList();
+        }
+
+        public void CheckMoveMap(Vector2Float cellPos, Player player)
+        {
+            if (Map.MapId == 1 && cellPos.y > 10)
+            {
+                player.Pos = new Vec2()
+                {
+                    X = -1,
+                    Y = -10
+                };
+                GameLogic.Instance.MoveRoom(player, 2);
+            }
+            else if (Map.MapId == 2 && cellPos.y < -11)
+            {
+                player.Pos = new Vec2()
+                {
+                    X = -1,
+                    Y = 9.5f
+                };
+                GameLogic.Instance.MoveRoom(player, 1);
+            }
         }
     }
 }

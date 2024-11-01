@@ -355,6 +355,8 @@ namespace GameServer.Game
 
             MapDb findMapData = db.MapDatas.Where(a => a.MapDbId == mapId).FirstOrDefault();
 
+            MapId = mapId;
+            
             if (findMapData == null)
             {
                 StringBuilder tileStr = new StringBuilder();
@@ -395,6 +397,7 @@ namespace GameServer.Game
                 findMapData = newMapData;
             }
 
+            
             MinX = findMapData.MinX;
             MaxX = findMapData.MaxX;
             MinY = findMapData.MinY;

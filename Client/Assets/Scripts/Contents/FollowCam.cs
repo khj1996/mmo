@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class FollowCam : MonoBehaviour
 {
-    [SerializeField]    private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
-    [SerializeField]private CinemachineConfiner2D confiner;
+    [SerializeField] private CinemachineConfiner2D confiner;
 
     private void Start()
     {
@@ -17,11 +17,14 @@ public class FollowCam : MonoBehaviour
 
         confiner.m_BoundingShape2D = Managers.Map.CameraClamp;
         confiner.InvalidateCache();
+        
+        Managers.Map.MapChangeAction -= SetNewBoundingShape;
+        Managers.Map.MapChangeAction += SetNewBoundingShape;
     }
 
-    public void SetNewBoundingShape(BoxCollider2D _collider2D)
+    public void SetNewBoundingShape()
     {
-        confiner.m_BoundingShape2D = _collider2D;
+        confiner.m_BoundingShape2D = Managers.Map.CameraClamp;
         confiner.InvalidateCache();
     }
 }

@@ -88,7 +88,8 @@ enum ConsumableType {
 
 
 message S_EnterGame {
-  ObjectInfo player = 1;
+  int32 MapId = 1;
+  ObjectInfo player = 2;
 }
 
 message S_LeaveGame {
@@ -208,8 +209,9 @@ message C_Pong {
 message LobbyPlayerInfo {
   int32 playerDbId = 1;
   string name = 2;
-  StatInfo statInfo = 3;
-  PositionInfo posInfo = 4;
+  int32 map = 3;
+  StatInfo statInfo = 4;
+  PositionInfo posInfo = 5;
 }
 
 message ObjectInfo {

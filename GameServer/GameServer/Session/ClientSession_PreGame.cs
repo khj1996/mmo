@@ -58,6 +58,7 @@ namespace GameServer
                     {
                         PlayerDbId = playerDb.PlayerDbId,
                         Name = playerDb.PlayerName,
+                        Map = playerDb.CurMap,
                         StatInfo = new StatInfo()
                         {
                             Level = playerDb.Level,
@@ -147,7 +148,7 @@ namespace GameServer
             //룸에 유저 추가
             GameLogic.Instance.Push(() =>
             {
-                GameRoom room = GameLogic.Instance.Find(1);
+                GameRoom room = GameLogic.Instance.FindByMapId(playerInfo.Map);
                 room.Push(room.EnterGame, MyPlayer);
             });
         }
