@@ -32,6 +32,32 @@ namespace GameServer.Game
         {
             get { return ArmorDefence; }
         }
+        
+        public int Level
+        {
+            get => Info.StatInfo.Level;
+            set => Info.StatInfo.Level = value;
+        }
+
+        public int Exp
+        {
+            get => Info.StatInfo.TotalExp;
+            set
+            {
+                var data = DataManager.StatDict
+                    .Where(x => x.Value.TotalExp <= value)
+                    .OrderByDescending(x => x.Value.TotalExp)
+                    .FirstOrDefault();
+
+                if (data.Key != null)
+                {
+                    UpdateLevel(data.Value);
+                }
+
+                // 최종적으로 TotalExp 값 설정
+                Info.StatInfo.TotalExp = value;
+            }
+        }
 
 
         public Player()
@@ -279,14 +305,14 @@ namespace GameServer.Game
             GameObject owner = attacker.GetOwner();
             if (owner.ObjectType == GameObjectType.Player)
             {
+                Player player = (Player)owner;
                 var rewardData = GetRandomReward();
                 if (rewardData != null)
                 {
-                    Player player = (Player)owner;
                     DbTransaction.RewardPlayer(player, rewardData, Room);
                 }
+                player.Exp += 3;
 
-                owner.Exp += 3;
             }
         }
 

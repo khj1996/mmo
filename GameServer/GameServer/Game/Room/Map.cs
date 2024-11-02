@@ -113,6 +113,11 @@ namespace GameServer.Game
             return pos.x >= MinX && pos.x <= MaxX && pos.y >= MinY && pos.y <= MaxY;
         }
 
+        private bool IsWithinTileBounds(int tileX, int tileY)
+        {
+            return tileX >= 0 && tileX < SizeX - 1 && tileY >= 0 && tileY < SizeY - 1;
+        }
+
 
         // 충돌 검사 함수
         public bool CanGo(Vector2Float curPos, Vector2Float destPos)
@@ -434,6 +439,7 @@ namespace GameServer.Game
 
                     if (closedSet.Contains(nextPos) ||
                         Math.Abs(startTilePos.tileY - nextPos.tileY) + Math.Abs(startTilePos.tileX - nextPos.tileX) > maxDist ||
+                        !IsWithinTileBounds(nextPos.tileX, nextPos.tileY) ||
                         !CanPass(nextPos))
                         continue;
 
@@ -455,7 +461,7 @@ namespace GameServer.Game
 
         private bool CanPass((int tileX, int tileY) pos)
         {
-            return !_collision[pos.tileX, pos.tileY];
+            return !_collision[pos.tileY, pos.tileX];
         }
 
         private List<(int tileX, int tileY)> ExtractPath(Dictionary<(int tileX, int tileY), (int tileX, int tileY)> parentMap, (int tileX, int tileY) destination)

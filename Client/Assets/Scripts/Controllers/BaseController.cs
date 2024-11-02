@@ -49,8 +49,6 @@ public class BaseController : MonoBehaviour
             _positionInfo = value;
         }
     }
-    
-    
 
 
     public CreatureState State
@@ -82,7 +80,7 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.Move;
         set
         {
-            if (_positionInfo.Move.Equals(value))
+            if (value == null || _positionInfo.Move.Equals(value))
                 return;
             statusChanged = true;
             _positionInfo.Move = value;
@@ -94,7 +92,7 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.LookDir;
         set
         {
-            if (_positionInfo.LookDir.Equals(value) || 
+            if (_positionInfo.LookDir.Equals(value) ||
                 (value.X == 0 && value.Y == 0))
                 return;
             statusChanged = true;

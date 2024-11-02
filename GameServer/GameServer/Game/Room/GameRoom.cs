@@ -67,7 +67,7 @@ namespace GameServer.Game
 
             if (Map.MapId == 2)
             {
-                for (int i = 0; i < 1; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     Monster monster = ObjectManager.Instance.Add<Monster>();
                     monster.Init(1);
@@ -139,6 +139,7 @@ namespace GameServer.Game
                 monster.Room = this;
 
                 GetZone(monster._Pos).Monsters.Add(monster);
+                monster.Move = new Vec2();
                 Map.ApplyMove(monster, new Vector2Float(monster._Pos.x, monster._Pos.y));
 
                 monster.Update();
@@ -292,6 +293,12 @@ namespace GameServer.Game
         {
             List<Zone> zones = GetAdjacentZones(pos, range);
             return zones.SelectMany(z => z.Players).ToList();
+        }
+
+        public List<Monster> GetAdjacentMonster(Vector2Float pos, int range, Func<Monster, bool> condition)
+        {
+            List<Zone> zones = GetAdjacentZones(pos, range);
+            return zones.SelectMany(z => z.Monsters).Where(condition).ToList();
         }
 
         public List<Zone> GetAdjacentZones(Vector2Float cellPos, int range = GameRoom.VisionDis)

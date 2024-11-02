@@ -46,6 +46,9 @@ namespace GameServer.Game
                     break;
             }
 
+            if (Move == null)
+                Console.WriteLine("test");
+
             // 5프레임 (0.2초마다 한번씩 Update)
             if (Room != null)
                 _job = Room.PushAfter(200, Update);
@@ -62,7 +65,7 @@ namespace GameServer.Game
                 return;
             nextSearchTick = Environment.TickCount64 + 1000;
 
-             Player target = Room.FindClosestPlayer(_Pos, searchDist);
+            Player target = Room.FindClosestPlayer(_Pos, searchDist);
 
             if (target == null)
                 return;
@@ -136,8 +139,15 @@ namespace GameServer.Game
                 BroadcastMove();
             }
         }
-        
-        protected void BroadcastMove()
+
+        private void ResetTarget()
+        {
+            _target = null;
+            State = CreatureState.Idle;
+            BroadcastMove();
+        }
+
+        protected override void BroadcastMove()
         {
             S_Move resMovePacket = new S_Move
             {
@@ -146,13 +156,6 @@ namespace GameServer.Game
             };
 
             Room.Broadcast(_Pos, resMovePacket);
-        }
-
-        private void ResetTarget()
-        {
-            _target = null;
-            State = CreatureState.Idle;
-            BroadcastMove();
         }
 
 
@@ -223,14 +226,14 @@ namespace GameServer.Game
             GameObject owner = attacker.GetOwner();
             if (owner.ObjectType == GameObjectType.Player)
             {
+                Player player = (Player)owner;
                 RewardData rewardData = GetRandomReward();
                 if (rewardData != null)
                 {
-                    Player player = (Player)owner;
                     DbTransaction.RewardPlayer(player, rewardData, Room);
                 }
 
-                owner.Exp += 5;
+                player.Exp += 5;
             }
         }
 

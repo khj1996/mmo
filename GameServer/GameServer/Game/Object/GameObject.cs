@@ -36,31 +36,7 @@ namespace GameServer.Game
         public virtual int TotalDefence => 0;
 
 
-        public int Level
-        {
-            get => Info.StatInfo.Level;
-            set => Info.StatInfo.Level = value;
-        }
-
-        public int Exp
-        {
-            get => Info.StatInfo.TotalExp;
-            set
-            {
-                var data = DataManager.StatDict
-                    .Where(x => x.Value.TotalExp <= value)
-                    .OrderByDescending(x => x.Value.TotalExp)
-                    .FirstOrDefault();
-
-                if (data.Key != null)
-                {
-                    UpdateLevel(data.Value);
-                }
-
-                // 최종적으로 TotalExp 값 설정
-                Info.StatInfo.TotalExp = value;
-            }
-        }
+        
 
         //속도
         public float Speed
@@ -117,7 +93,12 @@ namespace GameServer.Game
         public Vec2 Move
         {
             get => Info.PosInfo.Move;
-            set { Info.PosInfo.Move = value; }
+            set
+            {
+                if(value == null)
+                    return;
+                Info.PosInfo.Move = value;
+            }
         }
 
         public Vec2 LookDir
@@ -136,7 +117,8 @@ namespace GameServer.Game
             Info = new ObjectInfo
             {
                 PosInfo = new PositionInfo(),
-                StatInfo = new StatInfo()
+                StatInfo = new StatInfo(),
+                
             };
         }
 
@@ -164,7 +146,7 @@ namespace GameServer.Game
             return result;
         }
 
-        protected void BroadcastMove()
+        protected virtual void BroadcastMove()
         {
             S_Move resMovePacket = new S_Move
             {

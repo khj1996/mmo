@@ -25,11 +25,11 @@ namespace GameServer.Game
             }
 
 
-            var target = Room.FindPlayer(x => (_Pos - x._Pos).Magnitude < 1f);
+            var target = Room.GetAdjacentMonster(_Pos, 1, x => (_Pos - x._Pos).Magnitude < 0.4f);
 
-            if (target != null && target.Id != Owner.Id)
+            if (target.Count > 0)
             {
-                target.OnDamaged(Owner, Data.damage + Owner.TotalAttack);
+                target.First().OnDamaged(Owner, Data.damage + Owner.TotalAttack);
 
 
                 // 소멸
