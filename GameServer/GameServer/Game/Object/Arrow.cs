@@ -25,7 +25,7 @@ namespace GameServer.Game
             }
 
 
-            var target = Room.FindPlayer(x => (CellPos - x.CellPos).Magnitude < 1f);
+            var target = Room.FindPlayer(x => (_Pos - x._Pos).Magnitude < 1f);
 
             if (target != null && target.Id != Owner.Id)
             {

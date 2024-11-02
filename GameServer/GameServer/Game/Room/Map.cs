@@ -9,40 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameServer.Game
 {
-    //위치
-    public struct Pos
-    {
-        public Pos(int y, int x)
-        {
-            Y = y;
-            X = x;
-        }
-
-        public float Y;
-        public float X;
-
-        public static bool operator ==(Pos lhs, Pos rhs)
-        {
-            return Math.Abs(lhs.Y - rhs.Y) < 0.01 && Math.Abs(lhs.X - rhs.X) < 0.01;
-        }
-
-        public static bool operator !=(Pos lhs, Pos rhs)
-        {
-            return !(lhs == rhs);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return (Pos)obj == this;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-    }
-
-    //A*알고리즘
     public struct PQNode : IComparable<PQNode>
     {
         public int F;
@@ -63,6 +29,8 @@ namespace GameServer.Game
         public float x;
         public float y;
 
+        private const float Epsilon = 1e-5f;
+
         public Vector2Float(float x, float y)
         {
             this.x = x;
@@ -74,21 +42,23 @@ namespace GameServer.Game
         public static Vector2Float Left => new(-1, 0);
         public static Vector2Float Right => new(1, 0);
 
-        public static Vector2Float operator +(Vector2Float a, Vector2Float b)
-        {
-            return new Vector2Float(a.x + b.x, a.y + b.y);
-        }
+        public static Vector2Float operator +(Vector2Float a, Vector2Float b) => new(a.x + b.x, a.y + b.y);
+        public static Vector2Float operator -(Vector2Float a, Vector2Float b) => new(a.x - b.x, a.y - b.y);
 
-        public static Vector2Float operator -(Vector2Float a, Vector2Float b)
-        {
-            return new Vector2Float(a.x - b.x, a.y - b.y);
-        }
+        public static bool operator ==(Vector2Float a, Vector2Float b) =>
+            MathF.Abs(a.x - b.x) < Epsilon && MathF.Abs(a.y - b.y) < Epsilon;
+
+        public static bool operator !=(Vector2Float a, Vector2Float b) => !(a == b);
+
+        public override bool Equals(object obj) => obj is Vector2Float other && this == other;
+
+        public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode();
+
+        public Vector2Float Normalized => new(x / Magnitude, y / Magnitude);
 
         public float Magnitude => MathF.Sqrt(SqrMagnitude);
 
-        public float SqrMagnitude => (x * x + y * y);
-
-        public float CellDistFromZero => Math.Abs(x) + Math.Abs(y);
+        public float SqrMagnitude => x * x + y * y;
     }
 
     public class Map
@@ -129,7 +99,7 @@ namespace GameServer.Game
                 return false;
 
             // Zone
-            Zone zone = gameObject.Room.GetZone(gameObject.CellPos);
+            Zone zone = gameObject.Room.GetZone(gameObject._Pos);
             zone.Remove(gameObject);
 
             return true;
@@ -225,6 +195,13 @@ namespace GameServer.Game
             return (tileX, tileY);
         }
 
+        private (int x, int y) GetLocalPos(int tileX, int tileY)
+        {
+            int x = tileX + MinX;
+            int y = MaxY - tileY;
+            return (x, y);
+        }
+
         private void AdjustDestinationForCollision(ref Vector2Float dest, Vec2 moveDirection, float diffX, float diffY)
         {
             float epsilon = 0.2f;
@@ -277,12 +254,12 @@ namespace GameServer.Game
 
                     if (right > tileMinX && left < tileMaxX)
                     {
-                        Console.WriteLine(right+"   "+tileMaxX);
+                        Console.WriteLine(right + "   " + tileMaxX);
                         diffX = (right > tileMaxX) ? right - tileMaxX : tileMinX - left;
                     }
 
                     AdjustDestinationForCollision(ref pos, move, diffX, 0);
-                    break; 
+                    break;
                 }
             }
 
@@ -313,7 +290,7 @@ namespace GameServer.Game
             if (gameObject.Room == null || gameObject.Room.Map != this)
                 return false;
 
-            Vector2Float currentPos = gameObject.CellPos;
+            Vector2Float currentPos = gameObject._Pos;
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
 
             switch (type)
@@ -356,7 +333,7 @@ namespace GameServer.Game
             MapDb findMapData = db.MapDatas.Where(a => a.MapDbId == mapId).FirstOrDefault();
 
             MapId = mapId;
-            
+
             if (findMapData == null)
             {
                 StringBuilder tileStr = new StringBuilder();
@@ -397,7 +374,7 @@ namespace GameServer.Game
                 findMapData = newMapData;
             }
 
-            
+
             MinX = findMapData.MinX;
             MaxX = findMapData.MaxX;
             MinY = findMapData.MinY;
@@ -422,159 +399,77 @@ namespace GameServer.Game
 
         #region A* PathFinding
 
-        // U D L R  //  UL UR DL DR
-        int[] _deltaY = new int[] { 1, -1, 0, 0, 1, 1, -1, -1 };
-        int[] _deltaX = new int[] { 0, 0, -1, 1, -1, -1, 1, 1 };
-        int[] _cost = new int[] { 10, 10, 10, 10, 14, 14, 14, 14 };
+        int[] _deltaY = new int[] { 1, -1, 0, 0 };
+        int[] _deltaX = new int[] { 0, 0, -1, 1 };
+        int[] _cost = new int[] { 10, 10, 10, 10 };
 
-        public List<Vector2Float> FindPath(Vector2Float startCellPos, Vector2Float destCellPos,
-            bool checkObjects = true, int maxDist = 10)
+        public List<(int tileX, int tileY)> FindPath(Vector2Float start, Vector2Float dest, int maxDist = 10)
         {
-            List<Pos> path = new List<Pos>();
-
-            // 점수 매기기
-            // F = G + H
-            // F = 최종 점수 (작을 수록 좋음, 경로에 따라 달라짐)
-            // G = 시작점에서 해당 좌표까지 이동하는데 드는 비용 (작을 수록 좋음, 경로에 따라 달라짐)
-            // H = 목적지에서 얼마나 가까운지 (작을 수록 좋음, 고정)
-
-            // (y, x) 이미 방문했는지 여부 (방문 = closed 상태)
-            HashSet<Pos> closeList = new HashSet<Pos>(); // CloseList
-
-            // (y, x) 가는 길을 한 번이라도 발견했는지
-            // 발견X => MaxValue
-            // 발견O => F = G + H
-            Dictionary<Pos, int> openList = new Dictionary<Pos, int>(); // OpenList
-            Dictionary<Pos, Pos> parent = new Dictionary<Pos, Pos>();
-
-            // 오픈리스트에 있는 정보들 중에서, 가장 좋은 후보를 빠르게 뽑아오기 위한 도구
+            HashSet<(int tileX, int tileY)> closedSet = new HashSet<(int tileX, int tileY)>();
+            Dictionary<(int tileX, int tileY), float> openSet = new Dictionary<(int tileX, int tileY), float>();
+            Dictionary<(int tileX, int tileY), (int tileX, int tileY)> parentMap = new Dictionary<(int tileX, int tileY), (int tileX, int tileY)>();
             PriorityQueue<PQNode> pq = new PriorityQueue<PQNode>();
 
-            // CellPos -> ArrayPos
-            Pos pos = Cell2Pos(startCellPos);
-            Pos dest = Cell2Pos(destCellPos);
-
-            // 시작점 발견 (예약 진행)
-            openList.Add(pos, 10 * (int)(Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)));
-
-            pq.Push(new PQNode()
-            {
-                F = 10 * (int)(Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)), G = 0, Y = (int)pos.Y,
-                X = (int)pos.X
-            });
-            parent.Add(pos, pos);
+            var startTilePos = GetTilePos(start.x, start.y);
+            var destTilePos = GetTilePos(dest.x, dest.y);
+            int initialH = 10 * (Math.Abs(destTilePos.tileY - startTilePos.tileY) + Math.Abs(destTilePos.tileX - startTilePos.tileX));
+            pq.Push(new PQNode { F = initialH, G = 0, X = startTilePos.tileX, Y = startTilePos.tileY });
+            openSet[startTilePos] = initialH;
+            parentMap[startTilePos] = startTilePos;
 
             while (pq.Count > 0)
             {
-                // 제일 좋은 후보를 찾는다
-                PQNode pqNode = pq.Pop();
-                Pos node = new Pos(pqNode.Y, pqNode.X);
-                // 동일한 좌표를 여러 경로로 찾아서, 더 빠른 경로로 인해서 이미 방문(closed)된 경우 스킵
-                if (closeList.Contains(node))
-                    continue;
+                var currentNode = pq.Pop();
+                (int tileX, int tileY) currentPos = (currentNode.X, currentNode.Y);
 
-                // 방문한다
-                closeList.Add(node);
-
-                // 목적지 도착했으면 바로 종료
-                if (node.Y == dest.Y && node.X == dest.X)
+                if (currentPos == destTilePos)
                     break;
 
-                // 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약(open)한다
+                closedSet.Add(currentPos);
+
                 for (int i = 0; i < _deltaY.Length; i++)
                 {
-                    Pos next = new Pos((int)node.Y + _deltaY[i], (int)node.X + _deltaX[i]);
+                    (int tileX, int tileY) nextPos = (currentPos.tileX + _deltaX[i], currentPos.tileY + _deltaY[i]);
 
-                    // 너무 멀면 스킵
-                    if (Math.Abs(pos.Y - next.Y) + Math.Abs(pos.X - next.X) > maxDist)
+
+                    if (closedSet.Contains(nextPos) ||
+                        Math.Abs(startTilePos.tileY - nextPos.tileY) + Math.Abs(startTilePos.tileX - nextPos.tileX) > maxDist ||
+                        !CanPass(nextPos))
                         continue;
 
-                    // 유효 범위를 벗어났으면 스킵
-                    // 벽으로 막혀서 갈 수 없으면 스킵
-                    if (next.Y != dest.Y || next.X != dest.X)
+                    int g = currentNode.G + _cost[i];
+                    int h = 10 * (Math.Abs(destTilePos.tileY - nextPos.tileY) + Math.Abs(destTilePos.tileX - nextPos.tileX));
+                    int f = g + h;
+
+                    if (!openSet.TryGetValue(nextPos, out float existingF) || existingF > f)
                     {
-                        /*if (CanGo(Pos2Cell(next)) == false) // CellPos
-                            continue;*/
-                    }
-
-                    // 이미 방문한 곳이면 스킵
-                    if (closeList.Contains(next))
-                        continue;
-
-                    // 비용 계산
-                    int g = 0; // node.G + _cost[i];
-                    int h = 10 * (int)((dest.Y - next.Y) * (dest.Y - next.Y) + (dest.X - next.X) * (dest.X - next.X));
-                    // 다른 경로에서 더 빠른 길 이미 찾았으면 스킵
-
-                    int value = 0;
-                    if (openList.TryGetValue(next, out value) == false)
-                        value = Int32.MaxValue;
-
-                    if (value < g + h)
-                        continue;
-
-                    // 예약 진행
-                    if (openList.TryAdd(next, g + h) == false)
-                        openList[next] = g + h;
-
-                    pq.Push(new PQNode() { F = g + h, G = g, Y = (int)next.Y, X = (int)next.X });
-
-                    if (parent.TryAdd(next, node) == false)
-                        parent[next] = node;
-                }
-            }
-
-            return CalcCellPathFromParent(parent, dest);
-        }
-
-        List<Vector2Float> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
-        {
-            List<Vector2Float> cells = new List<Vector2Float>();
-
-            if (parent.ContainsKey(dest) == false)
-            {
-                Pos best = new Pos();
-                int bestDist = Int32.MaxValue;
-
-                foreach (Pos pos in parent.Keys)
-                {
-                    float dist = Math.Abs(dest.X - pos.X) + Math.Abs(dest.Y - pos.Y);
-                    // 제일 우수한 후보를 뽑는다
-                    if (dist < bestDist)
-                    {
-                        best = pos;
-                        bestDist = (int)dist;
+                        openSet[nextPos] = f;
+                        pq.Push(new PQNode { F = f, G = g, X = nextPos.tileX, Y = nextPos.tileY });
+                        parentMap[nextPos] = currentPos;
                     }
                 }
-
-                dest = best;
             }
 
+            return ExtractPath(parentMap, destTilePos);
+        }
+
+        private bool CanPass((int tileX, int tileY) pos)
+        {
+            return !_collision[pos.tileX, pos.tileY];
+        }
+
+        private List<(int tileX, int tileY)> ExtractPath(Dictionary<(int tileX, int tileY), (int tileX, int tileY)> parentMap, (int tileX, int tileY) destination)
+        {
+            List<(int tileX, int tileY)> path = new List<(int tileX, int tileY)>();
+            (int tileX, int tileY) step = destination;
+            while (parentMap.TryGetValue(step, out (int tileX, int tileY) parent) && parent != step)
             {
-                Pos pos = dest;
-                while (parent[pos] != pos)
-                {
-                    cells.Add(Pos2Cell(pos));
-                    pos = parent[pos];
-                }
-
-                cells.Add(Pos2Cell(pos));
-                cells.Reverse();
+                path.Add(GetLocalPos(step.tileX, step.tileY));
+                step = parent;
             }
 
-            return cells;
-        }
-
-        Pos Cell2Pos(Vector2Float cell)
-        {
-            // CellPos -> ArrayPos
-            return new Pos(MaxY - (int)cell.y, (int)cell.x - MinX);
-        }
-
-        Vector2Float Pos2Cell(Pos pos)
-        {
-            // ArrayPos -> CellPos
-            return new Vector2Float(pos.X + MinX, MaxY - pos.Y);
+            path.Reverse();
+            return path;
         }
 
         #endregion

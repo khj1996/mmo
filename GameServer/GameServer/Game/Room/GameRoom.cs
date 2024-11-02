@@ -65,14 +65,15 @@ namespace GameServer.Game
                 }
             }
 
-            //몬스터 생성
-            /*for (int i = 0; i < 1; i++)
+            if (Map.MapId == 2)
             {
-                Monster monster = ObjectManager.Instance.Add<Monster>();
-                monster.Init(1);
-                SetRandomPos(monster);
-                EnterGame(monster);
-            }*/
+                for (int i = 0; i < 1; i++)
+                {
+                    Monster monster = ObjectManager.Instance.Add<Monster>();
+                    monster.Init(1);
+                    EnterGame(monster, true);
+                }
+            }
         }
 
         // 누군가 주기적으로 호출해줘야 한다
@@ -83,20 +84,26 @@ namespace GameServer.Game
 
         Random _rand = new Random();
 
-        public void SetRandomPos(GameObject gameObject)
-        {
-            gameObject.Pos.X = 5;
-            gameObject.Pos.Y = 5;
-        }
-
-        public void EnterGame(GameObject gameObject)
+        public void EnterGame(GameObject gameObject, bool randomPos)
         {
             if (gameObject == null)
                 return;
 
-            GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
-            Console.WriteLine(gameObject.Id);
 
+            if (randomPos)
+            {
+                Vector2Float respawnPos;
+                respawnPos.x = _rand.Next(Map.MinX + 3, Map.MaxX - 3);
+                respawnPos.y = _rand.Next(Map.MinY + 3, Map.MaxY - 3);
+                gameObject.Pos = new Vec2()
+                {
+                    X = respawnPos.x,
+                    Y = respawnPos.y
+                };
+            }
+
+
+            GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
             if (type == GameObjectType.Player)
             {
                 Player player = gameObject as Player;
@@ -105,8 +112,8 @@ namespace GameServer.Game
 
                 player.RefreshAdditionalStat();
 
-                Map.ApplyMove(player, new Vector2Float(player.CellPos.x, player.CellPos.y));
-                GetZone(player.CellPos).Players.Add(player);
+                Map.ApplyMove(player, new Vector2Float(player._Pos.x, player._Pos.y));
+                GetZone(player._Pos).Players.Add(player);
 
                 // 본인한테 정보 전송
                 {
@@ -117,26 +124,28 @@ namespace GameServer.Game
                     enterPacket.Player.PosInfo.Move = new Vec2();
                     player.Session.Send(enterPacket);
                     player.StartUpdate();
+                    player.Vision.StartUpdate();
                 }
 
                 S_Spawn spawnPacket = new S_Spawn();
                 spawnPacket.Objects.Add(gameObject.Info);
-                Broadcast(gameObject.CellPos, spawnPacket, player.PlayerDbId);
+                Broadcast(gameObject._Pos, spawnPacket, player.PlayerDbId);
             }
+
             else if (type == GameObjectType.Monster)
             {
                 Monster monster = gameObject as Monster;
                 _monsters.Add(gameObject.Id, monster);
                 monster.Room = this;
 
-                GetZone(monster.CellPos).Monsters.Add(monster);
-                Map.ApplyMove(monster, new Vector2Float(monster.CellPos.x, monster.CellPos.y));
+                GetZone(monster._Pos).Monsters.Add(monster);
+                Map.ApplyMove(monster, new Vector2Float(monster._Pos.x, monster._Pos.y));
 
                 monster.Update();
 
                 S_Spawn spawnPacket = new S_Spawn();
                 spawnPacket.Objects.Add(gameObject.Info);
-                Broadcast(gameObject.CellPos, spawnPacket);
+                Broadcast(gameObject._Pos, spawnPacket);
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -144,7 +153,7 @@ namespace GameServer.Game
                 _projectiles.Add(gameObject.Id, projectile);
                 projectile.Room = this;
 
-                GetZone(projectile.CellPos).Projectiles.Add(projectile);
+                GetZone(projectile._Pos).Projectiles.Add(projectile);
                 projectile.Start(100);
             }
         }
@@ -162,12 +171,12 @@ namespace GameServer.Game
                 if (_players.Remove(objectId, out player) == false)
                     return;
 
-                cellPos = player.CellPos;
+                cellPos = player._Pos;
 
                 player.OnLeaveGame();
                 Map.ApplyLeave(player);
                 player.Room = null;
-                
+
 
                 // 본인한테 정보 전송
                 {
@@ -182,7 +191,7 @@ namespace GameServer.Game
                 if (_monsters.Remove(objectId, out monster) == false)
                     return;
 
-                cellPos = monster.CellPos;
+                cellPos = monster._Pos;
                 Map.ApplyLeave(monster);
                 monster.Room = null;
             }
@@ -192,7 +201,7 @@ namespace GameServer.Game
                 if (_projectiles.Remove(objectId, out projectile) == false)
                     return;
 
-                cellPos = projectile.CellPos;
+                cellPos = projectile._Pos;
                 Map.ApplyLeave(projectile);
                 projectile.Room = null;
             }
@@ -236,28 +245,29 @@ namespace GameServer.Game
             return targetList;
         }
 
-        // 살짝 부담스러운 함수
         public Player FindClosestPlayer(Vector2Float pos, int range)
         {
             List<Player> players = GetAdjacentPlayers(pos, range);
-
-            players.Sort((left, right) =>
-            {
-                float leftDist = (left.CellPos - pos).CellDistFromZero;
-                float rightDist = (right.CellPos - pos).CellDistFromZero;
-                return (int)leftDist - (int)rightDist;
-            });
+            Player closestPlayer = null;
+            float closestDistance = float.MaxValue;
 
             foreach (Player player in players)
             {
-                List<Vector2Float> path = Map.FindPath(pos, player.CellPos, checkObjects: true);
-                if (path.Count < 2 || path.Count > range)
-                    continue;
+                float distance = (player._Pos - pos).Magnitude;
 
-                return player;
+                if (distance < closestDistance)
+                {
+                    List<(int tileX, int tileY)> path = Map.FindPath(pos, player._Pos);
+
+                    if (path.Count >= 2 && path.Count <= range)
+                    {
+                        closestPlayer = player;
+                        closestDistance = distance;
+                    }
+                }
             }
 
-            return null;
+            return closestPlayer;
         }
 
         public void Broadcast(Vector2Float pos, IMessage packet, int playerDbId = -1)
@@ -269,7 +279,7 @@ namespace GameServer.Game
                 if (p.PlayerDbId == playerDbId)
                     continue;
 
-                var dis = (p.CellPos - pos).Magnitude;
+                var dis = (p._Pos - pos).Magnitude;
 
                 if (dis > VisionDis)
                     continue;

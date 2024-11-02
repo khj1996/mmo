@@ -33,4 +33,32 @@ public class MonsterController : CreatureController
 			State = CreatureState.Skill;
 		}
 	}
+	
+	public override void UpdatePosition(S_Move movePacket)
+	{
+		Pos = movePacket.PosInfo.Pos;
+		Move = movePacket.PosInfo.Move;
+
+
+		if (!(Move.X == 0 && Move.Y == 0))
+			LookDir = movePacket.PosInfo.Move;
+
+
+		if (movePacket.PosInfo.State != CreatureState.Idle)
+		{
+			State = movePacket.PosInfo.State;
+		}
+		else
+		{
+			var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
+			var distance = (destPos - transform.position).magnitude;
+			if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
+			{
+				State = CreatureState.Idle;
+				UpdateAnimation();
+			}
+		}
+
+		UpdateAnimation();
+	}
 }

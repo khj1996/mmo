@@ -114,11 +114,6 @@ namespace GameServer.Game
             set => Info.PosInfo.Pos = value;
         }
 
-        public Vec2 ClientPos
-        {
-            set => Info.PosInfo.Pos = value;
-        }
-
         public Vec2 Move
         {
             get => Info.PosInfo.Move;
@@ -132,7 +127,7 @@ namespace GameServer.Game
         }
 
         //위치
-        public Vector2Float CellPos => new(Info.PosInfo.Pos.X, Info.PosInfo.Pos.Y);
+        public Vector2Float _Pos => new(Info.PosInfo.Pos.X, Info.PosInfo.Pos.Y);
 
 
         //생성자
@@ -177,7 +172,7 @@ namespace GameServer.Game
                 PosInfo = Info.PosInfo,
             };
 
-            Room.Broadcast(CellPos, resMovePacket);
+            Room.Broadcast(_Pos, resMovePacket);
         }
 
 
@@ -193,7 +188,7 @@ namespace GameServer.Game
             var changePacket = new S_ChangeHp();
             changePacket.ObjectId = Id;
             changePacket.Hp = Info.StatInfo.Hp;
-            Room.Broadcast(CellPos, changePacket);
+            Room.Broadcast(_Pos, changePacket);
 
             if (Info.StatInfo.Hp <= 0)
             {
@@ -201,9 +196,6 @@ namespace GameServer.Game
             }
         }
 
-        //사망
-        //사망시 해당 오브젝트를 퇴장 후 재입장 방식
-        //TODO : 재입장이 아닌 방식으로 수정 도전
         public virtual void OnDead(GameObject attacker)
         {
             if (Room == null)
@@ -212,7 +204,7 @@ namespace GameServer.Game
             var diePacket = new S_Die();
             diePacket.ObjectId = Id;
             diePacket.AttackerId = attacker.Id;
-            Room.Broadcast(CellPos, diePacket);
+            Room.Broadcast(_Pos, diePacket);
 
             var room = Room;
             room.LeaveGame(Id);
@@ -221,7 +213,7 @@ namespace GameServer.Game
             Info.PosInfo.State = CreatureState.Idle;
             Info.PosInfo.LookDir = new Vec2();
 
-            room.EnterGame(this);
+            room.EnterGame(this,false);
         }
 
         //소유주

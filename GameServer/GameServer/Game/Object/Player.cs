@@ -47,7 +47,6 @@ namespace GameServer.Game
         {
             if (_job != null) return;
             Update();
-            Vision.Update();
         }
 
         public override void Update()
@@ -99,7 +98,7 @@ namespace GameServer.Game
         {
             base.UpdatePosition();
 
-            Room.CheckMoveMap(CellPos, this);
+            Room.CheckMoveMap(_Pos, this);
 
             return true;
         }
@@ -149,7 +148,7 @@ namespace GameServer.Game
                 Hp = Info.StatInfo.Hp
             };
 
-            Room.Broadcast(CellPos, changePacket, PlayerDbId);
+            Room.Broadcast(_Pos, changePacket, PlayerDbId);
         }
 
         public void OnLeaveGame()
@@ -188,7 +187,7 @@ namespace GameServer.Game
                     Hp = Info.StatInfo.Hp
                 };
 
-                Room.Broadcast(CellPos, changePacket);
+                Room.Broadcast(_Pos, changePacket);
             }
             else if (item.ItemType == ItemType.Armor || item.ItemType == ItemType.Weapon)
             {
@@ -248,7 +247,7 @@ namespace GameServer.Game
 
         public Vector2Float GetFrontPos()
         {
-            var cellPos = CellPos;
+            var cellPos = _Pos;
             if (Math.Abs(LookDir.X) >= Math.Abs(LookDir.Y))
             {
                 if (LookDir.X > 0)

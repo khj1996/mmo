@@ -149,7 +149,7 @@ namespace GameServer
             GameLogic.Instance.Push(() =>
             {
                 GameRoom room = GameLogic.Instance.FindByMapId(playerInfo.Map);
-                room.Push(room.EnterGame, MyPlayer);
+                room.Push(room.EnterGame, MyPlayer, false);
             });
         }
 
@@ -187,7 +187,7 @@ namespace GameServer
                         Speed = stat.Speed,
                         TotalExp = 0,
                         AccountGameDbId = AccountDbId,
-                        CurMap = 0,
+                        CurMap = 1,
                         PosX = 0,
                         PosY = 0,
                         PosZ = 0

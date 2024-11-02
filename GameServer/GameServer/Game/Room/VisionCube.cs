@@ -7,11 +7,11 @@ namespace GameServer.Game.Room
 {
     public class VisionCube
     {
-        //시야의 소유주
         public Player Owner { get; private set; }
 
-        //시야 에들어와있는 물체
         public HashSet<GameObject> PreviousObjects { get; private set; } = new HashSet<GameObject>();
+
+        IJob? _job;
 
         //생성자
         public VisionCube(Player owner)
@@ -28,10 +28,10 @@ namespace GameServer.Game.Room
             HashSet<GameObject> objects = new HashSet<GameObject>();
 
             //근접한 존 획득
-            List<Zone> zones = Owner.Room.GetAdjacentZones(Owner.CellPos);
+            List<Zone> zones = Owner.Room.GetAdjacentZones(Owner._Pos);
 
             //현재 유저의 위치
-            Vector2Float cellPos = Owner.CellPos;
+            Vector2Float cellPos = Owner._Pos;
             //각 존마다 반복하여 획득 가능한 오브젝트 획득
             foreach (Zone zone in zones)
             {
@@ -40,7 +40,7 @@ namespace GameServer.Game.Room
                     if (player.PlayerDbId == Owner.PlayerDbId)
                         continue;
 
-                    var dis = (player.CellPos - cellPos).Magnitude;
+                    var dis = (player._Pos - cellPos).Magnitude;
 
                     if (dis > GameRoom.VisionDis)
                         continue;
@@ -50,7 +50,7 @@ namespace GameServer.Game.Room
 
                 foreach (Monster monster in zone.Monsters)
                 {
-                    var dis = (monster.CellPos - cellPos).Magnitude;
+                    var dis = (monster._Pos - cellPos).Magnitude;
 
                     if (dis > GameRoom.VisionDis)
                         continue;
@@ -60,7 +60,7 @@ namespace GameServer.Game.Room
 
                 foreach (Projectile projectile in zone.Projectiles)
                 {
-                    var dis = (projectile.CellPos - cellPos).Magnitude;
+                    var dis = (projectile._Pos - cellPos).Magnitude;
 
                     if (dis > GameRoom.VisionDis)
                         continue;
@@ -72,12 +72,18 @@ namespace GameServer.Game.Room
             return objects;
         }
 
+        public void StartUpdate()
+        {
+            if (_job != null) return;
+            Update();
+        }
+
         //업데이트
         public void Update()
         {
             if (Owner == null || Owner.Room == null)
                 return;
-            
+
 
             HashSet<GameObject> currentObjects = GatherObjects();
 
@@ -114,7 +120,8 @@ namespace GameServer.Game.Room
             // 교체
             PreviousObjects = currentObjects;
 
-            Owner.Room.PushAfter(100, Update);
+            if (Owner.Room != null)
+                _job = Owner.Room.PushAfter(100, Update);
         }
     }
 }

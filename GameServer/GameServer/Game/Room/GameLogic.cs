@@ -53,11 +53,11 @@ namespace GameServer.Game
 
             if (afterRoom.Value == null)
             {
-                room.EnterGame(player);
+                room.EnterGame(player,false);
                 return false;
             }
 
-            afterRoom.Value.EnterGame(player);
+            afterRoom.Value.EnterGame(player,false);
             return true;
         }
 

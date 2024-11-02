@@ -48,7 +48,7 @@ namespace GameServer.Game
                 ObjectId = info.ObjectId,
                 MoveDir = skillPacket.MoveDir
             };
-            Broadcast(player.CellPos, skill);
+            Broadcast(player._Pos, skill);
 
             if (!DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out var skillData))
                 return;
@@ -92,7 +92,7 @@ namespace GameServer.Game
                     arrow.Info.PosInfo.LookDir = skillPacket.MoveDir;
                     arrow.Move = skillPacket.MoveDir;
                     arrow.Speed = skillData.projectile.speed;
-                    Push(EnterGame, arrow);
+                    Push(EnterGame, arrow,false);
                 }
                     break;
             }

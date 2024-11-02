@@ -20,6 +20,8 @@ namespace GameServer.Data
         public static Dictionary<int, MonsterData> MonsterDict { get; private set; } = new Dictionary<int, MonsterData>();
         public static Dictionary<int, ShopData> ShopDict { get; private set; } = new Dictionary<int, ShopData>();
 
+        #region 데이터 로드
+
         public static void LoadData()
         {
             StatDict = LoadJson<StatDataLoader, int, StatInfo>("StatData").MakeDict();
@@ -282,11 +284,33 @@ namespace GameServer.Data
             }
         }
 
-
         static Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
         {
             string text = File.ReadAllText($"{ConfigManager.Config.dataPath}/{path}.json");
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(text);
+        }
+
+        #endregion
+
+
+        public static int GetLevelForExp(int currentExp)
+        {
+            int left = 1;
+            int right = StatDict.Count;
+
+            while (left <= right)
+            {
+                int mid = (left + right) / 2;
+
+                if (StatDict[mid].TotalExp <= currentExp && (mid == StatDict.Count || StatDict[mid + 1].TotalExp > currentExp))
+                    return mid;
+                else if (StatDict[mid].TotalExp > currentExp)
+                    right = mid - 1;
+                else
+                    left = mid + 1;
+            }
+
+            return 1;
         }
     }
 }

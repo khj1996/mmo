@@ -8,16 +8,13 @@ namespace GameServer.Game
 {
     public class Monster : GameObject
     {
-        //오브젝트 id
         public int TemplateId { get; private set; }
 
-        //생성자
         public Monster()
         {
             ObjectType = GameObjectType.Monster;
         }
 
-        //초기화
         public void Init(int templateId)
         {
             TemplateId = templateId;
@@ -29,10 +26,8 @@ namespace GameServer.Game
             State = CreatureState.Idle;
         }
 
-        // FSM (Finite State Machine)
         IJob _job;
 
-        //입장할때 실행후 자체 재호출
         public override void Update()
         {
             switch (State)
@@ -56,24 +51,18 @@ namespace GameServer.Game
                 _job = Room.PushAfter(200, Update);
         }
 
-        //추격 대상
         Player _target;
-        //탐색 거리
-        int _searchCellDist = 10;
-        //추격 거리
-        int _chaseCellDist = 20;
+        int searchDist = 10;
+        int chaseDist = 20;
+        long nextSearchTick = 0;
 
-        //다음 탐색 틱
-        long _nextSearchTick = 0;
-
-        //일반 상태일때 탐색틱마다 유저 탐색
         protected virtual void UpdateIdle()
         {
-            if (_nextSearchTick > Environment.TickCount64)
+            if (nextSearchTick > Environment.TickCount64)
                 return;
-            _nextSearchTick = Environment.TickCount64 + 1000;
+            nextSearchTick = Environment.TickCount64 + 1000;
 
-            Player target = Room.FindClosestPlayer(CellPos, _searchCellDist);
+             Player target = Room.FindClosestPlayer(_Pos, searchDist);
 
             if (target == null)
                 return;
@@ -84,71 +73,88 @@ namespace GameServer.Game
 
         //공격 거리
         int _skillRange = 1;
+
         //다음 이동 틱
-        long _nextMoveTick = 0;
+        long nextMoveTick = 0;
+        private Vec2 lastTargetPos;
+        private List<(int tileX, int tileY)> _path;
 
         //이동
         protected virtual void UpdateMoving()
         {
-            if (_nextMoveTick > Environment.TickCount64)
+            if (nextMoveTick > Environment.TickCount64)
                 return;
-            int moveTick = (int)(1000 / Speed);
-            _nextMoveTick = Environment.TickCount64 + moveTick;
 
-            //대상이 없을시
+            int moveTick = (int)(1000 / Speed);
+            nextMoveTick = Environment.TickCount64 + moveTick;
+
             if (_target == null || _target.Room != Room)
             {
-                _target = null;
-                State = CreatureState.Idle;
-                BroadcastMove();
+                ResetTarget();
                 return;
             }
 
-            Vector2Float dir = _target.CellPos - CellPos;
-            float dist = dir.CellDistFromZero;
-            //대상이 멀어지면 추적 포기
-            if (dist == 0 || dist > _chaseCellDist)
+            Vector2Float dir = _target._Pos - _Pos;
+            float distSqr = dir.SqrMagnitude;
+
+            if (distSqr > chaseDist * chaseDist)
             {
-                _target = null;
-                State = CreatureState.Idle;
-                BroadcastMove();
+                ResetTarget();
                 return;
             }
 
-            //경로 탐색
-            List<Vector2Float> path = Room.Map.FindPath(CellPos, _target.CellPos, checkObjects: true);
-            //이미 근접했거나 먼경우
-            if (path.Count < 2 || path.Count > _chaseCellDist)
-            {
-                _target = null;
-                State = CreatureState.Idle;
-                BroadcastMove();
-                return;
-            }
-
-            // 스킬로 넘어갈지 체크
-            if (dist <= _skillRange && (dir.x == 0 || dir.y == 0))
+            if (distSqr <= _skillRange * _skillRange && (dir.x == 0 || dir.y == 0))
             {
                 _coolTick = 0;
                 State = CreatureState.Skill;
                 return;
             }
 
-            // 이동
-            //Dir = GetDirFromVec(path[1] - CellPos);
-            Room.Map.ApplyMove(this, path[1]);
+            if (_path == null || _path.Count < 2 || !_target.Pos.Equals(lastTargetPos))
+            {
+                _path = Room.Map.FindPath(_Pos, _target._Pos);
+                lastTargetPos = _target.Pos;
+            }
+
+            if (_path != null && _path.Count >= 2)
+            {
+                var normalizedDir = dir.Normalized;
+
+                Move = new Vec2()
+                {
+                    X = normalizedDir.x,
+                    Y = normalizedDir.y
+                };
+
+
+                Room.Map.ApplyMove(this, new Vector2Float()
+                {
+                    x = _path[1].tileX,
+                    y = _path[1].tileY
+                });
+                _path.RemoveAt(0);
+                BroadcastMove();
+            }
+        }
+        
+        protected void BroadcastMove()
+        {
+            S_Move resMovePacket = new S_Move
+            {
+                ObjectId = Id,
+                PosInfo = Info.PosInfo,
+            };
+
+            Room.Broadcast(_Pos, resMovePacket);
+        }
+
+        private void ResetTarget()
+        {
+            _target = null;
+            State = CreatureState.Idle;
             BroadcastMove();
         }
 
-        //이동 알림
-        void BroadcastMove()
-        {
-            // 다른 플레이어한테도 알려준다
-            S_Move movePacket = new S_Move();
-            movePacket.ObjectId = Id;
-            movePacket.PosInfo = Info.PosInfo;
-            Room.Broadcast(CellPos, movePacket);
-        }
 
         long _coolTick = 0;
 
@@ -167,8 +173,8 @@ namespace GameServer.Game
                 }
 
                 // 스킬이 아직 사용 가능한지
-                Vector2Float dir = (_target.CellPos - CellPos);
-                float dist = dir.CellDistFromZero;
+                Vector2Float dir = (_target._Pos - _Pos);
+                float dist = dir.Magnitude;
                 bool canUseSkill = (dist <= _skillRange && (dir.x == 0 || dir.y == 0));
                 if (canUseSkill == false)
                 {
@@ -176,15 +182,6 @@ namespace GameServer.Game
                     BroadcastMove();
                     return;
                 }
-
-                // 타게팅 방향 주시
-                //TODO : 공격및 이동 가능하게
-                /*MoveDir lookDir = GetDirFromVec(dir);
-                if (Dir != lookDir)
-                {
-                    Dir = lookDir;
-                    BroadcastMove();
-                }*/
 
                 Skill skillData = null;
                 DataManager.SkillDict.TryGetValue(1, out skillData);
@@ -196,7 +193,7 @@ namespace GameServer.Game
                 S_Skill skill = new S_Skill() { Info = new SkillInfo() };
                 skill.ObjectId = Id;
                 skill.Info.SkillId = skillData.id;
-                Room.Broadcast(CellPos, skill);
+                Room.Broadcast(_Pos, skill);
 
                 // 스킬 쿨타임 적용
                 int coolTick = (int)(1000 * skillData.cooldown);
