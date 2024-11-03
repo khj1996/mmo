@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,5 +28,51 @@ public class UI_GameScene : UI_Scene
         ExpUI.gameObject.SetActive(true);
         JoystickUI.gameObject.SetActive(true);
         isInitComplete = true;
+    }
+
+    private void Update()
+    {
+        GetUIKeyInput();
+    }
+
+
+    void GetUIKeyInput()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (InvenUI.gameObject.activeSelf)
+            {
+                InvenUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                InvenUI.gameObject.SetActive(true);
+                InvenUI.RefreshUI(Define.InvenRefreshType.All);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (StatUI.gameObject.activeSelf)
+            {
+                StatUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                StatUI.gameObject.SetActive(true);
+                StatUI.RefreshUI();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (ShopUI.gameObject.activeSelf)
+            {
+                ShopUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                ShopUI.gameObject.SetActive(true);
+                ShopUI.RefreshUI();
+            }
+        }
     }
 }

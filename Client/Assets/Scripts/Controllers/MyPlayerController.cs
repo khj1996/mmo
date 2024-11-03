@@ -16,7 +16,6 @@ public class MyPlayerController : PlayerController
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
 
-    private UI_GameScene gameSceneUI;
     [SerializeField] UI_ExpBar uiExpBar;
 
     public int Exp
@@ -44,15 +43,12 @@ public class MyPlayerController : PlayerController
     {
         base.Init();
         RefreshAdditionalStat();
-        gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
         _Joystick = FindObjectOfType<UI_Joystick>();
     }
 
 
     protected override void UpdateController()
     {
-        GetUIKeyInput();
-
         UseSkill();
 
         UpdateMovDir();
@@ -116,51 +112,6 @@ public class MyPlayerController : PlayerController
         _coSkillCooltime = null;
     }
 
-    void GetUIKeyInput()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            UI_Inventory invenUI = gameSceneUI.InvenUI;
-
-            if (invenUI.gameObject.activeSelf)
-            {
-                invenUI.gameObject.SetActive(false);
-            }
-            else
-            {
-                invenUI.gameObject.SetActive(true);
-                invenUI.RefreshUI(Define.InvenRefreshType.All);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.C))
-        {
-            UI_Stat statUI = gameSceneUI.StatUI;
-
-            if (statUI.gameObject.activeSelf)
-            {
-                statUI.gameObject.SetActive(false);
-            }
-            else
-            {
-                statUI.gameObject.SetActive(true);
-                statUI.RefreshUI();
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            var shopUI = gameSceneUI.ShopUI;
-
-            if (shopUI.gameObject.activeSelf)
-            {
-                shopUI.gameObject.SetActive(false);
-            }
-            else
-            {
-                shopUI.gameObject.SetActive(true);
-                shopUI.RefreshUI();
-            }
-        }
-    }
 
     public void UpdateMovDir()
     {
