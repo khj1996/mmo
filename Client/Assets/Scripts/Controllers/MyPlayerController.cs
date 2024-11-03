@@ -7,35 +7,37 @@ using UnityEngine.EventSystems;
 public class MyPlayerController : PlayerController
 {
     public bool isLevelUp = false;
-    
-    private UI_Joystick _Joystick;
-    private float currTime = 0.0f;
 
-    Coroutine _coSkillCooltime;
+    private UI_Joystick _joystick;
+    private float _currTime = 0.0f;
+    private Coroutine _coSkillCooltime;
 
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
 
-    [SerializeField] UI_ExpBar uiExpBar;
+    [SerializeField] private UI_ExpBar _uiExpBar;
 
     public int Exp
     {
         get => Stat.TotalExp;
         set
         {
-            Stat.TotalExp = value;
-            UpdateExpBar();
+            if (Stat.TotalExp != value)
+            {
+                Stat.TotalExp = value;
+                UpdateExpBar();
+            }
         }
     }
 
     public void UpdateExpBar()
     {
-        if (!uiExpBar)
+        if (!_uiExpBar)
         {
-            uiExpBar = FindObjectOfType<UI_ExpBar>();
+            _uiExpBar = FindObjectOfType<UI_ExpBar>();
         }
 
-        uiExpBar.SetExpBar(Exp);
+        _uiExpBar?.SetExpBar(Exp);
     }
 
 
@@ -43,7 +45,7 @@ public class MyPlayerController : PlayerController
     {
         base.Init();
         RefreshAdditionalStat();
-        _Joystick = FindObjectOfType<UI_Joystick>();
+        _joystick = FindObjectOfType<UI_Joystick>();
     }
 
 
@@ -58,123 +60,84 @@ public class MyPlayerController : PlayerController
         base.UpdateController();
     }
 
-    public void UseSkill()
+    private void UseSkill()
     {
-        if (_coSkillCooltime == null && Input.GetMouseButtonDown(0))
+        if (_coSkillCooltime != null) return;
+
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
-
-            var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var clickPos = new Vector3(mPos.origin.x, mPos.origin.y, 0);
-
-
-            var moveDir = (clickPos - transform.position).normalized;
-
-
-            C_Skill skill = new C_Skill()
-            {
-                Info = new SkillInfo
-                {
-                    SkillId = 2
-                },
-                MoveDir = new Vec2()
-                {
-                    X = moveDir.x,
-                    Y = moveDir.y,
-                }
-            };
-            Managers.Network.Send(skill);
-
-            _coSkillCooltime = StartCoroutine(nameof(CoInputCooltime), 0.2f);
+            UseSkill(2, 0.2f);
         }
-        else if (_coSkillCooltime == null && Input.GetKeyDown(KeyCode.Space))
+        else if (Input.GetKeyDown(KeyCode.Space))
         {
-            C_Skill skill = new C_Skill()
-            {
-                Info = new SkillInfo
-                {
-                    SkillId = 1
-                }
-            };
-            Managers.Network.Send(skill);
-
-            _coSkillCooltime = StartCoroutine(nameof(CoInputCooltime), 0.5f);
+            UseSkill(1, 0.5f);
         }
     }
 
+    private void UseSkill(int skillId, float cooltime)
+    {
+        Vector3 moveDir = Input.mousePosition;
+        if (skillId == 2)
+        {
+            var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
+            moveDir = (new Vector3(mPos.origin.x, mPos.origin.y, 0) - transform.position).normalized;
+        }
 
-    IEnumerator CoInputCooltime(float time)
+        C_Skill skill = new C_Skill
+        {
+            Info = new SkillInfo { SkillId = skillId },
+            MoveDir = new Vec2 { X = moveDir.x, Y = moveDir.y }
+        };
+
+        Managers.Network.Send(skill);
+        _coSkillCooltime = StartCoroutine(CoInputCooltime(cooltime));
+    }
+
+
+    private IEnumerator CoInputCooltime(float time)
     {
         yield return new WaitForSeconds(time);
         _coSkillCooltime = null;
     }
 
 
-    public void UpdateMovDir()
+    private void UpdateMovDir()
     {
-        if (State == CreatureState.Skill)
+        if (State == CreatureState.Skill) return;
+
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
+        if (horizontal == 0 && vertical == 0)
         {
-            return;
+            horizontal = _joystick.inputDirection.x;
+            vertical = _joystick.inputDirection.y;
         }
 
-
-        if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
-        {
-            Move = new Vec2()
-            {
-                X = _Joystick.inputDirection.x,
-                Y = _Joystick.inputDirection.y
-            };
-        }
-        else
-        {
-            Move = new Vec2()
-            {
-                X = Input.GetAxisRaw("Horizontal"),
-                Y = Input.GetAxisRaw("Vertical")
-            };
-        }
-
-
-        LookDir = new Vec2()
-        {
-            X = Move.X,
-            Y = Move.Y,
-        };
+        Move = new Vec2 { X = horizontal, Y = vertical };
+        LookDir = Move;
     }
 
 
     protected override void CheckUpdatedFlag()
     {
-        currTime += Time.deltaTime;
+        _currTime += Time.deltaTime;
 
-        if (statusChanged || currTime >= 2.0f)
+        if (statusChanged || _currTime >= 2.0f)
         {
             var moveDir = new Vector2(Move.X, Move.Y).normalized;
-
             C_Move movePacket = new C_Move
             {
-                PosInfo = new PositionInfo()
+                PosInfo = new PositionInfo
                 {
-                    Pos = new Vec2()
-                    {
-                        X = transform.position.x,
-                        Y = transform.position.y
-                    },
-                    Move = new Vec2()
-                    {
-                        X = moveDir.x,
-                        Y = moveDir.y
-                    },
+                    Pos = new Vec2 { X = transform.position.x, Y = transform.position.y },
+                    Move = new Vec2() { X = moveDir.x, Y = moveDir.y },
                 }
             };
             Managers.Network.Send(movePacket);
 
             statusChanged = false;
-            currTime = 0;
+            _currTime = 0;
         }
     }
 
@@ -185,8 +148,7 @@ public class MyPlayerController : PlayerController
 
         foreach (Item item in Managers.Inven.Items.Values)
         {
-            if (item.Equipped == false)
-                continue;
+            if (!item.Equipped) continue;
 
             switch (item.ItemType)
             {
