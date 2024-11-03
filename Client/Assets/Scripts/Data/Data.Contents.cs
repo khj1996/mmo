@@ -183,7 +183,7 @@ namespace Data
     [Serializable]
     public class RewardData
     {
-        public int probability; // 100분율
+        public int probability;
         public int itemId;
         public int count;
     }

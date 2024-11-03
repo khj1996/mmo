@@ -34,7 +34,7 @@ public class UI_Item : UI_Base, IPointerDownHandler, IPointerUpHandler
             }
             else
             {
-                (await Managers.UI.ShowPopupUI<UI_UseItem>()).OpenPopUp(_item);
+                 Managers.UI.ShowPopupUI<UI_UseItem>().OpenPopUp(_item);
             }
         });
     }

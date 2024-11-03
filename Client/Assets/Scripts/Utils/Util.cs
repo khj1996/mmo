@@ -23,12 +23,12 @@ public class Util
 
     public static T HandleAndRelease<T>(string _key, bool _isRelease = true)
     {
-        var handleTextAsset = Addressables.LoadAssetAsync<T>(_key);
+        var handleAsset = Addressables.LoadAssetAsync<T>(_key);
 
-        var result = handleTextAsset.WaitForCompletion();
+        var result = handleAsset.WaitForCompletion();
 
         if (_isRelease)
-            Addressables.Release(handleTextAsset);
+            Addressables.Release(handleAsset);
 
         return result;
     }

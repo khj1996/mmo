@@ -47,6 +47,5 @@ public class UI_Shop_Product : UI_Base
 
         Managers.Network.Send(buyPacket);
 
-        //Debug.Log($"아이템 구매 : {productInfo.}");
     }
 }

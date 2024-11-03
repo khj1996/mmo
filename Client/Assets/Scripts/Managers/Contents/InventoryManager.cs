@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class InventoryManager
@@ -32,6 +33,27 @@ public class InventoryManager
         }
 
         Items.Add(_item.ItemDbId, _item);
+    }
+
+    public void Add(List<ItemInfo> _itemInfos)
+    {
+        foreach (ItemInfo itemInfo in _itemInfos)
+        {
+            Item itemData = Item.MakeItem(itemInfo);
+
+            if (Items.TryGetValue(itemData.ItemDbId, out var _item))
+            {
+                Items[_item.ItemDbId] = _item;
+                return;
+            }
+
+            Items.Add(_item.ItemDbId, _item);
+        }
+
+        UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
+        gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
+
+        Managers.UI.ShowPopupUI<UI_GetItemPopUp>().OpenPopUpMultiItem(_itemInfos);
     }
 
     public Item Get(int itemDbId)

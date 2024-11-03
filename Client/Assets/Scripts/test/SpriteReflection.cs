@@ -70,7 +70,6 @@ public class SpriteReflection : MonoBehaviour
             axis.z * pivot.z
         );
 
-        // Transform
         Vector3 pos = Quaternion.Euler(180, 0, 0) * (transform.position - pivot) + pivot;
         reflectionObj.transform.SetPositionAndRotation(
             pos, transform.rotation * Quaternion.Euler(180, 0, 0)

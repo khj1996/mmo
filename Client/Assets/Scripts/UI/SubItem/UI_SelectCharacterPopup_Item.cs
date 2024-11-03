@@ -49,7 +49,7 @@ public class UI_SelectCharacterPopup_Item : UI_Base
         }
         else
         {
-            await Managers.UI.ShowPopupUI<UI_CreateCharacterPopup>();
+            Managers.UI.ShowPopupUI<UI_CreateCharacterPopup>();
         }
     }
 }

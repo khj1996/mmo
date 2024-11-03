@@ -25,8 +25,6 @@ public class UI_LoginScene : UI_Scene
         LoginBtn.gameObject.BindEvent(OnClickLoginButton);
         
         isInitComplete = true;
-
-       // FB.Init("", "");
     }
 
     public void OnClickCreateButton(PointerEventData evt)
@@ -62,7 +60,7 @@ public class UI_LoginScene : UI_Scene
             Password = password
         };
 
-        Managers.Web.SendPostRequest<LoginFacebookAccountPacketRes>("account/login", packet, (res) =>
+        Managers.Web.SendPostRequest<LoginAccountPacketRes>("account/login", packet, (res) =>
         {
             Debug.Log(res.LoginOK);
             AccountName.text = "";
@@ -81,23 +79,5 @@ public class UI_LoginScene : UI_Scene
             }
         });
 
-        //FB.LogInWithPublishPermissions(new List<string>() { "email" }, OnFacebookResponse);
-    }
-
-    public void OnFacebookResponse(ILoginResult result)
-    {
-        Debug.Log("Connected FB");
-
-        LoginFacebookAccountPacketReq packet = new LoginFacebookAccountPacketReq()
-        {
-            Token = result.AccessToken.TokenString
-        };
-
-        Managers.Web.SendPostRequest<LoginFacebookAccountPacketRes>("account/login/facebook", packet, (res) =>
-        {
-            Debug.Log(res.LoginOK);
-
-            // TODO
-        });
     }
 }

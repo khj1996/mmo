@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 public class Managers : MonoBehaviour
 {
-    private static Managers _instance = null; // 유일성이 보장된다
+    private static Managers _instance = null;
 
     public static Managers Instance
     {

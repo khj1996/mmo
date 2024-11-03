@@ -103,22 +103,19 @@ public class BaseController : MonoBehaviour
 
     protected MoveDirection CheckDirection(Vec2 direction)
     {
-        // 이동 벡터가 (0, 0)이면 아래 방향으로 취급
         if (direction == null || (direction.X == 0 && direction.Y == 0))
             return MoveDirection.Down;
 
-        // 수평 방향을 우선으로 계산
-        if (Mathf.Abs(direction.X) > Mathf.Epsilon) // 수평 이동이 있는지 먼저 확인
+        if (Mathf.Abs(direction.X) > Mathf.Epsilon)
         {
             return direction.X > 0 ? MoveDirection.Right : MoveDirection.Left;
         }
 
-        if (Mathf.Abs(direction.Y) > Mathf.Epsilon) // 수평 이동이 없을 경우에만 수직 확인
+        if (Mathf.Abs(direction.Y) > Mathf.Epsilon)
         {
             return direction.Y > 0 ? MoveDirection.Up : MoveDirection.Down;
         }
 
-        // 기본적으로 (0, 0)이면 아래로
         return MoveDirection.Down;
     }
 

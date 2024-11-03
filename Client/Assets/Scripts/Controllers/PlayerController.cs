@@ -115,7 +115,6 @@ public class PlayerController : CreatureController
 
     IEnumerator CoStartPunch()
     {
-        // 대기 시간
         _rangedSkill = false;
         State = CreatureState.Skill;
         yield return new WaitForSeconds(0.5f);
@@ -126,7 +125,6 @@ public class PlayerController : CreatureController
 
     IEnumerator CoStartShootArrow()
     {
-        // 대기 시간
         _rangedSkill = true;
         State = CreatureState.Skill;
         yield return new WaitForSeconds(0.3f);

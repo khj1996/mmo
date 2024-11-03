@@ -43,7 +43,7 @@ public class LoginFacebookAccountPacketReq
     public string Token;
 }
 
-public class LoginFacebookAccountPacketRes
+public class LoginAccountPacketRes
 {
     public bool LoginOK;
     public string JwtAccessToken;

@@ -9,7 +9,7 @@ using UnityEngine;
 
 class PacketHandler
 {
-    public static async void S_EnterGameHandler(PacketSession session, IMessage packet)
+    public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
         var enterGamePacket = packet as S_EnterGame;
 
@@ -113,26 +113,26 @@ class PacketHandler
         Managers.Network.Send(loginPacket);
     }
 
-    public static async void S_LoginHandler(PacketSession session, IMessage packet)
+    public static void S_LoginHandler(PacketSession session, IMessage packet)
     {
         S_Login loginPacket = (S_Login)packet;
         Debug.Log($"LoginOk({loginPacket.LoginOk})");
 
 
-        (await Managers.UI.ShowPopupUI<UI_SelectServerPopup>()).SetServers(loginPacket.ServerInfos);
+        Managers.UI.ShowPopupUI<UI_SelectServerPopup>().SetServers(loginPacket.ServerInfos);
     }
 
-    public static async void S_CreatePlayerHandler(PacketSession session, IMessage packet)
+    public static void S_CreatePlayerHandler(PacketSession session, IMessage packet)
     {
         S_CreatePlayer createOkPacket = (S_CreatePlayer)packet;
 
         if (createOkPacket.Player == null)
         {
-            (await Managers.UI.ShowPopupUI<UI_SimpleTextPopup>()).SetText("생성실패", "닉네임 중복");
+            Managers.UI.ShowPopupUI<UI_SimpleTextPopup>().SetText("생성실패", "닉네임 중복");
         }
         else
         {
-            (await Managers.UI.ShowPopupUI<UI_SimpleTextPopup>()).SetText("생성성공", "캐릭터 추가");
+            Managers.UI.ShowPopupUI<UI_SimpleTextPopup>().SetText("생성성공", "캐릭터 추가");
             GameObject.Find(nameof(UI_SelectCharacterPopup)).GetComponent<UI_SelectCharacterPopup>()
                 .AddCharacter(createOkPacket.Player);
         }
@@ -144,7 +144,6 @@ class PacketHandler
 
         Managers.Inven.Clear();
 
-        // 메모리에 아이템 정보 적용
         foreach (ItemInfo itemInfo in itemList.Items)
         {
             Item item = Item.MakeItem(itemInfo);
@@ -155,26 +154,11 @@ class PacketHandler
             Managers.Object.MyPlayer.RefreshAdditionalStat();
     }
 
-    public async static void S_AddItemHandler(PacketSession session, IMessage packet)
+    public static void S_AddItemHandler(PacketSession session, IMessage packet)
     {
         S_AddItem itemList = (S_AddItem)packet;
 
-        // 메모리에 아이템 정보 적용
-        foreach (ItemInfo itemInfo in itemList.Items)
-        {
-            Item item = Item.MakeItem(itemInfo);
-            Managers.Inven.Add(item);
-        }
-
-        Debug.Log("아이템을 획득했습니다!");
-
-
-        UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
-        gameSceneUI.StatUI.RefreshUI();
-
-        var remainingItems = itemList.Items.ToList();
-        (await Managers.UI.ShowPopupUI<UI_GetItemPopUp>()).OpenPopUpMultiItem(remainingItems);
+        Managers.Inven.Add(itemList.Items.ToList());
 
         if (Managers.Object.MyPlayer != null)
         {
@@ -187,7 +171,6 @@ class PacketHandler
     {
         S_UseItem equipItemOk = (S_UseItem)packet;
 
-        // 메모리에 아이템 정보 적용
         Item item = Managers.Inven.Get(equipItemOk.ItemDbId);
         if (item == null)
             return;
@@ -218,14 +201,14 @@ class PacketHandler
         // TODO
     }
 
-    public static async void S_EnterServerHandler(PacketSession session, IMessage packet)
+    public static void S_EnterServerHandler(PacketSession session, IMessage packet)
     {
         S_EnterServer enterPacket = (S_EnterServer)packet;
 
-        (await Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>()).SetCharacter(enterPacket.Players);
+        Managers.UI.ShowPopupUI<UI_SelectCharacterPopup>().SetCharacter(enterPacket.Players);
     }
 
-    public static async void S_BuyItemHandler(PacketSession session, IMessage packet)
+    public static void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
         S_BuyItem buyPacket = (S_BuyItem)packet;
         Debug.Log(buyPacket.Result);
@@ -249,18 +232,18 @@ class PacketHandler
             gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
 
             var remainingItems = buyPacket.Items.Skip(1).ToList();
-            (await Managers.UI.ShowPopupUI<UI_GetItemPopUp>()).OpenPopUpMultiItem(remainingItems);
+            Managers.UI.ShowPopupUI<UI_GetItemPopUp>().OpenPopUpMultiItem(remainingItems);
         }
     }
 
-    public static async void S_UpdateLevelHandler(PacketSession session, IMessage packet)
+    public static void S_UpdateLevelHandler(PacketSession session, IMessage packet)
     {
         S_UpdateLevel updateLevelPacket = (S_UpdateLevel)packet;
 
 
         if (Managers.Object.MyPlayer != null)
         {
-            (await Managers.UI.ShowPopupUI<UI_LevelUp>()).LevelUp(Managers.Object.MyPlayer.Stat, updateLevelPacket.StatInfo);
+            Managers.UI.ShowPopupUI<UI_LevelUp>().LevelUp(Managers.Object.MyPlayer.Stat, updateLevelPacket.StatInfo);
             Managers.Object.MyPlayer.Stat = updateLevelPacket.StatInfo;
             Managers.Object.MyPlayer.isLevelUp = true;
         }
