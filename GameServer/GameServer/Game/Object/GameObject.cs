@@ -141,6 +141,7 @@ namespace GameServer.Game
 
             var result = Room.Map.ApplyMove(this, new Vector2Float(Pos.X + speedScale * Move.X, Pos.Y + speedScale * Move.Y), Move);
 
+            Console.WriteLine(speedScale * Move.X);
             BroadcastMove();
 
             return result;

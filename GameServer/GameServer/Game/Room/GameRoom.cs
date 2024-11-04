@@ -67,14 +67,20 @@ namespace GameServer.Game
 
             if (Map.MapId == 2)
             {
-                for (int i = 0; i < 20; i++)
-                {
-                    Monster monster = ObjectManager.Instance.Add<Monster>();
-                    monster.Init(1);
-                    EnterGame(monster, true);
-                }
+                SpawnMonster();
             }
         }
+
+        public void SpawnMonster()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                Monster monster = ObjectManager.Instance.Add<Monster>();
+                monster.Init(1);
+                EnterGame(monster, true);
+            }
+        }
+
 
         // 누군가 주기적으로 호출해줘야 한다
         public void Update()
@@ -258,7 +264,7 @@ namespace GameServer.Game
 
                 if (distance < closestDistance)
                 {
-                    List<(int tileX, int tileY)> path = Map.FindPath(pos, player._Pos);
+                    List<Vector2Float> path = Map.FindPath(pos, player._Pos);
 
                     if (path.Count >= 2 && path.Count <= range)
                     {

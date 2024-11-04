@@ -16,84 +16,42 @@ public class PlayerController : CreatureController
         base.Init();
     }
 
+
     protected override void UpdateAnimation()
     {
-        if (_animator == null || _sprite == null)
+        if (!_animator || !_sprite)
             return;
 
-
         var dir = CheckDirection(LookDir);
+        string animationName = "";
+        bool flipX = false;
 
         switch (State)
         {
             case CreatureState.Idle:
-                switch (dir)
-                {
-                    case MoveDirection.Up:
-                        _animator.Play("IDLE_BACK");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Down:
-                        _animator.Play("IDLE_FRONT");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Right:
-                        _animator.Play("IDLE_RIGHT");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Left:
-                        _animator.Play("IDLE_RIGHT");
-                        _sprite.flipX = true;
-                        break;
-                }
-
+                animationName = dir == MoveDirection.Up ? "IDLE_BACK" :
+                    dir == MoveDirection.Down ? "IDLE_FRONT" : "IDLE_RIGHT";
+                flipX = dir == MoveDirection.Left;
                 break;
+
             case CreatureState.Moving:
-                switch (dir)
-                {
-                    case MoveDirection.Up:
-                        _animator.Play("WALK_BACK");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Down:
-                        _animator.Play("WALK_FRONT");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Right:
-                        _animator.Play("WALK_RIGHT");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Left:
-                        _animator.Play("WALK_RIGHT");
-                        _sprite.flipX = true;
-                        break;
-                }
-
+                animationName = dir == MoveDirection.Up ? "WALK_BACK" :
+                    dir == MoveDirection.Down ? "WALK_FRONT" : "WALK_RIGHT";
+                flipX = dir == MoveDirection.Left;
                 break;
-            case CreatureState.Skill:
-                switch (dir)
-                {
-                    case MoveDirection.Up:
-                        _animator.Play(_rangedSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Down:
-                        _animator.Play(_rangedSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Right:
-                        _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
-                        _sprite.flipX = false;
-                        break;
-                    case MoveDirection.Left:
-                        _animator.Play(_rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT");
-                        _sprite.flipX = true;
-                        break;
-                }
 
+            case CreatureState.Skill:
+                animationName = dir == MoveDirection.Up ? _rangedSkill ? "ATTACK_WEAPON_BACK" : "ATTACK_BACK" :
+                    dir == MoveDirection.Down ? _rangedSkill ? "ATTACK_WEAPON_FRONT" : "ATTACK_FRONT" :
+                    _rangedSkill ? "ATTACK_WEAPON_RIGHT" : "ATTACK_RIGHT";
+                flipX = dir == MoveDirection.Left;
                 break;
         }
+
+        _animator.Play(animationName);
+        _sprite.flipX = flipX;
     }
+
 
     public override void UseSkill(S_Skill skillPacket)
     {

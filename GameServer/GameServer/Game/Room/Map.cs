@@ -200,12 +200,17 @@ namespace GameServer.Game
             return (tileX, tileY);
         }
 
-        private (int x, int y) GetLocalPos(int tileX, int tileY)
+        private (int localX, int localY) GetLocalPos(int tileX, int tileY)
         {
-            int x = tileX + MinX;
-            int y = MaxY - tileY;
-            return (x, y);
+            int localX = tileX + MinX;
+            int localY = MaxY - tileY;
+            return (localX, localY);
         }
+
+        private int GetTileX(float x) => (int)MathF.Floor(x - MinX);
+        private int GetTileY(float y) => (int)MathF.Floor(MaxY - y);
+        private int GetLocalX(int tileX) => tileX + MinX;
+        private int GetLocalY(int tileY) => MaxY - tileY;
 
         private void AdjustDestinationForCollision(ref Vector2Float dest, Vec2 moveDirection, float diffX, float diffY)
         {
@@ -214,41 +219,29 @@ namespace GameServer.Game
             if (diffX > 0)
             {
                 if (moveDirection.X > 0)
-                {
-                    dest.x = dest.x - (1 - diffX) - epsilon;
-                }
+                    dest.x -= (1 - diffX) + epsilon;
                 else if (moveDirection.X < 0)
-                {
-                    dest.x = dest.x + (1 - diffX) + epsilon;
-                }
+                    dest.x += (1 - diffX) + epsilon;
             }
 
             if (diffY > 0)
             {
                 if (moveDirection.Y > 0)
-                {
-                    dest.y = dest.y - (1 - diffY) - epsilon;
-                }
+                    dest.y -= (1 - diffY) + epsilon;
                 else if (moveDirection.Y < 0)
-                {
-                    dest.y = dest.y + (1 - diffY) + epsilon;
-                }
+                    dest.y += (1 - diffY) + epsilon;
             }
         }
 
-        private bool CheckCollisionInTiles(ref Vector2Float pos, Vec2 move, ObjectSize size)
+        private bool CheckXCollision(ref Vector2Float pos, Vec2 move, ObjectSize size)
         {
             float left = pos.x - size.Left;
-            float bottom = pos.y - size.Bottom;
             float right = pos.x + size.Right;
-            float top = pos.y + size.Top;
-
-            var (tileLeft, tileBottom) = GetTilePos(left, bottom);
-            var (tileRight, tileTop) = GetTilePos(right, top);
-            var (currentTileX, currentTileY) = GetTilePos(pos.x, pos.y);
+            var (tileLeft, tileRight) = (GetTileX(left), GetTileX(right));
+            int currentTileY = GetTileY(pos.y);
 
             float diffX = 0f;
-            float diffY = 0f;
+            bool collided = false;
 
             for (int x = tileLeft; x <= tileRight; x++)
             {
@@ -259,14 +252,29 @@ namespace GameServer.Game
 
                     if (right > tileMinX && left < tileMaxX)
                     {
-                        Console.WriteLine(right + "   " + tileMaxX);
                         diffX = (right > tileMaxX) ? right - tileMaxX : tileMinX - left;
+                        collided = true;
                     }
 
-                    AdjustDestinationForCollision(ref pos, move, diffX, 0);
                     break;
                 }
             }
+
+            if (collided)
+                AdjustDestinationForCollision(ref pos, move, diffX, 0);
+
+            return collided;
+        }
+
+        private bool CheckYCollision(ref Vector2Float pos, Vec2 move, ObjectSize size)
+        {
+            float bottom = pos.y - size.Bottom;
+            float top = pos.y + size.Top;
+            var (tileBottom, tileTop) = (GetTileY(bottom), GetTileY(top));
+            int currentTileX = GetTileX(pos.x);
+
+            float diffY = 0f;
+            bool collided = false;
 
             for (int y = tileTop; y <= tileBottom; y++)
             {
@@ -278,14 +286,25 @@ namespace GameServer.Game
                     if (top > tileMinY && bottom < tileMaxY)
                     {
                         diffY = (top > tileMaxY) ? top - tileMaxY : tileMinY - bottom;
+                        collided = true;
                     }
 
-                    AdjustDestinationForCollision(ref pos, move, 0, diffY);
-                    return false;
+                    break;
                 }
             }
 
-            return true;
+            if (collided)
+                AdjustDestinationForCollision(ref pos, move, 0, diffY);
+
+            return collided;
+        }
+
+        private bool CheckCollisionInTiles(ref Vector2Float pos, Vec2 move, ObjectSize size)
+        {
+            bool xCollided = CheckXCollision(ref pos, move, size);
+            bool yCollided = CheckYCollision(ref pos, move, size);
+
+            return !(xCollided || yCollided);
         }
 
 
@@ -408,7 +427,7 @@ namespace GameServer.Game
         int[] _deltaX = new int[] { 0, 0, -1, 1 };
         int[] _cost = new int[] { 10, 10, 10, 10 };
 
-        public List<(int tileX, int tileY)> FindPath(Vector2Float start, Vector2Float dest, int maxDist = 10)
+        public List<Vector2Float> FindPath(Vector2Float start, Vector2Float dest, int maxDist = 10)
         {
             HashSet<(int tileX, int tileY)> closedSet = new HashSet<(int tileX, int tileY)>();
             Dictionary<(int tileX, int tileY), float> openSet = new Dictionary<(int tileX, int tileY), float>();
@@ -464,13 +483,27 @@ namespace GameServer.Game
             return !_collision[pos.tileY, pos.tileX];
         }
 
-        private List<(int tileX, int tileY)> ExtractPath(Dictionary<(int tileX, int tileY), (int tileX, int tileY)> parentMap, (int tileX, int tileY) destination)
+        private static Random random = new Random();
+
+        private float GetRandomOffset()
         {
-            List<(int tileX, int tileY)> path = new List<(int tileX, int tileY)>();
+            return (float)(random.NextDouble() - 0.5); // -0.5에서 0.5 사이의 랜덤 값
+        }
+
+        private Vector2Float GetLocalPosWithOffset(int tileX, int tileY)
+        {
+            float localX = GetLocalX(tileX) + GetRandomOffset();
+            float localY = GetLocalY(tileY) + GetRandomOffset();
+            return new Vector2Float(localX, localY);
+        }
+
+        private List<Vector2Float> ExtractPath(Dictionary<(int tileX, int tileY), (int tileX, int tileY)> parentMap, (int tileX, int tileY) destination)
+        {
+            List<Vector2Float> path = new List<Vector2Float>();
             (int tileX, int tileY) step = destination;
             while (parentMap.TryGetValue(step, out (int tileX, int tileY) parent) && parent != step)
             {
-                path.Add(GetLocalPos(step.tileX, step.tileY));
+                path.Add(GetLocalPosWithOffset(step.tileX, step.tileY));
                 step = parent;
             }
 

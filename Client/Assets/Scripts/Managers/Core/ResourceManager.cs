@@ -23,12 +23,6 @@ public class ResourceManager
 
         var data = Util.HandleAndRelease<T>(path);
 
-        if (!data)
-        {
-            Debug.Log(typeof(T) + "로드실패");
-        }
-
-
         return data;
     }
 

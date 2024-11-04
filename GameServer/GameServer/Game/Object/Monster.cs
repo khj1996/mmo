@@ -80,7 +80,7 @@ namespace GameServer.Game
         //다음 이동 틱
         long nextMoveTick = 0;
         private Vec2 lastTargetPos;
-        private List<(int tileX, int tileY)> _path;
+        private List<Vector2Float> _path;
 
         //이동
         protected virtual void UpdateMoving()
@@ -132,8 +132,8 @@ namespace GameServer.Game
 
                 Room.Map.ApplyMove(this, new Vector2Float()
                 {
-                    x = _path[1].tileX,
-                    y = _path[1].tileY
+                    x = _path[1].x,
+                    y = _path[1].y
                 });
                 _path.RemoveAt(0);
                 BroadcastMove();

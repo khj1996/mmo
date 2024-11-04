@@ -10,9 +10,7 @@ public class BaseController : MonoBehaviour
     protected bool statusChanged = false;
     public int Id { get; set; }
 
-    private StatInfo _stat = new StatInfo();
-    private PositionInfo _positionInfo = new PositionInfo();
-    private Vector3 _destination = Vector3.zero;
+    StatInfo _stat = new StatInfo();
 
     public virtual StatInfo Stat
     {
@@ -37,6 +35,8 @@ public class BaseController : MonoBehaviour
         get { return Stat.Hp; }
         set { Stat.Hp = value; }
     }
+
+    private PositionInfo _positionInfo = new PositionInfo();
 
     public PositionInfo PosInfo
     {
@@ -80,7 +80,7 @@ public class BaseController : MonoBehaviour
         get => _positionInfo.Move;
         set
         {
-            if (_positionInfo.Move.Equals(value))
+            if (value == null || _positionInfo.Move.Equals(value))
                 return;
             statusChanged = true;
             _positionInfo.Move = value;
@@ -162,7 +162,11 @@ public class BaseController : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
 
         transform.position = new Vector3(Pos.X, Pos.Y, 0);
-        _positionInfo.LookDir = new Vec2 { X = 0, Y = 0 };
+        _positionInfo.LookDir = new Vec2()
+        {
+            X = 0,
+            Y = 0
+        };
 
         UpdateAnimation();
     }
@@ -194,7 +198,8 @@ public class BaseController : MonoBehaviour
     protected virtual void UpdateMoving()
     {
         float step = Speed * Time.deltaTime;
-        var distance = (_destination - transform.position).magnitude;
+        var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
+        var distance = (destPos - transform.position).magnitude;
 
         if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
         {
@@ -203,7 +208,7 @@ public class BaseController : MonoBehaviour
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, _destination, Mathf.Min(step, distance));
+            transform.position = Vector3.MoveTowards(transform.position, destPos, Mathf.Min(step, distance));
         }
     }
 
@@ -222,10 +227,25 @@ public class BaseController : MonoBehaviour
         Pos = movePacket.PosInfo.Pos;
         Move = movePacket.PosInfo.Move;
 
+
         if (!(Move.X == 0 && Move.Y == 0))
             LookDir = movePacket.PosInfo.Move;
 
-        State = movePacket.PosInfo.State != CreatureState.Idle ? movePacket.PosInfo.State : CreatureState.Idle;
+
+        if (movePacket.PosInfo.State != CreatureState.Idle)
+        {
+            State = movePacket.PosInfo.State;
+        }
+        else
+        {
+            var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
+            var distance = (destPos - transform.position).magnitude;
+            if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
+            {
+                State = CreatureState.Idle;
+            }
+        }
+
         UpdateAnimation();
     }
 }
