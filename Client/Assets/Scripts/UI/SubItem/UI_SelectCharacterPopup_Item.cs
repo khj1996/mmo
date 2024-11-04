@@ -35,7 +35,7 @@ public class UI_SelectCharacterPopup_Item : UI_Base
         PosY.text = $"Y: {Info.PosY:0.#}";
     }
 
-    async void OnClickButton(PointerEventData evt)
+    void OnClickButton(PointerEventData evt)
     {
         if (Info.PlayerName != "캐릭터 추가")
         {

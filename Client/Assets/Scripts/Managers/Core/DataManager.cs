@@ -18,25 +18,28 @@ public class DataManager
 {
     #region 데이터 초기화
 
-    public static Dictionary<int, StatInfo> StatDict { get; private set; } = new Dictionary<int, StatInfo>();
-    public Dictionary<int, Data.Skill> SkillDict { get; private set; } = new Dictionary<int, Data.Skill>();
-    public Dictionary<int, Data.ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
+    public static Dictionary<int, StatInfo> StatDict { get; private set; } = new();
+    public Dictionary<int, Skill> SkillDict { get; private set; } = new();
+    public Dictionary<int, ItemData> ItemDict { get; private set; } = new();
 
-    public Dictionary<int, Data.MonsterData> MonsterDict { get; private set; } = new Dictionary<int, Data.MonsterData>();
+    public Dictionary<int, MonsterData> MonsterDict { get; private set; } = new();
 
-    public Dictionary<int, Data.ShopData> ShopDict { get; private set; } = new Dictionary<int, Data.ShopData>();
+    public Dictionary<int, ShopData> ShopDict { get; private set; } = new();
 
     public ItemImageSO ItemImageSO { get; private set; }
+
+    public SkillDataContainer SkillDataContainer { get; private set; }
 
     public void Init()
     {
         StatDict = LoadJson<StatDataLoader, int, StatInfo>("StatData").MakeDict();
-        ItemDict = LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData").MakeDict();
-        SkillDict = LoadJson<Data.SkillDataLoader, int, Data.Skill>("SkillData").MakeDict();
-        MonsterDict = LoadJson<Data.MonsterLoader, int, Data.MonsterData>("MonsterData").MakeDict();
-        ShopDict = LoadJson<Data.ShopLoader, int, Data.ShopData>("ShopData").MakeDict();
+        ItemDict = LoadJson<ItemLoader, int, ItemData>("ItemData").MakeDict();
+        SkillDict = LoadJson<SkillDataLoader, int, Skill>("SkillData").MakeDict();
+        MonsterDict = LoadJson<MonsterLoader, int, MonsterData>("MonsterData").MakeDict();
+        ShopDict = LoadJson<ShopLoader, int, ShopData>("ShopData").MakeDict();
 
         ItemImageSO = LoadSO<ItemImageSO>("ItemImageSO");
+        SkillDataContainer = LoadSO<SkillDataContainer>("SkillDataContainer");
     }
 
     Loader LoadJson<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
@@ -46,13 +49,15 @@ public class DataManager
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(textAsset.text);
     }
 
-    #endregion
-
     T LoadSO<T>(string name) where T : ScriptableObject
     {
         T sO = Util.HandleAndRelease<T>($"ScriptableObject/{name}.asset");
         return sO;
     }
+
+    #endregion
+
+
     public (int currentLevel, int expToNextLevel, int currentExpInLevel) GetCurrentLevelData(int totalExp)
     {
         int currentLevel = 1;
@@ -81,5 +86,4 @@ public class DataManager
 
         return (currentLevel, expToNextLevel, currentExpInLevel);
     }
-
 }

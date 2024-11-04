@@ -182,7 +182,9 @@ class PacketHandler
 
 
             if (Managers.Object.MyPlayer != null)
+            {
                 Managers.Object.MyPlayer.RefreshAdditionalStat();
+            }
         }
         else if (item.ItemType == ItemType.Consumable)
         {

@@ -55,8 +55,8 @@ namespace GameServer.Game
         }
 
         Player _target;
-        int searchDist = 10;
-        int chaseDist = 20;
+        int searchDist = 3;
+        int chaseDist = 7;
         long nextSearchTick = 0;
 
         protected virtual void UpdateIdle()

@@ -11,6 +11,7 @@ public class MyPlayerController : PlayerController
     private UI_Joystick _joystick;
     private float _currTime = 0.0f;
     private Coroutine _coSkillCooltime;
+    [SerializeField]private PlayerSkillController _playerSkillController;
 
     public int WeaponDamage { get; private set; }
     public int ArmorDefence { get; private set; }
@@ -51,7 +52,7 @@ public class MyPlayerController : PlayerController
 
     protected override void UpdateController()
     {
-        UseSkill();
+        _playerSkillController.UseSkill();
 
         UpdateMovDir();
 
@@ -59,47 +60,6 @@ public class MyPlayerController : PlayerController
 
         base.UpdateController();
     }
-
-    private void UseSkill()
-    {
-        if (_coSkillCooltime != null) return;
-
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-        {
-            UseSkill(2, 0.2f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UseSkill(1, 0.5f);
-        }
-    }
-
-    private void UseSkill(int skillId, float cooltime)
-    {
-        Vector3 moveDir = Input.mousePosition;
-        if (skillId == 2)
-        {
-            var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
-            moveDir = (new Vector3(mPos.origin.x, mPos.origin.y, 0) - transform.position).normalized;
-        }
-
-        C_Skill skill = new C_Skill
-        {
-            Info = new SkillInfo { SkillId = skillId },
-            MoveDir = new Vec2 { X = moveDir.x, Y = moveDir.y }
-        };
-
-        Managers.Network.Send(skill);
-        _coSkillCooltime = StartCoroutine(CoInputCooltime(cooltime));
-    }
-
-
-    private IEnumerator CoInputCooltime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        _coSkillCooltime = null;
-    }
-
 
     private void UpdateMovDir()
     {
@@ -140,6 +100,7 @@ public class MyPlayerController : PlayerController
             _currTime = 0;
         }
     }
+    
 
     public void RefreshAdditionalStat()
     {
@@ -153,6 +114,7 @@ public class MyPlayerController : PlayerController
             switch (item.ItemType)
             {
                 case ItemType.Weapon:
+                    _playerSkillController.SetSkillData((((Weapon)item).WeaponType == WeaponType.Bow) ? 2 : 1);
                     WeaponDamage += ((Weapon)item).Damage;
                     break;
                 case ItemType.Armor:

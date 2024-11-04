@@ -23,7 +23,7 @@ public class UI_Item : UI_Base, IPointerDownHandler, IPointerUpHandler
 
     public override void Init()
     {
-        _icon.gameObject.BindEvent(async (e) =>
+        _icon.gameObject.BindEvent(_ =>
         {
             Debug.Log("아이템 클릭");
             if (startDrag || _item == null)

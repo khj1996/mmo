@@ -8,6 +8,18 @@ using Google.Protobuf;
 
 public class NetworkManager
 {
+    private static NetworkManager _instance = null;
+
+    public static NetworkManager Instance
+    {
+        get { return _instance; }
+    }
+
+    public NetworkManager()
+    {
+        _instance = this;
+    }
+
     public string Token { get; set; }
 
     ServerSession _session = new ServerSession();
@@ -23,7 +35,7 @@ public class NetworkManager
             Managers.Scene.LoadScene("Login");
             return;
         }
-        
+
         _session.Send(packet);
     }
 
@@ -54,7 +66,7 @@ public class NetworkManager
             1);
         isConnected = true;
     }
-    
+
     public void Update()
     {
         List<PacketMessage> list = PacketQueue.Instance.PopAll();
