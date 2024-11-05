@@ -15,4 +15,4 @@ MonoBehaviour:
   skillId: 1
   skillName: "\uADFC\uC811\uACF5\uACA9"
   coolTime: 0.2
-  skillType: 0
+  skillType: 1

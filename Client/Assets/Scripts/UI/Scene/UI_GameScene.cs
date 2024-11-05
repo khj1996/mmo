@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_GameScene : UI_Scene
 {
@@ -10,6 +9,10 @@ public class UI_GameScene : UI_Scene
     public UI_Shop ShopUI { get; private set; }
     public UI_ExpBar ExpUI { get; private set; }
     public UI_Joystick JoystickUI { get; private set; }
+
+    public Button btnShop;
+    public Button btnInven;
+    public Button btnCharacter;
 
     public override void Init()
     {
@@ -22,57 +25,39 @@ public class UI_GameScene : UI_Scene
         ExpUI = GetComponentInChildren<UI_ExpBar>();
         JoystickUI = GetComponentInChildren<UI_Joystick>();
 
-        StatUI.gameObject.SetActive(false);
-        InvenUI.gameObject.SetActive(false);
-        ShopUI.gameObject.SetActive(false);
-        ExpUI.gameObject.SetActive(true);
-        JoystickUI.gameObject.SetActive(true);
+        SetUIActive(StatUI, false);
+        SetUIActive(InvenUI, false);
+        SetUIActive(ShopUI, false);
+        SetUIActive(ExpUI, true);
+        SetUIActive(JoystickUI, true);
+
+        InitButton();
+
         isInitComplete = true;
     }
 
-    private void Update()
+    private void InitButton()
     {
-        GetUIKeyInput();
+        BindButton(btnInven, InvenUI, () => InvenUI.RefreshUI(Define.InvenRefreshType.All));
+        BindButton(btnShop, ShopUI, ShopUI.RefreshUI);
+        BindButton(btnCharacter, StatUI, StatUI.RefreshUI);
     }
 
-
-    void GetUIKeyInput()
+    private void SetUIActive(MonoBehaviour uiElement, bool isActive)
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (uiElement != null)
+            uiElement.gameObject.SetActive(isActive);
+    }
+
+    private void BindButton(Button button, MonoBehaviour uiElement, Action refreshAction)
+    {
+        button.gameObject.BindEvent(_ =>
         {
-            if (InvenUI.gameObject.activeSelf)
-            {
-                InvenUI.gameObject.SetActive(false);
-            }
-            else
-            {
-                InvenUI.gameObject.SetActive(true);
-                InvenUI.RefreshUI(Define.InvenRefreshType.All);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (StatUI.gameObject.activeSelf)
-            {
-                StatUI.gameObject.SetActive(false);
-            }
-            else
-            {
-                StatUI.gameObject.SetActive(true);
-                StatUI.RefreshUI();
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (ShopUI.gameObject.activeSelf)
-            {
-                ShopUI.gameObject.SetActive(false);
-            }
-            else
-            {
-                ShopUI.gameObject.SetActive(true);
-                ShopUI.RefreshUI();
-            }
-        }
+            bool isActive = uiElement.gameObject.activeSelf;
+            SetUIActive(uiElement, !isActive);
+
+            if (!isActive && refreshAction != null)
+                refreshAction();
+        });
     }
 }
