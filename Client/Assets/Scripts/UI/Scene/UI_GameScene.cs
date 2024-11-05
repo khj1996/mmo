@@ -25,11 +25,11 @@ public class UI_GameScene : UI_Scene
         ExpUI = GetComponentInChildren<UI_ExpBar>();
         JoystickUI = GetComponentInChildren<UI_Joystick>();
 
-        SetUIActive(StatUI, false);
-        SetUIActive(InvenUI, false);
-        SetUIActive(ShopUI, false);
-        SetUIActive(ExpUI, true);
-        SetUIActive(JoystickUI, true);
+        StatUI.gameObject.SetActive(false);
+        InvenUI.gameObject.SetActive(false);
+        ShopUI.gameObject.SetActive(false);
+        ExpUI.gameObject.SetActive(true);
+        JoystickUI.gameObject.SetActive(true);
 
         InitButton();
 
@@ -43,18 +43,12 @@ public class UI_GameScene : UI_Scene
         BindButton(btnCharacter, StatUI, StatUI.RefreshUI);
     }
 
-    private void SetUIActive(MonoBehaviour uiElement, bool isActive)
-    {
-        if (uiElement != null)
-            uiElement.gameObject.SetActive(isActive);
-    }
-
-    private void BindButton(Button button, MonoBehaviour uiElement, Action refreshAction)
+    private void BindButton(Button button, UI_Base targetUI, Action refreshAction)
     {
         button.gameObject.BindEvent(_ =>
         {
-            bool isActive = uiElement.gameObject.activeSelf;
-            SetUIActive(uiElement, !isActive);
+            bool isActive = !targetUI.gameObject.activeSelf;
+            targetUI.gameObject.SetActive(isActive);
 
             if (!isActive && refreshAction != null)
                 refreshAction();

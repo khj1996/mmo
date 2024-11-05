@@ -21,6 +21,15 @@ namespace AccountServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowNgrok", builder =>
+                    builder.WithOrigins("hhttps://28bf-118-37-228-1.ngrok-free.app") // ngrok URL
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+            
+            
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -45,6 +54,8 @@ namespace AccountServer
 
             app.UseHttpsRedirection();
 
+            app.UseCors("AllowNgrok");
+            
             app.UseRouting();
 
             app.UseAuthorization();

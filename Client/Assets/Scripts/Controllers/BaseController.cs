@@ -201,14 +201,13 @@ public class BaseController : MonoBehaviour
         var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
         var distance = (destPos - transform.position).magnitude;
 
-        if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
+        transform.position = Vector3.MoveTowards(transform.position, destPos, Mathf.Min(step, distance));
+
+
+        if (distance < step && Move.X == 0 && Move.Y == 0)
         {
             State = CreatureState.Idle;
             UpdateAnimation();
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, destPos, Mathf.Min(step, distance));
         }
     }
 
@@ -235,15 +234,6 @@ public class BaseController : MonoBehaviour
         if (movePacket.PosInfo.State != CreatureState.Idle)
         {
             State = movePacket.PosInfo.State;
-        }
-        else
-        {
-            var destPos = new Vector3(Pos.X, Pos.Y, transform.position.z);
-            var distance = (destPos - transform.position).magnitude;
-            if (distance < Mathf.Epsilon && Move.X == 0 && Move.Y == 0)
-            {
-                State = CreatureState.Idle;
-            }
         }
 
         UpdateAnimation();

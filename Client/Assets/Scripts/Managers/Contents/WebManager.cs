@@ -7,7 +7,18 @@ using UnityEngine.Networking;
 
 public class WebManager
 {
-    public string BaseUrl { get; set; } = "http://localhost:5000/api";
+    private string BaseUrl
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return "http://localhost:5000/api";
+#else
+            return "https://28bf-118-37-228-1.ngrok-free.app/api";
+#endif
+        }
+    }
+
 
     public void SendPostRequest<T>(string url, object obj, Action<T> res)
     {
