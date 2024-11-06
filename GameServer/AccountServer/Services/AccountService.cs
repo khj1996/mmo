@@ -48,7 +48,6 @@ namespace AccountServer.Services
 
         public string? LoginEmailAccount(LoginAccountPacketReq? packet)
         {
-            Console.WriteLine("asdas");
             if (packet == null)
                 return null;
 

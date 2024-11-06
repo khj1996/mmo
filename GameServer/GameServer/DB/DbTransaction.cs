@@ -20,6 +20,7 @@ namespace GameServer.DB
             //플레이어 정보
             PlayerDb playerDb = new PlayerDb();
             playerDb.PlayerDbId = player.PlayerDbId;
+            playerDb.Level = player.Level;
             playerDb.Hp = player.Hp;
             playerDb.TotalExp = player.Exp;
             playerDb.CurMap = player.Room.Map.MapId;
@@ -35,6 +36,7 @@ namespace GameServer.DB
                     db.Entry(playerDb).State = EntityState.Unchanged;
                     db.Entry(playerDb).Property(nameof(PlayerDb.Hp)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.CurMap)).IsModified = true;
+                    db.Entry(playerDb).Property(nameof(PlayerDb.Level)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.TotalExp)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.PosX)).IsModified = true;
                     db.Entry(playerDb).Property(nameof(PlayerDb.PosY)).IsModified = true;

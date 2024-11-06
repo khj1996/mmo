@@ -17,7 +17,7 @@ public class UI_SelectCharacterPopup : UI_Popup
         base.Init();
     }
 
-    public void SetCharacter(RepeatedField<Google.Protobuf.Protocol.LobbyPlayerInfo> playerInfos)
+    public void SetCharacter(RepeatedField<LobbyPlayerInfo> playerInfos)
     {
         Items.Clear();
 

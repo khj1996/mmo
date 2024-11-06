@@ -8,6 +8,8 @@ public class InventoryManager
 {
     public Dictionary<int, Item> Items { get; private set; }
 
+    public Action<Item> AddNewItemAction;
+
     public int SlotLen
     {
         get { return Util.StaticValues.InventorySize; }
@@ -37,6 +39,7 @@ public class InventoryManager
 
     public void Add(List<ItemInfo> _itemInfos)
     {
+        List<Item> addedItem = new List<Item>();
         foreach (ItemInfo itemInfo in _itemInfos)
         {
             Item itemData = Item.MakeItem(itemInfo);
@@ -44,16 +47,18 @@ public class InventoryManager
             if (Items.TryGetValue(itemData.ItemDbId, out var _item))
             {
                 Items[_item.ItemDbId] = _item;
-                return;
+                addedItem.Add(_item);
+                continue;
             }
 
             Items.Add(itemData.ItemDbId, itemData);
+            addedItem.Add(itemData);
         }
 
-        UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;
-        gameSceneUI.InvenUI.RefreshUI(Define.InvenRefreshType.All);
-
-        Managers.UI.ShowPopupUI<UI_GetItemPopUp>().OpenPopUpMultiItem(_itemInfos);
+        foreach (var item in addedItem)
+        {
+            AddNewItemAction?.Invoke(item);
+        }
     }
 
     public Item Get(int itemDbId)

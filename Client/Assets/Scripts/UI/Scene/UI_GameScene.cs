@@ -10,6 +10,8 @@ public class UI_GameScene : UI_Scene
     public UI_ExpBar ExpUI { get; private set; }
     public UI_Joystick JoystickUI { get; private set; }
 
+    public UI_ItemNotice ItemNoticeUI { get; private set; }
+
     public Button btnShop;
     public Button btnInven;
     public Button btnCharacter;
@@ -24,12 +26,14 @@ public class UI_GameScene : UI_Scene
         ShopUI = GetComponentInChildren<UI_Shop>();
         ExpUI = GetComponentInChildren<UI_ExpBar>();
         JoystickUI = GetComponentInChildren<UI_Joystick>();
+        ItemNoticeUI = GetComponentInChildren<UI_ItemNotice>();
 
         StatUI.gameObject.SetActive(false);
         InvenUI.gameObject.SetActive(false);
         ShopUI.gameObject.SetActive(false);
         ExpUI.gameObject.SetActive(true);
         JoystickUI.gameObject.SetActive(true);
+        ItemNoticeUI.gameObject.SetActive(true);
 
         InitButton();
 

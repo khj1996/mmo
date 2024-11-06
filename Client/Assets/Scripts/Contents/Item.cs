@@ -40,6 +40,12 @@ public class Item
         set { Info.Equipped = value; }
     }
 
+    public string Name
+    {
+        get => name;
+        set => name = value;
+    }
+
     public string Description
     {
         get => description;
@@ -48,6 +54,8 @@ public class Item
 
     public ItemType ItemType { get; private set; }
     public bool Stackable { get; protected set; }
+
+    private string name;
     private string description;
 
     public Item(ItemType itemType)
@@ -87,6 +95,7 @@ public class Item
             item.Count = itemInfo.Count;
             item.Slot = itemInfo.Slot;
             item.Equipped = itemInfo.Equipped;
+            item.Name = itemData.name;
         }
 
         return item;
