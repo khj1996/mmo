@@ -52,8 +52,6 @@ namespace AccountServer
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseCors("AllowNgrok");
             
             app.UseRouting();

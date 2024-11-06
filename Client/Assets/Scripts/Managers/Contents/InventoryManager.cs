@@ -47,7 +47,7 @@ public class InventoryManager
                 return;
             }
 
-            Items.Add(_item.ItemDbId, _item);
+            Items.Add(itemData.ItemDbId, itemData);
         }
 
         UI_GameScene gameSceneUI = Managers.UI.CurrentSceneUI as UI_GameScene;

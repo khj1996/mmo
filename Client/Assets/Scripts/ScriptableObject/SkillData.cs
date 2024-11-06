@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 
-
 [CreateAssetMenu(menuName = "SO/Skill/SkillData", fileName = "SkillDataStorage")]
 public class SkillData : ScriptableObject
 {
@@ -17,7 +16,7 @@ public class SkillData : ScriptableObject
 public interface ISkill
 {
     public int GetSkillId();
-    float UseSkill(Vector2 playerPos);
+    float UseSkill(Vector3 playerPos);
 }
 
 public class MeleeSkill : ISkill
@@ -34,7 +33,7 @@ public class MeleeSkill : ISkill
         return skillData.skillId;
     }
 
-    public float UseSkill(Vector2 playerPos)
+    public float UseSkill(Vector3 playerPos)
     {
         SendSkillPacket(skillData.skillId);
 
@@ -66,12 +65,16 @@ public class RangedSkill : ISkill
         return skillData.skillId;
     }
 
-    public float UseSkill(Vector2 playerPos)
+    public float UseSkill(Vector3 playerPos)
     {
-        var mPos = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var moveDir = (new Vector2(mPos.origin.x, mPos.origin.y) - playerPos).normalized;
+        Vector3 screenPosition = Input.mousePosition;
+        screenPosition.z = Mathf.Abs(Camera.main.transform.position.z - playerPos.z);
 
-        SendSkillPacket(skillData.skillId, moveDir);
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+
+        Vector2 direction = (worldPosition - playerPos).normalized;
+
+        SendSkillPacket(skillData.skillId, direction);
 
         return skillData.coolTime;
     }
