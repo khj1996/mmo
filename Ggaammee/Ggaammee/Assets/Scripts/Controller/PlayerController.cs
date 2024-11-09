@@ -13,16 +13,6 @@ public class PlayerController : CreatureController
     public float FallTimeout = 0.15f;
 
 
-    [Header("Cinemachine")] public GameObject CinemachineCameraTarget;
-    public float TopClamp = 70.0f;
-    public float BottomClamp = -30.0f;
-    public float CameraAngleOverride = 0.0f;
-    public bool LockCameraPosition = false;
-
-
-    private float _cinemachineTargetYaw;
-    private float _cinemachineTargetPitch;
-
     private float _speed;
     private float _animationBlend;
     private float _targetRotation = 0.0f;
@@ -34,17 +24,10 @@ public class PlayerController : CreatureController
     private float _fallTimeoutDelta;
 
 
-    private PlayerInput _playerInput;
-
     private CharacterController _controller;
-    [SerializeField] private InputSystem _input;
+    private InputSystem _input;
     private GameObject _mainCamera;
-
-    private const float _threshold = 0.01f;
-
-
-    private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
-
+    
 
     private void Awake()
     {
@@ -54,7 +37,7 @@ public class PlayerController : CreatureController
         }
     }
 
-    private void Start()
+    private void Start() 
     {
         Init();
     }
@@ -63,12 +46,8 @@ public class PlayerController : CreatureController
     {
         base.Init();
 
-        _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<InputSystem>();
-        _playerInput = GetComponent<PlayerInput>();
-
 
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
@@ -81,28 +60,6 @@ public class PlayerController : CreatureController
         Move();
     }
 
-    private void LateUpdate()
-    {
-        CameraRotation();
-    }
-
-
-    private void CameraRotation()
-    {
-        if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-        {
-            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
-        }
-
-        _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-        _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-            _cinemachineTargetYaw, 0.0f);
-    }
 
     private void Move()
     {
@@ -134,8 +91,7 @@ public class PlayerController : CreatureController
 
         if (_input.move != Vector2.zero)
         {
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                              _mainCamera.transform.eulerAngles.y;
+            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                 RotationSmoothTime);
 
@@ -174,12 +130,15 @@ public class PlayerController : CreatureController
 
             if (_input.jump && _jumpTimeoutDelta <= 0.0f)
             {
+                Debug.Log(1);
                 _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
 
                 if (_hasAnimator)
                 {
                     _animator.SetBool(_animIDJump, true);
                 }
+                
+                _input.jump = false;
             }
 
             if (_jumpTimeoutDelta >= 0.0f)
@@ -202,8 +161,6 @@ public class PlayerController : CreatureController
                     _animator.SetBool(_animIDFreeFall, true);
                 }
             }
-
-            _input.jump = false;
         }
 
         if (_verticalVelocity < _terminalVelocity)
@@ -212,12 +169,6 @@ public class PlayerController : CreatureController
         }
     }
 
-    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
-    {
-        if (lfAngle < -360f) lfAngle += 360f;
-        if (lfAngle > 360f) lfAngle -= 360f;
-        return Mathf.Clamp(lfAngle, lfMin, lfMax);
-    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
@@ -234,6 +185,4 @@ public class PlayerController : CreatureController
     }
 
 #endif
-
-
 }

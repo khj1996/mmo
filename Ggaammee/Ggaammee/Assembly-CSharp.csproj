@@ -54,13 +54,14 @@
     <Compile Include="Assets\UnityChan\Scripts\CameraController.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\AnimationIDData.cs" />
     <Compile Include="Assets\UnityChan\Scripts\UnityChanControlScriptWithRgidBody.cs" />
     <Compile Include="Assets\UnityChan\Scripts\RandomWind.cs" />
     <Compile Include="Assets\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
-    <Compile Include="Assets\Scripts\Controller\ScriptableObject\CreatureData.cs" />
     <Compile Include="Assets\UnityChan\Scripts\IKLookAt.cs" />
     <Compile Include="Assets\UnityChan\Scripts\AutoBlinkforSD.cs" />
     <Compile Include="Assets\UnityChan\Scripts\IdleChanger.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\CreatureData.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
     <Compile Include="Assets\UnityChan\Scripts\AutoBlink.cs" />
     <Compile Include="Assets\Scripts\Util\Util.cs" />
@@ -70,7 +71,7 @@
     <Compile Include="Assets\UnityChan\Scripts\FaceUpdate.cs" />
     <Compile Include="Assets\UnityChan\Scripts\IKCtrlRightHand.cs" />
     <Compile Include="Assets\Scripts\Controller\CreatureController.cs" />
-    <Compile Include="Assets\Scripts\Controller\ScriptableObject\AnimationIDData.cs" />
+    <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <None Include="Assets\StarterAssets\license.txt" />
     <None Include="Assets\README_SD_UnityChan_en.txt" />
     <None Include="Assets\README_SD_UnityChan_jp.txt" />
