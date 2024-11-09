@@ -7,12 +7,6 @@ public class CreatureController : MonoBehaviour
 {
     public CreatureData creatureData;
 
-    public float GroundedOffset = -0.14f;
-    public float GroundedRadius = 0.28f;
-    public LayerMask GroundLayers;
-    public bool Grounded = true;
-
-
     protected Animator _animator;
     protected bool _hasAnimator;
 
@@ -36,18 +30,6 @@ public class CreatureController : MonoBehaviour
         _animIDFreeFall = Animator.StringToHash("FreeFall");
         _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
     }
-
-    protected void GroundedCheck()
-    {
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-
-        if (_hasAnimator)
-        {
-            _animator.SetBool(_animIDGrounded, Grounded);
-        }
-    }
-
 
     private void OnFootstep(AnimationEvent animationEvent)
     {

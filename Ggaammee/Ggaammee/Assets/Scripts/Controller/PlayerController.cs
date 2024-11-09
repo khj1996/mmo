@@ -12,6 +12,11 @@ public class PlayerController : CreatureController
     [Space(10)] public float JumpTimeout = 0.50f;
     public float FallTimeout = 0.15f;
 
+    public float GroundedOffset = -0.14f;
+    public float GroundedRadius = 0.28f;
+    public LayerMask GroundLayers;
+    public bool Grounded = true;
+
 
     private float _speed;
     private float _animationBlend;
@@ -27,7 +32,7 @@ public class PlayerController : CreatureController
     private CharacterController _controller;
     private InputSystem _input;
     private GameObject _mainCamera;
-    
+
 
     private void Awake()
     {
@@ -37,7 +42,7 @@ public class PlayerController : CreatureController
         }
     }
 
-    private void Start() 
+    private void Start()
     {
         Init();
     }
@@ -130,14 +135,13 @@ public class PlayerController : CreatureController
 
             if (_input.jump && _jumpTimeoutDelta <= 0.0f)
             {
-                Debug.Log(1);
                 _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
 
                 if (_hasAnimator)
                 {
                     _animator.SetBool(_animIDJump, true);
                 }
-                
+
                 _input.jump = false;
             }
 
@@ -169,7 +173,16 @@ public class PlayerController : CreatureController
         }
     }
 
+    protected void GroundedCheck()
+    {
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
+        if (_hasAnimator)
+        {
+            _animator.SetBool(_animIDGrounded, Grounded);
+        }
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
