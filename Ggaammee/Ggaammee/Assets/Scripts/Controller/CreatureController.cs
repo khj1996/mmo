@@ -1,18 +1,59 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CreatureController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public CreatureData creatureData;
+
+    public float GroundedOffset = -0.14f;
+    public float GroundedRadius = 0.28f;
+    public LayerMask GroundLayers;
+    public bool Grounded = true;
+
+
+    protected Animator _animator;
+    protected bool _hasAnimator;
+
+    protected int _animIDSpeed;
+    protected int _animIDGrounded;
+    protected int _animIDJump;
+    protected int _animIDFreeFall;
+    protected int _animIDMotionSpeed;
+
+    protected virtual void Init()
     {
-        
+        _hasAnimator = TryGetComponent(out _animator);
+        AssignAnimationIDs();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void AssignAnimationIDs()
     {
-        
+        _animIDSpeed = Animator.StringToHash("MoveSpeed");
+        _animIDGrounded = Animator.StringToHash("Grounded");
+        _animIDJump = Animator.StringToHash("Jump");
+        _animIDFreeFall = Animator.StringToHash("FreeFall");
+        _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+    }
+
+    protected void GroundedCheck()
+    {
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+
+        if (_hasAnimator)
+        {
+            _animator.SetBool(_animIDGrounded, Grounded);
+        }
+    }
+
+
+    private void OnFootstep(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
+        }
     }
 }

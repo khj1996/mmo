@@ -57,6 +57,7 @@
     <Compile Include="Assets\UnityChan\Scripts\UnityChanControlScriptWithRgidBody.cs" />
     <Compile Include="Assets\UnityChan\Scripts\RandomWind.cs" />
     <Compile Include="Assets\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
+    <Compile Include="Assets\Scripts\Controller\ScriptableObject\CreatureData.cs" />
     <Compile Include="Assets\UnityChan\Scripts\IKLookAt.cs" />
     <Compile Include="Assets\UnityChan\Scripts\AutoBlinkforSD.cs" />
     <Compile Include="Assets\UnityChan\Scripts\IdleChanger.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Assets\UnityChan\Scripts\FaceUpdate.cs" />
     <Compile Include="Assets\UnityChan\Scripts\IKCtrlRightHand.cs" />
     <Compile Include="Assets\Scripts\Controller\CreatureController.cs" />
+    <Compile Include="Assets\Scripts\Controller\ScriptableObject\AnimationIDData.cs" />
     <None Include="Assets\StarterAssets\license.txt" />
     <None Include="Assets\README_SD_UnityChan_en.txt" />
     <None Include="Assets\README_SD_UnityChan_jp.txt" />
@@ -795,8 +797,8 @@
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="PPv2URPConverters">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
+    <Reference Include="Unity.FilmInternalUtilities.Editor">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
@@ -804,8 +806,8 @@
     <Reference Include="Unity.Toonshader.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Toonshader.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.FilmInternalUtilities.Editor">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.Editor.dll</HintPath>
+    <Reference Include="PPv2URPConverters">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>

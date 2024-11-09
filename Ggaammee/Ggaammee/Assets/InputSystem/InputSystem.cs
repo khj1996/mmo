@@ -3,14 +3,14 @@ using UnityEngine.InputSystem;
 
 public class InputSystem : MonoBehaviour
 {
-    [Header("Character Input Values")] public Vector2 move;
+    public Vector2 move;
     public Vector2 look;
     public bool jump;
     public bool sprint;
 
-    [Header("Movement Settings")] public bool analogMovement;
+    public bool analogMovement;
 
-    [Header("Mouse Cursor Settings")] public bool cursorLocked = true;
+    public bool cursorLocked = true;
     public bool cursorInputForLook = true;
 
 

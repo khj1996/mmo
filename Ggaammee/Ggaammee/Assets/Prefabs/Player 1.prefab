@@ -963,7 +963,7 @@ GameObject:
   - component: {fileID: 5418255543766765209}
   m_Layer: 0
   m_Name: LookPos
-  m_TagString: Untagged
+  m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3955,7 +3955,6 @@ GameObject:
   - component: {fileID: 6591710976191693114}
   - component: {fileID: 1653520059555725034}
   - component: {fileID: 5372287860960465378}
-  - component: {fileID: 728329750628194763}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Player
@@ -3971,7 +3970,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5904525240692292765}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.99993974, z: -0, w: -0.0109805}
+  m_LocalRotation: {x: -0, y: -0.9999398, z: 0, w: -0.010977703}
   m_LocalPosition: {x: 1.7964593, y: 1.1, z: -0.0332454}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4019,8 +4018,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 2
-  SprintSpeed: 3
+  MoveSpeed: 60
+  SprintSpeed: 90
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
   LandingAudioClip: {fileID: 0}
@@ -4036,11 +4035,12 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 8
-  CinemachineCameraTarget: {fileID: 0}
+  CinemachineCameraTarget: {fileID: 1919987346168350438}
   TopClamp: 70
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  _input: {fileID: 0}
 --- !u!114 &6591710976191693114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4180,97 +4180,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &728329750628194763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5904525240692292765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6514ba86f976d724ab63844a6015b2aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dynamicRatio: 1
-  stiffnessForce: 0.01
-  stiffnessCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.010707155
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0.010707155
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  dragForce: 0.4
-  dragCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.40000004
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0.40000004
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  springBones:
-  - {fileID: 7047519509308892089}
-  - {fileID: 4399395963409023601}
-  - {fileID: 3958106160863844651}
-  - {fileID: 9158222646579388776}
-  - {fileID: 3014457367132287975}
-  - {fileID: 8375608322878488664}
-  - {fileID: 7248103232259662513}
-  - {fileID: 3903949802088833438}
-  - {fileID: 7104483584506906072}
-  - {fileID: 4289285203019173900}
-  - {fileID: 3032976717037449249}
-  - {fileID: 706481304920730122}
-  - {fileID: 3626062626509065681}
-  - {fileID: 7729893476771769996}
-  - {fileID: 8087539980494677495}
-  - {fileID: 4601677693768154561}
-  - {fileID: 4255280337620370482}
-  - {fileID: 7946900033494114498}
-  - {fileID: 7887756186135669457}
-  - {fileID: 49864755602494311}
-  - {fileID: 2148745150858558128}
-  - {fileID: 6761856261283582884}
-  - {fileID: 5443045190054826230}
-  - {fileID: 259360885452627035}
-  - {fileID: 4098033552351779397}
-  - {fileID: 1539147504825626760}
-  - {fileID: 3426471288771094955}
 --- !u!1 &5948609213990266354
 GameObject:
   m_ObjectHideFlags: 0
