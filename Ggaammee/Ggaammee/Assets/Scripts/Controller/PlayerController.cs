@@ -70,6 +70,18 @@ public class PlayerController : CreatureController
     {
         float targetSpeed = _input.sprint ? creatureData.sprintSpeed : creatureData.speed;
 
+
+        if (_input.crouch && Grounded)
+        {
+            _animator.SetBool(_animIDCrouch, true);
+            targetSpeed = creatureData.crouchSpeed;
+        }
+        else if (!_input.crouch)
+        {
+            _animator.SetBool(_animIDCrouch, false);
+        }
+
+
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -118,6 +130,8 @@ public class PlayerController : CreatureController
 
     private void JumpAndGravity()
     {
+        if (_input.crouch) return;
+
         if (Grounded)
         {
             _fallTimeoutDelta = FallTimeout;

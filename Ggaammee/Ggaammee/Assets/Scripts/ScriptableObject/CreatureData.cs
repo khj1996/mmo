@@ -16,6 +16,7 @@ public class CreatureData : ScriptableObject
     public float atackSpeed;
     public float speed;
     public float sprintSpeed;
+    public float crouchSpeed;
     public float acceleration;
     public float weight;
 

@@ -21,6 +21,7 @@ MonoBehaviour:
   atackSpeed: 0
   speed: 60
   sprintSpeed: 90
+  crouchSpeed: 45
   acceleration: 10
   weight: -15
   attackRange: 0

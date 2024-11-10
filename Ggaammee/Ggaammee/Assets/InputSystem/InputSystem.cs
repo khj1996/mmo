@@ -6,6 +6,7 @@ public class InputSystem : MonoBehaviour
     public Vector2 move;
     public Vector2 look;
     public bool jump;
+    public bool crouch;
     public bool sprint;
 
     public bool analogMovement;
@@ -32,6 +33,11 @@ public class InputSystem : MonoBehaviour
         JumpInput(value.isPressed);
     }
 
+    public void OnCrouch(InputValue value)
+    {
+        CrouchInput(value.isPressed);
+    }
+
     public void OnSprint(InputValue value)
     {
         SprintInput(value.isPressed);
@@ -51,6 +57,11 @@ public class InputSystem : MonoBehaviour
     public void JumpInput(bool newJumpState)
     {
         jump = newJumpState;
+    }
+
+    public void CrouchInput(bool newCrouchState)
+    {
+        crouch = newCrouchState;
     }
 
     public void SprintInput(bool newSprintState)

@@ -15,6 +15,7 @@ public class CreatureController : MonoBehaviour
     protected int _animIDJump;
     protected int _animIDFreeFall;
     protected int _animIDMotionSpeed;
+    protected int _animIDCrouch;
 
     protected virtual void Init()
     {
@@ -27,6 +28,7 @@ public class CreatureController : MonoBehaviour
         _animIDSpeed = Animator.StringToHash("MoveSpeed");
         _animIDGrounded = Animator.StringToHash("Grounded");
         _animIDJump = Animator.StringToHash("Jump");
+        _animIDCrouch = Animator.StringToHash("Crouch");
         _animIDFreeFall = Animator.StringToHash("FreeFall");
         _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
     }
