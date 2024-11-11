@@ -10,12 +10,6 @@ public class CreatureController : MonoBehaviour
     protected Animator _animator;
     protected bool _hasAnimator;
 
-    protected int _animIDSpeed;
-    protected int _animIDGrounded;
-    protected int _animIDJump;
-    protected int _animIDFreeFall;
-    protected int _animIDMotionSpeed;
-    protected int _animIDCrouch;
 
     protected virtual void Init()
     {
@@ -25,12 +19,6 @@ public class CreatureController : MonoBehaviour
 
     private void AssignAnimationIDs()
     {
-        _animIDSpeed = Animator.StringToHash("MoveSpeed");
-        _animIDGrounded = Animator.StringToHash("Grounded");
-        _animIDJump = Animator.StringToHash("Jump");
-        _animIDCrouch = Animator.StringToHash("Crouch");
-        _animIDFreeFall = Animator.StringToHash("FreeFall");
-        _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
     }
 
     private void OnFootstep(AnimationEvent animationEvent)
@@ -39,5 +27,13 @@ public class CreatureController : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
         }
+    }
+    
+    private void OnHit(AnimationEvent animationEvent)
+    {
+        /*if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
+        }*/
     }
 }

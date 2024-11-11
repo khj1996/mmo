@@ -19,7 +19,6 @@ public class BehaviorTree
                 return;
             }
         }
-        // 모든 조건이 만족되면 상태 전이를 실행
     }
 }
 

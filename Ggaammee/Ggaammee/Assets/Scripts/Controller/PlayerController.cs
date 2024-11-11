@@ -76,12 +76,12 @@ public class PlayerController : CreatureController
 
         if (_input.crouch && Grounded)
         {
-            _animator.SetBool(_animIDCrouch, true);
+            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
             targetSpeed = creatureData.crouchSpeed;
         }
         else if (!_input.crouch)
         {
-            _animator.SetBool(_animIDCrouch, false);
+            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
         }
 
 
@@ -126,8 +126,8 @@ public class PlayerController : CreatureController
 
         if (_hasAnimator)
         {
-            _animator.SetFloat(_animIDSpeed, _animationBlend);
-            _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            _animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
+            _animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, inputMagnitude);
         }
     }
 
@@ -141,8 +141,8 @@ public class PlayerController : CreatureController
 
             if (_hasAnimator)
             {
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, false);
+                _animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
+                _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
             }
 
             if (_verticalVelocity < 0.0f)
@@ -156,7 +156,7 @@ public class PlayerController : CreatureController
 
                 if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDJump, true);
+                    _animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
                 }
 
                 _input.jump = false;
@@ -179,7 +179,7 @@ public class PlayerController : CreatureController
             {
                 if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDFreeFall, true);
+                    _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
                 }
             }
         }
@@ -197,7 +197,7 @@ public class PlayerController : CreatureController
 
         if (_hasAnimator)
         {
-            _animator.SetBool(_animIDGrounded, Grounded);
+            _animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
         }
     }
 #if UNITY_EDITOR

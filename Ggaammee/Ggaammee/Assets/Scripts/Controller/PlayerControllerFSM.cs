@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerControllerFSM : CreatureController
 {
@@ -12,9 +13,8 @@ public class PlayerControllerFSM : CreatureController
     public LayerMask GroundLayers;
     public bool Grounded = true;
 
-
     private PlayerStateMachine playerStateMachine;
-    private BehaviorTree _bt;
+    //private BehaviorTree _bt;
 
     private float _speed;
     private float _animationBlend;
@@ -41,14 +41,15 @@ public class PlayerControllerFSM : CreatureController
         }
     }
 
+    #region 초기화
+
     private void Start()
     {
         Init();
 
-        _bt = new BehaviorTree();
+        //_bt = new BehaviorTree();
 
-        /*// BT 노드 추가 (예: 특정 조건을 만족하면 상태 전이 가능)
-        _bt.AddNode(new ConditionNode(() => playerStateMachine.CurrentState is not JumpState));*/
+        //_bt.AddNode(new ConditionNode(() => playerStateMachine.CurrentState is not JumpState));
     }
 
     protected override void Init()
@@ -59,6 +60,7 @@ public class PlayerControllerFSM : CreatureController
 
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
+        state = Util.CreatureState.Idle;
     }
 
     private void InitFSM()
@@ -70,7 +72,6 @@ public class PlayerControllerFSM : CreatureController
         playerStateMachine.AddState(new MoveState(this));
         playerStateMachine.AddState(new CrouchState(this));
         playerStateMachine.AddState(new JumpState(this));
-        playerStateMachine.AddState(new AttackState(this));
         playerStateMachine.AddState(new GetHitState(this));
 
         #region 상태 전이 조건
@@ -79,7 +80,7 @@ public class PlayerControllerFSM : CreatureController
 
         playerStateMachine.AddTransition<IdleState, MoveState>(() => _speed != 0);
         playerStateMachine.AddTransition<IdleState, CrouchState>(() => _input.crouch);
-        playerStateMachine.AddTransition<IdleState, JumpState>(() => Grounded && !_input.crouch && _input.jump);
+        playerStateMachine.AddTransition<IdleState, JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
 
         #endregion
 
@@ -87,7 +88,7 @@ public class PlayerControllerFSM : CreatureController
 
         playerStateMachine.AddTransition<MoveState, IdleState>(() => _speed == 0);
         playerStateMachine.AddTransition<MoveState, CrouchState>(() => _input.crouch);
-        playerStateMachine.AddTransition<MoveState, JumpState>(() => Grounded && !_input.crouch && _input.jump);
+        playerStateMachine.AddTransition<MoveState, JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
 
         #endregion
 
@@ -116,10 +117,17 @@ public class PlayerControllerFSM : CreatureController
         _input = GetComponent<InputSystem>();
     }
 
+    #endregion
+
+
     private void Update()
     {
-        _bt.Evaluate(); // BT에서 조건을 평가
-        playerStateMachine.Update(); // FSM 업데이트로 상태 전이 수행
+        //_bt.Evaluate(); // BT에서 조건을 평가
+        playerStateMachine.Update();
+    }
+
+    public void UpdateState(Util.CreatureState state)
+    {
     }
 
 
@@ -131,8 +139,8 @@ public class PlayerControllerFSM : CreatureController
 
             if (_hasAnimator)
             {
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, false);
+                _animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
+                _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
             }
 
             if (_verticalVelocity < 0.0f)
@@ -146,7 +154,7 @@ public class PlayerControllerFSM : CreatureController
 
                 if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDJump, true);
+                    _animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
                 }
 
                 _input.jump = false;
@@ -169,7 +177,7 @@ public class PlayerControllerFSM : CreatureController
             {
                 if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDFreeFall, true);
+                    _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
                 }
             }
         }
@@ -188,12 +196,12 @@ public class PlayerControllerFSM : CreatureController
 
         if (_input.crouch && Grounded)
         {
-            _animator.SetBool(_animIDCrouch, true);
+            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
             targetSpeed = creatureData.crouchSpeed;
         }
         else if (!_input.crouch)
         {
-            _animator.SetBool(_animIDCrouch, false);
+            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
         }
 
 
@@ -236,9 +244,37 @@ public class PlayerControllerFSM : CreatureController
 
         if (_hasAnimator)
         {
-            _animator.SetFloat(_animIDSpeed, _animationBlend);
-            _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            _animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
+            _animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, inputMagnitude);
         }
+    }
+
+
+    private Coroutine _AttackCoroutine = null;
+
+    public void CheckAttack()
+    {
+        Debug.Log(_animator.GetCurrentAnimatorStateInfo(1).normalizedTime);
+        if (_AttackCoroutine != null || !_input.attack) return;
+
+        _input.attack = false;
+        _AttackCoroutine = StartCoroutine(AttackCoroutine());
+    }
+
+    public void Hit()
+    {
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        _animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
+        _animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 1);
+
+        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= 1f);
+
+        _animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 0);
+
+        _AttackCoroutine = null;
     }
 
     public void GroundedCheck()
@@ -248,7 +284,7 @@ public class PlayerControllerFSM : CreatureController
 
         if (_hasAnimator)
         {
-            _animator.SetBool(_animIDGrounded, Grounded);
+            _animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
         }
     }
 #if UNITY_EDITOR

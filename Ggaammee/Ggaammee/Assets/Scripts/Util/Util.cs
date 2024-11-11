@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Util
+public class Util
 {
     public enum CreatureState
     {
@@ -15,4 +15,19 @@ public static class Util
         GetHit = 6,
         Die = 7,
     }
+
+
+   
+}
+
+public static class AssignAnimationIDs
+{
+    public static readonly int AnimIDSpeed = Animator.StringToHash("MoveSpeed");
+    public static readonly int AnimIDGrounded = Animator.StringToHash("Grounded");
+    public static readonly int AnimIDJump = Animator.StringToHash("Jump");
+    public static readonly int AnimIDCrouch = Animator.StringToHash("Crouch");
+    public static readonly int AnimIDFreeFall = Animator.StringToHash("FreeFall");
+    public static readonly int AnimIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+    public static readonly int AnimIDAttackType = Animator.StringToHash("AttackType");
+    public static readonly int AnimIDAttackTrigger = Animator.StringToHash("AttackTrigger");
 }

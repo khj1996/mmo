@@ -93,6 +93,7 @@ public class IdleState : State
     {
         _controller.JumpAndGravity();
         _controller.GroundedCheck();
+        _controller.CheckAttack();
         _controller.Move();
     }
 }
@@ -118,30 +119,8 @@ public class MoveState : State
     {
         _controller.JumpAndGravity();
         _controller.GroundedCheck();
+        _controller.CheckAttack();
         _controller.Move();
-    }
-}
-
-public class AttackState : State
-{
-    private PlayerControllerFSM _controller;
-
-    public AttackState(PlayerControllerFSM controller)
-    {
-        _controller = controller;
-    }
-
-    public override void OnEnter()
-    {
-    }
-
-    public override void OnExit()
-    {
-    }
-
-    public override void OnUpdate()
-    {
-        // Attack 상태에서 해야 할 로직
     }
 }
 
@@ -164,6 +143,7 @@ public class CrouchState : State
 
     public override void OnUpdate()
     {
+        _controller.CheckAttack();
         _controller.Move();
     }
 }
@@ -212,6 +192,5 @@ public class GetHitState : State
 
     public override void OnUpdate()
     {
-        // Attack 상태에서 해야 할 로직
     }
 }
