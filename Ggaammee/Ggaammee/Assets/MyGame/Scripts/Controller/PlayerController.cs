@@ -76,12 +76,7 @@ public class PlayerController : CreatureController
 
         if (_input.crouch && Grounded)
         {
-            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
             targetSpeed = creatureData.crouchSpeed;
-        }
-        else if (!_input.crouch)
-        {
-            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
         }
 
 

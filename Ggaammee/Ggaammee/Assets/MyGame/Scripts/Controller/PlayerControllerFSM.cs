@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerControllerFSM : CreatureController
@@ -10,7 +11,6 @@ public class PlayerControllerFSM : CreatureController
 
     public float GroundedOffset = -0.14f;
     public float GroundedRadius = 0.28f;
-    public LayerMask GroundLayers;
     public bool Grounded = true;
 
     private PlayerStateMachine playerStateMachine;
@@ -68,8 +68,7 @@ public class PlayerControllerFSM : CreatureController
         playerStateMachine = new PlayerStateMachine();
 
         // FSM 상태 등록
-        playerStateMachine.AddState(new IdleState(this));
-        playerStateMachine.AddState(new MoveState(this));
+        playerStateMachine.AddState(new IdleAndMoveState(this));
         playerStateMachine.AddState(new CrouchState(this));
         playerStateMachine.AddState(new JumpState(this));
         playerStateMachine.AddState(new GetHitState(this));
@@ -78,37 +77,27 @@ public class PlayerControllerFSM : CreatureController
 
         #region IdleState
 
-        playerStateMachine.AddTransition<IdleState, MoveState>(() => _speed != 0);
-        playerStateMachine.AddTransition<IdleState, CrouchState>(() => _input.crouch);
-        playerStateMachine.AddTransition<IdleState, JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
+        playerStateMachine.AddTransition<IdleAndMoveState, CrouchState>(() => _input.crouch);
+        playerStateMachine.AddTransition<IdleAndMoveState, JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
 
         #endregion
 
-        #region MoveState
-
-        playerStateMachine.AddTransition<MoveState, IdleState>(() => _speed == 0);
-        playerStateMachine.AddTransition<MoveState, CrouchState>(() => _input.crouch);
-        playerStateMachine.AddTransition<MoveState, JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
-
-        #endregion
 
         #region CrouchState
 
-        playerStateMachine.AddTransition<CrouchState, IdleState>(() => _speed == 0 && !_input.crouch);
-        playerStateMachine.AddTransition<CrouchState, MoveState>(() => _speed != 0 && !_input.crouch);
+        playerStateMachine.AddTransition<CrouchState, IdleAndMoveState>(() => !_input.crouch || !Grounded);
 
         #endregion
 
         #region JumpState
 
-        playerStateMachine.AddTransition<JumpState, IdleState>(() => _speed == 0 && Grounded);
-        playerStateMachine.AddTransition<JumpState, MoveState>(() => _speed != 0 && Grounded);
+        playerStateMachine.AddTransition<JumpState, IdleAndMoveState>(() => Grounded);
 
         #endregion
 
         #endregion
 
-        playerStateMachine.ChangeState(typeof(IdleState));
+        playerStateMachine.ChangeState(typeof(IdleAndMoveState));
     }
 
     private void InitComponent()
@@ -196,12 +185,7 @@ public class PlayerControllerFSM : CreatureController
 
         if (_input.crouch && Grounded)
         {
-            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
             targetSpeed = creatureData.crouchSpeed;
-        }
-        else if (!_input.crouch)
-        {
-            _animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
         }
 
 
@@ -269,7 +253,11 @@ public class PlayerControllerFSM : CreatureController
         _animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
         _animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 1);
 
-        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= 1f);
+
+        while (_animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1f)
+        {
+            yield return null;
+        }
 
         _animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 0);
 
@@ -279,13 +267,52 @@ public class PlayerControllerFSM : CreatureController
     public void GroundedCheck()
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer | LayerData.DefaultLayer, QueryTriggerInteraction.Ignore);
 
         if (_hasAnimator)
         {
             _animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
         }
     }
+
+
+    protected virtual void OnFootstep(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
+        }
+    }
+
+    public List<CharacterController> GetMonstersInRange(Vector3 position, float radius = 0.5f)
+    {
+        List<CharacterController> monstersInRange = new List<CharacterController>();
+
+        Collider[] colliders = Physics.OverlapSphere(position, radius, LayerData.MonsterLayer);
+
+        foreach (Collider collider in colliders)
+        {
+            CharacterController monster = collider.GetComponent<CharacterController>();
+
+            if (monster != null)
+            {
+                monstersInRange.Add(monster);
+            }
+        }
+
+        return monstersInRange;
+    }
+
+    protected virtual void OnHit(AnimationEvent animationEvent)
+    {
+        List<CharacterController> monsters = GetMonstersInRange(AttackPoint.position);
+
+        foreach (CharacterController monster in monsters)
+        {
+            Debug.Log("Found monster: " + monster.gameObject.name);
+        }
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -298,6 +325,10 @@ public class PlayerControllerFSM : CreatureController
         Gizmos.DrawSphere(
             new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
             GroundedRadius);
+
+        Gizmos.DrawSphere(
+            new Vector3(AttackPoint.position.x, AttackPoint.position.y - GroundedOffset, AttackPoint.position.z),
+            0.5f);
     }
 
 #endif

@@ -15,10 +15,16 @@ public class Util
         GetHit = 6,
         Die = 7,
     }
-
-
-   
 }
+
+public static class LayerData
+{
+    public static readonly int DefaultLayer = 1 << 0;
+    public static readonly int GroundLayer = 1 << 3;
+    public static readonly int PlayerLayer = 1 << 18;
+    public static readonly int MonsterLayer = 1 << 19;
+}
+
 
 public static class AssignAnimationIDs
 {

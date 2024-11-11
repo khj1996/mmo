@@ -71,37 +71,11 @@ public abstract class State
     public abstract void OnUpdate();
 }
 
-public class IdleState : State
+public class IdleAndMoveState : State
 {
     private PlayerControllerFSM _controller;
 
-    public IdleState(PlayerControllerFSM controller)
-    {
-        _controller = controller;
-    }
-
-    public override void OnEnter()
-    {
-    }
-
-    public override void OnExit()
-    {
-    }
-
-    public override void OnUpdate()
-    {
-        _controller.JumpAndGravity();
-        _controller.GroundedCheck();
-        _controller.CheckAttack();
-        _controller.Move();
-    }
-}
-
-public class MoveState : State
-{
-    private PlayerControllerFSM _controller;
-
-    public MoveState(PlayerControllerFSM controller)
+    public IdleAndMoveState(PlayerControllerFSM controller)
     {
         _controller = controller;
     }
@@ -134,15 +108,18 @@ public class CrouchState : State
 
     public override void OnEnter()
     {
+        _controller._animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
     }
 
     public override void OnExit()
     {
+        _controller._animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
     }
 
     public override void OnUpdate()
     {
         _controller.CheckAttack();
+        _controller.GroundedCheck();
         _controller.Move();
     }
 }

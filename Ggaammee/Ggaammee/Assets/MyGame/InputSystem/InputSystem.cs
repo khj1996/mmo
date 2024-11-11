@@ -9,6 +9,7 @@ public class InputSystem : MonoBehaviour
     public bool crouch;
     public bool sprint;
     public bool attack;
+    public bool interAction;
 
     public bool analogMovement;
 
@@ -49,6 +50,11 @@ public class InputSystem : MonoBehaviour
         SprintInput(value.isPressed);
     }
 
+    public void OnInterAction(InputValue value)
+    {
+        InterActionInput(value.isPressed);
+    }
+
 
     public void MoveInput(Vector2 newMoveDirection)
     {
@@ -78,6 +84,11 @@ public class InputSystem : MonoBehaviour
     public void SprintInput(bool newSprintState)
     {
         sprint = newSprintState;
+    }
+
+    public void InterActionInput(bool newSprintState)
+    {
+        interAction = newSprintState;
     }
 
     private void OnApplicationFocus(bool hasFocus)
