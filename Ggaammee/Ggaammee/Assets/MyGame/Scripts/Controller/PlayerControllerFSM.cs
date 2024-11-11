@@ -13,7 +13,7 @@ public class PlayerControllerFSM : CreatureController
     public float GroundedRadius = 0.28f;
     public bool Grounded = true;
 
-    private PlayerStateMachine playerStateMachine;
+    private PlayerStateMachine<PlayerControllerFSM> playerStateMachine;
     //private BehaviorTree _bt;
 
     private float _speed;
@@ -65,39 +65,39 @@ public class PlayerControllerFSM : CreatureController
 
     private void InitFSM()
     {
-        playerStateMachine = new PlayerStateMachine();
+        playerStateMachine = new PlayerStateMachine<PlayerControllerFSM>();
 
         // FSM 상태 등록
-        playerStateMachine.AddState(new IdleAndMoveState(this));
-        playerStateMachine.AddState(new CrouchState(this));
-        playerStateMachine.AddState(new JumpState(this));
-        playerStateMachine.AddState(new GetHitState(this));
+        playerStateMachine.AddState(new PlayerData.IdleAndMoveState(this));
+        playerStateMachine.AddState(new PlayerData.CrouchState(this));
+        playerStateMachine.AddState(new PlayerData.JumpState(this));
+        playerStateMachine.AddState(new PlayerData.GetHitState(this));
 
         #region 상태 전이 조건
 
         #region IdleState
 
-        playerStateMachine.AddTransition<IdleAndMoveState, CrouchState>(() => _input.crouch);
-        playerStateMachine.AddTransition<IdleAndMoveState, JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
+        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => _input.crouch);
+        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
 
         #endregion
 
 
         #region CrouchState
 
-        playerStateMachine.AddTransition<CrouchState, IdleAndMoveState>(() => !_input.crouch || !Grounded);
+        playerStateMachine.AddTransition<PlayerData.CrouchState, PlayerData.IdleAndMoveState>(() => !_input.crouch || !Grounded);
 
         #endregion
 
         #region JumpState
 
-        playerStateMachine.AddTransition<JumpState, IdleAndMoveState>(() => Grounded);
+        playerStateMachine.AddTransition<PlayerData.JumpState, PlayerData.IdleAndMoveState>(() => Grounded);
 
         #endregion
 
         #endregion
 
-        playerStateMachine.ChangeState(typeof(IdleAndMoveState));
+        playerStateMachine.ChangeState(typeof(PlayerData.IdleAndMoveState));
     }
 
     private void InitComponent()

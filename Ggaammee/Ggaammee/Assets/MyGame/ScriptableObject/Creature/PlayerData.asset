@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b21977717964455981f908a9174de8bc, type: 3}
-  m_Name: Monster1
+  m_Script: {fileID: 11500000, guid: 1f24ebe76af5488d9ad9db1f9e5391a9, type: 3}
+  m_Name: PlayerData
   m_EditorClassIdentifier: 
   name: 
   level: 0
+  creatureModel: {fileID: 0}
   maxHp: 0
   attack: 0
   defense: 0
@@ -24,9 +25,8 @@ MonoBehaviour:
   acceleration: 0
   weight: 0
   attackRange: 0
+  detectionRange: 0
   animations: []
   walkSound: {fileID: 0}
-  creatureModel: {fileID: 0}
-  detectionRange: 0
   dropItems: []
   exp: 0

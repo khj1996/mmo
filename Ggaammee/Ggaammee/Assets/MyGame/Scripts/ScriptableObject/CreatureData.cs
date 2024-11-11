@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[CreateAssetMenu(fileName = "NewCreature", menuName = "ScriptableObjects/Creature")]
 public class CreatureData : ScriptableObject
 {
     [Header("Basic Info")] public string name;
     public int level;
-    public GameObject creatureModel;
-
+   
     [Header("Stats")] public float maxHp;
     public float attack;
     public float defense;
@@ -21,13 +18,10 @@ public class CreatureData : ScriptableObject
     public float weight;
 
     [Header("Abilities & Behavior")] public float attackRange;
-    public float detectionRange;
+    
 
     [Header("Animations & Sounds")] public AnimationData[] animations;
     public AudioClip walkSound;
-
-    [Header("Drops & Rewards")] public List<DropItem> dropItems;
-    public float exp;
 
 
     [Serializable]
@@ -37,10 +31,18 @@ public class CreatureData : ScriptableObject
         public AnimationClip AnimationClip;
     }
 
-    [Serializable]
-    public struct DropItem
+
+    public abstract class State<T> where T : CreatureController
     {
-        public int Id;
-        public float DropRate;
+        protected T _owner;
+
+        public State(T owner)
+        {
+            _owner = owner;
+        }
+
+        public abstract void OnEnter();
+        public abstract void OnExit();
+        public abstract void OnUpdate();
     }
 }
