@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c6192647f891b2438987694132c1750, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: 
+  name: "\uD50C\uB808\uC774\uC5B4"
+  level: 1
+  creatureModel: {fileID: 0}
+  maxHp: 0
+  attack: 0
+  defense: 0
+  atackSpeed: 0
+  speed: 60
+  sprintSpeed: 90
+  crouchSpeed: 45
+  acceleration: 10
+  weight: -15
+  attackRange: 0
+  detectionRange: 0
+  animations: []
+  walkSound: {fileID: 8300000, guid: 04bcc9cc3a62e7843b8c687d67cd5fe6, type: 3}
+  dropItems: []
+  exp: 0
