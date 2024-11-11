@@ -6,9 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewPlayerData", menuName = "ScriptableObjects/PlayerData")]
 public class PlayerData : CreatureData
 {
-    public class IdleAndMoveState : State<PlayerControllerFSM>
+    public class IdleAndMoveState : State<PlayerController>
     {
-        public IdleAndMoveState(PlayerControllerFSM owner) : base(owner)
+        public IdleAndMoveState(PlayerController owner) : base(owner)
         {
         }
 
@@ -29,9 +29,9 @@ public class PlayerData : CreatureData
         }
     }
 
-    public class CrouchState : State<PlayerControllerFSM>
+    public class CrouchState : State<PlayerController>
     {
-        public CrouchState(PlayerControllerFSM owner) : base(owner)
+        public CrouchState(PlayerController owner) : base(owner)
         {
         }
 
@@ -42,7 +42,7 @@ public class PlayerData : CreatureData
 
         public override void OnExit()
         {
-            _owner._animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
+            _owner._animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
         }
 
         public override void OnUpdate()
@@ -53,9 +53,9 @@ public class PlayerData : CreatureData
         }
     }
 
-    public class JumpState : State<PlayerControllerFSM>
+    public class JumpState : State<PlayerController>
     {
-        public JumpState(PlayerControllerFSM owner) : base(owner)
+        public JumpState(PlayerController owner) : base(owner)
         {
         }
 
@@ -75,9 +75,9 @@ public class PlayerData : CreatureData
         }
     }
 
-    public class GetHitState : State<PlayerControllerFSM>
+    public class GetHitState : State<PlayerController>
     {
-        public GetHitState(PlayerControllerFSM owner) : base(owner)
+        public GetHitState(PlayerController owner) : base(owner)
         {
         }
 

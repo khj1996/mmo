@@ -53,14 +53,15 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\CreatureData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\PlayerStateMachine.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Controller\PlayerControllerFSM.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Util.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\Managers.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\MonsterController.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringBone.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\AnimationIDData.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />

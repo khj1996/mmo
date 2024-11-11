@@ -18,15 +18,15 @@ MonoBehaviour:
   attack: 0
   defense: 0
   atackSpeed: 0
-  speed: 0
+  speed: 40
   sprintSpeed: 0
   crouchSpeed: 0
-  acceleration: 0
-  weight: 0
-  attackRange: 0
+  acceleration: 10
+  weight: -15
+  sqrAttackRange: 1.5
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
-  detectionRange: 0
+  sqrDetectionRange: 10
   dropItems: []
   exp: 0

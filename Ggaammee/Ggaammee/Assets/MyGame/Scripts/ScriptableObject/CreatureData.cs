@@ -17,7 +17,7 @@ public class CreatureData : ScriptableObject
     public float acceleration;
     public float weight;
 
-    [Header("Abilities & Behavior")] public float attackRange;
+    [Header("Abilities & Behavior")] public float sqrAttackRange;
     
 
     [Header("Animations & Sounds")] public AnimationData[] animations;
