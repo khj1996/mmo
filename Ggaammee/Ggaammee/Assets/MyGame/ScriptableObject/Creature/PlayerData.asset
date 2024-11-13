@@ -18,10 +18,10 @@ MonoBehaviour:
   attack: 0
   defense: 0
   atackSpeed: 0
-  speed: 60
-  sprintSpeed: 90
-  crouchSpeed: 45
-  acceleration: 10
+  speed: 30
+  sprintSpeed: 60
+  crouchSpeed: 20
+  acceleration: 6
   weight: -15
   sqrAttackRange: 0
   animations: []

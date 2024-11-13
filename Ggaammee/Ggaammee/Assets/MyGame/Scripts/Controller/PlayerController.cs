@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,9 +13,9 @@ public class PlayerController : CreatureController
     public float GroundedOffset = -0.14f;
     public float GroundedRadius = 0.28f;
     public bool Grounded = true;
+    public bool isClimbing = false;
 
     private PlayerStateMachine<PlayerController> playerStateMachine;
-    //private BehaviorTree _bt;
 
     private float _speed;
     private float _animationBlend;
@@ -29,9 +30,9 @@ public class PlayerController : CreatureController
     private Util.CreatureState state;
 
 
-    private CharacterController _controller;
     private InputSystem _input;
     private GameObject _mainCamera;
+
 
     private void Awake()
     {
@@ -46,10 +47,6 @@ public class PlayerController : CreatureController
     private void Start()
     {
         Init();
-
-        //_bt = new BehaviorTree();
-
-        //_bt.AddNode(new ConditionNode(() => playerStateMachine.CurrentState is not JumpState));
     }
 
     protected override void Init()
@@ -73,6 +70,7 @@ public class PlayerController : CreatureController
         playerStateMachine.AddState(new PlayerData.CrouchState(this));
         playerStateMachine.AddState(new PlayerData.JumpState(this));
         playerStateMachine.AddState(new PlayerData.GetHitState(this));
+        playerStateMachine.AddState(new PlayerData.LadderState(this));
 
         #region 상태 전이 조건
 
@@ -80,6 +78,7 @@ public class PlayerController : CreatureController
 
         playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => _input.crouch);
         playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
+        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
 
         #endregion
 
@@ -93,6 +92,12 @@ public class PlayerController : CreatureController
         #region JumpState
 
         playerStateMachine.AddTransition<PlayerData.JumpState, PlayerData.IdleAndMoveState>(() => Grounded);
+
+        #endregion
+
+        #region LadderState
+
+        playerStateMachine.AddTransition<PlayerData.LadderState, PlayerData.IdleAndMoveState>(() => !isClimbing);
 
         #endregion
 
@@ -112,75 +117,46 @@ public class PlayerController : CreatureController
 
     private void Update()
     {
-        //_bt.Evaluate(); // BT에서 조건을 평가
+        Debug.Log(playerStateMachine.CurrentState);
         playerStateMachine.Update();
     }
 
-    public void UpdateState(Util.CreatureState state)
+
+    #region 이동
+
+    public void MoveLadder()
     {
-    }
+        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
+        float move = targetDirection.z;
+        bool isMove = true;
 
-    public void JumpAndGravity()
-    {
-        if (Grounded)
-        {
-            _fallTimeoutDelta = FallTimeout;
+        targetDirection.x = 0;
+        targetDirection.z = 0;
 
-            if (_hasAnimator)
-            {
-                _animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
-                _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
-            }
+        _verticalVelocity = 0;
 
-            if (_verticalVelocity < 0.0f)
-            {
-                _verticalVelocity = -2f;
-            }
+        Grounded = true;
 
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-            {
-                _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
+        //LockAtTargetPsition();
+        LookAtTarget();
+        if (_input.move == Vector2.zero)
+            isMove = false;
 
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
-                }
-
-                _input.jump = false;
-            }
-
-            if (_jumpTimeoutDelta >= 0.0f)
-            {
-                _jumpTimeoutDelta -= Time.deltaTime;
-            }
-        }
+        if (move < 0)
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove);
         else
-        {
-            _jumpTimeoutDelta = JumpTimeout;
-
-            if (_fallTimeoutDelta >= 0.0f)
-            {
-                _fallTimeoutDelta -= Time.deltaTime;
-            }
-            else
-            {
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
-                }
-            }
-        }
-
-        if (_verticalVelocity < _terminalVelocity)
-        {
-            _verticalVelocity += creatureData.weight * Time.deltaTime;
-        }
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove);
     }
-
 
     public void Move()
     {
+        if (isNearLadder && _input.interAction)
+        {
+            isClimbing = true;
+            return;
+        }
+
         float targetSpeed = _input.sprint ? creatureData.sprintSpeed : creatureData.speed;
 
 
@@ -224,16 +200,78 @@ public class PlayerController : CreatureController
 
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
+
         _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                          new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
+
         if (_hasAnimator)
         {
-            _animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
-            _animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, inputMagnitude);
+            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
+            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, inputMagnitude);
         }
     }
 
+    public void JumpAndGravity()
+    {
+        if (Grounded)
+        {
+            _fallTimeoutDelta = FallTimeout;
+
+            if (_hasAnimator)
+            {
+                animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
+                animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
+            }
+
+            if (_verticalVelocity < 0.0f)
+            {
+                _verticalVelocity = -2f;
+            }
+
+            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+            {
+                _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
+
+                if (_hasAnimator)
+                {
+                    animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
+                }
+
+                _input.jump = false;
+            }
+
+            if (_jumpTimeoutDelta >= 0.0f)
+            {
+                _jumpTimeoutDelta -= Time.deltaTime;
+            }
+        }
+        else
+        {
+            _jumpTimeoutDelta = JumpTimeout;
+
+            if (_fallTimeoutDelta >= 0.0f)
+            {
+                _fallTimeoutDelta -= Time.deltaTime;
+            }
+            else
+            {
+                if (_hasAnimator)
+                {
+                    animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
+                }
+            }
+        }
+
+        if (_verticalVelocity < _terminalVelocity)
+        {
+            _verticalVelocity += creatureData.weight * Time.deltaTime;
+        }
+    }
+
+    #endregion
+
+    #region 공격
 
     private Coroutine _AttackCoroutine = null;
 
@@ -245,25 +283,81 @@ public class PlayerController : CreatureController
         _AttackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
-    public void Hit()
-    {
-    }
-
     private IEnumerator AttackCoroutine()
     {
-        _animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
-        _animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 1);
+        animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
+        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 1);
 
 
-        while (_animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1f)
+        while (animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1f)
         {
             yield return null;
         }
 
-        _animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 0);
+        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 0);
 
         _AttackCoroutine = null;
     }
+
+    #endregion
+
+    #region 사다리
+
+    public bool isNearLadder = false;
+
+    public bool isUpLadder = false;
+    public bool isDownLadder = false;
+
+
+    private void NearLadderPosition(Collider other)
+    {
+        Debug.Log(other.name);
+        isNearLadder = true;
+
+        targetPosition = other.gameObject.transform.position;
+        lookTarget = other.gameObject.transform.forward;
+    }
+
+    private void EndofLadder(int animName)
+    {
+        if (isClimbing)
+        {
+            animator.SetTrigger(animName);
+            animator.SetBool(AssignAnimationIDs.AnimIDLadder, false);
+        }
+    }
+
+    public void CharacterToLadder()
+    {
+        LockAtTargetPsition();
+        LookAtTarget();
+        LadderStart();
+    }
+
+
+    private void LadderStart()
+    {
+        animator.SetBool(AssignAnimationIDs.AnimIDLadder, true);
+        if (isUpLadder)
+        {
+            animator.SetTrigger(AssignAnimationIDs.AnimIDLadderUpStart);
+        }
+
+        if (isDownLadder)
+        {
+            animator.SetTrigger(AssignAnimationIDs.AnimIDLadderDownStart);
+        }
+
+        _input.interAction = false;
+        isUpLadder = false;
+        isDownLadder = false;
+
+        isNearLadder = false;
+    }
+
+    #endregion
+
+    #region 트리거,콜라이더
 
     public void GroundedCheck()
     {
@@ -272,18 +366,10 @@ public class PlayerController : CreatureController
 
         if (_hasAnimator)
         {
-            _animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
+            animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
         }
     }
 
-
-    protected virtual void OnFootstep(AnimationEvent animationEvent)
-    {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
-        }
-    }
 
     public List<CharacterController> GetMonstersInRange(Vector3 position, float radius = 0.5f)
     {
@@ -304,6 +390,48 @@ public class PlayerController : CreatureController
         return monstersInRange;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("StartDown"))
+        {
+            NearLadderPosition(other);
+
+            isUpLadder = false;
+            isDownLadder = true;
+        }
+        else if (other.CompareTag("EndDown"))
+        {
+            EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
+        }
+        else if (other.CompareTag("StartUp"))
+        {
+            NearLadderPosition(other);
+
+            isUpLadder = true;
+            isDownLadder = false;
+        }
+        else if (other.CompareTag("EndUp"))
+        {
+            EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
+        }
+        else
+        {
+            isNearLadder = false;
+        }
+    }
+
+    #endregion
+
+    #region 애니메이션
+
+    protected virtual void OnFootstep(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
+        }
+    }
+
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
         List<CharacterController> monsters = GetMonstersInRange(AttackPoint.position);
@@ -313,6 +441,14 @@ public class PlayerController : CreatureController
             Debug.Log("Found monster: " + monster.gameObject.name);
         }
     }
+
+    public void OnExitLadder()
+    {
+        isClimbing = false;
+        LookAtTarget();
+    }
+
+    #endregion
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()

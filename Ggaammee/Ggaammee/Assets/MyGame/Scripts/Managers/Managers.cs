@@ -39,7 +39,7 @@ public class Managers : MonoBehaviour
     public bool isInit = false;
 
 
-    void Start()
+    void Awake()
     {
         Init();
     }

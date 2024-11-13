@@ -36,4 +36,11 @@ public static class AssignAnimationIDs
     public static readonly int AnimIDMotionSpeed = Animator.StringToHash("MotionSpeed");
     public static readonly int AnimIDAttackType = Animator.StringToHash("AttackType");
     public static readonly int AnimIDAttackTrigger = Animator.StringToHash("AttackTrigger");
+    public static readonly int AnimIDLadder = Animator.StringToHash("Ladder");
+    public static readonly int AnimIDLadderUpStart = Animator.StringToHash("LadderUpStart");
+    public static readonly int AnimIDLadderDownStart = Animator.StringToHash("LadderDownStart");
+    public static readonly int AnimIDLadderDownPlay = Animator.StringToHash("LadderDownPlay");
+    public static readonly int AnimIDLadderUpPlay = Animator.StringToHash("LadderUpPlay");
+    public static readonly int AnimIDLadderDownEnd = Animator.StringToHash("LadderDownEnd");
+    public static readonly int AnimIDLadderUpEnd = Animator.StringToHash("LadderUpEnd");
 }

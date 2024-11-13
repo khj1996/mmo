@@ -37,12 +37,12 @@ public class PlayerData : CreatureData
 
         public override void OnEnter()
         {
-            _owner._animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
+            _owner.animator.SetBool(AssignAnimationIDs.AnimIDCrouch, true);
         }
 
         public override void OnExit()
         {
-            _owner._animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
+            _owner.animator.SetBool(AssignAnimationIDs.AnimIDCrouch, false);
         }
 
         public override void OnUpdate()
@@ -72,6 +72,31 @@ public class PlayerData : CreatureData
             _owner.JumpAndGravity();
             _owner.GroundedCheck();
             _owner.Move();
+        }
+    }
+    
+    public class LadderState : State<PlayerController>
+    {
+        public LadderState(PlayerController owner) : base(owner)
+        {
+        }
+
+        public override void OnEnter()
+        {
+            _owner.CharacterToLadder();
+            _owner.animator.SetLayerWeight(1, 0);
+        }
+
+        public override void OnExit()
+        {
+            _owner.animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, false);
+            _owner.animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, false);
+            _owner.animator.SetLayerWeight(1, 1);
+        }
+
+        public override void OnUpdate()
+        {
+            _owner.MoveLadder();
         }
     }
 
