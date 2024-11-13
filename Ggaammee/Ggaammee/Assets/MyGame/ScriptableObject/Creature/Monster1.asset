@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21977717964455981f908a9174de8bc, type: 3}
   m_Name: Monster1
   m_EditorClassIdentifier: 
-  name: 
-  level: 0
-  maxHp: 0
-  attack: 0
+  name: "\uBAAC\uC2A4\uD1301"
+  level: 1
+  maxHp: 100
+  attack: 15
   defense: 0
-  atackSpeed: 0
-  speed: 40
+  attackSpeed: 2
+  speed: 15
   sprintSpeed: 0
   crouchSpeed: 0
   acceleration: 10
@@ -27,6 +27,6 @@ MonoBehaviour:
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
-  sqrDetectionRange: 10
+  sqrDetectionRange: 16
   dropItems: []
   exp: 0

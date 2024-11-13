@@ -48,8 +48,8 @@ public class MonsterController : CreatureController
 
         #region AttackState
 
-        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => !CheckCanAttack());
-        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => !_targetTransform);
+        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => _AttackCoroutine == null && !CheckCanAttack());
+        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !_targetTransform);
 
         #endregion
 
@@ -93,8 +93,9 @@ public class MonsterController : CreatureController
 
     public void Move()
     {
-        LookAtTarget();
         Vector3 direction = (_targetTransform.position - transform.position).normalized;
+
+        LookAtTarget(direction);
 
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
@@ -103,6 +104,40 @@ public class MonsterController : CreatureController
 
         _controller.Move(direction.normalized * (_speed * Time.deltaTime));
     }
+
+    #region 공격
+    
+    private float lastAttackTime = 0f; 
+    private Coroutine _AttackCoroutine = null;
+
+    public void CheckAttack()
+    {
+        //공격 쿨타임이거나 모션 진행중
+        if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + creatureData.attackSpeed)) return;
+        
+        _AttackCoroutine = StartCoroutine(AttackCoroutine());
+        lastAttackTime = Time.time;
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
+        Vector3 direction = (_targetTransform.position - transform.position).normalized;
+        LookAtTarget(direction);
+
+        
+
+
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            yield return null;
+        }
+
+        _AttackCoroutine = null;
+    }
+
+    #endregion
 
 /*
     public void Move()

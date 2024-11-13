@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: "\uD50C\uB808\uC774\uC5B4"
   level: 1
-  maxHp: 0
-  attack: 0
+  maxHp: 250
+  attack: 55
   defense: 0
-  atackSpeed: 0
+  attackSpeed: 1
   speed: 30
   sprintSpeed: 60
   crouchSpeed: 20

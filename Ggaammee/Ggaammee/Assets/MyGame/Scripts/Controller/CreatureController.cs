@@ -32,10 +32,10 @@ public class CreatureController : MonoBehaviour
         _controller.Move(direction * distanceToLadder);
     }
 
-    public void LookAtTarget()
+    public void LookAtTarget(Vector3 targetVector)
     {
         Vector3 up = transform.rotation * Vector3.up;
 
-        transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, _targetTransform.transform.forward, up), up) * transform.rotation;
+        transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, targetVector, up), up) * transform.rotation;
     }
 }

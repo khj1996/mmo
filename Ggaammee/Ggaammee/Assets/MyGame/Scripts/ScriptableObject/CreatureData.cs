@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CreatureData : ScriptableObject
 {
@@ -10,7 +11,7 @@ public class CreatureData : ScriptableObject
     [Header("Stats")] public float maxHp;
     public float attack;
     public float defense;
-    public float atackSpeed;
+    public float attackSpeed;
     public float speed;
     public float sprintSpeed;
     public float crouchSpeed;

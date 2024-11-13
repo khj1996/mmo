@@ -138,7 +138,7 @@ public class PlayerController : CreatureController
         Grounded = true;
 
         //LockAtTargetPsition();
-        LookAtTarget();
+        LookAtTarget(_targetTransform.transform.forward);
         if (_input.move == Vector2.zero)
             isMove = false;
 
@@ -328,7 +328,7 @@ public class PlayerController : CreatureController
     public void CharacterToLadder()
     {
         LockAtTargetPsition();
-        LookAtTarget();
+        LookAtTarget(_targetTransform.transform.forward);
         LadderStart();
     }
 
@@ -443,7 +443,7 @@ public class PlayerController : CreatureController
     public void OnExitLadder()
     {
         isClimbing = false;
-        LookAtTarget();
+        LookAtTarget(_targetTransform.transform.forward);
     }
 
     #endregion

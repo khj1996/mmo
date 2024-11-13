@@ -22,7 +22,7 @@ public class MonsterData : CreatureData
         public int Id;
         public float DropRate;
     }
-    
+
     public class IdleState : State<MonsterController>
     {
         public IdleState(MonsterController owner) : base(owner)
@@ -41,7 +41,7 @@ public class MonsterData : CreatureData
         {
         }
     }
-    
+
     public class ChaseState : State<MonsterController>
     {
         public ChaseState(MonsterController owner) : base(owner)
@@ -63,7 +63,7 @@ public class MonsterData : CreatureData
             _owner.Move();
         }
     }
-    
+
     public class AttackState : State<MonsterController>
     {
         public AttackState(MonsterController owner) : base(owner)
@@ -80,6 +80,7 @@ public class MonsterData : CreatureData
 
         public override void OnUpdate()
         {
+            _owner.CheckAttack();
         }
     }
 }
