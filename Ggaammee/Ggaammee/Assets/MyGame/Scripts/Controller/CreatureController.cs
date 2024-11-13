@@ -15,9 +15,7 @@ public class CreatureController : MonoBehaviour
     protected bool _hasAnimator;
     public Transform AttackPoint;
 
-
-    protected Vector3 targetPosition;
-    protected Vector3 lookTarget;
+    protected Transform _targetTransform;
 
     protected virtual void Init()
     {
@@ -26,7 +24,7 @@ public class CreatureController : MonoBehaviour
 
     public void LockAtTargetPsition()
     {
-        Vector3 targetPosition = new Vector3(this.targetPosition.x, transform.position.y, this.targetPosition.z);
+        Vector3 targetPosition = new Vector3(this._targetTransform.position.x, transform.position.y, this._targetTransform.position.z);
         Vector3 direction = (targetPosition - transform.position).normalized;
 
         float distanceToLadder = Vector3.Distance(transform.position, targetPosition);
@@ -38,6 +36,6 @@ public class CreatureController : MonoBehaviour
     {
         Vector3 up = transform.rotation * Vector3.up;
 
-        transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, lookTarget, up), up) * transform.rotation;
+        transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, _targetTransform.transform.forward, up), up) * transform.rotation;
     }
 }

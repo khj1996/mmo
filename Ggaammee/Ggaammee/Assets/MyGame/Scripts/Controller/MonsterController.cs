@@ -8,9 +8,6 @@ public class MonsterController : CreatureController
 
     private CharacterController _controller;
 
-    private Transform _targetTransform;
-
-
     #region 초기화
 
     private void Start()
@@ -92,64 +89,22 @@ public class MonsterController : CreatureController
         Debug.Log(stateMachine.CurrentState);
     }
 
-    /*public void JumpAndGravity()
+    private float _speed;
+
+    public void Move()
     {
-        if (Grounded)
-        {
-            _fallTimeoutDelta = FallTimeout;
+        LookAtTarget();
+        Vector3 direction = (_targetTransform.position - transform.position).normalized;
 
-            if (_hasAnimator)
-            {
-                _animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
-                _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
-            }
+        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
-            if (_verticalVelocity < 0.0f)
-            {
-                _verticalVelocity = -2f;
-            }
+        _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
+        _speed = Mathf.Round(_speed * 1000f) / 1000f;
 
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-            {
-                _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
-
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
-                }
-
-                _input.jump = false;
-            }
-
-            if (_jumpTimeoutDelta >= 0.0f)
-            {
-                _jumpTimeoutDelta -= Time.deltaTime;
-            }
-        }
-        else
-        {
-            _jumpTimeoutDelta = JumpTimeout;
-
-            if (_fallTimeoutDelta >= 0.0f)
-            {
-                _fallTimeoutDelta -= Time.deltaTime;
-            }
-            else
-            {
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
-                }
-            }
-        }
-
-        if (_verticalVelocity < _terminalVelocity)
-        {
-            _verticalVelocity += creatureData.weight * Time.deltaTime;
-        }
+        _controller.Move(direction.normalized * (_speed * Time.deltaTime));
     }
 
-
+/*
     public void Move()
     {
         float targetSpeed = _input.sprint ? creatureData.sprintSpeed : creatureData.speed;

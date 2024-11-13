@@ -117,7 +117,6 @@ public class PlayerController : CreatureController
 
     private void Update()
     {
-        Debug.Log(playerStateMachine.CurrentState);
         playerStateMachine.Update();
     }
 
@@ -314,8 +313,7 @@ public class PlayerController : CreatureController
         Debug.Log(other.name);
         isNearLadder = true;
 
-        targetPosition = other.gameObject.transform.position;
-        lookTarget = other.gameObject.transform.forward;
+        _targetTransform = other.gameObject.transform;
     }
 
     private void EndofLadder(int animName)

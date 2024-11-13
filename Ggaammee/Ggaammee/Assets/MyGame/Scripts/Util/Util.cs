@@ -29,6 +29,7 @@ public static class LayerData
 public static class AssignAnimationIDs
 {
     public static readonly int AnimIDSpeed = Animator.StringToHash("MoveSpeed");
+    public static readonly int AnimIDMove = Animator.StringToHash("Move");
     public static readonly int AnimIDGrounded = Animator.StringToHash("Grounded");
     public static readonly int AnimIDJump = Animator.StringToHash("Jump");
     public static readonly int AnimIDCrouch = Animator.StringToHash("Crouch");

@@ -50,14 +50,17 @@ public class MonsterData : CreatureData
 
         public override void OnEnter()
         {
+            _owner.animator.SetBool(AssignAnimationIDs.AnimIDMove, true);
         }
 
         public override void OnExit()
         {
+            _owner.animator.SetBool(AssignAnimationIDs.AnimIDMove, false);
         }
 
         public override void OnUpdate()
         {
+            _owner.Move();
         }
     }
     
