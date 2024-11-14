@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MonsterController : CreatureController
 {
+    public Transform lockOnPos;
+    
     private PlayerStateMachine<MonsterController> stateMachine;
 
     private CharacterController _controller;
@@ -130,7 +132,6 @@ public class MonsterController : CreatureController
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
-            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             yield return null;
         }
 

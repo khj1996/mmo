@@ -20,14 +20,30 @@ public class CameraController : MonoBehaviour
     private InputSystem _input;
     private const float _threshold = 0.01f;
 
+    private LockOn _lockOn;
+    [SerializeField] private float cameraDirectionY = 0;
+    public float cameraSmoothing = 5f;
+
+    public GameObject _mainCamera;
+        
+        
+        
     private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
+    private void Awake()
+    {
+        if (_mainCamera == null)
+        {
+            _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        }
+    }
 
     private void Start()
     {
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _playerInput = GetComponent<PlayerInput>();
         _input = GetComponent<InputSystem>();
+        _lockOn = GetComponent<LockOn>();
     }
 
     private void LateUpdate()
@@ -49,8 +65,26 @@ public class CameraController : MonoBehaviour
         _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-            _cinemachineTargetYaw, 0.0f);
+        if (_lockOn.isFindTarget && _lockOn.currentTarget != null)
+        {
+            Vector3 direction = (_lockOn.currentTarget.lockOnPos.transform.position - CinemachineCameraTarget.transform.position).normalized;
+
+            direction.y = cameraDirectionY;
+
+            CinemachineCameraTarget.transform.forward = Vector3.Lerp(CinemachineCameraTarget.transform.forward, direction, Time.deltaTime * cameraSmoothing);
+
+            Vector3 camAngles = _mainCamera.transform.eulerAngles;
+
+            _cinemachineTargetYaw = camAngles.y;
+            _cinemachineTargetPitch = camAngles.x;
+        }
+        else
+        {
+            
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+                _cinemachineTargetYaw, 0.0f);
+        }
+        
     }
 
 

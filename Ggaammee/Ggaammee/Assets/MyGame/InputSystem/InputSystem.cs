@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class InputSystem : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InputSystem : MonoBehaviour
     public bool sprint;
     public bool attack;
     public bool interAction;
+    public bool lockOn;
 
     public bool analogMovement;
 
@@ -55,6 +57,11 @@ public class InputSystem : MonoBehaviour
         InterActionInput(value.isPressed);
     }
 
+    public void OnLockOn(InputValue value)
+    {
+        LockOnInput(value.isPressed);
+    }
+
 
     public void MoveInput(Vector2 newMoveDirection)
     {
@@ -89,6 +96,11 @@ public class InputSystem : MonoBehaviour
     public void InterActionInput(bool newSprintState)
     {
         interAction = newSprintState;
+    }
+
+    public void LockOnInput(bool newSprintState)
+    {
+        lockOn = newSprintState;
     }
 
     private void OnApplicationFocus(bool hasFocus)

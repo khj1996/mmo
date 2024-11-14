@@ -33,6 +33,7 @@ public class PlayerController : CreatureController
     private InputSystem _input;
     private GameObject _mainCamera;
 
+    private LockOn _lockOn;
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class PlayerController : CreatureController
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
     }
+
 
     #region 초기화
 
@@ -76,8 +78,8 @@ public class PlayerController : CreatureController
 
         #region IdleState
 
-        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => _input.crouch);
-        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
+        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !_lockOn.isFindTarget && _input.crouch);
+        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => !_lockOn.isFindTarget && _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
         playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
 
         #endregion
@@ -110,6 +112,7 @@ public class PlayerController : CreatureController
     {
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<InputSystem>();
+        _lockOn = GetComponent<LockOn>();
     }
 
     #endregion
@@ -159,7 +162,7 @@ public class PlayerController : CreatureController
         float targetSpeed = _input.sprint ? creatureData.sprintSpeed : creatureData.speed;
 
 
-        if (_input.crouch && Grounded)
+        if (_input.crouch && Grounded || _lockOn.isFindTarget)
         {
             targetSpeed = creatureData.crouchSpeed;
         }
@@ -193,7 +196,10 @@ public class PlayerController : CreatureController
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                 RotationSmoothTime);
 
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (!_lockOn.isFindTarget)
+            {
+                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            }
         }
 
 
@@ -230,6 +236,12 @@ public class PlayerController : CreatureController
 
             if (_input.jump && _jumpTimeoutDelta <= 0.0f)
             {
+                if (_lockOn.isFindTarget)
+                {
+                    _input.jump = false;
+                    return;
+                }
+                
                 _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
 
                 if (_hasAnimator)
