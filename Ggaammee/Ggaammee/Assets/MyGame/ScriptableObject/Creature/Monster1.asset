@@ -18,7 +18,7 @@ MonoBehaviour:
   attack: 15
   defense: 0
   attackSpeed: 2
-  speed: 15
+  speed: 5
   sprintSpeed: 0
   crouchSpeed: 0
   acceleration: 10
@@ -27,6 +27,8 @@ MonoBehaviour:
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
+  hpBarPos: {x: 0, y: 2.5, z: 0}
   sqrDetectionRange: 16
+  sqrChaseRange: 25
   dropItems: []
   exp: 0

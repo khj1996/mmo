@@ -9,8 +9,10 @@ public class MonsterData : CreatureData
     [Header("-------------------MonsterData--------------------")]
     public GameObject creatureModel;
 
+    public Vector3 hpBarPos;
 
     public float sqrDetectionRange;
+    public float sqrChaseRange;
 
     public List<DropItem> dropItems;
     public float exp;

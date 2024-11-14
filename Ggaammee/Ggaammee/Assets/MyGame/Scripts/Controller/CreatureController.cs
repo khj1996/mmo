@@ -8,13 +8,14 @@ public class CreatureController : MonoBehaviour
 {
     public CreatureData creatureData;
 
-    private float hp;
+    protected float hp;
+    protected bool isDie;
 
     public Animator animator;
-    protected CharacterController _controller;
-    protected bool _hasAnimator;
-    public Transform AttackPoint;
+    public Transform attackPoint;
 
+    protected bool _hasAnimator;
+    protected CharacterController _controller;
     protected Transform _targetTransform;
 
     protected virtual void Init()
@@ -27,9 +28,9 @@ public class CreatureController : MonoBehaviour
         Vector3 targetPosition = new Vector3(this._targetTransform.position.x, transform.position.y, this._targetTransform.position.z);
         Vector3 direction = (targetPosition - transform.position).normalized;
 
-        float distanceToLadder = Vector3.Distance(transform.position, targetPosition);
+        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
-        _controller.Move(direction * distanceToLadder);
+        _controller.Move(direction * distanceToTarget);
     }
 
     public void LookAtTarget(Vector3 targetVector)
@@ -37,5 +38,10 @@ public class CreatureController : MonoBehaviour
         Vector3 up = transform.rotation * Vector3.up;
 
         transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, targetVector, up), up) * transform.rotation;
+    }
+
+    public virtual void GetDamaged(float damage)
+    {
+        hp -= damage;
     }
 }

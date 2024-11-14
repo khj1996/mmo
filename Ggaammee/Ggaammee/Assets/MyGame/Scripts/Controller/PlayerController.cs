@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : CreatureController
@@ -15,7 +16,6 @@ public class PlayerController : CreatureController
     public bool Grounded = true;
     public bool isClimbing = false;
 
-    private PlayerStateMachine<PlayerController> playerStateMachine;
 
     private float _speed;
     private float _animationBlend;
@@ -27,12 +27,9 @@ public class PlayerController : CreatureController
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
 
-    private Util.CreatureState state;
-
-
+    private PlayerStateMachine<PlayerController> playerStateMachine;
     private InputSystem _input;
     private GameObject _mainCamera;
-
     private LockOn _lockOn;
 
     private void Awake()
@@ -60,7 +57,6 @@ public class PlayerController : CreatureController
         Managers.ObjectManager.RegisterPlayer(this);
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
-        state = Util.CreatureState.Idle;
     }
 
     private void InitFSM()
@@ -136,11 +132,8 @@ public class PlayerController : CreatureController
         targetDirection.x = 0;
         targetDirection.z = 0;
 
-        _verticalVelocity = 0;
-
         Grounded = true;
 
-        //LockAtTargetPsition();
         LookAtTarget(_targetTransform.transform.forward);
         if (_input.move == Vector2.zero)
             isMove = false;
@@ -160,41 +153,24 @@ public class PlayerController : CreatureController
         }
 
         float targetSpeed = _input.sprint ? creatureData.sprintSpeed : creatureData.speed;
-
-
-        if (_input.crouch && Grounded || _lockOn.isFindTarget)
-        {
-            targetSpeed = creatureData.crouchSpeed;
-        }
-
-
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+        targetSpeed = (_input.crouch && Grounded || _lockOn.isFindTarget) ? creatureData.crouchSpeed : targetSpeed;
+        targetSpeed = _input.move == Vector2.zero ? 0.0f : targetSpeed;
 
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-
         float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
-        if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-        {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = targetSpeed;
-        }
+        _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
+        _speed = Mathf.Round(_speed * 1000f) / 1000f;
 
         _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
         if (_animationBlend < 0.01f) _animationBlend = 0f;
 
         Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
         if (_input.move != Vector2.zero)
         {
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                RotationSmoothTime);
+            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 
             if (!_lockOn.isFindTarget)
             {
@@ -202,13 +178,8 @@ public class PlayerController : CreatureController
             }
         }
 
-
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
-
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-
+        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
         if (_hasAnimator)
         {
@@ -229,48 +200,16 @@ public class PlayerController : CreatureController
                 animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
             }
 
-            if (_verticalVelocity < 0.0f)
-            {
-                _verticalVelocity = -2f;
-            }
-
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-            {
-                if (_lockOn.isFindTarget)
-                {
-                    _input.jump = false;
-                    return;
-                }
-                
-                _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
-
-                if (_hasAnimator)
-                {
-                    animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
-                }
-
-                _input.jump = false;
-            }
-
-            if (_jumpTimeoutDelta >= 0.0f)
-            {
-                _jumpTimeoutDelta -= Time.deltaTime;
-            }
+            _verticalVelocity = _input.jump && _jumpTimeoutDelta <= 0.0f && !_lockOn.isFindTarget ? Mathf.Sqrt(-2.5f * creatureData.weight) : -2f;
+            _jumpTimeoutDelta = _input.jump ? JumpTimeout : _jumpTimeoutDelta - Time.deltaTime;
+            _input.jump = false;
         }
         else
         {
-            _jumpTimeoutDelta = JumpTimeout;
-
-            if (_fallTimeoutDelta >= 0.0f)
+            _fallTimeoutDelta -= Time.deltaTime;
+            if (_fallTimeoutDelta <= 0.0f && _hasAnimator)
             {
-                _fallTimeoutDelta -= Time.deltaTime;
-            }
-            else
-            {
-                if (_hasAnimator)
-                {
-                    animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
-                }
+                animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
             }
         }
 
@@ -299,14 +238,12 @@ public class PlayerController : CreatureController
         animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
         animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 1);
 
-
         while (animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1f)
         {
             yield return null;
         }
 
         animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 0);
-
         _AttackCoroutine = null;
     }
 
@@ -314,17 +251,14 @@ public class PlayerController : CreatureController
 
     #region 사다리
 
-    public bool isNearLadder = false;
-
-    public bool isUpLadder = false;
-    public bool isDownLadder = false;
+    private bool isNearLadder = false;
+    private bool isUpLadder = false;
+    private bool isDownLadder = false;
 
 
     private void NearLadderPosition(Collider other)
     {
-        Debug.Log(other.name);
         isNearLadder = true;
-
         _targetTransform = other.gameObject.transform;
     }
 
@@ -344,25 +278,13 @@ public class PlayerController : CreatureController
         LadderStart();
     }
 
-
     private void LadderStart()
     {
         animator.SetBool(AssignAnimationIDs.AnimIDLadder, true);
-        if (isUpLadder)
-        {
-            animator.SetTrigger(AssignAnimationIDs.AnimIDLadderUpStart);
-        }
-
-        if (isDownLadder)
-        {
-            animator.SetTrigger(AssignAnimationIDs.AnimIDLadderDownStart);
-        }
+        animator.SetTrigger(isUpLadder ? AssignAnimationIDs.AnimIDLadderUpStart : AssignAnimationIDs.AnimIDLadderDownStart);
 
         _input.interAction = false;
-        isUpLadder = false;
-        isDownLadder = false;
-
-        isNearLadder = false;
+        isUpLadder = isDownLadder = isNearLadder = false;
     }
 
     #endregion
@@ -444,11 +366,11 @@ public class PlayerController : CreatureController
 
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
-        List<CharacterController> monsters = GetMonstersInRange(AttackPoint.position);
+        List<CharacterController> monsters = GetMonstersInRange(attackPoint.position);
 
         foreach (CharacterController monster in monsters)
         {
-            Debug.Log("Found monster: " + monster.gameObject.name);
+            monster.gameObject.GetComponent<CreatureController>().GetDamaged(creatureData.attack);
         }
     }
 
@@ -474,7 +396,7 @@ public class PlayerController : CreatureController
             GroundedRadius);
 
         Gizmos.DrawSphere(
-            new Vector3(AttackPoint.position.x, AttackPoint.position.y - GroundedOffset, AttackPoint.position.z),
+            new Vector3(attackPoint.position.x, attackPoint.position.y - GroundedOffset, attackPoint.position.z),
             0.5f);
     }
 

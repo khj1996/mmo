@@ -61,6 +61,7 @@
     <Compile Include="Assets\ImprtAsset\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringBone.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\AnimationIDData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\HpBar.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />

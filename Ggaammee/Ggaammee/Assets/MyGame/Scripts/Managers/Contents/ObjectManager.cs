@@ -4,7 +4,7 @@ using UnityEngine;
 public class ObjectManager
 {
     public List<PlayerController> Players { get; set; } = new List<PlayerController>();
-    Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
+    public List<MonsterController> Monsters { get; set; } = new List<MonsterController>();
 
     public void RegisterPlayer(PlayerController player)
     {
