@@ -33,6 +33,7 @@ public class MonsterController : CreatureController
         stateMachine.AddState(new MonsterData.IdleState(this));
         stateMachine.AddState(new MonsterData.ChaseState(this));
         stateMachine.AddState(new MonsterData.AttackState(this));
+        stateMachine.AddState(new MonsterData.DeadState(this));
 
         #region 상태 전이 조건
 
@@ -90,7 +91,6 @@ public class MonsterController : CreatureController
     private void Update()
     {
         stateMachine.Update();
-        Debug.Log(stateMachine.CurrentState);
     }
 
     private float _speed;
@@ -138,8 +138,21 @@ public class MonsterController : CreatureController
 
     public void DropItem()
     {
-        Vector3 dropPosition = transform.position;
-        Managers.DropManager.DropItem(dropPosition);
+        List<MonsterData.DropItem> dropList = ((MonsterData)creatureData).dropItems;
+
+        foreach (var dropItem in dropList)
+        {
+            if (CheckDropItem(dropItem.dropRate))
+            {
+                Vector3 dropPosition = transform.position;
+                Managers.DropManager.DropItem(dropItem.itemData, dropPosition);
+            }
+        }
+    }
+
+    private bool CheckDropItem(int dropRate)
+    {
+        return Random.Range(0, 100) < dropRate;
     }
 
 

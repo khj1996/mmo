@@ -59,8 +59,8 @@ public class Managers : MonoBehaviour
     public void Init()
     {
         _obj = new ObjectManager();
-        _drop = new DropManager();
         _pool = new PoolManager();
+        _drop = new DropManager();
 
         Application.targetFrameRate = 60;
         isInit = true;

@@ -1,22 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 public class PoolManager
 {
-    private Transform poolContainerTransform;
-    private Dictionary<Type, Queue<Poolable>> pools;
+    private Transform poolContainerTransform = GameObject.FindWithTag("PoolContainer").transform;
+    private Dictionary<Type, Queue<Poolable>> pools = new();
+    private Dictionary<Type, AsyncOperationHandle<GameObject>> loadedPrefabs = new();
 
-    private void Awake()
+    private const int PREFAB_POOL_SIZE = 10;
+
+    public void PrewarmPools<T>() where T : Poolable
     {
-        pools = new Dictionary<Type, Queue<Poolable>>();
-        poolContainerTransform = GameObject.FindWithTag("PoolContainer").transform;
+        var type = typeof(T);
+
+        if (!pools.ContainsKey(type))
+        {
+            pools[type] = new Queue<Poolable>();
+        }
+
+
+        var handle = Addressables.LoadAssetAsync<GameObject>(type.Name);
+        handle.Completed += (op) =>
+        {
+            if (op.Status == AsyncOperationStatus.Succeeded)
+            {
+                GameObject prefab = op.Result;
+
+                for (int i = 0; i < PREFAB_POOL_SIZE; i++)
+                {
+                    T newItem = Object.Instantiate(prefab, poolContainerTransform).GetComponent<T>();
+                    newItem.OnReturnToPool();
+                    pools[type].Enqueue(newItem);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Failed to load Addressable prefab for {type.Name}");
+            }
+        };
     }
 
-    public T GetFromPool<T>(T prefab) where T : Poolable
+
+    public T GetFromPool<T>() where T : Poolable
     {
-        Type type = typeof(T);
+        var type = typeof(T);
 
         if (!pools.ContainsKey(type))
         {
@@ -31,8 +62,7 @@ public class PoolManager
             return (T)item;
         }
 
-        T newItem = Object.Instantiate(prefab, poolContainerTransform);
-        return newItem;
+        return null;
     }
 
     public void ReturnToPool(Poolable item)
@@ -44,7 +74,6 @@ public class PoolManager
             pools[type] = new Queue<Poolable>();
         }
 
-        item.gameObject.SetActive(false);
         item.OnReturnToPool();
         pools[type].Enqueue(item);
     }

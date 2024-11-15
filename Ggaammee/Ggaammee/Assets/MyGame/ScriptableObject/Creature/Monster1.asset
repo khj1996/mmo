@@ -31,6 +31,6 @@ MonoBehaviour:
   sqrDetectionRange: 16
   sqrChaseRange: 25
   dropItems:
-  - itemData: {fileID: 0}
-    dropRate: 0
+  - itemData: {fileID: 11400000, guid: 4eea58919299a194a9a91668e7e4d429, type: 2}
+    dropRate: 100
   exp: 0

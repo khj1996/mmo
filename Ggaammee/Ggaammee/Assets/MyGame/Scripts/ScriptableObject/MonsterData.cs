@@ -22,7 +22,7 @@ public class MonsterData : CreatureData
     public struct DropItem
     {
         public ItemData itemData;
-        public float dropRate;
+        public int dropRate;
     }
 
     public class IdleState : State<MonsterController>
@@ -95,6 +95,7 @@ public class MonsterData : CreatureData
         public override void OnEnter()
         {
             _owner.DropItem();
+            _owner.gameObject.SetActive(false);
         }
 
         public override void OnExit()

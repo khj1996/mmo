@@ -754,6 +754,9 @@
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Toonshader">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Toonshader.dll</HintPath>
     </Reference>
@@ -762,6 +765,9 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
@@ -820,6 +826,9 @@
     <Reference Include="Unity.FilmInternalUtilities">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
     </Reference>
@@ -856,8 +865,14 @@
     <Reference Include="Cinemachine">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
