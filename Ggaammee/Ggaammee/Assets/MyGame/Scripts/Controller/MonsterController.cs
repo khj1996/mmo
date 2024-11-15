@@ -8,8 +8,6 @@ public class MonsterController : CreatureController
 
     private PlayerStateMachine<MonsterController> stateMachine;
 
-    [SerializeField] private HpBar _hpBar;
-
     #region 초기화
 
     private void Start()
@@ -24,9 +22,9 @@ public class MonsterController : CreatureController
         InitComponent();
 
         hp = creatureData.maxHp;
+        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
         _hpBar.gameObject.transform.position = transform.TransformPoint(((MonsterData)creatureData).hpBarPos);
 
-        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
     }
 
     private void InitFSM()
@@ -141,6 +139,17 @@ public class MonsterController : CreatureController
 
         _AttackCoroutine = null;
     }
+    
+    
+    protected virtual void OnHit(AnimationEvent animationEvent)
+    {
+        List<CharacterController> players = GetTargetInRange(attackPoint.position, LayerData.PlayerLayer);
+
+        foreach (CharacterController monster in players)
+        {
+            monster.gameObject.GetComponent<PlayerController>().GetDamaged(creatureData.attack);
+        }
+    }
 
     #endregion
 
@@ -148,7 +157,6 @@ public class MonsterController : CreatureController
     {
         base.GetDamaged(damage);
         Debug.Log($"남은 체력 {hp}");
-        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
 
         if (hp <= 0)
         {

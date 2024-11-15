@@ -9,6 +9,7 @@ TagManager:
   - StartDown
   - EndUp
   - EndDown
+  - NPC
   layers:
   - Default
   - TransparentFX

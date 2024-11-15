@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 public class CreatureController : MonoBehaviour
 {
     public CreatureData creatureData;
+    [SerializeField] protected HpBar _hpBar;
 
     protected float hp;
     protected bool isDie;
@@ -40,8 +41,28 @@ public class CreatureController : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, targetVector, up), up) * transform.rotation;
     }
 
+    public List<CharacterController> GetTargetInRange(Vector3 position, int targetLayer, float radius = 0.5f)
+    {
+        List<CharacterController> targetsInRange = new List<CharacterController>();
+
+        Collider[] colliders = Physics.OverlapSphere(position, radius, targetLayer);
+
+        foreach (Collider collider in colliders)
+        {
+            CharacterController target = collider.GetComponent<CharacterController>();
+
+            if (target != null)
+            {
+                targetsInRange.Add(target);
+            }
+        }
+
+        return targetsInRange;
+    }
+
     public virtual void GetDamaged(float damage)
     {
         hp -= damage;
+        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
     }
 }

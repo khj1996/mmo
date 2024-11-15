@@ -54,6 +54,8 @@ public class PlayerController : CreatureController
         InitFSM();
         InitComponent();
 
+        hp = creatureData.maxHp;
+        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
         Managers.ObjectManager.RegisterPlayer(this);
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
