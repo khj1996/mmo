@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
-public class PlayerStateMachine<T> where T : CreatureController
+public class CreatureStateMachine<T> where T : CreatureController
 {
     private CreatureData.State<T> _currentState;
     private StateCache<T> _stateCache = new StateCache<T>();
@@ -28,7 +26,17 @@ public class PlayerStateMachine<T> where T : CreatureController
         _transitions[(typeof(U), typeof(V))] = condition;
     }
 
-    // 상태 업데이트 및 전이 체크
+    public void AddGlobalTransition<V>(Func<bool> condition) where V : CreatureData.State<T>
+    {
+        foreach (var stateType in _stateCache.GetAllStateTypes())
+        {
+            if (stateType != typeof(V)) // 자기 자신으로 전환은 추가하지 않음
+            {
+                _transitions[(stateType, typeof(V))] = condition;
+            }
+        }
+    }
+
     public void Update()
     {
         foreach (var transition in _transitions)
@@ -50,7 +58,7 @@ public class StateCache<T> where T : CreatureController
 
     public void AddState(CreatureData.State<T> state)
     {
-        if (!_stateCache.TryGetValue(state.GetType(), out _))
+        if (!_stateCache.ContainsKey(state.GetType()))
         {
             _stateCache.Add(state.GetType(), state);
         }
@@ -59,5 +67,10 @@ public class StateCache<T> where T : CreatureController
     public CreatureData.State<T> GetState(Type stateType)
     {
         return _stateCache[stateType];
+    }
+
+    public IEnumerable<Type> GetAllStateTypes()
+    {
+        return _stateCache.Keys;
     }
 }

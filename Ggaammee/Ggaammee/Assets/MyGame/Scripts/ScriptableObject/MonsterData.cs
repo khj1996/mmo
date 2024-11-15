@@ -21,8 +21,8 @@ public class MonsterData : CreatureData
     [Serializable]
     public struct DropItem
     {
-        public int Id;
-        public float DropRate;
+        public ItemData itemData;
+        public float dropRate;
     }
 
     public class IdleState : State<MonsterController>
@@ -83,6 +83,26 @@ public class MonsterData : CreatureData
         public override void OnUpdate()
         {
             _owner.CheckAttack();
+        }
+    }
+
+    public class DeadState : State<MonsterController>
+    {
+        public DeadState(MonsterController owner) : base(owner)
+        {
+        }
+
+        public override void OnEnter()
+        {
+            _owner.DropItem();
+        }
+
+        public override void OnExit()
+        {
+        }
+
+        public override void OnUpdate()
+        {
         }
     }
 }

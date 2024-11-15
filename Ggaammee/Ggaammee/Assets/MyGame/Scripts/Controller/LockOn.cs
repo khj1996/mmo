@@ -152,9 +152,7 @@ public class LockOn : MonoBehaviour
         lockOnImage.position = _mainCamera.WorldToScreenPoint(currentTargetPosition);
 
         Vector3 dir = (currentTargetPosition - transform.position).normalized;
-// dir.y = 0.0f; // y축을 0으로 고정해서 xz 평면상에서만 회전하도록 설정
-
-// 또는 현재 y 값을 유지하는 방식
+        
         dir.y = transform.forward.y; 
 
         transform.forward = Vector3.Lerp(transform.forward, dir, Time.deltaTime * lookAtSmoothing);

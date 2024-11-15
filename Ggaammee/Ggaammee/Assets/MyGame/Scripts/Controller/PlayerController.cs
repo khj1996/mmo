@@ -27,7 +27,7 @@ public class PlayerController : CreatureController
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
 
-    private PlayerStateMachine<PlayerController> playerStateMachine;
+    private CreatureStateMachine<PlayerController> creatureStateMachine;
     private InputSystem _input;
     private GameObject _mainCamera;
     private LockOn _lockOn;
@@ -63,47 +63,46 @@ public class PlayerController : CreatureController
 
     private void InitFSM()
     {
-        playerStateMachine = new PlayerStateMachine<PlayerController>();
+        creatureStateMachine = new CreatureStateMachine<PlayerController>();
 
-        // FSM 상태 등록
-        playerStateMachine.AddState(new PlayerData.IdleAndMoveState(this));
-        playerStateMachine.AddState(new PlayerData.CrouchState(this));
-        playerStateMachine.AddState(new PlayerData.JumpState(this));
-        playerStateMachine.AddState(new PlayerData.GetHitState(this));
-        playerStateMachine.AddState(new PlayerData.LadderState(this));
+        creatureStateMachine.AddState(new PlayerData.IdleAndMoveState(this));
+        creatureStateMachine.AddState(new PlayerData.CrouchState(this));
+        creatureStateMachine.AddState(new PlayerData.JumpState(this));
+        creatureStateMachine.AddState(new PlayerData.GetHitState(this));
+        creatureStateMachine.AddState(new PlayerData.LadderState(this));
 
         #region 상태 전이 조건
 
         #region IdleState
 
-        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !_lockOn.isFindTarget && _input.crouch);
-        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => !_lockOn.isFindTarget && _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
-        playerStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
+        creatureStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !_lockOn.isFindTarget && _input.crouch);
+        creatureStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => !_lockOn.isFindTarget && _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
+        creatureStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
 
         #endregion
 
 
         #region CrouchState
 
-        playerStateMachine.AddTransition<PlayerData.CrouchState, PlayerData.IdleAndMoveState>(() => !_input.crouch || !Grounded);
+        creatureStateMachine.AddTransition<PlayerData.CrouchState, PlayerData.IdleAndMoveState>(() => !_input.crouch || !Grounded);
 
         #endregion
 
         #region JumpState
 
-        playerStateMachine.AddTransition<PlayerData.JumpState, PlayerData.IdleAndMoveState>(() => Grounded);
+        creatureStateMachine.AddTransition<PlayerData.JumpState, PlayerData.IdleAndMoveState>(() => Grounded);
 
         #endregion
 
         #region LadderState
 
-        playerStateMachine.AddTransition<PlayerData.LadderState, PlayerData.IdleAndMoveState>(() => !isClimbing);
+        creatureStateMachine.AddTransition<PlayerData.LadderState, PlayerData.IdleAndMoveState>(() => !isClimbing);
 
         #endregion
 
         #endregion
 
-        playerStateMachine.ChangeState(typeof(PlayerData.IdleAndMoveState));
+        creatureStateMachine.ChangeState(typeof(PlayerData.IdleAndMoveState));
     }
 
     private void InitComponent()
@@ -118,7 +117,7 @@ public class PlayerController : CreatureController
 
     private void Update()
     {
-        playerStateMachine.Update();
+        creatureStateMachine.Update();
     }
 
 

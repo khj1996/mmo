@@ -6,7 +6,7 @@ public class MonsterController : CreatureController
 {
     public Transform lockOnPos;
 
-    private PlayerStateMachine<MonsterController> stateMachine;
+    private CreatureStateMachine<MonsterController> stateMachine;
 
     #region 초기화
 
@@ -24,12 +24,11 @@ public class MonsterController : CreatureController
         hp = creatureData.maxHp;
         _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
         _hpBar.gameObject.transform.position = transform.TransformPoint(((MonsterData)creatureData).hpBarPos);
-
     }
 
     private void InitFSM()
     {
-        stateMachine = new PlayerStateMachine<MonsterController>();
+        stateMachine = new CreatureStateMachine<MonsterController>();
 
         stateMachine.AddState(new MonsterData.IdleState(this));
         stateMachine.AddState(new MonsterData.ChaseState(this));
@@ -37,16 +36,8 @@ public class MonsterController : CreatureController
 
         #region 상태 전이 조건
 
-        #region IdleState
-
-        stateMachine.AddTransition<MonsterData.IdleState, MonsterData.ChaseState>(CheckCanChase);
-
-        #endregion
-
-
         #region ChaseState
 
-        stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.AttackState>(CheckCanAttack);
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
 
         #endregion
@@ -55,6 +46,13 @@ public class MonsterController : CreatureController
 
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => _AttackCoroutine == null && !CheckCanAttack());
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !_targetTransform);
+
+        #endregion
+
+        #region 전역
+
+        stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanChase);
+        stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
 
         #endregion
 
@@ -91,7 +89,6 @@ public class MonsterController : CreatureController
 
     private void Update()
     {
-        //_bt.Evaluate(); // BT에서 조건을 평가
         stateMachine.Update();
         Debug.Log(stateMachine.CurrentState);
     }
@@ -119,7 +116,6 @@ public class MonsterController : CreatureController
 
     public void CheckAttack()
     {
-        //공격 쿨타임이거나 모션 진행중
         if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + creatureData.attackSpeed)) return;
 
         _AttackCoroutine = StartCoroutine(AttackCoroutine());
@@ -139,8 +135,14 @@ public class MonsterController : CreatureController
 
         _AttackCoroutine = null;
     }
-    
-    
+
+    public void DropItem()
+    {
+        Vector3 dropPosition = transform.position;
+        Managers.DropManager.DropItem(dropPosition);
+    }
+
+
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
         List<CharacterController> players = GetTargetInRange(attackPoint.position, LayerData.PlayerLayer);

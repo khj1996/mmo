@@ -30,10 +30,22 @@ public class Managers : MonoBehaviour
 
 
     private ObjectManager _obj;
+    private DropManager _drop;
+    private PoolManager _pool;
 
     public static ObjectManager ObjectManager
     {
         get { return Instance._obj; }
+    }
+
+    public static DropManager DropManager
+    {
+        get { return Instance._drop; }
+    }
+
+    public static PoolManager PoolManager
+    {
+        get { return Instance._pool; }
     }
 
     public bool isInit = false;
@@ -47,6 +59,8 @@ public class Managers : MonoBehaviour
     public void Init()
     {
         _obj = new ObjectManager();
+        _drop = new DropManager();
+        _pool = new PoolManager();
 
         Application.targetFrameRate = 60;
         isInit = true;

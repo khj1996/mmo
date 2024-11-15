@@ -10,6 +10,7 @@ TagManager:
   - EndUp
   - EndDown
   - NPC
+  - PoolContainer
   layers:
   - Default
   - TransparentFX
