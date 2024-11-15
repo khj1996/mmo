@@ -37,6 +37,12 @@ public class MonsterController : CreatureController
 
         #region 상태 전이 조건
 
+        #region IdleState
+
+        stateMachine.AddTransition<MonsterData.IdleState, MonsterData.ChaseState>(() => CheckCanChase());
+
+        #endregion
+
         #region ChaseState
 
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
@@ -52,7 +58,7 @@ public class MonsterController : CreatureController
 
         #region 전역
 
-        stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanChase);
+        stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanAttack);
         stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
 
         #endregion

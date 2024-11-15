@@ -30,7 +30,7 @@ public class CreatureStateMachine<T> where T : CreatureController
     {
         foreach (var stateType in _stateCache.GetAllStateTypes())
         {
-            if (stateType != typeof(V)) // 자기 자신으로 전환은 추가하지 않음
+            if (stateType != typeof(V))
             {
                 _transitions[(stateType, typeof(V))] = condition;
             }
