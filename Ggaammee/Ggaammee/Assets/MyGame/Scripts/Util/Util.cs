@@ -1,9 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Util
+public static class Util
 {
+    public enum UIEvent
+    {
+        Click,
+        Drag,
+    }
+
     public enum CreatureState
     {
         Idle = 0,
@@ -15,10 +23,24 @@ public class Util
         GetHit = 6,
         Die = 7,
     }
-    
+
     public static class StaticValues
     {
-        public static readonly int InventorySize = 76;
+        public static readonly int InventorySize = 25;
+    }
+
+    public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
+    {
+        T component = go.GetComponent<T>();
+        if (component == null)
+            component = go.AddComponent<T>();
+        return component;
+    }
+
+
+    public static void BindEvent(this GameObject go, Action<PointerEventData> action, UIEvent type = UIEvent.Click)
+    {
+        UI_Base.BindEvent(go, action, type);
     }
 }
 

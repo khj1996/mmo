@@ -31,4 +31,6 @@ public class ArmorItemData : ItemData
 [CreateAssetMenu(fileName = "ItemData", menuName = "Inventory/UsableItemData")]
 public class UsableItemData : ItemData
 {
+    public bool Stackable;
+    public int maxStack;
 }

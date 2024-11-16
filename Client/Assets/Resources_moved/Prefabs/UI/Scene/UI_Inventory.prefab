@@ -461,18 +461,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  visibleRectPadding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 10
+    m_Right: 10
+    m_Top: 15
+    m_Bottom: 15
   scrollRect: {fileID: 1741518441034797433}
-  _RectTransform: {fileID: 6982656429221555657}
   spacingHeight: 6
+  _RectTransform: {fileID: 6982656429221555657}
   ItemPosY: []
   _goldTMP: {fileID: 3205083064447915023}
 --- !u!1 &7350243111874998751
@@ -512,7 +507,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -0.5000305}
   m_SizeDelta: {x: 0, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4427862210257076096

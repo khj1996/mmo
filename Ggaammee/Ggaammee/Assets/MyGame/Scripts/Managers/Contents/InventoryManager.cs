@@ -6,7 +6,7 @@ using UnityEngine;
 public class InventoryManager
 {
     public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
-    public Action<Item> AddNewItemAction;
+    public Action ChangeItemAction;
 
     public int SlotLen
     {
@@ -30,6 +30,9 @@ public class InventoryManager
         }
 
         Items.Add(newItme.ItemId, newItme);
+        
+        
+        ChangeItemAction?.Invoke();
         return true;
     }
 
@@ -52,10 +55,7 @@ public class InventoryManager
             addedItem.Add(newItme);
         }
 
-        foreach (var item in addedItem)
-        {
-            AddNewItemAction?.Invoke(item);
-        }
+        ChangeItemAction?.Invoke();
     }
 
     public Item Get(int Id)

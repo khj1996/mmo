@@ -158,7 +158,6 @@ public class PlayerController : CreatureController
         targetSpeed = _input.move == Vector2.zero ? 0.0f : targetSpeed;
 
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-        float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
         _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);

@@ -21,7 +21,11 @@ public class Item
     {
         get => data.name;
     }
-
+    
+    public Sprite ItemSprite
+    {
+        get => data.itemSprite;
+    }
 
     private int _count;
     private int _slot;
@@ -48,7 +52,6 @@ public class Item
 
 
     public ItemType ItemType { get; private set; }
-    public bool Stackable { get; protected set; }
 
 
     public Item(ItemType itemType)
@@ -122,6 +125,17 @@ public class Armor : Item
 
 public class Consumable : Item
 {
+    public int currentStack;
+    public bool Stackable
+    {
+        get => ((UsableItemData)data).Stackable;
+    }
+
+    public int MaxStack
+    {
+        get => ((UsableItemData)data).maxStack;
+    }
+
     public Consumable(ItemData _itemData) : base(ItemType.Usable)
     {
         Init(_itemData);
