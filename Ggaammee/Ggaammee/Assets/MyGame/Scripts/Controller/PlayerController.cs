@@ -147,7 +147,7 @@ public class PlayerController : CreatureController
 
     public void Move()
     {
-        if (isNearLadder && _input.interAction)
+        if (isClimbing)
         {
             isClimbing = true;
             return;
@@ -284,8 +284,69 @@ public class PlayerController : CreatureController
         animator.SetBool(AssignAnimationIDs.AnimIDLadder, true);
         animator.SetTrigger(isUpLadder ? AssignAnimationIDs.AnimIDLadderUpStart : AssignAnimationIDs.AnimIDLadderDownStart);
 
-        _input.interAction = false;
+        _input.interaction = false;
         isUpLadder = isDownLadder = isNearLadder = false;
+    }
+
+    #endregion
+
+    #region 상호작용
+
+    public void Interact()
+    {
+        if (isNearLadder && _input.interaction)
+        {
+            isClimbing = true;
+            return;
+        }
+
+        if (_input.interaction && _currentDropItems.Count > 0)
+        {
+            DropItem closestItem = GetClosestDropItem();
+            if (closestItem)
+            {
+                closestItem.Interact(this);
+                _currentDropItems.Remove(closestItem);
+            }
+        }
+    }
+
+    #endregion
+
+    #region 아이템
+
+    private List<DropItem> _currentDropItems = new List<DropItem>();
+
+    public bool AddItemToInventory(ItemData itemData)
+    {
+        if (Managers.InventoryManager.Add(itemData))
+        {
+            Debug.Log($"{itemData.name} was added to inventory.");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Failed to add item to inventory.");
+            return false;
+        }
+    }
+
+    private DropItem GetClosestDropItem()
+    {
+        DropItem closestItem = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var item in _currentDropItems)
+        {
+            float distance = Vector3.Distance(transform.position, item.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestItem = item;
+            }
+        }
+
+        return closestItem;
     }
 
     #endregion
@@ -325,7 +386,15 @@ public class PlayerController : CreatureController
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("StartDown"))
+        if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
+        {
+            Debug.Log("아이템 진입");
+            if (!_currentDropItems.Contains(dropItem))
+            {
+                _currentDropItems.Add(dropItem);
+            }
+        }
+        else if (other.CompareTag("StartDown"))
         {
             NearLadderPosition(other);
 
@@ -350,6 +419,15 @@ public class PlayerController : CreatureController
         else
         {
             isNearLadder = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
+        {
+            Debug.Log("아이템 탈출");
+            _currentDropItems.Remove(dropItem);
         }
     }
 

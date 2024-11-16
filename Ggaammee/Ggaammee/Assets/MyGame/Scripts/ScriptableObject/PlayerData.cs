@@ -22,6 +22,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
+            _owner.Interact();
             _owner.JumpAndGravity();
             _owner.GroundedCheck();
             _owner.CheckAttack();
@@ -47,6 +48,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
+            _owner.Interact();
             _owner.CheckAttack();
             _owner.GroundedCheck();
             _owner.Move();
@@ -69,6 +71,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
+            _owner.Interact();
             _owner.JumpAndGravity();
             _owner.GroundedCheck();
             _owner.Move();

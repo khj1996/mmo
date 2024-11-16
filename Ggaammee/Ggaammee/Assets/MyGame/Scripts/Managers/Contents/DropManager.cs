@@ -4,12 +4,12 @@ public class DropManager
 {
     public DropManager()
     {
-        Managers.PoolManager.PrewarmPools<Item>();
+        Managers.PoolManager.PrewarmPools<DropItem>();
     }
 
     public void DropItem(ItemData itemData, Vector3 dropPosition)
     {
-        var item = Managers.PoolManager.GetFromPool<Item>();
+        var item = Managers.PoolManager.GetFromPool<DropItem>();
 
         Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), 0.5f, Random.Range(-1f, 1f));
         Vector3 dropForce = randomOffset.normalized * Random.Range(2f, 5f);

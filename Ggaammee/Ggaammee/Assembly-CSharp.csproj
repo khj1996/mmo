@@ -56,6 +56,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\NPCDialogue.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\CreatureData.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Util.cs" />
@@ -67,12 +68,13 @@
     <Compile Include="Assets\MyGame\Scripts\SpringBone.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DropManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\AnimationIDData.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Util\Item.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\DropItem.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\Contents\InventoryManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\DialogueModule.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\BehaviorTree.cs" />
@@ -824,14 +826,14 @@
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.FilmInternalUtilities">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Addressables.Editor">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
@@ -839,11 +841,11 @@
     <Reference Include="Unity.FilmInternalUtilities.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Toonshader.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Toonshader.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="PPv2URPConverters">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>

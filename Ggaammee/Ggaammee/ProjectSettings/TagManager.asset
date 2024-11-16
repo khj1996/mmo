@@ -11,6 +11,7 @@ TagManager:
   - EndDown
   - NPC
   - PoolContainer
+  - Item
   layers:
   - Default
   - TransparentFX

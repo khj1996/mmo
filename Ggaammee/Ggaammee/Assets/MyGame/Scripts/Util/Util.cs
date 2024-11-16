@@ -15,6 +15,11 @@ public class Util
         GetHit = 6,
         Die = 7,
     }
+    
+    public static class StaticValues
+    {
+        public static readonly int InventorySize = 76;
+    }
 }
 
 public static class LayerData

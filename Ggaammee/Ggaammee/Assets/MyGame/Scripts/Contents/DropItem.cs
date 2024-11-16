@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Item : Poolable
+public class DropItem : Poolable
 {
     private Rigidbody _rigidbody;
     [SerializeField] private ItemData _itemData;
@@ -27,5 +27,13 @@ public class Item : Poolable
         _itemData = itemData;
         gameObject.SetActive(true);
         _rigidbody.AddForce(force, ForceMode.Impulse);
+    }
+
+    public void Interact(PlayerController player)
+    {
+        if (player.AddItemToInventory(_itemData))
+        {
+            Managers.PoolManager.ReturnToPool(this); 
+        }
     }
 }

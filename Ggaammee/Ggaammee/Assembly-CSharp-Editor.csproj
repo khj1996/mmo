@@ -820,14 +820,14 @@
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.FilmInternalUtilities">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Addressables.Editor">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
@@ -835,11 +835,11 @@
     <Reference Include="Unity.FilmInternalUtilities.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.FilmInternalUtilities.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Toonshader.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Toonshader.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="PPv2URPConverters">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>

@@ -10,7 +10,7 @@ public class InputSystem : MonoBehaviour
     public bool crouch;
     public bool sprint;
     public bool attack;
-    public bool interAction;
+    [FormerlySerializedAs("interAction")] public bool interaction;
     public bool lockOn;
 
     public bool analogMovement;
@@ -95,7 +95,7 @@ public class InputSystem : MonoBehaviour
 
     public void InterActionInput(bool newSprintState)
     {
-        interAction = newSprintState;
+        interaction = newSprintState;
     }
 
     public void LockOnInput(bool newSprintState)
