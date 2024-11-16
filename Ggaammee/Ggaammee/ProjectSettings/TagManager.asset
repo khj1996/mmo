@@ -12,6 +12,7 @@ TagManager:
   - NPC
   - PoolContainer
   - Item
+  - InventorySlot
   layers:
   - Default
   - TransparentFX

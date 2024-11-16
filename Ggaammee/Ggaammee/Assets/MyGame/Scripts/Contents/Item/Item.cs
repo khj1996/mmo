@@ -2,7 +2,47 @@
 using UnityEngine;
 
 
-public class Item
+public abstract class Item
+{
+    public ItemData Data { get; private set; }
+
+    public Item(ItemData data) => Data = data;
+    
+    private int _slot;
+    
+    public int Slot
+    {
+        get { return _slot; }
+        set { _slot = value; }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*public class Item
 {
     public ItemData data;
     public Action UseItem;
@@ -21,11 +61,21 @@ public class Item
     {
         get => data.name;
     }
-    
+
     public Sprite ItemSprite
     {
         get => data.itemSprite;
     }
+
+    public bool Stackable
+    {
+        get => ((UsableItemData)data).Stackable;
+    }
+    public bool IsMax
+    {
+        get => ItemData.;
+    }
+    
 
     private int _count;
     private int _slot;
@@ -51,34 +101,23 @@ public class Item
     }
 
 
-    public ItemType ItemType { get; private set; }
 
 
-    public Item(ItemType itemType)
+    public Item(ItemData _data)
     {
-        ItemType = itemType;
+        data = _data;
     }
 
     public static Item MakeItem(ItemData itemData)
     {
-        Item item = null;
-
-
-        switch (itemData.itemType)
+        Item item = itemData switch
         {
-            case ItemType.Weapon:
-                item = new Weapon(itemData);
-                break;
-            case ItemType.Armor:
-                item = new Armor(itemData);
-                break;
-            case ItemType.Usable:
-                item = new Consumable(itemData);
-                break;
-            case ItemType.Currency:
-                item = new Currency(itemData);
-                break;
-        }
+            WeaponItemData weaponData => new Weapon(weaponData),
+            ArmorItemData armorData => new Armor(armorData),
+            UsableItemData usableData => new Consumable(usableData),
+            CurrencyItemData currencyData => new Currency(currencyData),
+            _ => null
+        };
 
         if (item != null)
         {
@@ -89,23 +128,23 @@ public class Item
 
         return item;
     }
+
 }
 
 public class Weapon : Item
 {
-    public Weapon(ItemData _itemData) : base(ItemType.Weapon)
-    {
-        Init(_itemData);
-    }
-
-    void Init(ItemData _itemData)
+    public Weapon(ItemData _itemData) : base(_itemData)
     {
         data = _itemData;
+        UseItem += OnUseItem;
+    }
 
-
-        UseItem += () => { Debug.Log("장착"); };
+    private void OnUseItem()
+    {
+        Debug.Log("장착");
     }
 }
+
 
 public class Armor : Item
 {
@@ -126,10 +165,7 @@ public class Armor : Item
 public class Consumable : Item
 {
     public int currentStack;
-    public bool Stackable
-    {
-        get => ((UsableItemData)data).Stackable;
-    }
+
 
     public int MaxStack
     {
@@ -166,4 +202,4 @@ public class Currency : Item
 
         UseItem += () => { Debug.Log("장착"); };
     }
-}
+}*/

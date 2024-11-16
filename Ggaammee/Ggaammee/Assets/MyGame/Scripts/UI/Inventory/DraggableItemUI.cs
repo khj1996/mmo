@@ -1,23 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class DraggableItem : MonoBehaviour
+public class DraggableItem : Singleton<DraggableItem>
 {
-    public Image itemIcon;
+    public bool isDragItem =false;
+    public Image _image;
+    private RectTransform _rectTransform;
 
-    public void Show(Sprite icon)
+    private Item tmpItem;
+
+    public void StartDrag(Item item)
     {
-        itemIcon.sprite = icon;
-        itemIcon.enabled = true;
+        transform.position = Input.mousePosition;
+        _image.gameObject.SetActive(true);
+        _image.sprite = item.Data.itemSprite;
     }
-
-    public void SetPosition(Vector2 position)
+    
+    public void EndDrag()
     {
-        transform.position = position;
-    }
-
-    public void Hide()
-    {
-        itemIcon.enabled = false;
+        _image.sprite = null;
+        _image.gameObject.SetActive(false);
     }
 }

@@ -61,6 +61,11 @@ public class InputSystem : MonoBehaviour
     {
         LockOnInput(value.isPressed);
     }
+    
+    public void OnCursorLock(InputValue value)
+    {
+        CursorLockInput();
+    }
 
 
     public void MoveInput(Vector2 newMoveDirection)
@@ -88,19 +93,25 @@ public class InputSystem : MonoBehaviour
         attack = newAttackState;
     }
 
-    public void SprintInput(bool newSprintState)
+    public void SprintInput(bool newValue)
     {
-        sprint = newSprintState;
+        sprint = newValue;
     }
 
-    public void InterActionInput(bool newSprintState)
+    public void InterActionInput(bool newValue)
     {
-        interaction = newSprintState;
+        interaction = newValue;
     }
 
-    public void LockOnInput(bool newSprintState)
+    public void LockOnInput(bool newValue)
     {
-        lockOn = newSprintState;
+        lockOn = newValue;
+    }
+    
+    public void CursorLockInput()
+    {
+        cursorLocked = !cursorLocked;
+        SetCursorState(cursorLocked);
     }
 
     private void OnApplicationFocus(bool hasFocus)

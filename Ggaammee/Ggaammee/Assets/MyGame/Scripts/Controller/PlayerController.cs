@@ -117,6 +117,7 @@ public class PlayerController : CreatureController
 
     private void Update()
     {
+        Debug.Log(creatureStateMachine.CurrentState);
         creatureStateMachine.Update();
     }
 
@@ -200,16 +201,42 @@ public class PlayerController : CreatureController
                 animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
             }
 
-            _verticalVelocity = _input.jump && _jumpTimeoutDelta <= 0.0f && !_lockOn.isFindTarget ? Mathf.Sqrt(-2.5f * creatureData.weight) : -2f;
-            _jumpTimeoutDelta = _input.jump ? JumpTimeout : _jumpTimeoutDelta - Time.deltaTime;
-            _input.jump = false;
+            if (_verticalVelocity < 0.0f)
+            {
+                _verticalVelocity = -2f;
+            }
+
+            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+            {
+                _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
+
+                if (_hasAnimator)
+                {
+                    animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
+                }
+
+                _input.jump = false;
+            }
+
+            if (_jumpTimeoutDelta >= 0.0f)
+            {
+                _jumpTimeoutDelta -= Time.deltaTime;
+            }
         }
         else
         {
-            _fallTimeoutDelta -= Time.deltaTime;
-            if (_fallTimeoutDelta <= 0.0f && _hasAnimator)
+            _jumpTimeoutDelta = JumpTimeout;
+
+            if (_fallTimeoutDelta >= 0.0f)
             {
-                animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
+                _fallTimeoutDelta -= Time.deltaTime;
+            }
+            else
+            {
+                if (_hasAnimator)
+                {
+                    animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
+                }
             }
         }
 
@@ -318,7 +345,7 @@ public class PlayerController : CreatureController
 
     public bool AddItemToInventory(ItemData itemData)
     {
-        if (Managers.InventoryManager.Add(itemData))
+        if (Managers.InventoryManager.Add(itemData) >= 0)
         {
             Debug.Log($"{itemData.name} was added to inventory.");
             return true;

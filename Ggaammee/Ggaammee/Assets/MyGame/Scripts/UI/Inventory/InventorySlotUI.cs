@@ -5,36 +5,36 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotUI : UI_Base, IPointerDownHandler, IPointerUpHandler
+public class InventorySlotUI : UI_Base, IPointerDownHandler
 {
     [SerializeField] Image _icon = null;
-
     [SerializeField] Image _frame = null;
-
     [SerializeField] TMP_Text _quantity = null;
 
     private Item _item = null;
 
+
+    public Action actionLongPress;
     public Action actionShortPress;
+    public Action actionBeginDrag;
 
     private bool isInput = false;
     private bool startDrag = false;
 
     public override void Init()
     {
-        _icon.gameObject.BindEvent(_ =>
+        actionShortPress += UseItem;
+    }
+
+    public void UseItem()
+    {
+        if (_item == null)
+            return;
+
+        if (_item is UsableItem usableItem)
         {
-            if (startDrag || _item == null)
-                return;
-            if (_item == null)
-            {
-                Debug.Log("설명 뜨게 할수도 있음?");
-            }
-            else
-            {
-                _item.UseItem();
-            }
-        });
+            usableItem.Use();
+        }
     }
 
     public void SetItem(Item item)
@@ -48,14 +48,16 @@ public class InventorySlotUI : UI_Base, IPointerDownHandler, IPointerUpHandler
         else
         {
             _item = item;
+            _icon.sprite = item.Data.itemSprite;
+            if (item is StackableItem ci)
+            {
+                _quantity.text = ci.Count.ToString();
+                _quantity.gameObject.SetActive(true);
+            }
 
-            _icon.sprite = item.ItemSprite;
-
-            _quantity.text = item.Count.ToString();
 
             _icon.gameObject.SetActive(true);
-            _frame.gameObject.SetActive(item.Equipped);
-            _quantity.gameObject.SetActive(_item.ItemType == ItemType.Usable);
+            //_frame.gameObject.SetActive(item.Equipped);
         }
     }
 
@@ -69,24 +71,37 @@ public class InventorySlotUI : UI_Base, IPointerDownHandler, IPointerUpHandler
         float waitTime = 0;
         var startPos = Input.mousePosition;
         Vector3 mousePos;
+        bool actionPress = false;
         while (Input.GetMouseButton(0))
         {
             waitTime += Time.deltaTime;
             await UniTask.Yield();
             mousePos = Input.mousePosition;
-            if ((startPos - mousePos).y > 30 || (startPos - mousePos).y < -30)
+            if (Vector3.Distance(startPos, mousePos) > 30)
             {
-                startDrag = true;
+                if (!startDrag)
+                {
+                    actionBeginDrag?.Invoke();
+                    startDrag = true;
+                }
+
                 break;
             }
 
-            if (waitTime > 0.3f)
-                break;
+            if (waitTime > 0.3f && !actionPress)
+            {
+                actionPress = true;
+                actionLongPress?.Invoke();
+            }
         }
 
-        if (!startDrag)
+        if (!startDrag && !actionPress)
         {
-            if (waitTime < 0.3f)
+            if (waitTime >= 0.3f)
+            {
+                actionLongPress?.Invoke();
+            }
+            else
             {
                 actionShortPress?.Invoke();
             }
@@ -95,23 +110,9 @@ public class InventorySlotUI : UI_Base, IPointerDownHandler, IPointerUpHandler
         isInput = false;
     }
 
-    public void OnBtnUp()
-    {
-        if (!isInput)
-            return;
-
-
-        startDrag = false;
-        isInput = false;
-    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         OnBtnDown();
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        OnBtnUp();
     }
 }

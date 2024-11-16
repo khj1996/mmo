@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class InventoryUI : UI_ScrollView<InventoryUISub>
 {
+    public static DraggableItem dragItem;
+
     public override void Init()
     {
         maxIndex = Managers.InventoryManager.SlotLen / 5 + 1;
@@ -11,10 +13,25 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
 
         base.Init();
 
-        Managers.InventoryManager.ChangeItemAction -= RefreshUI;
-        Managers.InventoryManager.ChangeItemAction += RefreshUI;
+        Managers.InventoryManager.ChangeItemAction -= RefreshSlot;
+        Managers.InventoryManager.ChangeItemAction += RefreshSlot;
 
         InitializeView();
+    }
+
+    public void RefreshSlot(int index, Item item)
+    {
+        int line = index / 5;
+        int slot = index - (line * 5);
+
+
+        var current = items.First;
+        for (int i = 0; i < line; i++)
+        {
+            current = current.Next;
+        }
+
+        current.Value.items[slot].SetItem(item);
     }
 
 

@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: ItemData
-  m_EditorClassIdentifier: Assembly-CSharp::UsableItemData
-  id: 0
+  m_Script: {fileID: 11500000, guid: f8def28bfcca4bbaa5c4c00174502775, type: 3}
+  m_Name: 1_Apple
+  m_EditorClassIdentifier: 
+  id: 1
   name: "\uC0AC\uACFC"
-  description: "\uC8C4\uC1A1\uD569\uB2C8\uB2E4"
+  description: "\uC0AC\uACFC\uB294 \uC8C4\uC1A1\uD569\uB2C8"
   itemSprite: {fileID: -3989417037294542392, guid: dc095ce8d2086f541bd26c7e3a71ef12,
     type: 3}
-  itemType: 3
+  maxStack: 99
+  value: 22
