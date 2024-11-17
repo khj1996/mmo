@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class UsableItem : StackableItem, IUsableItem
 {
@@ -6,6 +7,7 @@ public class UsableItem : StackableItem, IUsableItem
 
     public UsableItem(UsableItemData data, int amount = 1) : base(data, amount)
     {
+        UseItem += () => { Debug.Log("아이템 사용"); };
     }
 
     public void Use()

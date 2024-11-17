@@ -6,40 +6,13 @@ public abstract class Item
 {
     public ItemData Data { get; private set; }
 
-    public Item(ItemData data) => Data = data;
-    
-    private int _slot;
-    
-    public int Slot
+    public Item(ItemData data)
     {
-        get { return _slot; }
-        set { _slot = value; }
+        Data = data;
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*public class Item
@@ -75,7 +48,7 @@ public abstract class Item
     {
         get => ItemData.;
     }
-    
+
 
     private int _count;
     private int _slot;

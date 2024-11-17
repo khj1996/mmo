@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   name: "\uC0AC\uACFC"
-  description: "\uC0AC\uACFC\uB294 \uC8C4\uC1A1\uD569\uB2C8"
+  description: "\uC0AC\uACFC\uB294 \uC8C4\uC1A1\uD569\uB2C8\uB2E4"
   itemSprite: {fileID: -3989417037294542392, guid: dc095ce8d2086f541bd26c7e3a71ef12,
     type: 3}
   maxStack: 99

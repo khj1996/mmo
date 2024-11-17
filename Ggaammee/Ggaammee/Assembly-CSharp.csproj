@@ -83,6 +83,8 @@
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryPopupUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\DropItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\UI_ClickHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\EuqipItemData.cs" />

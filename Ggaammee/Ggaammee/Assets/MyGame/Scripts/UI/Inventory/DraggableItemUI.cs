@@ -1,24 +1,44 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class DraggableItem : Singleton<DraggableItem>
+public class DraggableItem : MonoBehaviour
 {
-    public bool isDragItem =false;
     public Image _image;
-    private RectTransform _rectTransform;
+    [SerializeField] private RectTransform _rectTransform;
 
-    private Item tmpItem;
+    private InventorySlotUI currentDrag;
+    private Vector3 _beginDragIconPoint;
+    private Vector3 _beginDragCursorPoint;
 
-    public void StartDrag(Item item)
+    private void Start()
     {
-        transform.position = Input.mousePosition;
-        _image.gameObject.SetActive(true);
-        _image.sprite = item.Data.itemSprite;
+        var inventoryUI = FindObjectOfType<InventoryUI>();
+
+        inventoryUI.startDragAction += StartDrag;
+        inventoryUI.onDragAction += OnDrag;
+        inventoryUI.endDragAction += EndDrag;
+        gameObject.SetActive(false);
     }
-    
+
+
+    public void StartDrag(InventorySlotUI inventorySlotUI)
+    {
+        gameObject.SetActive(true);
+        currentDrag = inventorySlotUI;
+        _beginDragIconPoint = inventorySlotUI._rect.transform.position;
+        _beginDragCursorPoint = Input.mousePosition;
+        _image.sprite = inventorySlotUI.Item.Data.itemSprite;
+    }
+
+    public void OnDrag()
+    {
+        _rectTransform.position = _beginDragIconPoint + (Input.mousePosition - _beginDragCursorPoint);
+    }
+
     public void EndDrag()
     {
         _image.sprite = null;
-        _image.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

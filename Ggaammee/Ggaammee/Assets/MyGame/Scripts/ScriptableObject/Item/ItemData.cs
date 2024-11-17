@@ -8,6 +8,3 @@ public abstract class ItemData : ScriptableObject
     public Sprite itemSprite;
     public abstract Item CreateItem();
 }
-
-
-
