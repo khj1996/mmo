@@ -127,23 +127,15 @@ public class PlayerController : CreatureController
     public void MoveLadder()
     {
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
-        float move = targetDirection.z;
-        bool isMove = true;
-
-        targetDirection.x = 0;
-        targetDirection.z = 0;
+        bool isMove = _input.move != Vector2.zero;
+        targetDirection.x = targetDirection.z = 0;
 
         Grounded = true;
-
         LookAtTarget(_targetTransform.transform.forward);
-        if (_input.move == Vector2.zero)
-            isMove = false;
 
-        if (move < 0)
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove);
-        else
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove);
+        float move = targetDirection.z;
+        animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
+        animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
     }
 
     public void Move()
@@ -158,6 +150,13 @@ public class PlayerController : CreatureController
         targetSpeed = (_input.crouch && Grounded || _lockOn.isFindTarget) ? creatureData.crouchSpeed : targetSpeed;
         targetSpeed = _input.move == Vector2.zero ? 0.0f : targetSpeed;
 
+        UpdateMovement(targetSpeed);
+        ApplyRotation();
+        ApplyTranslation(targetSpeed);
+    }
+
+    private void UpdateMovement(float targetSpeed)
+    {
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
@@ -166,7 +165,10 @@ public class PlayerController : CreatureController
 
         _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
         if (_animationBlend < 0.01f) _animationBlend = 0f;
+    }
 
+    private void ApplyRotation()
+    {
         Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
         if (_input.move != Vector2.zero)
         {
@@ -178,68 +180,113 @@ public class PlayerController : CreatureController
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
         }
+    }
 
+    private void ApplyTranslation(float targetSpeed)
+    {
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
         _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
         if (_hasAnimator)
         {
             animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
-            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, inputMagnitude);
+            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, targetSpeed);
         }
     }
 
+    #endregion
+
+
+    #region 점프
+
     public void JumpAndGravity()
     {
+        // 착지 상태 처리
         if (Grounded)
         {
-            _fallTimeoutDelta = FallTimeout;
+            ResetFallTimeout();
 
             if (_hasAnimator)
             {
-                animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
-                animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
+                ResetAnimatorJumpAndFall();
             }
 
-            if (_verticalVelocity < 0.0f)
-            {
-                _verticalVelocity = -2f;
-            }
+            HandleGroundedVelocity();
 
             if (_input.jump && _jumpTimeoutDelta <= 0.0f)
             {
-                _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
-
-                if (_hasAnimator)
-                {
-                    animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
-                }
-
-                _input.jump = false;
+                PerformJump();
             }
 
-            if (_jumpTimeoutDelta >= 0.0f)
-            {
-                _jumpTimeoutDelta -= Time.deltaTime;
-            }
+            UpdateJumpTimeout();
         }
         else
         {
-            _jumpTimeoutDelta = JumpTimeout;
-
-            if (_fallTimeoutDelta >= 0.0f)
-            {
-                _fallTimeoutDelta -= Time.deltaTime;
-            }
-            else
-            {
-                if (_hasAnimator)
-                {
-                    animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
-                }
-            }
+            HandleAirborneState();
         }
 
+        ApplyGravity();
+    }
+
+
+    private void ResetFallTimeout()
+    {
+        _fallTimeoutDelta = FallTimeout;
+    }
+
+    private void ResetAnimatorJumpAndFall()
+    {
+        animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
+        animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
+    }
+
+    private void HandleGroundedVelocity()
+    {
+        if (_verticalVelocity < 0.0f)
+        {
+            _verticalVelocity = -2f;
+        }
+    }
+
+    private void PerformJump()
+    {
+        _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
+
+        if (_hasAnimator)
+        {
+            animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
+        }
+
+        _input.jump = false;
+    }
+
+    private void UpdateJumpTimeout()
+    {
+        if (_jumpTimeoutDelta >= 0.0f)
+        {
+            _jumpTimeoutDelta -= Time.deltaTime;
+        }
+    }
+
+    private void HandleAirborneState()
+    {
+        _jumpTimeoutDelta = JumpTimeout;
+
+        if (_fallTimeoutDelta >= 0.0f)
+        {
+            _fallTimeoutDelta -= Time.deltaTime;
+        }
+        else
+        {
+            if (_hasAnimator)
+            {
+                animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
+            }
+        }
+    }
+
+    private void ApplyGravity()
+    {
         if (_verticalVelocity < _terminalVelocity)
         {
             _verticalVelocity += creatureData.weight * Time.deltaTime;
@@ -248,13 +295,15 @@ public class PlayerController : CreatureController
 
     #endregion
 
+
     #region 공격
 
     private Coroutine _AttackCoroutine = null;
 
     public void CheckAttack()
     {
-        if (_AttackCoroutine != null || !_input.attack) return;
+        if (_AttackCoroutine != null || !_input.attack)
+            return;
 
         _input.attack = false;
         _AttackCoroutine = StartCoroutine(AttackCoroutine());
@@ -280,13 +329,22 @@ public class PlayerController : CreatureController
 
     private bool isNearLadder = false;
     private bool isUpLadder = false;
-    private bool isDownLadder = false;
 
 
-    private void NearLadderPosition(Collider other)
+    private void NearLadderPosition(Collider other, bool isUp)
     {
         isNearLadder = true;
+        isUpLadder = isUp;
         _targetTransform = other.gameObject.transform;
+    }
+
+    private void ExitLadderPosition()
+    {
+        if (!isClimbing)
+        {
+            isNearLadder = false;
+            _targetTransform = null;
+        }
     }
 
     private void EndofLadder(int animName)
@@ -300,7 +358,7 @@ public class PlayerController : CreatureController
 
     public void CharacterToLadder()
     {
-        LockAtTargetPsition();
+        LockAtTargetPosition();
         LookAtTarget(_targetTransform.transform.forward);
         LadderStart();
     }
@@ -308,10 +366,12 @@ public class PlayerController : CreatureController
     private void LadderStart()
     {
         animator.SetBool(AssignAnimationIDs.AnimIDLadder, true);
-        animator.SetTrigger(isUpLadder ? AssignAnimationIDs.AnimIDLadderUpStart : AssignAnimationIDs.AnimIDLadderDownStart);
+        animator.SetTrigger(isUpLadder
+            ? AssignAnimationIDs.AnimIDLadderUpStart
+            : AssignAnimationIDs.AnimIDLadderDownStart);
 
         _input.interaction = false;
-        isUpLadder = isDownLadder = isNearLadder = false;
+        isUpLadder = isNearLadder = false;
     }
 
     #endregion
@@ -350,11 +410,9 @@ public class PlayerController : CreatureController
             Debug.Log($"{itemData.name} was added to inventory.");
             return true;
         }
-        else
-        {
-            Debug.Log("Failed to add item to inventory.");
-            return false;
-        }
+
+        Debug.Log("Failed to add item to inventory.");
+        return false;
     }
 
     private DropItem GetClosestDropItem()
@@ -394,13 +452,11 @@ public class PlayerController : CreatureController
     public List<CharacterController> GetMonstersInRange(Vector3 position, float radius = 0.5f)
     {
         List<CharacterController> monstersInRange = new List<CharacterController>();
-
         Collider[] colliders = Physics.OverlapSphere(position, radius, LayerData.MonsterLayer);
 
         foreach (Collider collider in colliders)
         {
             CharacterController monster = collider.GetComponent<CharacterController>();
-
             if (monster != null)
             {
                 monstersInRange.Add(monster);
@@ -414,7 +470,6 @@ public class PlayerController : CreatureController
     {
         if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
         {
-            Debug.Log("아이템 진입");
             if (!_currentDropItems.Contains(dropItem))
             {
                 _currentDropItems.Add(dropItem);
@@ -422,10 +477,7 @@ public class PlayerController : CreatureController
         }
         else if (other.CompareTag("StartDown"))
         {
-            NearLadderPosition(other);
-
-            isUpLadder = false;
-            isDownLadder = true;
+            NearLadderPosition(other, false);
         }
         else if (other.CompareTag("EndDown"))
         {
@@ -433,18 +485,11 @@ public class PlayerController : CreatureController
         }
         else if (other.CompareTag("StartUp"))
         {
-            NearLadderPosition(other);
-
-            isUpLadder = true;
-            isDownLadder = false;
+            NearLadderPosition(other, true);
         }
         else if (other.CompareTag("EndUp"))
         {
             EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
-        }
-        else
-        {
-            isNearLadder = false;
         }
     }
 
@@ -452,8 +497,23 @@ public class PlayerController : CreatureController
     {
         if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
         {
-            Debug.Log("아이템 탈출");
             _currentDropItems.Remove(dropItem);
+        }
+        else if (other.CompareTag("StartDown"))
+        {
+            ExitLadderPosition();
+        }
+        else if (other.CompareTag("EndDown"))
+        {
+            EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
+        }
+        else if (other.CompareTag("StartUp"))
+        {
+            ExitLadderPosition();
+        }
+        else if (other.CompareTag("EndUp"))
+        {
+            EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
         }
     }
 
@@ -472,7 +532,6 @@ public class PlayerController : CreatureController
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
         List<CharacterController> monsters = GetMonstersInRange(attackPoint.position);
-
         foreach (CharacterController monster in monsters)
         {
             monster.gameObject.GetComponent<CreatureController>().GetDamaged(creatureData.attack);
@@ -481,8 +540,9 @@ public class PlayerController : CreatureController
 
     public void OnExitLadder()
     {
-        isClimbing = false;
         LookAtTarget(_targetTransform.transform.forward);
+        isClimbing = false;
+        _targetTransform = null;
     }
 
     #endregion
@@ -493,17 +553,10 @@ public class PlayerController : CreatureController
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        if (Grounded) Gizmos.color = transparentGreen;
-        else Gizmos.color = transparentRed;
+        Gizmos.color = Grounded ? transparentGreen : transparentRed;
+        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 
-        Gizmos.DrawSphere(
-            new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-            GroundedRadius);
-
-        Gizmos.DrawSphere(
-            new Vector3(attackPoint.position.x, attackPoint.position.y - GroundedOffset, attackPoint.position.z),
-            0.5f);
+        Gizmos.DrawSphere(new Vector3(attackPoint.position.x, attackPoint.position.y - GroundedOffset, attackPoint.position.z), 0.5f);
     }
-
 #endif
 }

@@ -41,6 +41,11 @@ public class LockOn : MonoBehaviour
     {
         if (isFindTarget)
         {
+            if (!currentTarget.isActiveAndEnabled)
+            {
+                isLockOn = false;
+            }
+
             if (isTargetRange())
             {
                 LookAtTarget();
@@ -109,7 +114,7 @@ public class LockOn : MonoBehaviour
             currentIndex = 0;
         }
 
-        currentTarget = targetEnemy[currentIndex]; 
+        currentTarget = targetEnemy[currentIndex];
     }
 
     private void LockOnTarget()
@@ -152,11 +157,10 @@ public class LockOn : MonoBehaviour
         lockOnImage.position = _mainCamera.WorldToScreenPoint(currentTargetPosition);
 
         Vector3 dir = (currentTargetPosition - transform.position).normalized;
-        
-        dir.y = transform.forward.y; 
+
+        dir.y = transform.forward.y;
 
         transform.forward = Vector3.Lerp(transform.forward, dir, Time.deltaTime * lookAtSmoothing);
-
     }
 
     private void FindTarget()
@@ -176,7 +180,7 @@ public class LockOn : MonoBehaviour
     {
         if (!isLockOn)
             return false;
-        
+
         float distance = (transform.position - currentTargetPosition).magnitude;
 
         return !(distance > lcokOnRadius);

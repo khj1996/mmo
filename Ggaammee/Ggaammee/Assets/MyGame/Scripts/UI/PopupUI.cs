@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PopupUI : MonoBehaviour, IPointerDownHandler
 {
-    public Button _closeButton;
+    //public Button _closeButton;
     public event Action OnFocus;
 
     public void OnPointerDown(PointerEventData eventData)

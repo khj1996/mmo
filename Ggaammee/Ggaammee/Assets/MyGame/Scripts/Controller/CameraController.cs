@@ -25,9 +25,8 @@ public class CameraController : MonoBehaviour
     public float cameraSmoothing = 5f;
 
     public GameObject _mainCamera;
-        
-        
-        
+
+
     private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
     private void Awake()
@@ -80,11 +79,9 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
         }
-        
     }
 
 

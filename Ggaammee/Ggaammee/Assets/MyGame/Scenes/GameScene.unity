@@ -321,6 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 67259573}
   - component: {fileID: 67259572}
+  - component: {fileID: 67259574}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -356,6 +357,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &67259574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67259571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af238838b626425188933ec2f8b162b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _escapeKey: 27
+  popList:
+  - UI: {fileID: 1833059118}
+    key: 105
 --- !u!224 &73386360 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4281558446911275279, guid: 89b01fdbc5b912845be46d92ababf26a,
@@ -5249,6 +5266,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1758581165}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1833059117 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7947804650707326265, guid: 89b01fdbc5b912845be46d92ababf26a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4738281615687857512}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1833059118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833059117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 654f9fb1f8d6f7f4e9aeaa7868a4230f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1862015886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6099,6 +6134,11 @@ PrefabInstance:
       propertyPath: lockOnImage
       value: 
       objectReference: {fileID: 73386360}
+    - target: {fileID: 1874768547656342762, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: lcokOnRadius
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 5904525240692292765, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}
       propertyPath: m_Name
@@ -6774,6 +6814,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1117725789}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7947804650707326265, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1833059118}
     - targetCorrespondingSourceObject: {fileID: 7947804650162936403, guid: 89b01fdbc5b912845be46d92ababf26a,
         type: 3}
       insertIndex: -1
