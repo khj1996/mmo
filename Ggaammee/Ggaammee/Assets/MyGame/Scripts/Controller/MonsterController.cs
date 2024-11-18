@@ -21,8 +21,6 @@ public class MonsterController : CreatureController
         InitFSM();
         InitComponent();
 
-        hp = creatureData.maxHp;
-        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
         _hpBar.gameObject.transform.position = transform.TransformPoint(((MonsterData)creatureData).hpBarPos);
     }
 
@@ -177,9 +175,8 @@ public class MonsterController : CreatureController
     public override void GetDamaged(float damage)
     {
         base.GetDamaged(damage);
-        Debug.Log($"남은 체력 {hp}");
 
-        if (hp <= 0)
+        if (stat.currentHp <= 0)
         {
             isDie = true;
         }

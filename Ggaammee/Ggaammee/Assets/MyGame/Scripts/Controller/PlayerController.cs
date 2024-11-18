@@ -50,12 +50,12 @@ public class PlayerController : CreatureController
 
     protected override void Init()
     {
-        base.Init();
         InitFSM();
         InitComponent();
+        
+        base.Init();
 
-        hp = creatureData.maxHp;
-        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
+        Managers.ObjectManager.MainPlayer = this;
         Managers.ObjectManager.RegisterPlayer(this);
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;

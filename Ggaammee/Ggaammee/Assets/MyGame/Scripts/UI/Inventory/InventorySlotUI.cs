@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class InventorySlotUI : UI_Base
 {
-    [Header("UI Elements")]
-    [SerializeField] private Image _icon;
+    [Header("UI Elements")] [SerializeField]
+    private Image _icon;
+
     [SerializeField] private Image _frame;
     [SerializeField] private TMP_Text _quantity;
 
-    [Header("Item Data")]
-    private Item _item;
+    [Header("Item Data")] private Item _item;
     public Item Item => _item;
     public int Index { get; private set; } = -1;
 
@@ -31,6 +31,7 @@ public class InventorySlotUI : UI_Base
         if (_item is UsableItem usableItem)
         {
             usableItem.Use();
+            RefreshCount();
         }
     }
 
@@ -53,6 +54,15 @@ public class InventorySlotUI : UI_Base
         else
         {
             UpdateUI();
+        }
+    }
+
+    public void RefreshCount()
+    {
+        if (_item is StackableItem stackableItem)
+        {
+            _quantity.text = stackableItem.Count.ToString();
+            _quantity.gameObject.SetActive(true);
         }
     }
 

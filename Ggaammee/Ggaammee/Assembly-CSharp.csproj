@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\State.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\CreatureStats.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\LockOn.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
@@ -64,8 +65,8 @@
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Data.Contents.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\BehaviorTree.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\UsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\ShopUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\UsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUISub.cs" />

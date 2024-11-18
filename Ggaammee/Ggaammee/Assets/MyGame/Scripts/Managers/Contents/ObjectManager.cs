@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ObjectManager
 {
+    public PlayerController MainPlayer = new PlayerController();
     public List<PlayerController> Players { get; set; } = new List<PlayerController>();
     public List<MonsterController> Monsters { get; set; } = new List<MonsterController>();
 

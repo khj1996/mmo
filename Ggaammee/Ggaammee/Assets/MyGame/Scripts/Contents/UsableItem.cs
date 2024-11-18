@@ -7,7 +7,11 @@ public class UsableItem : StackableItem, IUsableItem
 
     public UsableItem(UsableItemData data, int amount = 1) : base(data, amount)
     {
-        UseItem += () => { Debug.Log("아이템 사용"); };
+        UseItem += () =>
+        {
+            Count -= 1;
+            Managers.ObjectManager.MainPlayer.stat.HpChange(data.value);
+        };
     }
 
     public void Use()

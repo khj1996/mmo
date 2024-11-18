@@ -9,7 +9,7 @@ public class CreatureController : MonoBehaviour
     public CreatureData creatureData;
     [SerializeField] protected HpBar _hpBar;
 
-    protected float hp;
+    public CreatureStats stat =new CreatureStats();
     protected bool isDie;
 
     public Animator animator;
@@ -22,6 +22,9 @@ public class CreatureController : MonoBehaviour
     protected virtual void Init()
     {
         _hasAnimator = TryGetComponent(out animator);
+        stat.ChangeHpEvent += () => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
+        stat.baseMaxHp = creatureData.maxHp;
+        stat.currentHp = stat.CurrentMaxHp;
     }
 
     public void LockAtTargetPosition()
@@ -62,7 +65,6 @@ public class CreatureController : MonoBehaviour
 
     public virtual void GetDamaged(float damage)
     {
-        hp -= damage;
-        _hpBar.UpdateHealthBar(hp, creatureData.maxHp);
+        stat.HpChange(-damage);
     }
 }
