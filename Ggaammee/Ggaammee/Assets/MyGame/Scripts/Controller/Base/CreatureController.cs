@@ -24,7 +24,7 @@ public class CreatureController : MonoBehaviour
         _hasAnimator = TryGetComponent(out animator);
     }
 
-    public void LockAtTargetPsition()
+    public void LockAtTargetPosition()
     {
         Vector3 targetPosition = new Vector3(this._targetTransform.position.x, transform.position.y, this._targetTransform.position.z);
         Vector3 direction = (targetPosition - transform.position).normalized;

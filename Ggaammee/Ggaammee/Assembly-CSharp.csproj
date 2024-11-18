@@ -61,6 +61,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\NPCDialogue.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\CreatureData.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Base\BehaviorTree.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\UsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryPopupUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\DropItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStateMachine.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\UI_ClickHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\EuqipItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\EquipmentItem.cs" />
@@ -93,16 +95,17 @@
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\InventoryManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\DialogueModule.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\UI_ScrollView_Sub.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\PopupManager.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\DraggableItemUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\UsableItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\CurrencyItem.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Controller\BehaviorTree.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\WeaponItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\StackableItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\IUsableItem.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Controller\CreatureStateMachine.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\CameraController.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\PopupUIHeader.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\PopupUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\PlayerController.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ItemData.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

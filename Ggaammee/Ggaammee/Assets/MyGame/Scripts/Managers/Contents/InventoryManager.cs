@@ -6,7 +6,7 @@ using UnityEngine;
 public class InventoryManager
 {
     public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
-    public Action<int, Item> ChangeItemAction;
+    public event Action<int, Item> ChangeItemAction;
 
     public int SlotLen
     {
@@ -59,17 +59,15 @@ public class InventoryManager
                     {
                         break;
                     }
-                    else
-                    {
-                        StackableItem ci = ciData.CreateItem() as StackableItem;
-                        ci.SetAmount(amount);
 
-                        Items[index] = ci;
+                    StackableItem ci = ciData.CreateItem() as StackableItem;
+                    ci.SetAmount(amount);
 
-                        amount = (amount > ciData.maxStack) ? (amount - ciData.maxStack) : 0;
+                    Items[index] = ci;
 
-                        UpdateSlot(index, Items[index]);
-                    }
+                    amount = (amount > ciData.maxStack) ? (amount - ciData.maxStack) : 0;
+
+                    UpdateSlot(index, Items[index]);
                 }
             }
         }
@@ -143,7 +141,7 @@ public class InventoryManager
 
     private void UpdateSlot(int index, Item item)
     {
-        ChangeItemAction.Invoke(index, item);
+        ChangeItemAction?.Invoke(index, item);
     }
 
     private int FindEmptySlotIndex(int startIndex = 0)

@@ -10,7 +10,7 @@ public class InputSystem : MonoBehaviour
     public bool crouch;
     public bool sprint;
     public bool attack;
-    [FormerlySerializedAs("interAction")] public bool interaction;
+    public bool interaction;
     public bool lockOn;
 
     public bool analogMovement;
