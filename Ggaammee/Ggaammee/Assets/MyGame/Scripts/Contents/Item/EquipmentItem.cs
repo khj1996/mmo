@@ -8,6 +8,10 @@ public abstract class EquipmentItem : Item
 {
     public EuqipItemData EquipmentData { get; private set; }
 
+    private bool _isEquipped = false;
+
+    private bool IsEquipped => _isEquipped;
+
     /*public int Durability
     {
         get => _durability;
@@ -21,6 +25,12 @@ public abstract class EquipmentItem : Item
         }
     }
     private int _durability;*/
+
+    public bool Equip()
+    {
+        _isEquipped = !_isEquipped;
+        return _isEquipped;
+    }
 
     public EquipmentItem(EuqipItemData data) : base(data)
     {

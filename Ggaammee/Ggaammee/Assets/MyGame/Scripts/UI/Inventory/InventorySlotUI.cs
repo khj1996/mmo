@@ -5,71 +5,79 @@ using UnityEngine.UI;
 
 public class InventorySlotUI : UI_Base
 {
-    [SerializeField] Image _icon = null;
-    [SerializeField] Image _frame = null;
-    [SerializeField] TMP_Text _quantity = null;
+    [Header("UI Elements")]
+    [SerializeField] private Image _icon;
+    [SerializeField] private Image _frame;
+    [SerializeField] private TMP_Text _quantity;
 
-    private Item _item = null;
-
+    [Header("Item Data")]
+    private Item _item;
     public Item Item => _item;
+    public int Index { get; private set; } = -1;
 
-    public int index = -1;
+    public RectTransform Rect => GetComponent<RectTransform>();
 
-    public RectTransform _rect => GetComponent<RectTransform>();
-
-
-    public event Action actionShortPress;
-
-    private bool isInput = false;
-    private bool startDrag = false;
+    public event Action OnShortPress;
 
     public override void Init()
     {
-        actionShortPress += () =>
-        {
-            if (_item == null)
-                return;
-
-            if (_item is UsableItem usableItem)
-            {
-                usableItem.Use();
-            }
-        };
+        OnShortPress += HandleShortPress;
     }
 
-    public bool HasItem()
+    private void HandleShortPress()
     {
-        return (_item != null);
+        if (_item == null) return;
+
+        if (_item is UsableItem usableItem)
+        {
+            usableItem.Use();
+        }
     }
+
+    public bool HasItem() => _item != null;
 
     public void UseItem()
     {
-        actionShortPress?.Invoke();
+        OnShortPress?.Invoke();
     }
 
-
-    public void SetItem(Item item, int _index)
+    public void SetItem(Item item, int index)
     {
-        index = _index;
+        Index = index;
         _item = item;
-        if (item == null)
+
+        if (_item == null)
         {
-            _icon.gameObject.SetActive(false);
-            _frame.gameObject.SetActive(false);
-            _quantity.gameObject.SetActive(false);
+            ResetUI();
         }
         else
         {
-            _icon.sprite = item.Data.itemSprite;
-            if (item is StackableItem ci)
-            {
-                _quantity.text = ci.Count.ToString();
-                _quantity.gameObject.SetActive(true);
-            }
-
-
-            _icon.gameObject.SetActive(true);
-            //_frame.gameObject.SetActive(item.Equipped);
+            UpdateUI();
         }
+    }
+
+    private void ResetUI()
+    {
+        _icon?.gameObject.SetActive(false);
+        _frame?.gameObject.SetActive(false);
+        _quantity?.gameObject.SetActive(false);
+    }
+
+    private void UpdateUI()
+    {
+        _icon.sprite = _item.Data.itemSprite;
+        _icon.gameObject.SetActive(true);
+
+        if (_item is StackableItem stackableItem)
+        {
+            _quantity.text = stackableItem.Count.ToString();
+            _quantity.gameObject.SetActive(true);
+        }
+        else
+        {
+            _quantity.gameObject.SetActive(false);
+        }
+
+        //_frame.gameObject.SetActive(_item.Equipped); // Uncomment when equipped logic is added
     }
 }

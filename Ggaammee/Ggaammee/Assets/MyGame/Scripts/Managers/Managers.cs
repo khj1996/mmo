@@ -1,9 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+
+[Serializable]
+public struct StartItem
+{
+    public ItemData data;
+    public int count;
+}
 
 public class Managers : MonoBehaviour
 {
@@ -29,10 +37,13 @@ public class Managers : MonoBehaviour
     #endregion
 
 
+    [SerializeField] public List<StartItem> StartItemData;
+
     private ObjectManager _obj;
     private DropManager _drop;
     private PoolManager _pool;
     private InventoryManager _inventory;
+    private DataManager _data;
 
     public static ObjectManager ObjectManager
     {
@@ -53,6 +64,11 @@ public class Managers : MonoBehaviour
     {
         get { return Instance._inventory; }
     }
+    
+    public static DataManager DataManager
+    {
+        get { return Instance._data; }
+    }
 
     public bool isInit = false;
 
@@ -68,6 +84,7 @@ public class Managers : MonoBehaviour
         _pool = new PoolManager();
         _drop = new DropManager();
         _inventory = new InventoryManager();
+        _data = new DataManager();
 
         Application.targetFrameRate = 60;
         isInit = true;

@@ -26,7 +26,7 @@ public static class Util
 
     public static class StaticValues
     {
-        public static readonly int InventorySize = 25;
+        public static readonly int InventorySize = 88;
     }
 
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component

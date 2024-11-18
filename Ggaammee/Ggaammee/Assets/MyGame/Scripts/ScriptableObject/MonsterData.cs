@@ -22,7 +22,7 @@ public class MonsterData : CreatureData
     public struct DropItem
     {
         public ItemData itemData;
-        public int dropRate;
+        [Range(0, 100)] public int dropRate;
     }
 
     public class IdleState : State<MonsterController>

@@ -5,13 +5,17 @@ using UnityEngine.UI;
 
 public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
 {
-    [Header("---------UI_ScrollView-----------")] [SerializeField]
+    [Header("---------UI_ScrollView-----------")] 
+    [SerializeField]
     protected GameObject itemBase = null;
 
-    [SerializeField] protected RectOffset padding;
+    [SerializeField] 
+    protected RectOffset padding;
+    
     public ScrollRect scrollRect;
     public float spacingHeight = 10.0f;
     public RectTransform _RectTransform;
+
     protected Rect visibleRect;
     protected Vector2 prevScrollPos;
 
@@ -22,87 +26,103 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
     public override void Init()
     {
         items.Clear();
-
         scrollRect.onValueChanged.AddListener(OnScrollPosChanged);
     }
-
 
     protected void InitializeView()
     {
         UpdateScrollViewSize();
         UpdateVisibleRect();
 
-
         if (maxIndex == 0) return;
 
         if (items.Count < 1)
         {
-            ItemPosY = new float[maxIndex];
-
-            Vector2 itemTop = new Vector2(0.0f, -padding.top);
-
-            for (int i = 0; i < maxIndex; i++)
-            {
-                float itemHeight = GetItemHeight();
-                Vector2 itemBottom = itemTop + new Vector2(0.0f, -itemHeight);
-
-                if ((itemTop.y <= visibleRect.y && itemTop.y >= visibleRect.y - visibleRect.height) ||
-                    (itemBottom.y <= visibleRect.y && itemBottom.y >= visibleRect.y - visibleRect.height))
-                {
-                    T item = CreateItem(i);
-
-                    item.Top = itemTop;
-                }
-
-                ItemPosY[i] = itemTop.y;
-
-                itemTop = itemBottom + new Vector2(0.0f, -spacingHeight);
-            }
-
+            InitializeItems();
             SetFillVisibleRectWithItems();
         }
         else
         {
-            Vector2 itemTop = new Vector2(0.0f, -padding.top);
-            UpdateVisibleRect();
+            UpdateItemsPosition();
+            SetFillVisibleRectWithItems();
+        }
+    }
 
-            ItemPosY = new float[maxIndex];
+    private void InitializeItems()
+    {
+        ItemPosY = new float[maxIndex];
+        Vector2 itemTop = new Vector2(0.0f, -padding.top);
 
-            for (int i = 0; i < maxIndex; i++)
+        for (int i = 0; i < maxIndex; i++)
+        {
+            float itemHeight = GetItemHeight();
+            Vector2 itemBottom = itemTop + new Vector2(0.0f, -itemHeight);
+
+            if (IsItemVisible(itemTop, itemBottom))
             {
-                float itemHeight = GetItemHeight();
-                Vector2 itemBottom = itemTop + new Vector2(0.0f, -itemHeight);
-
-                ItemPosY[i] = itemTop.y;
-
-                itemTop = itemBottom + new Vector2(0.0f, -spacingHeight);
+                T item = CreateItem(i);
+                item.Top = itemTop;
             }
 
-            LinkedListNode<T> node = items.First;
+            ItemPosY[i] = itemTop.y;
+            itemTop = itemBottom + new Vector2(0.0f, -spacingHeight);
+        }
+    }
 
-            LinkedList<T> tempList = new LinkedList<T>();
-            int newIndex = 0;
-            while (node != null)
-            {
-                node.Value._index = newIndex;
+    private bool IsItemVisible(Vector2 itemTop, Vector2 itemBottom)
+    {
+        return (itemTop.y <= visibleRect.y && itemTop.y >= visibleRect.y - visibleRect.height) ||
+               (itemBottom.y <= visibleRect.y && itemBottom.y >= visibleRect.y - visibleRect.height);
+    }
 
-                items.RemoveFirst();
-                tempList.AddLast(node);
-                node = items.First;
-                newIndex++;
-            }
+    private void UpdateItemsPosition()
+    {
+        Vector2 itemTop = new Vector2(0.0f, -padding.top);
+        UpdateVisibleRect();
+        ItemPosY = new float[maxIndex];
 
-            node = tempList.First;
-            while (node != null)
-            {
-                tempList.RemoveFirst();
-                items.AddLast(node);
+        for (int i = 0; i < maxIndex; i++)
+        {
+            float itemHeight = GetItemHeight();
+            Vector2 itemBottom = itemTop + new Vector2(0.0f, -itemHeight);
 
-                node = tempList.First;
-            }
+            ItemPosY[i] = itemTop.y;
+            itemTop = itemBottom + new Vector2(0.0f, -spacingHeight);
+        }
 
+        ReorderItems();
+        PositionItems();
+    }
+
+    private void ReorderItems()
+    {
+        LinkedListNode<T> node = items.First;
+        LinkedList<T> tempList = new LinkedList<T>();
+        int newIndex = 0;
+
+        while (node != null)
+        {
+            node.Value._index = newIndex;
+            items.RemoveFirst();
+            tempList.AddLast(node);
             node = items.First;
+            newIndex++;
+        }
 
+        node = tempList.First;
+        while (node != null)
+        {
+            tempList.RemoveFirst();
+            items.AddLast(node);
+            node = tempList.First;
+        }
+    }
+
+    private void PositionItems()
+    {
+        LinkedListNode<T> node = items.First;
+        while (node != null)
+        {
             UpdateItemForIndex(node.Value, node.Value._index);
             node.Value.RectTransform.anchoredPosition = Vector2.up * ItemPosY[node.Value._index];
             node = node.Next;
@@ -119,9 +139,6 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
 
                 node = node.Next;
             }
-
-            UpdateItems(1);
-            SetFillVisibleRectWithItems();
         }
     }
 
@@ -167,57 +184,59 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
 
         if (scrollDirection > 0)
         {
-            T firstViewSub = items.First.Value;
-
-            while (firstViewSub.Bottom.y > visibleRect.y && items.Last.Value._index < maxIndex - 1)
-            {
-                T lastViewSub = items.Last.Value;
-
-                firstViewSub.Top = Vector2.up * ItemPosY[lastViewSub._index + 1];
-
-                UpdateItemForIndex(firstViewSub, lastViewSub._index + 1);
-
-                items.AddLast(firstViewSub);
-
-                items.RemoveFirst();
-
-                firstViewSub = items.First.Value;
-            }
-
-            SetFillVisibleRectWithItems();
+            HandleScrollingDown();
         }
         else if (scrollDirection < 0)
         {
-            T lastViewSub = items.Last.Value;
-            T firstViewSub = items.First.Value;
-
-            while ((lastViewSub.Top.y < visibleRect.y - visibleRect.height || firstViewSub.Bottom.y < visibleRect.y) && items.First.Value._index > 0)
-            {
-                firstViewSub = items.First.Value;
-
-                UpdateItemForIndex(lastViewSub, firstViewSub._index - 1);
-
-                lastViewSub.Bottom = Vector2.up * ItemPosY[firstViewSub._index - 1] - new Vector2(0.0f, GetItemHeight());
-                items.AddFirst(lastViewSub);
-                items.RemoveLast();
-                lastViewSub = items.Last.Value;
-            }
-
-            SetFillVisibleRectWithItems();
+            HandleScrollingUp();
         }
+    }
+
+    private void HandleScrollingDown()
+    {
+        T firstViewSub = items.First.Value;
+
+        while (firstViewSub.Bottom.y > visibleRect.y && items.Last.Value._index < maxIndex - 1)
+        {
+            T lastViewSub = items.Last.Value;
+            firstViewSub.Top = Vector2.up * ItemPosY[lastViewSub._index + 1];
+            UpdateItemForIndex(firstViewSub, lastViewSub._index + 1);
+
+            items.AddLast(firstViewSub);
+            items.RemoveFirst();
+
+            firstViewSub = items.First.Value;
+        }
+
+        SetFillVisibleRectWithItems();
+    }
+
+    private void HandleScrollingUp()
+    {
+        T lastViewSub = items.Last.Value;
+        T firstViewSub = items.First.Value;
+
+        while ((lastViewSub.Top.y < visibleRect.y - visibleRect.height || firstViewSub.Bottom.y < visibleRect.y) && items.First.Value._index > 0)
+        {
+            firstViewSub = items.First.Value;
+            UpdateItemForIndex(lastViewSub, firstViewSub._index - 1);
+
+            lastViewSub.Bottom = Vector2.up * ItemPosY[firstViewSub._index - 1] - new Vector2(0.0f, GetItemHeight());
+            items.AddFirst(lastViewSub);
+            items.RemoveLast();
+            lastViewSub = items.Last.Value;
+        }
+
+        SetFillVisibleRectWithItems();
     }
 
     protected void SetFillVisibleRectWithItems()
     {
-        if (items.Count < 1)
-        {
-            return;
-        }
+        if (items.Count < 1) return;
 
         T lastItem = items.Last.Value;
         int nextItemDataIndex = lastItem._index + 1;
         Vector2 nextItemTop = nextItemDataIndex < maxIndex ? Vector2.up * ItemPosY[nextItemDataIndex] : lastItem.Bottom + new Vector2(0.0f, -spacingHeight);
-
 
         while (nextItemDataIndex < maxIndex && nextItemTop.y >= visibleRect.y - visibleRect.height)
         {
@@ -244,14 +263,12 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
         Vector2 offsetMax = item.RectTransform.offsetMax;
 
         item.transform.localPosition = Vector3.zero;
-
         item.transform.localScale = Vector3.one;
         item.RectTransform.sizeDelta = sizeDelta;
         item.RectTransform.offsetMin = offsetMin;
         item.RectTransform.offsetMax = offsetMax;
 
         UpdateItemForIndex(item, index);
-
         items.AddLast(item);
 
         return item;

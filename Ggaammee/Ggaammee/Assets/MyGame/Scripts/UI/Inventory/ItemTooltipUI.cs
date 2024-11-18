@@ -53,7 +53,7 @@ public class ItemTooltipUI : MonoBehaviour
     public void SetItemInfo(ItemData data)
     {
         nameText.text = data.name;
-        descriptionText.text = data.description;
+        descriptionText.text = $"{data.description}";
     }
 
     public void SetRectPosition(RectTransform slotRect)

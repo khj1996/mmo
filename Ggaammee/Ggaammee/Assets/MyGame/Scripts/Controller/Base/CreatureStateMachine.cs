@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 public class CreatureStateMachine<T> where T : CreatureController
 {
-    private CreatureData.State<T> _currentState;
+    private State<T> _currentState;
     private StateCache<T> _stateCache = new StateCache<T>();
     private Dictionary<(Type, Type), Func<bool>> _transitions = new Dictionary<(Type, Type), Func<bool>>();
 
-    public CreatureData.State<T> CurrentState => _currentState;
+    public State<T> CurrentState => _currentState;
 
     public void ChangeState(Type stateType)
     {
@@ -16,17 +16,17 @@ public class CreatureStateMachine<T> where T : CreatureController
         _currentState.OnEnter();
     }
 
-    public void AddState(CreatureData.State<T> state)
+    public void AddState(State<T> state)
     {
         _stateCache.AddState(state);
     }
 
-    public void AddTransition<U, V>(Func<bool> condition) where U : CreatureData.State<T> where V : CreatureData.State<T>
+    public void AddTransition<U, V>(Func<bool> condition) where U : State<T> where V : State<T>
     {
         _transitions[(typeof(U), typeof(V))] = condition;
     }
 
-    public void AddGlobalTransition<V>(Func<bool> condition) where V : CreatureData.State<T>
+    public void AddGlobalTransition<V>(Func<bool> condition) where V : State<T>
     {
         foreach (var stateType in _stateCache.GetAllStateTypes())
         {
@@ -54,9 +54,9 @@ public class CreatureStateMachine<T> where T : CreatureController
 
 public class StateCache<T> where T : CreatureController
 {
-    private Dictionary<Type, CreatureData.State<T>> _stateCache = new Dictionary<Type, CreatureData.State<T>>();
+    private Dictionary<Type, State<T>> _stateCache = new Dictionary<Type, State<T>>();
 
-    public void AddState(CreatureData.State<T> state)
+    public void AddState(State<T> state)
     {
         if (!_stateCache.ContainsKey(state.GetType()))
         {
@@ -64,7 +64,7 @@ public class StateCache<T> where T : CreatureController
         }
     }
 
-    public CreatureData.State<T> GetState(Type stateType)
+    public State<T> GetState(Type stateType)
     {
         return _stateCache[stateType];
     }

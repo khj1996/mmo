@@ -26,7 +26,7 @@ public class DraggableItem : MonoBehaviour
     {
         gameObject.SetActive(true);
         currentDrag = inventorySlotUI;
-        _beginDragIconPoint = inventorySlotUI._rect.transform.position;
+        _beginDragIconPoint = inventorySlotUI.Rect.transform.position;
         _beginDragCursorPoint = Input.mousePosition;
         _image.sprite = inventorySlotUI.Item.Data.itemSprite;
     }

@@ -117,7 +117,6 @@ public class PlayerController : CreatureController
 
     private void Update()
     {
-        Debug.Log(creatureStateMachine.CurrentState);
         creatureStateMachine.Update();
     }
 

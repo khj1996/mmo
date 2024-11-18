@@ -3,9 +3,10 @@ using UnityEngine.Serialization;
 
 public abstract class UI_ScrollView_Sub : UI_Base
 {
-    [SerializeField] public RectTransform RectTransform => GetComponent<RectTransform>();
+    public RectTransform RectTransform => GetComponent<RectTransform>();
 
     public int _index;
+
 
     public float Height
     {
