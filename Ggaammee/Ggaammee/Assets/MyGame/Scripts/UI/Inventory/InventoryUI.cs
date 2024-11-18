@@ -111,7 +111,7 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
 
             if (slot != null && slot.HasItem())
             {
-                slot.actionShortPress();
+                slot.UseItem();
             }
         }
     }
@@ -217,6 +217,7 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
         {
             return;
         }
+
         Debug.Log(from.index);
         Debug.Log(to.index);
 

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class InputSystem : MonoBehaviour
@@ -47,7 +48,12 @@ public class InputSystem : MonoBehaviour
 
     public void CrouchInput(bool newCrouchState) => crouch = newCrouchState;
 
-    public void AttackInput(bool newAttackState) => attack = newAttackState;
+    public void AttackInput(bool newAttackState)
+    {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+    
+        attack = newAttackState;
+    }
 
     public void SprintInput(bool newValue) => sprint = newValue;
 
@@ -74,6 +80,7 @@ public class InputSystem : MonoBehaviour
 
     private void ResetActions()
     {
+        if (attack) attack = false;
         if (jump) jump = false;
         if (lockOn) lockOn = false;
         if (interaction) interaction = false;
