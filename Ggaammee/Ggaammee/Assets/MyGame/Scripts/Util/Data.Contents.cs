@@ -15,9 +15,10 @@ namespace Data
     [Serializable]
     public class ProductData
     {
+        public string productId;
         public string itemId;
         public int price;
-        public int stock;
+        public string priceId;
     }
 
 

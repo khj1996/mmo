@@ -274,14 +274,14 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
         return item;
     }
 
-    protected void UpdateItemForIndex(UI_ScrollView_Sub item, int _index)
+    protected virtual void UpdateItemForIndex(UI_ScrollView_Sub item, int _index)
     {
         item._index = _index;
 
         if (item._index >= 0 && item._index <= maxIndex - 1)
         {
             item.gameObject.SetActive(true);
-            item.RefreshUI(_index);
+            item.RefreshUI();
             item.Height = GetItemHeight();
         }
         else

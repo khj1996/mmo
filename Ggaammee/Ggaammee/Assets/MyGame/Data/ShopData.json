@@ -1,22 +1,31 @@
 {
   "Shops": [
     {
-      "shopId": "shop_001",
+      "shopId": "shop_000",
       "productList": [
         {
+          "productId": "product_0",
           "itemId": "item_000",
           "price": "100",
-          "stock": "10"
+          "priceId": "item_400"
         },
         {
+          "productId": "product_1",
           "itemId": "item_100",
           "price": "50",
-          "stock": "10"
+          "priceId": "item_400"
         },
         {
-          "itemId": "item_300",
-          "price": "20",
-          "stock": "-1"
+          "productId": "product_2",
+          "itemId": "item_101",
+          "price": "100",
+          "priceId": "item_400"
+        },
+        {
+          "productId": "product_3",
+          "itemId": "item_200",
+          "price": "50",
+          "priceId": "item_400"
         }
       ]
     }

@@ -17,4 +17,5 @@ MonoBehaviour:
   description: "\uACE8\uB4DC"
   itemSprite: {fileID: -3338749442709606003, guid: 93978dcbff65c754c82f146ed36c1c45,
     type: 3}
+  cellPrice: 0
   maxStack: 60000

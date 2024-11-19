@@ -19,6 +19,11 @@ public abstract class StackableItem : Item
         SetAmount(amount);
     }
 
+    public bool CheckCount(int amount)
+    {
+        return Count >= amount;
+    }
+
     public void SetAmount(int amount)
     {
         Count = Mathf.Clamp(amount, 0, MaxCount);

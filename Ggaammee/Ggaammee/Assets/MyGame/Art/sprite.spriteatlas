@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: sprite
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 6c083c68f537d944db0c5a63177e9627, type: 3}
+    - {fileID: 2800000, guid: b6bf64f3818ea7048adcf794dea42649, type: 3}
+    - {fileID: 2800000, guid: a64f98d7a00501442ae40845562f1c20, type: 3}
+    - {fileID: 2800000, guid: 25ca2528409a30f4e827cb2d05c772bb, type: 3}
+    - {fileID: 2800000, guid: 3884787ef484b9641b8d705dfa15ea9d, type: 3}
+    - {fileID: 2800000, guid: f0b4dc9b8fe390b4597ba9c379657d44, type: 3}
+    - {fileID: 2800000, guid: 816373d26daf2fe40b59acd3712be032, type: 3}
+    - {fileID: 2800000, guid: dc095ce8d2086f541bd26c7e3a71ef12, type: 3}
+    - {fileID: 2800000, guid: b40d433859d7ac84bbaef8c466cbe4f1, type: 3}
+    - {fileID: 2800000, guid: bc5c9842ed20fb14eab8fca166a60f01, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - bc5c9842ed20fb14eab8fca166a60f01: 893452534743736695
+    - 816373d26daf2fe40b59acd3712be032: -3674341465549410928
+    - b6bf64f3818ea7048adcf794dea42649: 5659230168238626165
+    - a64f98d7a00501442ae40845562f1c20: 4211293783942383924
+    - 25ca2528409a30f4e827cb2d05c772bb: -6506105160274925290
+    - b40d433859d7ac84bbaef8c466cbe4f1: -3017524493629421183
+    - 6c083c68f537d944db0c5a63177e9627: 6120561350918462585
+    - dc095ce8d2086f541bd26c7e3a71ef12: -3989417037294542392
+    - f0b4dc9b8fe390b4597ba9c379657d44: -7020922751645015488
+    - 3884787ef484b9641b8d705dfa15ea9d: 1932520997363718593
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 893452534743736695, guid: bc5c9842ed20fb14eab8fca166a60f01, type: 3}
+  - {fileID: -3674341465549410928, guid: 816373d26daf2fe40b59acd3712be032, type: 3}
+  - {fileID: 5659230168238626165, guid: b6bf64f3818ea7048adcf794dea42649, type: 3}
+  - {fileID: 4211293783942383924, guid: a64f98d7a00501442ae40845562f1c20, type: 3}
+  - {fileID: -6506105160274925290, guid: 25ca2528409a30f4e827cb2d05c772bb, type: 3}
+  - {fileID: -3017524493629421183, guid: b40d433859d7ac84bbaef8c466cbe4f1, type: 3}
+  - {fileID: 6120561350918462585, guid: 6c083c68f537d944db0c5a63177e9627, type: 3}
+  - {fileID: -3989417037294542392, guid: dc095ce8d2086f541bd26c7e3a71ef12, type: 3}
+  - {fileID: -7020922751645015488, guid: f0b4dc9b8fe390b4597ba9c379657d44, type: 3}
+  - {fileID: 1932520997363718593, guid: 3884787ef484b9641b8d705dfa15ea9d, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Progress Bar Pink_0
+  - Dark Panels Style 2 Pink_0
+  - Coin Stack_0
+  - 80x80 Background_0
+  - Fill Blue_0
+  - Dark Panels Style 2 Green_0
+  - Button Pink_0
+  - apple red_0
+  - Menu Background_0
+  - Progress Bar Background_0
+  m_RenderDataMap: {}
+  m_Tag: sprite
+  m_IsVariant: 0

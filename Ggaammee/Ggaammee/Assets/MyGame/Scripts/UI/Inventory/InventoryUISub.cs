@@ -14,7 +14,7 @@ public class InventoryUISub : UI_ScrollView_Sub
         }
     }
 
-    public override void RefreshUI(int _index)
+    public override void RefreshUI()
     {
         if (items == null || items.Length == 0)
         {
@@ -27,7 +27,7 @@ public class InventoryUISub : UI_ScrollView_Sub
 
         for (int i = 0; i < items.Length; i++)
         {
-            var item = Managers.InventoryManager.Get(startIndex + i);
+            var item = Managers.InventoryManager.GetSlotData(startIndex + i);
             items[i].SetItem(item, startIndex + i);
         }
     }

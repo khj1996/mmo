@@ -29,12 +29,12 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
     public override void Init()
     {
         _ped = new PointerEventData(EventSystem.current);
-        maxIndex = Managers.InventoryManager.SlotLen / 5 + 1;
+        maxIndex = Managers.InventoryManager.SlotCapacity / 5 + 1;
 
         base.Init();
 
-        Managers.InventoryManager.ChangeItemAction -= RefreshSlot;
-        Managers.InventoryManager.ChangeItemAction += RefreshSlot;
+        Managers.InventoryManager.SlotChanged -= RefreshSlot;
+        Managers.InventoryManager.SlotChanged += RefreshSlot;
 
         InitializeView();
     }
@@ -149,7 +149,7 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
 
     private void TryRemoveItem(int index)
     {
-        Managers.InventoryManager.Remove(index);
+        Managers.InventoryManager.RemoveItem(index);
     }
 
     private void TrySeparateAmount(int indexA, int indexB, int amount)

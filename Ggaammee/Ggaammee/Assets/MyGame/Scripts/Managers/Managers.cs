@@ -44,6 +44,7 @@ public class Managers : MonoBehaviour
     private PoolManager _pool;
     private InventoryManager _inventory;
     private DataManager _data;
+    private ShopManager _shop;
 
     public static ObjectManager ObjectManager
     {
@@ -64,10 +65,15 @@ public class Managers : MonoBehaviour
     {
         get { return Instance._inventory; }
     }
-    
+
     public static DataManager DataManager
     {
         get { return Instance._data; }
+    }
+
+    public static ShopManager ShopManager
+    {
+        get { return Instance._shop; }
     }
 
     public bool isInit = false;
@@ -85,6 +91,7 @@ public class Managers : MonoBehaviour
         _drop = new DropManager();
         _inventory = new InventoryManager();
         _data = new DataManager();
+        _shop = new ShopManager();
 
         Application.targetFrameRate = 60;
         isInit = true;

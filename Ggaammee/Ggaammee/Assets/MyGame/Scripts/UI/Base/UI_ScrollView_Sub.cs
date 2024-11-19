@@ -19,7 +19,7 @@ public abstract class UI_ScrollView_Sub : UI_Base
         }
     }
 
-    public abstract void RefreshUI(int _index);
+    public abstract void RefreshUI();
 
     public Vector2 Top
     {

@@ -17,4 +17,5 @@ MonoBehaviour:
   description: "\uB0A0\uCE74\uB85C\uC6B4 \uAC80\uC774\uB2E4\n\uACF5\uACA9\uB825 15\uC99D\uAC00"
   itemSprite: {fileID: 712035800519618848, guid: 5555116c8467a454c8c90c5cece8dc84,
     type: 3}
+  cellPrice: 100
   damage: 15

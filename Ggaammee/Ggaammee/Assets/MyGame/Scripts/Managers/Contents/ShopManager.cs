@@ -1,74 +1,112 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Data;
 using UnityEngine;
 
 public class ShopManager
 {
-    // 상점 상품 리스트
-    public List<ShopItemData> shopItems = new List<ShopItemData>();
+    public string CurrentOpenShopId = "shop_000";
+    
+    private Dictionary<string, ShopData> shopDatas = new Dictionary<string, ShopData>();
 
-    // 플레이어의 금액 (예시)
-    private int playerGold = 1000;
-
-    // 상점에서 구매할 수 있는 아이템
-    public void InitializeShop()
+    /// <summary>
+    /// 특정 상점 데이터를 가져옵니다. 없을 경우 DataManager에서 로드합니다.
+    /// </summary>
+    public ShopData GetShopData(string shopId)
     {
-        // 상점에 아이템 추가
-        shopItems.Add(new ShopItemData("Sword", 100, "A sharp sword"));
-        shopItems.Add(new ShopItemData("Shield", 150, "A strong shield"));
-        shopItems.Add(new ShopItemData("Potion", 50, "A healing potion"));
-    }
-
-    // 아이템 구매
-    public bool BuyItem(int itemIndex)
-    {
-        if (itemIndex < 0 || itemIndex >= shopItems.Count)
-            return false;
-
-        ShopItemData item = shopItems[itemIndex];
-
-        // 금액이 충분한지 체크
-        if (playerGold >= item.price)
+        if (!shopDatas.TryGetValue(shopId, out var shopData))
         {
-            playerGold -= item.price;
-            Debug.Log($"Bought {item.name} for {item.price} gold.");
-            return true;
+            if (Managers.DataManager.ShopDict.TryGetValue(shopId, out shopData))
+            {
+                shopDatas[shopId] = shopData;
+            }
         }
 
-        Debug.Log("Not enough gold.");
-        return false;
+        CurrentOpenShopId = shopId;
+
+        return shopData;
     }
 
-    // 아이템 판매
-    public void SellItem(ShopItemData item)
+    /// <summary>
+    /// 아이템 구매
+    /// </summary>
+    public bool BuyItem(string productId)
     {
-        playerGold += item.price;
-        Debug.Log($"Sold {item.name} for {item.price} gold.");
+        if (!TryGetProduct(CurrentOpenShopId, productId, out var product))
+        {
+            Debug.LogWarning($"Product not found: ShopID({CurrentOpenShopId}), ProductID({productId})");
+            return false;
+        }
+
+        var itemData = Managers.DataManager.ItemDatas.GetData(product.itemId);
+        if (!CanBuyItem(product, itemData, out int availableSlot))
+        {
+            Debug.LogWarning($"Cannot buy item: ProductID({productId})");
+            return false;
+        }
+
+        // 구매 처리
+        Managers.InventoryManager.UseCurrency(product.priceId, product.price);
+        Managers.InventoryManager.Add(itemData, 1);
+
+        return true;
     }
 
-    // 상점 상품 반환
-    public List<ShopItemData> GetShopItems()
+    /// <summary>
+    /// 아이템 판매
+    /// </summary>
+    public void SellItem(Item item, int count)
     {
-        return shopItems;
+        // 구현 필요
+        Debug.Log($"SellItem: {item?.Data?.name}, Count: {count}");
     }
 
-    // 플레이어의 금액 반환
-    public int GetPlayerGold()
+    /// <summary>
+    /// 특정 상품을 가져옵니다.
+    /// </summary>
+    private bool TryGetProduct(string shopId, string productId, out ProductData product)
     {
-        return playerGold;
+        product = null;
+
+        var shopData = GetShopData(shopId);
+        if (shopData == null)
+        {
+            Debug.LogWarning($"Shop not found: ShopID({shopId})");
+            return false;
+        }
+
+        product = shopData.productList.FirstOrDefault(x => x.productId == productId);
+        return product != null;
     }
-}
 
-[System.Serializable]
-public class ShopItemData
-{
-    public string name;
-    public int price;
-    public string description;
-
-    public ShopItemData(string name, int price, string description)
+    /// <summary>
+    /// 아이템 구매 가능 여부를 확인합니다.
+    /// </summary>
+    private bool CanBuyItem(ProductData product, ItemData itemData, out int availableSlot)
     {
-        this.name = name;
-        this.price = price;
-        this.description = description;
+        availableSlot = -1;
+
+        if (product == null || itemData == null)
+        {
+            Debug.LogWarning("Invalid product or item data.");
+            return false;
+        }
+
+        // 가격 확인
+        if (!Managers.InventoryManager.CheckCurrencyCost(product.priceId, product.price))
+        {
+            Debug.LogWarning($"Not enough currency: PriceID({product.priceId}), Price({product.price})");
+            return false;
+        }
+
+        // 인벤토리 슬롯 확인
+        availableSlot = Managers.InventoryManager.GetAvailableSlot(itemData);
+        if (availableSlot == -1)
+        {
+            Debug.LogWarning("No available inventory slot.");
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,15 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "ItemDatas", menuName = "Inventory/ItemDatas")]
 public class ItemDatas : ScriptableObject
 {
     [SerializeField] private List<ItemData> itemDatas;
 
-    /*public ItemData GetData(string itemId)
+    public ItemData GetData(string itemId)
     {
-        itemDatas.First(x=>x.id == itemId)
-    }*/
+        var itemData = itemDatas.FirstOrDefault(x => x.id == itemId);
+
+        return itemData;
+    }
 }

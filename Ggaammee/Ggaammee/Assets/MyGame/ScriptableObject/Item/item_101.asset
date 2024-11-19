@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ef4f66ea63549a095d7392257ddd8e5, type: 3}
-  m_Name: item_100
+  m_Name: item_101
   m_EditorClassIdentifier: 
-  id: item_100
-  name: "\uBC29\uC5B4\uAD6C"
-  description: "\uD2BC\uD2BC\uD55C \uBC29\uC5B4\uAD6C\uB2E4\n\uBC29\uC5B4\uB825 10\uC99D\uAC00"
-  itemSprite: {fileID: -6717884257390833292, guid: 6f2409c812e59e04fb9d2af0715bea80,
+  id: item_101
+  name: "\uB2E8\uB2E8\uD55C \uBC29\uC5B4\uAD6C"
+  description: "\uB2E8\uB2E8\uD55C \uBC29\uC5B4\uAD6C\uB2E4\n\uBC29\uC5B4\uB825 15\uC99D\uAC00"
+  itemSprite: {fileID: -7314038943984137149, guid: 888bc6c3bee4a644894eb075d8d389f5,
     type: 3}
   cellPrice: 100
-  Defence: 10
+  Defence: 15
