@@ -26,6 +26,12 @@
           "itemId": "item_200",
           "price": "50",
           "priceId": "item_400"
+        },
+        {
+          "productId": "product_4",
+          "itemId": "item_201",
+          "price": "100",
+          "priceId": "item_400"
         }
       ]
     }

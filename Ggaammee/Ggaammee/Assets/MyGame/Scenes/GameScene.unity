@@ -6612,6 +6612,26 @@ PrefabInstance:
       propertyPath: currentShopId
       value: shop_000
       objectReference: {fileID: 0}
+    - target: {fileID: 9035285920660268357, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      propertyPath: padding.m_Top
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9035285920660268357, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      propertyPath: padding.m_Left
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9035285920660268357, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      propertyPath: padding.m_Right
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9035285920660268357, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      propertyPath: padding.m_Bottom
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 4983755021165899364, guid: 89b01fdbc5b912845be46d92ababf26a, type: 3}

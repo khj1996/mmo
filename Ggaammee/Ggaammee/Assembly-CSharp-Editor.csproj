@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\MyGame\Editor\ShopUIEditor.cs" />
+    <Compile Include="Assets\MyGame\Editor\ItemDatasEditor.cs" />
     <Compile Include="Assets\MyGame\Editor\MeshCombinerEditorMeshCombinerEditor.cs" />
     <Compile Include="Assets\MyGame\Editor\SpriteAtlasCollector.cs" />
     <Reference Include="UnityEngine">
