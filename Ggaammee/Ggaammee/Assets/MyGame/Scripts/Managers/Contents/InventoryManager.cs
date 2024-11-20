@@ -15,12 +15,10 @@ public class InventoryManager
 
     public int SlotCapacity { get; private set; } = Util.StaticValues.InventorySize;
 
-    public InventoryManager()
-    {
-        InitializeInventory();
-    }
 
-    private void InitializeInventory()
+
+    //초기 아이템 보여주기용 예시용도
+    public void InitializeInventory()
     {
         foreach (var item in Managers.Instance.StartItemData)
         {
@@ -125,6 +123,21 @@ public class InventoryManager
             Currency.Add(newCurrency);
         }
 
+        UpdateCurrency();
+    }
+
+    public void UseCurrency(string currencyId, int amount)
+    {
+        var currency = Currency.FirstOrDefault(c => c.Data.id == currencyId);
+        if (currency != null)
+        {
+            currency.AddAmountAndGetExcess(-amount);
+            UpdateCurrency();
+        }
+    }
+
+    private void UpdateCurrency()
+    {
         CurrencyChanged?.Invoke();
     }
 
@@ -147,8 +160,7 @@ public class InventoryManager
     {
         if (!IsValidIndex(fromIndex) || !IsValidIndex(toIndex)) return;
 
-        var sourceItem = Items[fromIndex] as StackableItem;
-        if (sourceItem != null && Items[toIndex] == null)
+        if (Items[fromIndex] is StackableItem sourceItem && Items[toIndex] == null)
         {
             Items[toIndex] = sourceItem.SeperateAndClone(amount);
             UpdateSlot(fromIndex, sourceItem);
@@ -193,16 +205,6 @@ public class InventoryManager
     {
         var currency = Currency.FirstOrDefault(c => c.Data.id == currencyId);
         return currency != null && currency.CheckCount(amount);
-    }
-
-    public void UseCurrency(string currencyId, int amount)
-    {
-        var currency = Currency.FirstOrDefault(c => c.Data.id == currencyId);
-        if (currency != null)
-        {
-            currency.AddAmountAndGetExcess(-amount);
-            CurrencyChanged?.Invoke();
-        }
     }
 
     // 유틸리티 메서드

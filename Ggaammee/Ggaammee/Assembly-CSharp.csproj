@@ -83,6 +83,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_DragHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DropManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\Item.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />

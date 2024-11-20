@@ -30,13 +30,15 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
     {
         _ped = new PointerEventData(EventSystem.current);
         maxIndex = Managers.InventoryManager.SlotCapacity / 5 + 1;
-
-        base.Init();
-
         Managers.InventoryManager.SlotChanged -= RefreshSlot;
         Managers.InventoryManager.SlotChanged += RefreshSlot;
 
+        base.Init();
         InitializeView();
+        Managers.InventoryManager.InitializeInventory();
+
+
+        gameObject.SetActive(false);
     }
 
     private void Update()

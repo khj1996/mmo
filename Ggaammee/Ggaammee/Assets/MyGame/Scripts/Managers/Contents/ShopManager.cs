@@ -6,7 +6,7 @@ using UnityEngine;
 public class ShopManager
 {
     public string CurrentOpenShopId = "shop_000";
-    
+
     private Dictionary<string, ShopData> shopDatas = new Dictionary<string, ShopData>();
 
     /// <summary>
@@ -52,14 +52,6 @@ public class ShopManager
         return true;
     }
 
-    /// <summary>
-    /// 아이템 판매
-    /// </summary>
-    public void SellItem(Item item, int count)
-    {
-        // 구현 필요
-        Debug.Log($"SellItem: {item?.Data?.name}, Count: {count}");
-    }
 
     /// <summary>
     /// 특정 상품을 가져옵니다.

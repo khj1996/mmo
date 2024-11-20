@@ -349,7 +349,7 @@ MonoBehaviour:
   - data: {fileID: 11400000, guid: 9dd3bcd593af7bb4384fc99d9fa08402, type: 2}
     count: 44
   - data: {fileID: 11400000, guid: 9dd3bcd593af7bb4384fc99d9fa08402, type: 2}
-    count: 33
+    count: 111
   - data: {fileID: 11400000, guid: 945749d011959214eb18042048d1c6d2, type: 2}
     count: 5000
   isInit: 0
@@ -6482,6 +6482,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1139047450852140141, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1212060916606026200, guid: 89b01fdbc5b912845be46d92ababf26a,
         type: 3}
       propertyPath: m_Name
@@ -6597,13 +6602,20 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 630
       objectReference: {fileID: 0}
+    - target: {fileID: 4983755021165899364, guid: 89b01fdbc5b912845be46d92ababf26a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9035285920660268357, guid: 89b01fdbc5b912845be46d92ababf26a,
         type: 3}
       propertyPath: currentShopId
       value: shop_000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4983755021165899364, guid: 89b01fdbc5b912845be46d92ababf26a, type: 3}
+    - {fileID: 1139047450852140141, guid: 89b01fdbc5b912845be46d92ababf26a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89b01fdbc5b912845be46d92ababf26a, type: 3}

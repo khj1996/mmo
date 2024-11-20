@@ -12,6 +12,13 @@ public static class Util
         Drag,
     }
 
+    public enum ChangeType
+    {
+        Add,
+        Cost,
+        New
+    }
+
     public enum CreatureState
     {
         Idle = 0,
@@ -41,6 +48,25 @@ public static class Util
     public static void BindEvent(this GameObject go, Action<PointerEventData> action, UIEvent type = UIEvent.Click)
     {
         UI_Base.BindEvent(go, action, type);
+    }
+
+    public static string FormatNumber(long num)
+    {
+        // 숫자 범위와 접미사를 배열로 정의
+        var suffixes = new[] { "K", "M", "B", "T" }; // 순서: 천, 백만, 십억, 조
+        var divisors = new[] { 1_000L, 1_000_000L, 1_000_000_000L, 1_000_000_000_000L };
+
+        for (int i = divisors.Length - 1; i >= 0; i--)
+        {
+            if (num >= divisors[i])
+            {
+                double shortened = (double)num / divisors[i];
+                return shortened.ToString(shortened >= 10 ? "0" : "0.#") + suffixes[i];
+            }
+        }
+
+        // 1,000 미만은 숫자 그대로 반환
+        return num.ToString("#,0");
     }
 }
 

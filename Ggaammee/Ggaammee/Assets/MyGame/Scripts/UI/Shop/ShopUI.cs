@@ -1,3 +1,4 @@
+using System;
 using Data;
 using TMPro;
 using UnityEngine;
@@ -11,11 +12,16 @@ public class ShopUI : UI_ScrollView<ShopUISub>
 
     private ShopData shopData;
 
-    private void Start()
+    public override void Init()
     {
-        var popupUI = GetComponent<PopupUI>();
+        base.Init();
+        gameObject.SetActive(false);
+    }
 
-        popupUI.OnFocus += RefreshShop;
+    private void OnEnable()
+    {
+        if (Managers.Instance.isInit)
+            RefreshShop();
     }
 
     public void RefreshShop()

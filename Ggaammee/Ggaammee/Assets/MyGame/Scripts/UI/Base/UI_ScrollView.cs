@@ -118,29 +118,29 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
         }
     }
 
-    private void PositionItems()
+    protected virtual void PositionItems()
     {
         LinkedListNode<T> node = items.First;
+
         while (node != null)
         {
+            // 현재 노드의 아이템 업데이트
             UpdateItemForIndex(node.Value, node.Value._index);
-            node.Value.RectTransform.anchoredPosition = Vector2.up * ItemPosY[node.Value._index];
-            node = node.Next;
 
-            while (node != null)
+            // 현재 노드의 위치 설정
+            if (node.Value._index < ItemPosY.Length)
             {
-                UpdateItemForIndex(node.Value, node.Previous.Value._index + 1);
-
-                if (node.Value._index < ItemPosY.Length)
-                {
-                    node.Value.Top = Vector2.up * ItemPosY[node.Value._index];
-                    node.Value.RectTransform.anchoredPosition = node.Value.Top;
-                }
-
-                node = node.Next;
+                Vector2 position = Vector2.up * ItemPosY[node.Value._index];
+                node.Value.RectTransform.anchoredPosition = position;
+                node.Value.Top = position;
             }
+
+            // 다음 노드로 이동
+            node = node.Next;
         }
     }
+
+
 
     protected void UpdateScrollViewSize()
     {

@@ -8,10 +8,6 @@ public class InventoryUISub : UI_ScrollView_Sub
 
     public override void Init()
     {
-        foreach (var slot in items)
-        {
-            slot.SetItem(null, -1); // 슬롯 초기화
-        }
     }
 
     public override void RefreshUI()

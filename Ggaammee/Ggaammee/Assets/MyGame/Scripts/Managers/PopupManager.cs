@@ -25,7 +25,6 @@ public class PopupUIManager : MonoBehaviour
     {
         _activePopupLList = new LinkedList<PopupUI>();
         Init();
-        InitCloseAll();
     }
 
     private void Update()
