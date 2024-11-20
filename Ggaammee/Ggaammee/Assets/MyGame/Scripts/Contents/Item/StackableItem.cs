@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class StackableItem : Item
 {
@@ -11,6 +12,8 @@ public abstract class StackableItem : Item
     public bool IsMax => Count >= StackableDataData.maxStack;
 
     public bool IsEmpty => Count <= 0;
+
+    public event Action OnChangeCount;
 
 
     public StackableItem(StackableItemData dataData, int amount = 1) : base(dataData)
@@ -27,6 +30,7 @@ public abstract class StackableItem : Item
     public void SetAmount(int amount)
     {
         Count = Mathf.Clamp(amount, 0, MaxCount);
+        OnOnChangeCount();
     }
 
     public int AddAmountAndGetExcess(int amount)
@@ -49,4 +53,9 @@ public abstract class StackableItem : Item
     }
 
     protected abstract StackableItem Clone(int amount);
+
+    protected virtual void OnOnChangeCount()
+    {
+        OnChangeCount?.Invoke();
+    }
 }

@@ -76,6 +76,7 @@ public static class LayerData
     public static readonly int GroundLayer = 1 << 3;
     public static readonly int PlayerLayer = 1 << 18;
     public static readonly int MonsterLayer = 1 << 19;
+    public static readonly int ItemSlotLayer = 1 << 20;
 }
 
 

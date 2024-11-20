@@ -52,13 +52,14 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringCollider.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\DialogueAction.cs" />
-    <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventorySlotUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\Singleton.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\MeshCombiner.cs" />
     <Compile Include="Assets\MyGame\InputSystem\InputSystem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ItemDatas.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ScrollView_Sub.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\QuickUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\ArmorItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\Base\ItemSlotUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\WeaponItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\NPCDialogue.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\CreatureData.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Assets\MyGame\Scripts\Util\Data.Contents.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\BehaviorTree.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\UsableItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\DraggableItemUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUISub.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DropManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\DragManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\Item.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
@@ -102,7 +105,6 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\DialogueModule.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\PopupManager.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
-    <Compile Include="Assets\MyGame\Scripts\UI\Inventory\DraggableItemUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureController.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ScrollView.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\UsableItemData.cs" />

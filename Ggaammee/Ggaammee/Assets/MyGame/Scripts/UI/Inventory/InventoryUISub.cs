@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryUISub : UI_ScrollView_Sub
 {
-    [SerializeField] public InventorySlotUI[] items;
+    [SerializeField] public ItemSlotUI[] items;
 
     public override void Init()
     {
@@ -19,7 +19,6 @@ public class InventoryUISub : UI_ScrollView_Sub
         }
 
         int startIndex = _index * items.Length;
-        Debug.Log(startIndex);
 
         for (int i = 0; i < items.Length; i++)
         {

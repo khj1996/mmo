@@ -9,7 +9,7 @@ public class CreatureController : MonoBehaviour
     public CreatureData creatureData;
     [SerializeField] protected HpBar _hpBar;
 
-    public CreatureStats stat =new CreatureStats();
+    public CreatureStats stat;
     protected bool isDie;
 
     public Animator animator;
@@ -22,6 +22,7 @@ public class CreatureController : MonoBehaviour
     protected virtual void Init()
     {
         _hasAnimator = TryGetComponent(out animator);
+        stat = new CreatureStats();
         stat.ChangeHpEvent += () => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
         stat.baseMaxHp = creatureData.maxHp;
         stat.currentHp = stat.CurrentMaxHp;

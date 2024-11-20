@@ -9,7 +9,7 @@ public class UsableItem : StackableItem, IUsableItem
     {
         UseItem += () =>
         {
-            Count -= 1;
+            SetAmount(--Count);
             Managers.ObjectManager.MainPlayer.stat.HpChange(data.value);
         };
     }

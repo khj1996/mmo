@@ -31,6 +31,7 @@ public class PlayerController : CreatureController
     private InputSystem _input;
     private GameObject _mainCamera;
     private LockOn _lockOn;
+    private List<DropItem> _currentDropItems;
 
     private void Awake()
     {
@@ -52,13 +53,14 @@ public class PlayerController : CreatureController
     {
         InitFSM();
         InitComponent();
-        
+
         base.Init();
 
         Managers.ObjectManager.MainPlayer = this;
         Managers.ObjectManager.RegisterPlayer(this);
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
+        _currentDropItems = new List<DropItem>();
     }
 
     private void InitFSM()
@@ -399,8 +401,6 @@ public class PlayerController : CreatureController
     #endregion
 
     #region 아이템
-
-    private List<DropItem> _currentDropItems = new List<DropItem>();
 
     public bool AddItemToInventory(ItemData itemData)
     {

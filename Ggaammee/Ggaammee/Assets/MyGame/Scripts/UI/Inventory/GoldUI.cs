@@ -10,6 +10,8 @@ public class GoldUI : UI_Base
     {
         Managers.InventoryManager.CurrencyChanged -= RefreshUI;
         Managers.InventoryManager.CurrencyChanged += RefreshUI;
+
+        RefreshUI();
     }
 
     private void RefreshUI()

@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventorySlotUI : UI_Base
+public class ItemSlotUI : UI_Base
 {
     [Header("UI Elements")] [SerializeField]
     private Image _icon;
@@ -15,9 +15,11 @@ public class InventorySlotUI : UI_Base
     public Item Item => _item;
     public int Index { get; private set; } = -1;
 
+
     public RectTransform Rect => GetComponent<RectTransform>();
 
     public event Action OnShortPress;
+    public event Action<ItemSlotUI, ItemSlotUI> OnDropItem;
 
     public override void Init()
     {
@@ -31,7 +33,6 @@ public class InventorySlotUI : UI_Base
         if (_item is UsableItem usableItem)
         {
             usableItem.Use();
-            RefreshCount();
         }
     }
 
@@ -41,6 +42,22 @@ public class InventorySlotUI : UI_Base
     {
         OnShortPress?.Invoke();
     }
+
+    public void SetItem(Item item)
+    {
+        if (_item == item) return;
+
+        _item = item;
+        if (_item == null)
+        {
+            ResetUI();
+        }
+        else
+        {
+            UpdateUI();
+        }
+    }
+
 
     public void SetItem(Item item, int index)
     {
@@ -75,6 +92,11 @@ public class InventorySlotUI : UI_Base
 
     private void UpdateUI()
     {
+        if (_item is StackableItem oldStackableItem)
+        {
+            oldStackableItem.OnChangeCount -= RefreshCount;
+        }
+
         _icon.sprite = _item.Data.itemSprite;
         _icon.gameObject.SetActive(true);
 
@@ -82,12 +104,23 @@ public class InventorySlotUI : UI_Base
         {
             _quantity.text = stackableItem.Count.ToString();
             _quantity.gameObject.SetActive(true);
+            stackableItem.OnChangeCount -= RefreshCount;
+            stackableItem.OnChangeCount += RefreshCount;
         }
         else
         {
             _quantity.gameObject.SetActive(false);
         }
+    }
 
-        //_frame.gameObject.SetActive(_item.Equipped); // Uncomment when equipped logic is added
+
+    public void HandleDrop(ItemSlotUI itemSlotUI)
+    {
+        if (_item != null && itemSlotUI.HasItem())
+        {
+            Debug.Log("Dropping item from slot " + itemSlotUI.Index + " to " + Index);
+        }
+
+        OnDropItem?.Invoke(itemSlotUI, this);
     }
 }

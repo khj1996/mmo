@@ -20,7 +20,6 @@ public class DataManager
     {
         ShopDict = LoadJson<ShopLoader, string, ShopData>("ShopData").MakeDict();
         ItemDatas = LoadSO<ItemDatas>("ItemDatas");
-        Debug.Log(1);
     }
 
     Loader LoadJson<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
