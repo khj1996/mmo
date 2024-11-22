@@ -22,10 +22,8 @@ public class CreatureController : MonoBehaviour
     protected virtual void Init()
     {
         _hasAnimator = TryGetComponent(out animator);
-        stat = new CreatureStats();
+        stat = new CreatureStats(creatureData);
         stat.ChangeHpEvent += () => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
-        stat.baseMaxHp = creatureData.maxHp;
-        stat.currentHp = stat.CurrentMaxHp;
     }
 
     public void LockAtTargetPosition()

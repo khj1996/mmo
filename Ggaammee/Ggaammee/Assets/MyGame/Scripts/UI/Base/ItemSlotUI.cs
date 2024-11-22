@@ -116,11 +116,6 @@ public class ItemSlotUI : UI_Base
 
     public void HandleDrop(ItemSlotUI itemSlotUI)
     {
-        if (_item != null && itemSlotUI.HasItem())
-        {
-            Debug.Log("Dropping item from slot " + itemSlotUI.Index + " to " + Index);
-        }
-
         OnDropItem?.Invoke(itemSlotUI, this);
     }
 }

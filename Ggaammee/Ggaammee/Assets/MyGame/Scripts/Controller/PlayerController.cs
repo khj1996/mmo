@@ -533,7 +533,7 @@ public class PlayerController : CreatureController
         List<CharacterController> monsters = GetMonstersInRange(attackPoint.position);
         foreach (CharacterController monster in monsters)
         {
-            monster.gameObject.GetComponent<CreatureController>().GetDamaged(creatureData.attack);
+            monster.gameObject.GetComponent<CreatureController>().GetDamaged(stat.CurrentAttackPower);
         }
     }
 

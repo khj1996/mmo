@@ -34,6 +34,12 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
 
     private void HandleItemSwapOrSeparation(ItemSlotUI fromSlot, ItemSlotUI toSlot)
     {
+        if (fromSlot.Index == -1)
+        {
+            Managers.InventoryManager.UnequipItem(((EquipItemData)fromSlot.Item.Data).type);
+            return;
+        }
+        
         bool isSeparatable = (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift)) &&
                              (fromSlot.Item is StackableItem stackable && stackable.Count > 1);
 

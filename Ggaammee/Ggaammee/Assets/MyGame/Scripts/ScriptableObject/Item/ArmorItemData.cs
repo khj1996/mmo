@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "ArmorItemData", menuName = "Inventory/ArmorItemData")]
-public class ArmorItemData : EuqipItemData
+public class ArmorItemData : EquipItemData
 {
     public int Defence = 1;
 

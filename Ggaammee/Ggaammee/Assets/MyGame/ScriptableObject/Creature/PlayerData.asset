@@ -16,7 +16,7 @@ MonoBehaviour:
   level: 1
   maxHp: 250
   attack: 55
-  defense: 0
+  defense: 11
   attackSpeed: 1
   speed: 30
   sprintSpeed: 60

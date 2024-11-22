@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\State.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\CreatureStats.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\LockOn.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
@@ -67,6 +66,7 @@
     <Compile Include="Assets\MyGame\Scripts\Util\Data.Contents.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\BehaviorTree.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\UsableItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStats.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DraggableItemUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
@@ -74,6 +74,7 @@
     <Compile Include="Assets\MyGame\Scripts\Util\Util.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\PoolManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Managers.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\EquipItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\MonsterController.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Hp\HpBar.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_DragHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DropManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\EquipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\DragManager.cs" />
@@ -98,9 +100,8 @@
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\DropItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStateMachine.cs" />
-    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\EuqipItemData.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\Item\EquipmentItem.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item\EquipItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\InventoryManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\DialogueModule.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\PopupManager.cs" />

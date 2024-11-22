@@ -8,13 +8,14 @@ public class InventoryManager
     // 아이템 슬롯 및 통화 정보
     public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
     public List<StackableItem> Currency { get; private set; } = new List<StackableItem>();
+    public Dictionary<Util.EquipType, EquipItem> EquipedItems { get; private set; } = new Dictionary<Util.EquipType, EquipItem>();
 
     // 슬롯 변경 및 통화 변경 이벤트
     public event Action<int, Item> SlotChanged;
     public event Action CurrencyChanged;
+    public event Action<Util.EquipType> OnEquipChanged;
 
     public int SlotCapacity { get; private set; } = Util.StaticValues.InventorySize;
-
 
 
     //초기 아이템 보여주기용 예시용도
@@ -69,6 +70,51 @@ public class InventoryManager
 
         return amount;
     }
+
+    public void EquipItem(ItemSlotUI slotData)
+    {
+        if (slotData.Item?.Data is EquipItemData data)
+        {
+            // 현재 장착 아이템 해제
+            UnequipItem(data.type);
+
+            // 새 장비 장착
+            EquipNewItem(slotData, data.type);
+        }
+    }
+
+    public void UnequipItem(Util.EquipType type)
+    {
+        if (EquipedItems.TryGetValue(type, out var currentEquip))
+        {
+            var slotIndex = FindEmptySlot();
+            if (slotIndex == -1)
+            {
+                return;
+            }
+
+            Items.Add(slotIndex, currentEquip);
+            UpdateSlot(slotIndex, currentEquip);
+            EquipedItems.Remove(type);
+            NotifyEquipChanged(type);
+        }
+    }
+
+    private void EquipNewItem(ItemSlotUI slotData, Util.EquipType type)
+    {
+        var selectSlotItem = slotData.Item;
+        Items.Remove(slotData.Index);
+        UpdateSlot(slotData.Index, null);
+        EquipedItems.Add(type, selectSlotItem as EquipItem);
+        NotifyEquipChanged(type);
+    }
+
+
+    private void NotifyEquipChanged(Util.EquipType type)
+    {
+        OnEquipChanged?.Invoke(type);
+    }
+
 
     private int AddNonStackableItem(ItemData data, int amount)
     {

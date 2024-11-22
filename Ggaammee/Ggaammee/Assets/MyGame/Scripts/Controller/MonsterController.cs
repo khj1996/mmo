@@ -166,7 +166,7 @@ public class MonsterController : CreatureController
 
         foreach (CharacterController monster in players)
         {
-            monster.gameObject.GetComponent<PlayerController>().GetDamaged(creatureData.attack);
+            monster.gameObject.GetComponent<PlayerController>().GetDamaged(stat.CurrentAttackPower);
         }
     }
 

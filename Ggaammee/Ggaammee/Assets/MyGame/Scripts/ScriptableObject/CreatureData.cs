@@ -9,8 +9,8 @@ public class CreatureData : ScriptableObject
     public int level;
    
     [Header("Stats")] public float maxHp;
-    public float attack;
-    public float defense;
+    public int attack;
+    public int defense;
     public float attackSpeed;
     public float speed;
     public float sprintSpeed;

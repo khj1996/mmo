@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "WeaponItemData", menuName = "Inventory/WeaponItemData")]
-public class WeaponItemData : EuqipItemData
+public class WeaponItemData : EquipItemData
 {
     public int damage = 1;
 

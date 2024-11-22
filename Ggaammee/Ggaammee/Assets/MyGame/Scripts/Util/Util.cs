@@ -31,6 +31,20 @@ public static class Util
         Die = 7,
     }
 
+    public enum EquipType
+    {
+        Weapon,
+        Armor
+    }
+
+    public enum StatType
+    {
+        Hp,
+        Atk,
+        Defense
+    }
+
+
     public static class StaticValues
     {
         public static readonly int InventorySize = 88;

@@ -22,45 +22,50 @@ public class CreatureStats
     public float currentHp = 0;
 
     // 장비 관리
-    private List<EquipmentItem> equippedItems = new List<EquipmentItem>();
+    private List<EquipItem> equippedItems = new List<EquipItem>();
 
-    // 아이템 사용에 의한 일시적 효과
-    private int temporaryHpBonus;
-    private int temporaryAttackBonus;
+    public CreatureStats(CreatureData creatureData)
+    {
+        baseMaxHp = creatureData.maxHp;
+        currentHp = CurrentMaxHp;
+        baseAttackPower = creatureData.attack;
+        baseDefensePower = creatureData.defense;
+    }
+
+
+    public event Action<float, Util.StatType> OnChangeCurrentMaxHp;
+    public event Action<float, Util.StatType> OnChangeCurrentAttackPower;
+    public event Action<float, Util.StatType> OnChangeCurrentDefensePower;
 
     public event Action ChangeHpEvent;
 
-    // 아이템 효과 적용
-    public void ApplyItemEffect(int value)
-    {
-        HpChange(value);
-    }
-
     // 장비 착용
-    public void Equip(EquipmentItem equipment)
+    public void Equip(EquipItem equip)
     {
-        equippedItems.Add(equipment);
+        equippedItems.Add(equip);
 
-        if (equipment.Data is ArmorItemData ai)
+        if (equip.Data is ArmorItemData ai)
         {
             equipmentDefenseBonus += ai.Defence;
+            OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, Util.StatType.Defense);
         }
-        else if (equipment.Data is WeaponItemData wi)
+        else if (equip.Data is WeaponItemData wi)
         {
             equipmentAttackBonus += wi.damage;
+            OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, Util.StatType.Atk);
         }
     }
 
     // 장비 해제
-    public void Unequip(EquipmentItem equipment)
+    public void Unequip(EquipItem equip)
     {
-        equippedItems.Remove(equipment);
+        equippedItems.Remove(equip);
 
-        if (equipment.Data is ArmorItemData ai)
+        if (equip.Data is ArmorItemData ai)
         {
             equipmentDefenseBonus -= ai.Defence;
         }
-        else if (equipment.Data is WeaponItemData wi)
+        else if (equip.Data is WeaponItemData wi)
         {
             equipmentAttackBonus -= wi.damage;
         }
