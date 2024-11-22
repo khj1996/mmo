@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CreatureStats
@@ -21,17 +20,16 @@ public class CreatureStats
 
     public float currentHp = 0;
 
-    // 장비 관리
-    private List<EquipItem> equippedItems = new List<EquipItem>();
-
     public CreatureStats(CreatureData creatureData)
     {
         baseMaxHp = creatureData.maxHp;
         currentHp = CurrentMaxHp;
         baseAttackPower = creatureData.attack;
         baseDefensePower = creatureData.defense;
-    }
 
+        Managers.InventoryManager.OnEquipChanged -= RefreshEquipStat;
+        Managers.InventoryManager.OnEquipChanged += RefreshEquipStat;
+    }
 
     public event Action<float, Util.StatType> OnChangeCurrentMaxHp;
     public event Action<float, Util.StatType> OnChangeCurrentAttackPower;
@@ -39,35 +37,45 @@ public class CreatureStats
 
     public event Action ChangeHpEvent;
 
-    // 장비 착용
-    public void Equip(EquipItem equip)
+    // 장비 장착 시 스탯 갱신
+    public void RefreshEquipStat(Util.EquipType type)
     {
-        equippedItems.Add(equip);
+        // 인벤토리에서 해당 타입의 장비를 가져옴
+        EquipItem equip = Managers.InventoryManager.GetEquippedItem(type);
 
+        // 장비가 없는 경우, 해당 타입의 보너스를 초기화
+        if (equip == null)
+        {
+            ResetEquipBonus(type);
+            return;
+        }
+
+        // 장비가 있는 경우, 타입에 따라 보너스를 갱신
         if (equip.Data is ArmorItemData ai)
         {
-            equipmentDefenseBonus += ai.Defence;
+            equipmentDefenseBonus = ai.Defence;
             OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, Util.StatType.Defense);
         }
         else if (equip.Data is WeaponItemData wi)
         {
-            equipmentAttackBonus += wi.damage;
+            equipmentAttackBonus = wi.damage;
             OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, Util.StatType.Atk);
         }
     }
 
-    // 장비 해제
-    public void Unequip(EquipItem equip)
+    // 해당 타입의 장비 보너스를 초기화
+    private void ResetEquipBonus(Util.EquipType type)
     {
-        equippedItems.Remove(equip);
-
-        if (equip.Data is ArmorItemData ai)
+        switch (type)
         {
-            equipmentDefenseBonus -= ai.Defence;
-        }
-        else if (equip.Data is WeaponItemData wi)
-        {
-            equipmentAttackBonus -= wi.damage;
+            case Util.EquipType.Armor:
+                equipmentDefenseBonus = 0;
+                OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, Util.StatType.Defense);
+                break;
+            case Util.EquipType.Weapon:
+                equipmentAttackBonus = 0;
+                OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, Util.StatType.Atk);
+                break;
         }
     }
 

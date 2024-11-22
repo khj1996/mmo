@@ -269,4 +269,9 @@ public class InventoryManager
 
     public string GetItemName(int index) =>
         IsValidIndex(index) && Items.TryGetValue(index, out var item) ? item.Data.name : string.Empty;
+
+    public EquipItem GetEquippedItem(Util.EquipType type)
+    {
+        return EquipedItems.GetValueOrDefault(type);
+    }
 }

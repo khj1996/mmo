@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -20,20 +21,47 @@ public class EquipUI : UI_Base
 
     private bool isInit = false;
 
-    public override void Init()
+    public override async void Init()
     {
         isInit = true;
 
         // EquipSlot에 드롭 이벤트 연결
         foreach (var slot in equipSlots)
         {
+            slot.slotUI.OnDropItem -= HandleEquipSlotChange;
             slot.slotUI.OnDropItem += HandleEquipSlotChange;
         }
 
         // 인벤토리 장비 변경 이벤트 등록
+        Managers.InventoryManager.OnEquipChanged -= RefreshUI;
         Managers.InventoryManager.OnEquipChanged += RefreshUI;
 
+
+        //이부분에서 플레이어 스탯 데이터 초기화 전까지 대기
+
+
+        var playerStat = await WaitForPlayerStatInitialization();
+
+        playerStat.OnChangeCurrentMaxHp -= RefreshStatValue;
+        playerStat.OnChangeCurrentMaxHp += RefreshStatValue;
+
+        playerStat.OnChangeCurrentDefensePower -= RefreshStatValue;
+        playerStat.OnChangeCurrentDefensePower += RefreshStatValue;
+
+        playerStat.OnChangeCurrentAttackPower -= RefreshStatValue;
+        playerStat.OnChangeCurrentAttackPower += RefreshStatValue;
+
         gameObject.SetActive(false);
+    }
+
+    private async UniTask<CreatureStats> WaitForPlayerStatInitialization()
+    {
+        while (Managers.ObjectManager.MainPlayer?.stat == null)
+        {
+            await UniTask.Yield(); // 매 프레임 대기
+        }
+
+        return Managers.ObjectManager.MainPlayer.stat;
     }
 
     private void OnEnable()
@@ -86,12 +114,6 @@ public class EquipUI : UI_Base
             currentEquipDic.TryGetValue(type, out var equip);
             targetSlot.slotUI.SetItem(equip);
         }
-
-        // 스탯 갱신
-        var playerStat = Managers.ObjectManager.MainPlayer.stat;
-        HpValueText.text = playerStat.CurrentMaxHp.ToString();
-        AttackValueText.text = playerStat.CurrentAttackPower.ToString();
-        DefenceValueText.text = playerStat.CurrentDefensePower.ToString();
     }
 
     public void RefreshUI()
