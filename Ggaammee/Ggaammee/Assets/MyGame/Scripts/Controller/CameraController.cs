@@ -79,16 +79,17 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         }
+
+        Debug.Log(_cinemachineTargetPitch);
     }
 
 
-    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+    private static float ClampAngle(float angle, float min, float max)
     {
-        if (lfAngle < -360f) lfAngle += 360f;
-        if (lfAngle > 360f) lfAngle -= 360f;
-        return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        angle = Mathf.Repeat(angle + 180f, 360f) - 180f;
+
+        return Mathf.Clamp(angle, min, max);
     }
 }
