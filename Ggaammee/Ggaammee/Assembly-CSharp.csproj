@@ -48,6 +48,7 @@
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\State.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\LockOn.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\MonsterSpawner.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringCollider.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\DialogueAction.cs" />
@@ -57,19 +58,19 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ItemDatas.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ScrollView_Sub.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\QuickUI.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\ArmorItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\ItemSlotUI.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\WeaponItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\NPCDialogue.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\CreatureData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item\WeaponItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item\UsableItem.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Data.Contents.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\BehaviorTree.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\UsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStats.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DraggableItemUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item\ArmorItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUISub.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Util.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\PoolManager.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DataManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Shop\ShopUISub.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\StackableItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item\DropItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_Base.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringBone.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUI.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\DragManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\Item.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Item\CurrencyItem.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />
@@ -98,7 +101,6 @@
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryPopupUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\DropItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStateMachine.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\EquipItem.cs" />
@@ -111,7 +113,6 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\UsableItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Shop\ShopUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\PopupUI.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Contents\CurrencyItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\WeaponItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\StackableItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\IUsableItem.cs" />

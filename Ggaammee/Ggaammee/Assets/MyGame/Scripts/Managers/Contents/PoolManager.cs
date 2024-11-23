@@ -8,22 +8,20 @@ using Object = UnityEngine.Object;
 public class PoolManager
 {
     private Transform poolContainerTransform = GameObject.FindWithTag("PoolContainer").transform;
-    private Dictionary<Type, Queue<Poolable>> pools = new();
-    private Dictionary<Type, AsyncOperationHandle<GameObject>> loadedPrefabs = new();
+    private Dictionary<string, Queue<Poolable>> pools = new();
+    private Dictionary<string, AsyncOperationHandle<GameObject>> loadedPrefabs = new();
 
     private const int PREFAB_POOL_SIZE = 10;
 
-    public void PrewarmPools<T>() where T : Poolable
+    public void PrewarmPools<T>(string name) where T : Poolable
     {
-        var type = typeof(T);
-
-        if (!pools.ContainsKey(type))
+        if (!pools.ContainsKey(name))
         {
-            pools[type] = new Queue<Poolable>();
+            pools[name] = new Queue<Poolable>();
         }
 
 
-        var handle = Addressables.LoadAssetAsync<GameObject>(type.Name);
+        var handle = Addressables.LoadAssetAsync<GameObject>(name);
         handle.Completed += (op) =>
         {
             if (op.Status == AsyncOperationStatus.Succeeded)
@@ -33,30 +31,29 @@ public class PoolManager
                 for (int i = 0; i < PREFAB_POOL_SIZE; i++)
                 {
                     T newItem = Object.Instantiate(prefab, poolContainerTransform).GetComponent<T>();
+                    newItem.poolName = name;
                     newItem.OnReturnToPool();
-                    pools[type].Enqueue(newItem);
+                    pools[name].Enqueue(newItem);
                 }
             }
             else
             {
-                Debug.LogError($"Failed to load Addressable prefab for {type.Name}");
+                Debug.LogError($"Failed to load Addressable prefab for {name}");
             }
         };
     }
 
 
-    public T GetFromPool<T>() where T : Poolable
+    public T GetFromPool<T>(string name) where T : Poolable
     {
-        var type = typeof(T);
-
-        if (!pools.ContainsKey(type))
+        if (!pools.ContainsKey(name))
         {
-            pools[type] = new Queue<Poolable>();
+            pools[name] = new Queue<Poolable>();
         }
 
-        if (pools[type].Count > 0)
+        if (pools[name].Count > 0)
         {
-            Poolable item = pools[type].Dequeue();
+            Poolable item = pools[name].Dequeue();
             item.gameObject.SetActive(true);
             item.OnGetFromPool();
             return (T)item;
@@ -65,16 +62,20 @@ public class PoolManager
         return null;
     }
 
-    public void ReturnToPool(Poolable item)
+    public void ReturnToPool(string poolName, Poolable item)
     {
-        Type type = item.GetType();
-
-        if (!pools.ContainsKey(type))
+        if (poolName == null)
         {
-            pools[type] = new Queue<Poolable>();
+            Debug.Log("풀 이름 설정 필요");
+            return;
+        }
+        
+        if (!pools.ContainsKey(poolName))
+        {
+            pools[poolName] = new Queue<Poolable>();
         }
 
         item.OnReturnToPool();
-        pools[type].Enqueue(item);
+        pools[poolName].Enqueue(item);
     }
 }

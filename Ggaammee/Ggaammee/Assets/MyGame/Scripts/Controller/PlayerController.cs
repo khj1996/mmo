@@ -404,14 +404,7 @@ public class PlayerController : CreatureController
 
     public bool AddItemToInventory(ItemData itemData)
     {
-        if (Managers.InventoryManager.Add(itemData) >= 0)
-        {
-            Debug.Log($"{itemData.name} was added to inventory.");
-            return true;
-        }
-
-        Debug.Log("Failed to add item to inventory.");
-        return false;
+        return Managers.InventoryManager.Add(itemData) >= 0;
     }
 
     private DropItem GetClosestDropItem()

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class CreatureController : MonoBehaviour
+public class CreatureController : Poolable
 {
     public CreatureData creatureData;
     [SerializeField] protected HpBar _hpBar;
@@ -65,5 +65,15 @@ public class CreatureController : MonoBehaviour
     public virtual void GetDamaged(float damage)
     {
         stat.HpChange(-damage);
+    }
+
+    public override void OnGetFromPool()
+    {
+        stat = new CreatureStats(creatureData);
+    }
+
+    public override void OnReturnToPool()
+    {
+        throw new NotImplementedException();
     }
 }

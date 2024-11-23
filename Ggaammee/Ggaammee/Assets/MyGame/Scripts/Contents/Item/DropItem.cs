@@ -33,7 +33,7 @@ public class DropItem : Poolable
     {
         if (player.AddItemToInventory(_itemData))
         {
-            Managers.PoolManager.ReturnToPool(this); 
+            ReturnToPool();
         }
     }
 }
