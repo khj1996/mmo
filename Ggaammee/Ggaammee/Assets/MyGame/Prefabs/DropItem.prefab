@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7791400004616983364}
   - component: {fileID: 2696281739330658537}
   m_Layer: 20
-  m_Name: Item
+  m_Name: DropItem
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

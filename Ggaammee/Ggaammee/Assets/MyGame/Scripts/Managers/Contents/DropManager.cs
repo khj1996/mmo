@@ -2,7 +2,7 @@
 
 public class DropManager
 {
-    private string poolName = "dropItem";
+    private string poolName = "DropItem";
     
     public DropManager()
     {

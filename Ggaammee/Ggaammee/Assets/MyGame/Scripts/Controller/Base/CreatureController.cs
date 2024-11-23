@@ -19,6 +19,10 @@ public class CreatureController : Poolable
     protected CharacterController _controller;
     protected Transform _targetTransform;
 
+
+    public event Action OnReturnToPoolAction;
+    public event Action OnGetFromPoolAction;
+
     protected virtual void Init()
     {
         _hasAnimator = TryGetComponent(out animator);
@@ -28,7 +32,7 @@ public class CreatureController : Poolable
 
     public void LockAtTargetPosition()
     {
-        Vector3 targetPosition = new Vector3(this._targetTransform.position.x, transform.position.y, this._targetTransform.position.z);
+        Vector3 targetPosition = new Vector3(_targetTransform.position.x, transform.position.y, _targetTransform.position.z);
         Vector3 direction = (targetPosition - transform.position).normalized;
 
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
@@ -69,11 +73,12 @@ public class CreatureController : Poolable
 
     public override void OnGetFromPool()
     {
-        stat = new CreatureStats(creatureData);
+        OnGetFromPoolAction?.Invoke();
     }
 
     public override void OnReturnToPool()
     {
-        throw new NotImplementedException();
+        OnReturnToPoolAction?.Invoke();
+        gameObject.SetActive(false);
     }
 }

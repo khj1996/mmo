@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("Cinemachine")] public GameObject CinemachineCameraTarget;
+    public GameObject CinemachineCameraTarget;
     public float TopClamp = 70.0f;
     public float BottomClamp = -30.0f;
     public float CameraAngleOverride = 0.0f;
@@ -81,8 +81,6 @@ public class CameraController : MonoBehaviour
         {
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         }
-
-        Debug.Log(_cinemachineTargetPitch);
     }
 
 

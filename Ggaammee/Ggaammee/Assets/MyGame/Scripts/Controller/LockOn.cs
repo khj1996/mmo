@@ -11,8 +11,8 @@ public class LockOn : MonoBehaviour
     public float lcokOnRadius = 5f;
 
     public Camera _mainCamera;
-    public float minViewAngle = -70.0f;
     public float maxViewAngle = 70.0f;
+    public float minViewAngle = -70.0f;
     public float lookAtSmoothing = 5f;
 
     [SerializeField] public Transform lockOnImage;
@@ -43,7 +43,7 @@ public class LockOn : MonoBehaviour
         {
             if (!currentTarget.isActiveAndEnabled)
             {
-                isLockOn = false;
+                ResetTarget();
             }
 
             if (isTargetRange())
@@ -90,12 +90,14 @@ public class LockOn : MonoBehaviour
 
                 if (viewAngle > minViewAngle && viewAngle < maxViewAngle)
                 {
-                    RaycastHit hit;
-
-                    if (Physics.Linecast(transform.position, target.lockOnPos.transform.position, out hit, LayerData.MonsterLayer))
+                    if (Physics.Linecast(transform.position, target.lockOnPos.transform.position, out _, LayerData.MonsterLayer))
                     {
                         targetEnemy.Add(target);
                     }
+                }
+                else
+                {
+                    ResetTarget();
                 }
             }
         }

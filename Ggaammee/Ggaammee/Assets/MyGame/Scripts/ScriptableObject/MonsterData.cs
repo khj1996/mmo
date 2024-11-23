@@ -95,7 +95,7 @@ public class MonsterData : CreatureData
         public override void OnEnter()
         {
             _owner.DropItem();
-            _owner.gameObject.SetActive(false);
+            _owner.ReturnToPool();
         }
 
         public override void OnExit()

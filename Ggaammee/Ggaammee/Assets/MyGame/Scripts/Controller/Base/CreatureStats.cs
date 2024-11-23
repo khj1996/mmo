@@ -20,6 +20,9 @@ public class CreatureStats
 
     public float currentHp = 0;
 
+    // CreatureData 타입이 PlayerData인지 여부를 체크
+    private bool isPlayerData;
+
     public CreatureStats(CreatureData creatureData)
     {
         baseMaxHp = creatureData.maxHp;
@@ -27,8 +30,21 @@ public class CreatureStats
         baseAttackPower = creatureData.attack;
         baseDefensePower = creatureData.defense;
 
+        // PlayerData인지 체크
+        isPlayerData = creatureData is PlayerData;
+
+        if (!isPlayerData) return;
         Managers.InventoryManager.OnEquipChanged -= RefreshEquipStat;
         Managers.InventoryManager.OnEquipChanged += RefreshEquipStat;
+    }
+
+    public void ResetData(CreatureData creatureData)
+    {
+        baseMaxHp = creatureData.maxHp;
+        currentHp = CurrentMaxHp;
+        baseAttackPower = creatureData.attack;
+        baseDefensePower = creatureData.defense;
+        ChangeHpEvent?.Invoke();
     }
 
     public event Action<float, Util.StatType> OnChangeCurrentMaxHp;
@@ -40,6 +56,9 @@ public class CreatureStats
     // 장비 장착 시 스탯 갱신
     public void RefreshEquipStat(Util.EquipType type)
     {
+        // PlayerData일 때만 이벤트 실행
+        if (!isPlayerData) return;
+
         // 인벤토리에서 해당 타입의 장비를 가져옴
         EquipItem equip = Managers.InventoryManager.GetEquippedItem(type);
 

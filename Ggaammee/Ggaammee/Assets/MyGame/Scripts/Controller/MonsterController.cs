@@ -1,16 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MonsterController : CreatureController
 {
     public Transform lockOnPos;
-
+    private MonsterData MonsterData => (MonsterData)creatureData;
     private CreatureStateMachine<MonsterController> stateMachine;
 
     #region 초기화
 
-    private void Start()
+    private void Awake()
     {
         Init();
     }
@@ -21,49 +23,52 @@ public class MonsterController : CreatureController
         InitFSM();
         InitComponent();
 
-        _hpBar.gameObject.transform.position = transform.TransformPoint(((MonsterData)creatureData).hpBarPos);
+        OnReturnToPoolAction += () =>
+        {
+            isDie = false;
+            _targetTransform = null;
+            _AttackCoroutine = null;
+
+            transform.localPosition = Vector3.zero;
+            stat.ResetData(creatureData);
+            stateMachine.ChangeState(typeof(MonsterData.IdleState));
+        };
+        _hpBar.gameObject.transform.position = transform.TransformPoint(MonsterData.hpBarPos);
     }
 
     private void InitFSM()
     {
         stateMachine = new CreatureStateMachine<MonsterController>();
 
+        RegisterStates();
+        RegisterTransitions();
+
+        stateMachine.ChangeState(typeof(MonsterData.IdleState));
+    }
+
+    private void RegisterStates()
+    {
         stateMachine.AddState(new MonsterData.IdleState(this));
         stateMachine.AddState(new MonsterData.ChaseState(this));
         stateMachine.AddState(new MonsterData.AttackState(this));
         stateMachine.AddState(new MonsterData.DeadState(this));
+    }
 
-        #region 상태 전이 조건
+    private void RegisterTransitions()
+    {
+        // IdleState
+        stateMachine.AddTransition<MonsterData.IdleState, MonsterData.ChaseState>(CheckCanChase);
 
-        #region IdleState
-
-        stateMachine.AddTransition<MonsterData.IdleState, MonsterData.ChaseState>(() => CheckCanChase());
-
-        #endregion
-
-        #region ChaseState
-
+        // ChaseState
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
 
-        #endregion
-
-        #region AttackState
-
+        // AttackState
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => _AttackCoroutine == null && !CheckCanAttack());
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !_targetTransform);
 
-        #endregion
-
-        #region 전역
-
+        // Global
         stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanAttack);
         stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
-
-        #endregion
-
-        #endregion
-
-        stateMachine.ChangeState(typeof(MonsterData.IdleState));
     }
 
 
@@ -73,7 +78,7 @@ public class MonsterController : CreatureController
             return false;
 
 
-        _targetTransform = Managers.ObjectManager.GetNearestPlayer(transform.position, ((MonsterData)creatureData).sqrDetectionRange);
+        _targetTransform = Managers.ObjectManager.GetNearestPlayer(transform.position, MonsterData.sqrDetectionRange);
 
         return _targetTransform;
     }
@@ -89,11 +94,19 @@ public class MonsterController : CreatureController
         _controller = GetComponent<CharacterController>();
     }
 
+    public void SetPos(Vector3 newPos)
+    {
+        Vector3 newPosition = newPos;
+        Vector3 delta = newPosition - transform.position;
+        _controller.Move(delta);
+    }
+
     #endregion
 
 
     private void Update()
     {
+        Debug.Log(stateMachine.CurrentState);
         stateMachine.Update();
     }
 
@@ -129,10 +142,10 @@ public class MonsterController : CreatureController
     private IEnumerator AttackCoroutine()
     {
         animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
-        Vector3 direction = (_targetTransform.position - transform.position).normalized;
-        LookAtTarget(direction);
+        LookAtTarget((_targetTransform.position - transform.position).normalized);
 
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        // 애니메이션 대기
+        while (!IsAnimationComplete(AssignAnimationIDs.AnimIDAttackTrigger))
         {
             yield return null;
         }
@@ -140,9 +153,15 @@ public class MonsterController : CreatureController
         _AttackCoroutine = null;
     }
 
+    private bool IsAnimationComplete(int animationID)
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        return stateInfo.normalizedTime >= 1f;
+    }
+
     public void DropItem()
     {
-        List<MonsterData.DropItem> dropList = ((MonsterData)creatureData).dropItems;
+        List<MonsterData.DropItem> dropList = MonsterData.dropItems;
 
         foreach (var dropItem in dropList)
         {
@@ -164,9 +183,9 @@ public class MonsterController : CreatureController
     {
         List<CharacterController> players = GetTargetInRange(attackPoint.position, LayerData.PlayerLayer);
 
-        foreach (CharacterController monster in players)
+        foreach (CharacterController player in players)
         {
-            monster.gameObject.GetComponent<PlayerController>().GetDamaged(stat.CurrentAttackPower);
+            player.gameObject.GetComponent<PlayerController>().GetDamaged(stat.CurrentAttackPower);
         }
     }
 
