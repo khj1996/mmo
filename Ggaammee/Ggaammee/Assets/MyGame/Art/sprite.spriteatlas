@@ -20,13 +20,26 @@ SpriteAtlas:
       readable: 0
       crunchedCompression: 0
       sRGB: 1
-    platformSettings: []
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
     packingSettings:
       serializedVersion: 2
       padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
-      enableRotation: 1
+      enableRotation: 0
       enableTightPacking: 0
       enableAlphaDilation: 1
     secondaryTextureSettings: {}
@@ -48,10 +61,13 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 2b8558b645a07d74582677fd0bf9dfa9, type: 3}
     - {fileID: 2800000, guid: 2423bc8beede9344d98c41e18af1a299, type: 3}
     - {fileID: 2800000, guid: 103ed4397ca7479479873ab55626ff41, type: 3}
+    - {fileID: 2800000, guid: 9035a2602b4b6774fb8c30b4f5872fca, type: 3}
+    - {fileID: 2800000, guid: 6f2409c812e59e04fb9d2af0715bea80, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
+    - 9035a2602b4b6774fb8c30b4f5872fca: -1401110133662507876
     - bc5c9842ed20fb14eab8fca166a60f01: 893452534743736695
     - 816373d26daf2fe40b59acd3712be032: -3674341465549410928
     - 888bc6c3bee4a644894eb075d8d389f5: -7314038943984137149
@@ -61,6 +77,7 @@ SpriteAtlas:
     - 25ca2528409a30f4e827cb2d05c772bb: -6506105160274925290
     - b40d433859d7ac84bbaef8c466cbe4f1: -3017524493629421183
     - 6c083c68f537d944db0c5a63177e9627: 6120561350918462585
+    - 6f2409c812e59e04fb9d2af0715bea80: -6717884257390833292
     - dc095ce8d2086f541bd26c7e3a71ef12: -3989417037294542392
     - 103ed4397ca7479479873ab55626ff41: -1955448553306655712
     - 2423bc8beede9344d98c41e18af1a299: 6548843039894869275
@@ -70,6 +87,7 @@ SpriteAtlas:
     - 3884787ef484b9641b8d705dfa15ea9d: 1932520997363718593
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: -1401110133662507876, guid: 9035a2602b4b6774fb8c30b4f5872fca, type: 3}
   - {fileID: 893452534743736695, guid: bc5c9842ed20fb14eab8fca166a60f01, type: 3}
   - {fileID: -3674341465549410928, guid: 816373d26daf2fe40b59acd3712be032, type: 3}
   - {fileID: -7314038943984137149, guid: 888bc6c3bee4a644894eb075d8d389f5, type: 3}
@@ -79,6 +97,7 @@ SpriteAtlas:
   - {fileID: -6506105160274925290, guid: 25ca2528409a30f4e827cb2d05c772bb, type: 3}
   - {fileID: -3017524493629421183, guid: b40d433859d7ac84bbaef8c466cbe4f1, type: 3}
   - {fileID: 6120561350918462585, guid: 6c083c68f537d944db0c5a63177e9627, type: 3}
+  - {fileID: -6717884257390833292, guid: 6f2409c812e59e04fb9d2af0715bea80, type: 3}
   - {fileID: -3989417037294542392, guid: dc095ce8d2086f541bd26c7e3a71ef12, type: 3}
   - {fileID: -1955448553306655712, guid: 103ed4397ca7479479873ab55626ff41, type: 3}
   - {fileID: 6548843039894869275, guid: 2423bc8beede9344d98c41e18af1a299, type: 3}
@@ -87,6 +106,7 @@ SpriteAtlas:
   - {fileID: 712035800519618848, guid: 5555116c8467a454c8c90c5cece8dc84, type: 3}
   - {fileID: 1932520997363718593, guid: 3884787ef484b9641b8d705dfa15ea9d, type: 3}
   m_PackedSpriteNamesToIndex:
+  - Potion Red_0
   - Progress Bar Pink_0
   - Dark Panels Style 2 Pink_0
   - shield blue_0
@@ -96,6 +116,7 @@ SpriteAtlas:
   - Fill Blue_0
   - Dark Panels Style 2 Green_0
   - Button Pink_0
+  - Shield_0
   - apple red_0
   - Background_0
   - Dark Panels Style 2 Violet_0
