@@ -1,12 +1,13 @@
 ﻿using Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ShopUISub : UI_ScrollView_Sub
 {
     [SerializeField] public Image icon;
-    [SerializeField] public TMP_Text name;
+    [SerializeField] public TMP_Text productName;
     [SerializeField] public TMP_Text description;
     [SerializeField] public TMP_Text price;
     [SerializeField] public Button buy;
@@ -21,16 +22,16 @@ public class ShopUISub : UI_ScrollView_Sub
 
     public void buyItem()
     {
-        Managers.ShopManager.BuyItem(productData.productId);
+        Managers.ShopManager.BuyItem(productData.ProductId);
     }
 
     public override void RefreshUI()
     {
-        ItemData itemData = Managers.DataManager.ItemDatas.GetData(productData.itemId);
+        ItemData itemData = Managers.DataManager.ItemDatas.GetData(productData.ItemId);
 
         icon.sprite = itemData?.itemSprite;
-        name.text = itemData?.name;
+        productName.text = itemData?.itemName;
         description.text = itemData?.description;
-        price.text = productData.price.ToString();
+        price.text = productData.Price.ToString();
     }
 }

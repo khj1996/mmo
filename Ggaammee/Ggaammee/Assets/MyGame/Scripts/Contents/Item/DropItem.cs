@@ -36,4 +36,9 @@ public class DropItem : Poolable
             ReturnToPool();
         }
     }
+
+    public void Interact()
+    {
+        throw new System.NotImplementedException();
+    }
 }

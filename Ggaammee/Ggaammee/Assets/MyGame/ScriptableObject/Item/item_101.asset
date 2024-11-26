@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: item_101
   m_EditorClassIdentifier: 
   id: item_101
-  name: "\uB2E8\uB2E8\uD55C \uBC29\uC5B4\uAD6C"
+  itemName: "\uB2E8\uB2E8\uD55C \uBC29\uC5B4\uAD6C"
   description: "\uB2E8\uB2E8\uD55C \uBC29\uC5B4\uAD6C\uB2E4\n\uBC29\uC5B4\uB825 15\uC99D\uAC00"
   itemSprite: {fileID: -7314038943984137149, guid: 888bc6c3bee4a644894eb075d8d389f5,
     type: 3}

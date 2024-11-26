@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ShopManager
 {
+    public ShopUI shopUI;
     public string CurrentOpenShopId = "shop_000";
 
     private Dictionary<string, ShopData> shopDatas = new Dictionary<string, ShopData>();
@@ -38,7 +39,7 @@ public class ShopManager
             return false;
         }
 
-        var itemData = Managers.DataManager.ItemDatas.GetData(product.itemId);
+        var itemData = Managers.DataManager.ItemDatas.GetData(product.ItemId);
         if (!CanBuyItem(product, itemData, out int availableSlot))
         {
             Debug.LogWarning($"Cannot buy item: ProductID({productId})");
@@ -46,7 +47,7 @@ public class ShopManager
         }
 
         // 구매 처리
-        Managers.InventoryManager.UseCurrency(product.priceId, product.price);
+        Managers.InventoryManager.UseCurrency(product.PriceId, product.Price);
         Managers.InventoryManager.Add(itemData, 1);
 
         return true;
@@ -67,7 +68,7 @@ public class ShopManager
             return false;
         }
 
-        product = shopData.productList.FirstOrDefault(x => x.productId == productId);
+        product = shopData.ProductList.FirstOrDefault(x => x.ProductId == productId);
         return product != null;
     }
 
@@ -85,9 +86,9 @@ public class ShopManager
         }
 
         // 가격 확인
-        if (!Managers.InventoryManager.CheckCurrencyCost(product.priceId, product.price))
+        if (!Managers.InventoryManager.CheckCurrencyCost(product.PriceId, product.Price))
         {
-            Debug.LogWarning($"Not enough currency: PriceID({product.priceId}), Price({product.price})");
+            Debug.LogWarning($"Not enough currency: PriceID({product.PriceId}), Price({product.Price})");
             return false;
         }
 

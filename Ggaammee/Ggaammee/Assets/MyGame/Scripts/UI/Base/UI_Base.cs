@@ -16,16 +16,16 @@ public abstract class UI_Base : MonoBehaviour
     }
 
 
-    public static void BindEvent(GameObject go, Action<PointerEventData> action, Util.UIEvent type = Util.UIEvent.Click)
+    public static void BindEvent(GameObject go, Action<PointerEventData> action, UIEvent type = UIEvent.Click)
     {
         switch (type)
         {
-            case Util.UIEvent.Click:
+            case UIEvent.Click:
                 UI_ClickHandler clickEvt = Util.GetOrAddComponent<UI_ClickHandler>(go);
                 clickEvt.OnClickHandler -= action;
                 clickEvt.OnClickHandler += action;
                 break;
-            case Util.UIEvent.Drag:
+            case UIEvent.Drag:
                 UI_DragHandler dragEvt = Util.GetOrAddComponent<UI_DragHandler>(go);
                 dragEvt.OnDragHandler -= action;
                 dragEvt.OnDragHandler += action;

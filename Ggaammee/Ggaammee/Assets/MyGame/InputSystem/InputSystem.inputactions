@@ -76,15 +76,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "CursorLock",
-                    "type": "Button",
-                    "id": "1378f1a1-5c76-4cf8-91e9-c72f14421eac",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -305,17 +296,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "LockOn",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b6a7a3ff-e0f1-4ec9-bfcb-1e537ec0705f",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CursorLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

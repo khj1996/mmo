@@ -106,7 +106,6 @@ public class MonsterController : CreatureController
 
     private void Update()
     {
-        Debug.Log(stateMachine.CurrentState);
         stateMachine.Update();
     }
 

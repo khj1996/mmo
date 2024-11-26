@@ -45,6 +45,7 @@ public class Managers : MonoBehaviour
     private InventoryManager _inventory;
     private DataManager _data;
     private ShopManager _shop;
+    private GameStateManager _gameState;
 
     public static ObjectManager ObjectManager
     {
@@ -76,6 +77,12 @@ public class Managers : MonoBehaviour
         get { return Instance._shop; }
     }
 
+    public static GameStateManager GameStateManager
+    {
+        get { return Instance._gameState; }
+    }
+
+
     public bool isInit = false;
 
 
@@ -92,6 +99,7 @@ public class Managers : MonoBehaviour
         _inventory = new InventoryManager();
         _data = new DataManager();
         _shop = new ShopManager();
+        _gameState = new GameStateManager();
 
         Application.targetFrameRate = 60;
         isInit = true;

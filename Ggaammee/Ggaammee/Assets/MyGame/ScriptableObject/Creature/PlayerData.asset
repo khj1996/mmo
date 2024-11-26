@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f24ebe76af5488d9ad9db1f9e5391a9, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  name: "\uD50C\uB808\uC774\uC5B4"
+  creatureName: "\uD50C\uB808\uC774\uC5B4"
   level: 1
   maxHp: 250
   attack: 55

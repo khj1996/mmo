@@ -6,7 +6,7 @@ public class QuickUI : UI_Base
 {
     [SerializeField] private ItemSlotUI[] quickSlots; // 3개의 퀵슬롯
 
-    public event Action<ItemData> quickSlotChange;
+    //public event Action<ItemData> quickSlotChange;
 
     public override void Init()
     {

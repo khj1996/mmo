@@ -551,15 +551,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _index: 0
   icon: {fileID: 2767328339578916970}
-  name: {fileID: 72816517557451306}
+  productName: {fileID: 72816517557451306}
   description: {fileID: 7673922811336337749}
   price: {fileID: 4343709592673518294}
   buy: {fileID: 4840398986769008601}
   productData:
-    productId: 
-    itemId: 
-    price: 0
-    priceId: 
+    ProductId: 
+    ItemId: 
+    Price: 0
+    PriceId: 
 --- !u!1 &5504686699182255193
 GameObject:
   m_ObjectHideFlags: 0

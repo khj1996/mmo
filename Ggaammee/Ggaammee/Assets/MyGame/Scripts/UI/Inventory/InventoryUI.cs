@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class InventoryUI : UI_ScrollView<InventoryUISub>
 {
-    [SerializeField] private bool _showRemovingPopup = true;
+    //[SerializeField] private bool showRemovingPopup = true;
     [SerializeField] private InventoryPopupUI _popup;
 
     public override void Init()
@@ -39,7 +40,7 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
             Managers.InventoryManager.UnequipItem(((EquipItemData)fromSlot.Item.Data).type);
             return;
         }
-        
+
         bool isSeparatable = (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift)) &&
                              (fromSlot.Item is StackableItem stackable && stackable.Count > 1);
 

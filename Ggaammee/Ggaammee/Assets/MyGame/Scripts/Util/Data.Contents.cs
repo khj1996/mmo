@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Data
 {
@@ -8,17 +9,17 @@ namespace Data
     [Serializable]
     public class ShopData
     {
-        public string shopId;
-        public List<ProductData> productList;
+        public string ShopId;
+        public List<ProductData> ProductList;
     }
 
     [Serializable]
     public class ProductData
     {
-        public string productId;
-        public string itemId;
-        public int price;
-        public string priceId;
+        public string ProductId;
+        public string ItemId;
+        public int Price;
+        public string PriceId;
     }
 
 
@@ -32,7 +33,7 @@ namespace Data
             Dictionary<string, ShopData> dict = new Dictionary<string, ShopData>();
             foreach (ShopData shop in Shops)
             {
-                dict.Add(shop.shopId, shop);
+                dict.Add(shop.ShopId, shop);
             }
 
             return dict;

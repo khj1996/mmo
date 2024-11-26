@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-public class PopupUIManager : MonoBehaviour
+public class PopupUIManager : Singleton<PopupUIManager>
 {
     [Serializable]
-    public struct Popup
+    public class Popup
     {
         [SerializeField] public PopupUI UI;
         [SerializeField] public KeyCode key;
+        [SerializeField] public PopupType type;
+        public event Action<string> OnOpen;
+
+        public void InvokeOnOpen(string data = null)
+        {
+            Debug.Log(OnOpen?.GetInvocationList());
+            OnOpen?.Invoke(data);
+        }
+    }
+
+    public enum PopupType
+    {
+        General,
+        Special
     }
 
     [Space] public KeyCode _escapeKey = KeyCode.Escape;
@@ -29,6 +42,9 @@ public class PopupUIManager : MonoBehaviour
 
     private void Update()
     {
+        if (!Managers.GameStateManager.CanOpenPopUp())
+            return;
+
         if (Input.GetKeyDown(_escapeKey))
         {
             if (_activePopupLList.Count > 0)
@@ -37,9 +53,9 @@ public class PopupUIManager : MonoBehaviour
             }
         }
 
-        foreach (var popup in popList)
+        foreach (var popup in popList.Where(p => p.type == PopupType.General))
         {
-            ToggleKeyDownAction(popup.key, popup.UI);
+            ToggleKeyDownAction(popup.key, popup);
         }
     }
 
@@ -47,19 +63,29 @@ public class PopupUIManager : MonoBehaviour
     {
         _allPopupList = popList.Select(x => x.UI).ToList();
 
-
-        foreach (var popup in _allPopupList)
+        foreach (var popup in popList)
         {
-            popup.OnFocus += () =>
+            popup.UI.OnFocus += () =>
             {
-                _activePopupLList.Remove(popup);
-                _activePopupLList.AddFirst(popup);
+                _activePopupLList.Remove(popup.UI);
+                _activePopupLList.AddFirst(popup.UI);
                 RefreshAllPopupDepth();
             };
 
-            //popup._closeButton.onClick.AddListener(() => ClosePopup(popup));
+            if (popup.UI.name == PopUpName.ShopUI)
+            {
+                popup.OnOpen += (data) =>
+                {
+                    var inventoryPopup = popList.FirstOrDefault(p => p.UI.name == PopUpName.InventoryUI);
+                    if (inventoryPopup.UI != null && !inventoryPopup.UI.gameObject.activeSelf)
+                    {
+                        OpenPopup(inventoryPopup);
+                    }
+                };
+            }
         }
     }
+
 
     private void InitCloseAll()
     {
@@ -69,30 +95,45 @@ public class PopupUIManager : MonoBehaviour
         }
     }
 
-    private void ToggleKeyDownAction(in KeyCode key, PopupUI popup)
+    private void ToggleKeyDownAction(in KeyCode key, Popup popup)
     {
         if (Input.GetKeyDown(key))
             ToggleOpenClosePopup(popup);
     }
 
-    private void ToggleOpenClosePopup(PopupUI popup)
+    private void ToggleOpenClosePopup(Popup popup)
     {
-        if (!popup.gameObject.activeSelf) OpenPopup(popup);
-        else ClosePopup(popup);
+        if (!popup.UI.gameObject.activeSelf) OpenPopup(popup);
+        else ClosePopup(popup.UI);
     }
 
-    private void OpenPopup(PopupUI popup)
+    public void OpenPopupById(string popupName, string data = null)
     {
-        _activePopupLList.AddFirst(popup);
-        popup.gameObject.SetActive(true);
+        var popup = popList.FirstOrDefault(p => p.UI.name == popupName);
+        if (popup.UI == null)
+        {
+            Debug.LogWarning($"Popup with name {popupName} not found!");
+            return;
+        }
+
+        OpenPopup(popup, data);
+    }
+
+    private void OpenPopup(Popup popup, string data = null)
+    {
+        _activePopupLList.AddFirst(popup.UI);
+        popup.UI.gameObject.SetActive(true);
+        popup.InvokeOnOpen(data);
         RefreshAllPopupDepth();
+        UpdateGameState();
     }
 
-    private void ClosePopup(PopupUI popup)
+    public void ClosePopup(PopupUI popup)
     {
         _activePopupLList.Remove(popup);
         popup.gameObject.SetActive(false);
         RefreshAllPopupDepth();
+        UpdateGameState();
     }
 
     private void RefreshAllPopupDepth()
@@ -100,6 +141,18 @@ public class PopupUIManager : MonoBehaviour
         foreach (var popup in _activePopupLList)
         {
             popup.transform.SetAsFirstSibling();
+        }
+    }
+
+    private void UpdateGameState()
+    {
+        if (_activePopupLList.Count > 0)
+        {
+            Managers.GameStateManager.SetState(GameState.InMenu);
+        }
+        else
+        {
+            Managers.GameStateManager.SetState(GameState.Normal);
         }
     }
 }

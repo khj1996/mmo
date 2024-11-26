@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d87f30c1bfd50a744a1cb99a2cfeb0a5, type: 3}
   m_Name: NPCDialogue
   m_EditorClassIdentifier: 
-  startModule: {fileID: 0}
-  npcName: 
+  startModule: {fileID: 11400000, guid: 115429e18b4b7494ba46da9119d5d227, type: 2}
+  npcName: "\uB450\uB824\uC6CC\uD558\uB294 \uB9C8\uC744 \uC8FC\uBBFC"

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: item_400
   m_EditorClassIdentifier: 
   id: item_400
-  name: "\uACE8\uB4DC"
+  itemName: "\uACE8\uB4DC"
   description: "\uACE8\uB4DC"
   itemSprite: {fileID: -3338749442709606003, guid: 93978dcbff65c754c82f146ed36c1c45,
     type: 3}

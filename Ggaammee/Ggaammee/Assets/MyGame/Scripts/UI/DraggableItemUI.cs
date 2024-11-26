@@ -14,7 +14,7 @@ public class DraggableItem : MonoBehaviour
     {
         Image = GetComponent<Image>();
         RectTransform = GetComponent<RectTransform>();
-        gameObject.SetActive(false); // 초기 비활성화
+        gameObject.SetActive(false); 
     }
 
     public void StartDrag(ItemSlotUI data)
@@ -23,7 +23,7 @@ public class DraggableItem : MonoBehaviour
         _beginDragIconPoint = data.Rect.transform.position;
         _beginDragCursorPoint = Input.mousePosition;
 
-        gameObject.SetActive(true); // 드래그 오브젝트 활성화
+        gameObject.SetActive(true); 
     }
 
     public void OnDrag()
@@ -34,6 +34,6 @@ public class DraggableItem : MonoBehaviour
     public void EndDrag()
     {
         Image.sprite = null;
-        gameObject.SetActive(false); // 드래그 오브젝트 비활성화
+        gameObject.SetActive(false); 
     }
 }

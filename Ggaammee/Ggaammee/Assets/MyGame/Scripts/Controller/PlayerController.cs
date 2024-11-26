@@ -381,12 +381,14 @@ public class PlayerController : CreatureController
 
     public void Interact()
     {
+        // 사다리와의 상호작용 처리
         if (isNearLadder && _input.interaction)
         {
             isClimbing = true;
             return;
         }
 
+        // 드랍 아이템과의 상호작용 처리
         if (_input.interaction && _currentDropItems.Count > 0)
         {
             DropItem closestItem = GetClosestDropItem();
@@ -395,10 +397,46 @@ public class PlayerController : CreatureController
                 closestItem.Interact(this);
                 _currentDropItems.Remove(closestItem);
             }
+            return;
+        }
+
+        // NPC와의 상호작용 처리
+        if (_input.interaction)
+        {
+            Npc closestNpc = GetClosestNpc();
+            if (closestNpc != null)
+            {
+                closestNpc.Interact();
+            }
         }
     }
+    
+    private Npc GetClosestNpc()
+    {
+        Npc closestNpc = null;
+        float closestDistance = float.MaxValue;
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1.0f, LayerData.NpcLayer);
+        foreach (Collider collider in colliders)
+        {
+            Npc npc = collider.GetComponent<Npc>();
+            if (npc != null)
+            {
+                float distance = Vector3.Distance(transform.position, npc.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestNpc = npc;
+                }
+            }
+        }
+
+        return closestNpc;
+    }
+
 
     #endregion
+
 
     #region 아이템
 

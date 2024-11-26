@@ -8,13 +8,6 @@ public class DialogueAction : ScriptableObject
     }
 }
 
-public class OpenShopAction : DialogueAction
-{
-    public override void Execute()
-    {
-        Debug.Log("상점이 열립니다!");
-    }
-}
 
 public class ExecuteFunctionAction : DialogueAction
 {

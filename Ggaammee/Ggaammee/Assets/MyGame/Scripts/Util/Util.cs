@@ -6,50 +6,6 @@ using UnityEngine.EventSystems;
 
 public static class Util
 {
-    public enum UIEvent
-    {
-        Click,
-        Drag,
-    }
-
-    public enum ChangeType
-    {
-        Add,
-        Cost,
-        New
-    }
-
-    public enum CreatureState
-    {
-        Idle = 0,
-        Move = 1,
-        Jump = 2,
-        Crouch = 3,
-        Attack = 4,
-        Interactive = 5,
-        GetHit = 6,
-        Die = 7,
-    }
-
-    public enum EquipType
-    {
-        Weapon,
-        Armor
-    }
-
-    public enum StatType
-    {
-        Hp,
-        Atk,
-        Defense
-    }
-
-
-    public static class StaticValues
-    {
-        public static readonly int InventorySize = 88;
-    }
-
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();
@@ -66,8 +22,7 @@ public static class Util
 
     public static string FormatNumber(long num)
     {
-        // 숫자 범위와 접미사를 배열로 정의
-        var suffixes = new[] { "K", "M", "B", "T" }; // 순서: 천, 백만, 십억, 조
+        var suffixes = new[] { "K", "M", "B", "T" };
         var divisors = new[] { 1_000L, 1_000_000L, 1_000_000_000L, 1_000_000_000_000L };
 
         for (int i = divisors.Length - 1; i >= 0; i--)
@@ -79,18 +34,69 @@ public static class Util
             }
         }
 
-        // 1,000 미만은 숫자 그대로 반환
         return num.ToString("#,0");
     }
+}
+
+public static class StaticValues
+{
+    public static readonly int InventorySize = 88;
+}
+
+public enum UIEvent
+{
+    Click,
+    Drag,
+}
+
+public enum ChangeType
+{
+    Add,
+    Cost,
+    New
+}
+
+public enum CreatureState
+{
+    Idle = 0,
+    Move = 1,
+    Jump = 2,
+    Crouch = 3,
+    Attack = 4,
+    Interactive = 5,
+    GetHit = 6,
+    Die = 7,
+}
+
+
+public enum StatType
+{
+    Hp,
+    Atk,
+    Defense
+}
+
+public enum EquipType
+{
+    Weapon,
+    Armor
 }
 
 public static class LayerData
 {
     public static readonly int DefaultLayer = 1 << 0;
     public static readonly int GroundLayer = 1 << 3;
+    public static readonly int NpcLayer = 1 << 17;
     public static readonly int PlayerLayer = 1 << 18;
     public static readonly int MonsterLayer = 1 << 19;
     public static readonly int ItemSlotLayer = 1 << 20;
+}
+
+public static class PopUpName
+{
+    public static readonly string InventoryUI = "InventoryUI";
+    public static readonly string ShopUI = "ShopUI";
+    public static readonly string StatUI = "StatUI";
 }
 
 

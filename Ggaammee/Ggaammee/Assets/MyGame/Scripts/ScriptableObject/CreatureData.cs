@@ -5,9 +5,9 @@ using UnityEngine.Serialization;
 
 public class CreatureData : ScriptableObject
 {
-    [Header("Basic Info")] public string name;
+    [Header("Basic Info")] public string creatureName;
     public int level;
-   
+
     [Header("Stats")] public float maxHp;
     public int attack;
     public int defense;
@@ -19,7 +19,7 @@ public class CreatureData : ScriptableObject
     public float weight;
 
     [Header("Abilities & Behavior")] public float sqrAttackRange;
-    
+
 
     [Header("Animations & Sounds")] public AnimationData[] animations;
     public AudioClip walkSound;

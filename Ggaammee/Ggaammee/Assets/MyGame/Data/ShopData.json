@@ -1,37 +1,37 @@
 {
   "Shops": [
     {
-      "shopId": "shop_000",
-      "productList": [
+      "ShopId": "shop_000",
+      "ProductList": [
         {
-          "productId": "product_0",
-          "itemId": "item_000",
-          "price": "100",
-          "priceId": "item_400"
+          "ProductId": "product_0",
+          "ItemId": "item_000",
+          "Price": "100",
+          "PriceId": "item_400"
         },
         {
-          "productId": "product_1",
-          "itemId": "item_100",
-          "price": "50",
-          "priceId": "item_400"
+          "ProductId": "product_1",
+          "ItemId": "item_100",
+          "Price": "50",
+          "PriceId": "item_400"
         },
         {
-          "productId": "product_2",
-          "itemId": "item_101",
-          "price": "100",
-          "priceId": "item_400"
+          "ProductId": "product_2",
+          "ItemId": "item_101",
+          "Price": "100",
+          "PriceId": "item_400"
         },
         {
-          "productId": "product_3",
-          "itemId": "item_200",
-          "price": "50",
-          "priceId": "item_400"
+          "ProductId": "product_3",
+          "ItemId": "item_200",
+          "Price": "50",
+          "PriceId": "item_400"
         },
         {
-          "productId": "product_4",
-          "itemId": "item_201",
-          "price": "100",
-          "priceId": "item_400"
+          "ProductId": "product_4",
+          "ItemId": "item_201",
+          "Price": "100",
+          "PriceId": "item_400"
         }
       ]
     }

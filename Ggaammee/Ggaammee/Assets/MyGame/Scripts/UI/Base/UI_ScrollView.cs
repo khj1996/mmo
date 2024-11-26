@@ -124,10 +124,8 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
 
         while (node != null)
         {
-            // 현재 노드의 아이템 업데이트
             UpdateItemForIndex(node.Value, node.Value._index);
 
-            // 현재 노드의 위치 설정
             if (node.Value._index < ItemPosY.Length)
             {
                 Vector2 position = Vector2.up * ItemPosY[node.Value._index];
@@ -135,7 +133,6 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
                 node.Value.Top = position;
             }
 
-            // 다음 노드로 이동
             node = node.Next;
         }
     }

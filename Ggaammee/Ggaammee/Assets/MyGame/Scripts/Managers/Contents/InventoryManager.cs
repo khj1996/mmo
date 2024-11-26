@@ -8,14 +8,14 @@ public class InventoryManager
     // 아이템 슬롯 및 통화 정보
     public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
     public List<StackableItem> Currency { get; private set; } = new List<StackableItem>();
-    public Dictionary<Util.EquipType, EquipItem> EquipedItems { get; private set; } = new Dictionary<Util.EquipType, EquipItem>();
+    public Dictionary<EquipType, EquipItem> EquipedItems { get; private set; } = new Dictionary<EquipType, EquipItem>();
 
     // 슬롯 변경 및 통화 변경 이벤트
     public event Action<int, Item> SlotChanged;
     public event Action CurrencyChanged;
-    public event Action<Util.EquipType> OnEquipChanged;
+    public event Action<EquipType> OnEquipChanged;
 
-    public int SlotCapacity { get; private set; } = Util.StaticValues.InventorySize;
+    public int SlotCapacity { get; private set; } = StaticValues.InventorySize;
 
 
     //초기 아이템 보여주기용 예시용도
@@ -83,7 +83,7 @@ public class InventoryManager
         }
     }
 
-    public void UnequipItem(Util.EquipType type)
+    public void UnequipItem(EquipType type)
     {
         if (EquipedItems.TryGetValue(type, out var currentEquip))
         {
@@ -100,7 +100,7 @@ public class InventoryManager
         }
     }
 
-    private void EquipNewItem(ItemSlotUI slotData, Util.EquipType type)
+    private void EquipNewItem(ItemSlotUI slotData, EquipType type)
     {
         var selectSlotItem = slotData.Item;
         Items.Remove(slotData.Index);
@@ -110,7 +110,7 @@ public class InventoryManager
     }
 
 
-    private void NotifyEquipChanged(Util.EquipType type)
+    private void NotifyEquipChanged(EquipType type)
     {
         OnEquipChanged?.Invoke(type);
     }
@@ -268,9 +268,9 @@ public class InventoryManager
     }
 
     public string GetItemName(int index) =>
-        IsValidIndex(index) && Items.TryGetValue(index, out var item) ? item.Data.name : string.Empty;
+        IsValidIndex(index) && Items.TryGetValue(index, out var item) ? item.Data.itemName : string.Empty;
 
-    public EquipItem GetEquippedItem(Util.EquipType type)
+    public EquipItem GetEquippedItem(EquipType type)
     {
         return EquipedItems.GetValueOrDefault(type);
     }

@@ -47,14 +47,14 @@ public class CreatureStats
         ChangeHpEvent?.Invoke();
     }
 
-    public event Action<float, Util.StatType> OnChangeCurrentMaxHp;
-    public event Action<float, Util.StatType> OnChangeCurrentAttackPower;
-    public event Action<float, Util.StatType> OnChangeCurrentDefensePower;
+    //public event Action<float, StatType> OnChangeCurrentMaxHp;
+    public event Action<float, StatType> OnChangeCurrentAttackPower;
+    public event Action<float, StatType> OnChangeCurrentDefensePower;
 
     public event Action ChangeHpEvent;
 
     // 장비 장착 시 스탯 갱신
-    public void RefreshEquipStat(Util.EquipType type)
+    public void RefreshEquipStat(EquipType type)
     {
         // PlayerData일 때만 이벤트 실행
         if (!isPlayerData) return;
@@ -73,27 +73,27 @@ public class CreatureStats
         if (equip.Data is ArmorItemData ai)
         {
             equipmentDefenseBonus = ai.Defence;
-            OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, Util.StatType.Defense);
+            OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, StatType.Defense);
         }
         else if (equip.Data is WeaponItemData wi)
         {
             equipmentAttackBonus = wi.damage;
-            OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, Util.StatType.Atk);
+            OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, StatType.Atk);
         }
     }
 
     // 해당 타입의 장비 보너스를 초기화
-    private void ResetEquipBonus(Util.EquipType type)
+    private void ResetEquipBonus(EquipType type)
     {
         switch (type)
         {
-            case Util.EquipType.Armor:
+            case EquipType.Armor:
                 equipmentDefenseBonus = 0;
-                OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, Util.StatType.Defense);
+                OnChangeCurrentDefensePower?.Invoke(CurrentDefensePower, StatType.Defense);
                 break;
-            case Util.EquipType.Weapon:
+            case EquipType.Weapon:
                 equipmentAttackBonus = 0;
-                OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, Util.StatType.Atk);
+                OnChangeCurrentAttackPower?.Invoke(CurrentAttackPower, StatType.Atk);
                 break;
         }
     }

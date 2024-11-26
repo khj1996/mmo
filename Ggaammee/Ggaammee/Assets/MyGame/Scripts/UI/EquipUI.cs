@@ -8,7 +8,7 @@ public class EquipUI : UI_Base
     [Serializable]
     struct EquipSlot
     {
-        public Util.EquipType type;
+        public EquipType type;
         public ItemSlotUI slotUI;
     }
 
@@ -42,8 +42,8 @@ public class EquipUI : UI_Base
 
         var playerStat = await WaitForPlayerStatInitialization();
 
-        playerStat.OnChangeCurrentMaxHp -= RefreshStatValue;
-        playerStat.OnChangeCurrentMaxHp += RefreshStatValue;
+        //playerStat.OnChangeCurrentMaxHp -= RefreshStatValue;
+        //playerStat.OnChangeCurrentMaxHp += RefreshStatValue;
 
         playerStat.OnChangeCurrentDefensePower -= RefreshStatValue;
         playerStat.OnChangeCurrentDefensePower += RefreshStatValue;
@@ -85,17 +85,17 @@ public class EquipUI : UI_Base
         }
     }
 
-    public void RefreshStatValue(float value, Util.StatType type)
+    public void RefreshStatValue(float value, StatType type)
     {
         switch (type)
         {
-            case Util.StatType.Hp:
+            case StatType.Hp:
                 HpValueText.text = value.ToString();
                 break;
-            case Util.StatType.Atk:
+            case StatType.Atk:
                 AttackValueText.text = value.ToString();
                 break;
-            case Util.StatType.Defense:
+            case StatType.Defense:
                 DefenceValueText.text = value.ToString();
                 break;
             default:
@@ -103,7 +103,7 @@ public class EquipUI : UI_Base
         }
     }
 
-    public void RefreshUI(Util.EquipType type)
+    public void RefreshUI(EquipType type)
     {
         var currentEquipDic = Managers.InventoryManager.EquipedItems;
 

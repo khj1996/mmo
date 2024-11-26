@@ -52,7 +52,7 @@ public class ItemTooltipUI : MonoBehaviour
 
     public void SetItemInfo(ItemData data)
     {
-        nameText.text = data.name;
+        nameText.text = data.itemName;
         descriptionText.text = $"{data.description}";
     }
 
