@@ -82,32 +82,36 @@ public class DialogueUI : MonoBehaviour
 
     private void ShowChoices()
     {
-        foreach (var button in choiceButtons)
-        {
-            button.gameObject.SetActive(false);
-        }
+        HideChoices();
 
         for (var index = 0; index < currentModule.choices.Length; index++)
         {
             var choice = currentModule.choices[index];
+            if (index >= choiceButtons.Length)
+            {
+                Debug.LogWarning("Not enough buttons for all choices.");
+                break;
+            }
+
             var button = choiceButtons[index];
             button.gameObject.SetActive(true);
+
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             buttonText.text = choice.choiceText;
 
+            button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() =>
             {
-                if (choice.action != null)
-                {
-                    choice.action.Execute();
-                }
+                choice.action?.Execute();
 
-                if (choice.nextModule == null && choice.action == null)
+                DialogueModule nextModule = choice.GetNextModule();
+
+                LoadModule(nextModule);
+
+                if (nextModule == null && choice.action == null)
                 {
                     Managers.GameStateManager.SetState(GameState.Normal);
                 }
-
-                LoadModule(choice.nextModule);
             });
         }
     }

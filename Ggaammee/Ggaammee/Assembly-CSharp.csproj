@@ -45,7 +45,9 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\KillMonsterQuestData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\State.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Quest\ReachDestinationQuest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\LockOn.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\MonsterSpawner.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\Singleton.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\MeshCombiner.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\NpcDialogue.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\Contents\EventManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Npc.cs" />
     <Compile Include="Assets\MyGame\InputSystem\InputSystem.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ItemDatas.cs" />
@@ -67,10 +70,13 @@
     <Compile Include="Assets\MyGame\Scripts\Util\Data.Contents.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\BehaviorTree.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\Action\OpenShopAction.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Quest\Quest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStats.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\DialogueModule.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DraggableItemUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\Contents\QuestManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\QuestData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\Poolable.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\ArmorItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryUISub.cs" />
@@ -79,6 +85,7 @@
     <Compile Include="Assets\MyGame\Scripts\Managers\Managers.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\EquipItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\MonsterController.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Quest\CollectItemQuest.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Hp\HpBar.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DataManager.cs" />
@@ -94,6 +101,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\EquipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\QuestDatas.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\DragManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\CurrencyItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\Item.cs" />
@@ -103,12 +111,15 @@
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ShopManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryPopupUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\ReachDestinationQuestData.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStateMachine.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\CollectItemQuestData.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\EquipItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\GameStateManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\InventoryManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\Quest\QuestUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\PopupManager.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureController.cs" />
@@ -116,9 +127,11 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\UsableItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Shop\ShopUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\PopupUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\Quest\QuestUISub.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\WeaponItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\StackableItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\IUsableItem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\Quest\KillMonsterQuest.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DialogueUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ClickHandler.cs" />
@@ -131,6 +144,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\MyGame\Data\QuestData.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />

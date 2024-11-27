@@ -56,17 +56,13 @@ public class MonsterController : CreatureController
 
     private void RegisterTransitions()
     {
-        // IdleState
         stateMachine.AddTransition<MonsterData.IdleState, MonsterData.ChaseState>(CheckCanChase);
 
-        // ChaseState
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
 
-        // AttackState
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => _AttackCoroutine == null && !CheckCanAttack());
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !_targetTransform);
 
-        // Global
         stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanAttack);
         stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
     }
@@ -143,7 +139,6 @@ public class MonsterController : CreatureController
         animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
         LookAtTarget((_targetTransform.position - transform.position).normalized);
 
-        // 애니메이션 대기
         while (!IsAnimationComplete(AssignAnimationIDs.AnimIDAttackTrigger))
         {
             yield return null;

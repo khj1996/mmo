@@ -5,12 +5,10 @@ using UnityEngine;
 
 public class InventoryManager
 {
-    // 아이템 슬롯 및 통화 정보
     public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
     public List<StackableItem> Currency { get; private set; } = new List<StackableItem>();
     public Dictionary<EquipType, EquipItem> EquipedItems { get; private set; } = new Dictionary<EquipType, EquipItem>();
 
-    // 슬롯 변경 및 통화 변경 이벤트
     public event Action<int, Item> SlotChanged;
     public event Action CurrencyChanged;
     public event Action<EquipType> OnEquipChanged;
@@ -18,7 +16,6 @@ public class InventoryManager
     public int SlotCapacity { get; private set; } = StaticValues.InventorySize;
 
 
-    //초기 아이템 보여주기용 예시용도
     public void InitializeInventory()
     {
         foreach (var item in Managers.Instance.StartItemData)
@@ -32,7 +29,6 @@ public class InventoryManager
 
     private bool IsValidIndex(int index) => index >= 0 && index < SlotCapacity;
 
-    // 아이템 추가
     public int Add(ItemData itemData, int amount = 1)
     {
         return itemData switch
@@ -75,10 +71,8 @@ public class InventoryManager
     {
         if (slotData.Item?.Data is EquipItemData data)
         {
-            // 현재 장착 아이템 해제
             UnequipItem(data.type);
 
-            // 새 장비 장착
             EquipNewItem(slotData, data.type);
         }
     }
@@ -192,7 +186,6 @@ public class InventoryManager
         SlotChanged?.Invoke(index, item);
     }
 
-    // 아이템 제거
     public void RemoveItem(int index)
     {
         if (!IsValidIndex(index)) return;
@@ -201,7 +194,6 @@ public class InventoryManager
         UpdateSlot(index, null);
     }
 
-    // 아이템 분리
     public void SeparateAmount(int fromIndex, int toIndex, int amount)
     {
         if (!IsValidIndex(fromIndex) || !IsValidIndex(toIndex)) return;
@@ -214,7 +206,6 @@ public class InventoryManager
         }
     }
 
-    // 아이템 교환
     public void Swap(int fromIndex, int toIndex)
     {
         if (!IsValidIndex(fromIndex) || !IsValidIndex(toIndex)) return;
@@ -246,14 +237,12 @@ public class InventoryManager
         }
     }
 
-    // 통화 비용 확인 및 사용
     public bool CheckCurrencyCost(string currencyId, int amount)
     {
         var currency = Currency.FirstOrDefault(c => c.Data.id == currencyId);
         return currency != null && currency.CheckCount(amount);
     }
 
-    // 유틸리티 메서드
     public Item GetSlotData(int index) => Items.TryGetValue(index, out var item) ? item : null;
 
     public int GetAvailableSlot(ItemData item)

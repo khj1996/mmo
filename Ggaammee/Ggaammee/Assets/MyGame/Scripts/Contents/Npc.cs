@@ -2,7 +2,7 @@
 
 public class Npc : MonoBehaviour
 {
-    public NpcDialogue dialogue; // 연결된 대화 데이터
+    public NpcDialogue dialogue; 
 
     public void Interact()
     {

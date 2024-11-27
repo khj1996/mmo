@@ -11,24 +11,22 @@ public class InventoryPopupUI : MonoBehaviour
 
     [SerializeField] private Text _confirmationItemNameText;
     [SerializeField] private Text _confirmationText;
-    [SerializeField] private Button _confirmationOkButton; // Ok
-    [SerializeField] private Button _confirmationCancelButton; // Cancel
+    [SerializeField] private Button _confirmationOkButton;
+    [SerializeField] private Button _confirmationCancelButton; 
 
     [Header("Amount Input Popup")] [SerializeField]
     private GameObject _amountInputPopupObject;
 
     [SerializeField] private Text _amountInputItemNameText;
     [SerializeField] private InputField _amountInputField;
-    [SerializeField] private Button _amountPlusButton; // +
-    [SerializeField] private Button _amountMinusButton; // -
-    [SerializeField] private Button _amountInputOkButton; // Ok
-    [SerializeField] private Button _amountInputCancelButton; // Cancel
+    [SerializeField] private Button _amountPlusButton; 
+    [SerializeField] private Button _amountMinusButton; 
+    [SerializeField] private Button _amountInputOkButton; 
+    [SerializeField] private Button _amountInputCancelButton;
 
-    // 확인 버튼 눌렀을 때 동작할 이벤트
     private event Action OnConfirmationOK;
     private event Action<int> OnAmountInputOK;
 
-    // 수량 입력 제한 개수
     private int _maxAmount;
 
 
@@ -105,7 +103,6 @@ public class InventoryPopupUI : MonoBehaviour
             int.TryParse(_amountInputField.text, out int amount);
             if (amount > 1)
             {
-                // Shift 누르면 10씩 감소
                 int nextAmount = Input.GetKey(KeyCode.LeftShift) ? amount - 10 : amount - 1;
                 if (nextAmount < 1)
                     nextAmount = 1;
@@ -118,7 +115,6 @@ public class InventoryPopupUI : MonoBehaviour
             int.TryParse(_amountInputField.text, out int amount);
             if (amount < _maxAmount)
             {
-                // Shift 누르면 10씩 증가
                 int nextAmount = Input.GetKey(KeyCode.LeftShift) ? amount + 10 : amount + 1;
                 if (nextAmount > _maxAmount)
                     nextAmount = _maxAmount;

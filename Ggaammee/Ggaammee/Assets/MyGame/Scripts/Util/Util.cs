@@ -99,6 +99,20 @@ public static class PopUpName
     public static readonly string StatUI = "StatUI";
 }
 
+public enum QuestType
+{
+    KillMonster,
+    CollectItem,
+    ReachDestination
+}
+
+
+public enum QuestState
+{
+    NotStarted,
+    InProgress,
+    Completed
+}
 
 public static class AssignAnimationIDs
 {

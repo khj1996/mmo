@@ -17,7 +17,6 @@ public class UIVirtualTouchZone : MonoBehaviour, IPointerDownHandler, IDragHandl
     public bool invertXOutputValue;
     public bool invertYOutputValue;
 
-    //Stored Pointer Values
     private Vector2 pointerDownPosition;
     private Vector2 currentPointerPosition;
 

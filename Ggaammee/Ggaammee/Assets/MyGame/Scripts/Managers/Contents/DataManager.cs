@@ -13,13 +13,17 @@ public class DataManager
     #region 데이터 초기화
 
     public Dictionary<string, ShopData> ShopDict { get; private set; } = new();
+    //public Dictionary<string, QuestData> QuestDict { get; private set; } = new();
 
     public ItemDatas ItemDatas;
+    public QuestDatas QuestDatas;
 
     public DataManager()
     {
         ShopDict = LoadJson<ShopLoader, string, ShopData>("ShopData").MakeDict();
+        //QuestDict = LoadJson<QuestLoader, string, QuestData>("QuestData").MakeDict();
         ItemDatas = LoadSO<ItemDatas>("ItemDatas");
+        QuestDatas = LoadSO<QuestDatas>("QuestDatas");
     }
 
     Loader LoadJson<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>

@@ -1,17 +1,71 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "DialogueModule", menuName = "Dialogue/DialogueModule")]
 public class DialogueModule : ScriptableObject
 {
-    [TextArea]
-    public string[] dialogueLines;
-    public DialogueChoice[] choices; 
+    [TextArea] public string[] dialogueLines;
+    public DialogueChoice[] choices;
 }
 
-[System.Serializable]
+[Serializable]
 public class DialogueChoice
 {
     public string choiceText; 
+    public DialogueModule defaultNextModule; 
+    public DialogueAction action;
+    public ConditionalDialogueBranch[] conditionalBranches;
+
+    public DialogueModule GetNextModule()
+    {
+        foreach (var branch in conditionalBranches)
+        {
+            if (branch.branchNode.CheckCondition())
+            {
+                return branch.nextModule;
+            }
+        }
+
+        return defaultNextModule; 
+    }
+}
+
+[Serializable]
+public class ConditionalDialogueBranch
+{
+    public DialogueBranchNode branchNode; 
     public DialogueModule nextModule; 
-    public DialogueAction action; 
+}
+
+
+public abstract class DialogueBranchNode
+{
+    public abstract bool CheckCondition(); 
+}
+
+[Serializable]
+public class DialogueQuestBranchNode : DialogueBranchNode
+{
+    public string questId; 
+    public QuestState requiredState; 
+
+    public override bool CheckCondition()
+    {
+        var questManager = Managers.QuestManager;
+
+        if (questManager == null)
+        {
+            Debug.LogWarning("QuestManager not found.");
+            return false;
+        }
+
+        return requiredState switch
+        {
+            QuestState.NotStarted => !questManager.IsQuestActive(questId) && !questManager.IsQuestCompleted(questId),
+            QuestState.InProgress => questManager.IsQuestActive(questId),
+            QuestState.Completed => questManager.IsQuestCompleted(questId),
+            _ => false,
+        };
+    }
 }

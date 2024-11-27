@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum GameState
 {
-    Normal, // 일반 상태
-    InConversation, // 대화 중
-    InMenu, // 메뉴 UI 오픈
-    Paused // 게임 일시 정지
+    Normal, 
+    InConversation,
+    InMenu, 
+    Paused 
 }
 
 public class GameStateManager

@@ -202,7 +202,6 @@ public class PlayerController : CreatureController
 
     public void JumpAndGravity()
     {
-        // 착지 상태 처리
         if (Grounded)
         {
             ResetFallTimeout();
@@ -381,14 +380,12 @@ public class PlayerController : CreatureController
 
     public void Interact()
     {
-        // 사다리와의 상호작용 처리
         if (isNearLadder && _input.interaction)
         {
             isClimbing = true;
             return;
         }
 
-        // 드랍 아이템과의 상호작용 처리
         if (_input.interaction && _currentDropItems.Count > 0)
         {
             DropItem closestItem = GetClosestDropItem();
@@ -400,7 +397,6 @@ public class PlayerController : CreatureController
             return;
         }
 
-        // NPC와의 상호작용 처리
         if (_input.interaction)
         {
             Npc closestNpc = GetClosestNpc();

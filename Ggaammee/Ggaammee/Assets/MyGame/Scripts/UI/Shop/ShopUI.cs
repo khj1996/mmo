@@ -28,14 +28,14 @@ public class ShopUI : UI_ScrollView<ShopUISub>
 
     public void RefreshShop()
     {
-        maxIndex = shopData.ProductList.Count;
+        maxIndex = shopData.productList.Count;
         InitializeView();
     }
 
     protected override void UpdateItemForIndex(UI_ScrollView_Sub item, int index)
     {
         var shopItem = (ShopUISub)item;
-        shopItem.productData = shopData.ProductList[index];
+        shopItem.productData = shopData.productList[index];
         base.UpdateItemForIndex(item, index);
     }
 }

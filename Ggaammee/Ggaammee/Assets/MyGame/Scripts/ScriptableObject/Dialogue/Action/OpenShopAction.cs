@@ -7,7 +7,6 @@ public class OpenShopAction : DialogueAction
 
     public override void Execute()
     {
-        // 팝업 매니저에 상점 열기 요청
         PopupUIManager.Instance.OpenPopupById(PopUpName.ShopUI, shopId);
     }
 }

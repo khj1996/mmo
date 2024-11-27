@@ -22,16 +22,16 @@ public class ShopUISub : UI_ScrollView_Sub
 
     public void buyItem()
     {
-        Managers.ShopManager.BuyItem(productData.ProductId);
+        Managers.ShopManager.BuyItem(productData.productId);
     }
 
     public override void RefreshUI()
     {
-        ItemData itemData = Managers.DataManager.ItemDatas.GetData(productData.ItemId);
+        ItemData itemData = Managers.DataManager.ItemDatas.GetData(productData.itemId);
 
         icon.sprite = itemData?.itemSprite;
         productName.text = itemData?.itemName;
         description.text = itemData?.description;
-        price.text = productData.Price.ToString();
+        price.text = productData.price.ToString();
     }
 }

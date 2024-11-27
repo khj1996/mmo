@@ -10,9 +10,6 @@ public class ShopManager
 
     private Dictionary<string, ShopData> shopDatas = new Dictionary<string, ShopData>();
 
-    /// <summary>
-    /// 특정 상점 데이터를 가져옵니다. 없을 경우 DataManager에서 로드합니다.
-    /// </summary>
     public ShopData GetShopData(string shopId)
     {
         if (!shopDatas.TryGetValue(shopId, out var shopData))
@@ -28,9 +25,6 @@ public class ShopManager
         return shopData;
     }
 
-    /// <summary>
-    /// 아이템 구매
-    /// </summary>
     public bool BuyItem(string productId)
     {
         if (!TryGetProduct(CurrentOpenShopId, productId, out var product))
@@ -39,24 +33,19 @@ public class ShopManager
             return false;
         }
 
-        var itemData = Managers.DataManager.ItemDatas.GetData(product.ItemId);
+        var itemData = Managers.DataManager.ItemDatas.GetData(product.itemId);
         if (!CanBuyItem(product, itemData, out int availableSlot))
         {
             Debug.LogWarning($"Cannot buy item: ProductID({productId})");
             return false;
         }
 
-        // 구매 처리
-        Managers.InventoryManager.UseCurrency(product.PriceId, product.Price);
+        Managers.InventoryManager.UseCurrency(product.priceId, product.price);
         Managers.InventoryManager.Add(itemData, 1);
 
         return true;
     }
 
-
-    /// <summary>
-    /// 특정 상품을 가져옵니다.
-    /// </summary>
     private bool TryGetProduct(string shopId, string productId, out ProductData product)
     {
         product = null;
@@ -68,13 +57,10 @@ public class ShopManager
             return false;
         }
 
-        product = shopData.ProductList.FirstOrDefault(x => x.ProductId == productId);
+        product = shopData.productList.FirstOrDefault(x => x.productId == productId);
         return product != null;
     }
 
-    /// <summary>
-    /// 아이템 구매 가능 여부를 확인합니다.
-    /// </summary>
     private bool CanBuyItem(ProductData product, ItemData itemData, out int availableSlot)
     {
         availableSlot = -1;
@@ -85,14 +71,12 @@ public class ShopManager
             return false;
         }
 
-        // 가격 확인
-        if (!Managers.InventoryManager.CheckCurrencyCost(product.PriceId, product.Price))
+        if (!Managers.InventoryManager.CheckCurrencyCost(product.priceId, product.price))
         {
-            Debug.LogWarning($"Not enough currency: PriceID({product.PriceId}), Price({product.Price})");
+            Debug.LogWarning($"Not enough currency: PriceID({product.priceId}), Price({product.price})");
             return false;
         }
 
-        // 인벤토리 슬롯 확인
         availableSlot = Managers.InventoryManager.GetAvailableSlot(itemData);
         if (availableSlot == -1)
         {

@@ -1,0 +1,61 @@
+{
+  "quests": [
+    {
+      "id": "quest_001",
+      "title": "Goblin Extermination",
+      "description": "Eliminate the goblins that have been terrorizing the village.",
+      "objectives": [
+        {
+          "type": "KillMonster",
+          "targetId": "goblin",
+          "count": 10
+        }
+      ],
+      "rewards": {
+        "experience": 500,
+        "gold": 200,
+        "items": [
+          { "itemId": "health_potion", "quantity": 3 }
+        ]
+      }
+    },
+    {
+      "id": "quest_002",
+      "title": "Gather Healing Herbs",
+      "description": "Collect herbs from the forest to help the village healer.",
+      "objectives": [
+        {
+          "type": "CollectItem",
+          "targetId": "healing_herb",
+          "count": 5
+        }
+      ],
+      "rewards": {
+        "experience": 300,
+        "gold": 100,
+        "items": [
+          { "itemId": "mana_potion", "quantity": 1 }
+        ]
+      }
+    },
+    {
+      "id": "quest_003",
+      "title": "Reach the Mountain Peak",
+      "description": "Travel to the peak of the Mystic Mountain to gather information.",
+      "objectives": [
+        {
+          "type": "ReachDestination",
+          "targetId": "mountain_peak",
+          "coordinates": { "x": 150.0, "y": 0.0, "z": 300.0 }
+        }
+      ],
+      "rewards": {
+        "experience": 700,
+        "gold": 300,
+        "items": [
+          { "itemId": "stamina_boost", "quantity": 1 }
+        ]
+      }
+    }
+  ]
+}

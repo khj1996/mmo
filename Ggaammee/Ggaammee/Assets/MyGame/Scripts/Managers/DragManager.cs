@@ -128,7 +128,6 @@ public class DragManager : UI_Base
 
         ItemSlotUI endDragSlot = GetPointerOverObject();
 
-        // 드래그된 아이템이 유효한 슬롯에 놓인 경우
         if (endDragSlot != null)
         {
             endDragSlot.HandleDrop(_beginDragSlot);
@@ -139,7 +138,7 @@ public class DragManager : UI_Base
         }
 
         _draggableItem.EndDrag();
-        _beginDragSlot = null; // 드래그 시작 슬롯 초기화
+        _beginDragSlot = null;
     }
 
 

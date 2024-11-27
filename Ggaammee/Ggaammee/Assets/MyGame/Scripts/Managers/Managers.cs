@@ -46,6 +46,7 @@ public class Managers : MonoBehaviour
     private DataManager _data;
     private ShopManager _shop;
     private GameStateManager _gameState;
+    private QuestManager _quest;
 
     public static ObjectManager ObjectManager
     {
@@ -80,6 +81,12 @@ public class Managers : MonoBehaviour
     public static GameStateManager GameStateManager
     {
         get { return Instance._gameState; }
+    }
+
+
+    public static QuestManager QuestManager
+    {
+        get { return Instance._quest; }
     }
 
 
