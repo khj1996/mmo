@@ -2,8 +2,8 @@
 
 public class KillMonsterQuest : Quest
 {
-    private int currentKillCount = 0;
-    private KillMonsterQuestData MonsterData => (KillMonsterQuestData)Data;
+    public int currentKillCount = 0;
+    public KillMonsterQuestData MonsterData => (KillMonsterQuestData)Data;
 
     public KillMonsterQuest(QuestData data) : base(data)
     {

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class QuestManager
 {
-    private Dictionary<string, Quest> activeQuests = new Dictionary<string, Quest>(); // 진행 중
-    private Dictionary<string, Quest> completedQuests = new Dictionary<string, Quest>(); // 완료된 퀘스트
+    public Dictionary<string, Quest> activeQuests { get; private set; } = new Dictionary<string, Quest>(); // 진행 중
+    public Dictionary<string, Quest> completedQuests { get; private set; } = new Dictionary<string, Quest>(); // 완료된 퀘스트
+
+    public event Action OnChangeQuest;
 
     public void AddTestQuest()
     {
@@ -37,6 +39,7 @@ public class QuestManager
         activeQuests.Add(questId, newQuest);
 
         newQuest.Subscribe();
+        OnChangeQuest?.Invoke();
         Debug.Log($"Quest '{newQuest.Data.title}' added.");
     }
 
@@ -52,6 +55,7 @@ public class QuestManager
 
         activeQuests.Remove(questId);
         completedQuests.Add(questId, quest);
+        OnChangeQuest?.Invoke();
 
         Debug.Log($"Quest '{quest.Data.title}' completed and moved to completed quests.");
     }
@@ -72,7 +76,7 @@ public class QuestManager
         {
             QuestType.KillMonster => new KillMonsterQuest(data),
             QuestType.CollectItem => new CollectItemQuest(data),
-            QuestType.ReachDestination => new CollectItemQuest(data),
+            QuestType.ReachDestination => new ReachDestinationQuest(data),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

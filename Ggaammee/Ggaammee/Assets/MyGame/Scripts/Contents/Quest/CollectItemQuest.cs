@@ -2,8 +2,8 @@
 
 public class CollectItemQuest : Quest
 {
-    private int currentItemCount = 0;
-    private CollectItemQuestData ItemData => (CollectItemQuestData)Data;
+    public int currentItemCount = 0;
+    public CollectItemQuestData ItemData => (CollectItemQuestData)Data;
 
     public CollectItemQuest(QuestData data) : base(data)
     {

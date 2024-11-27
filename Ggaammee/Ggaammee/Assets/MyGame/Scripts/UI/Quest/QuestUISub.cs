@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class QuestUISub : MonoBehaviour
 {
-    [Header("UI Elements")]
-    [SerializeField] private TMP_Text questTitleText; 
-    [SerializeField] private TMP_Text questDescriptionText; 
-    [SerializeField] private TMP_Text questProgressText; 
+    [Header("UI Elements")] [SerializeField]
+    private TMP_Text questTitleText;
+
+    [SerializeField] private TMP_Text questDescriptionText;
+    [SerializeField] private TMP_Text questProgressText;
 
     private Quest linkedQuest;
 
@@ -28,15 +29,15 @@ public class QuestUISub : MonoBehaviour
     {
         if (linkedQuest is KillMonsterQuest killQuest)
         {
-            //return $"{killQuest.co}/{killQuest.m.TargetKillCount}";
+            return $"{killQuest.currentKillCount}/{killQuest.MonsterData.targetCount}";
         }
         else if (linkedQuest is CollectItemQuest itemQuest)
         {
-            //return $"{itemQuest.CurrentItemCount}/{itemQuest.Data.TargetCount}";
+            return $"{itemQuest.currentItemCount}/{itemQuest.ItemData.targetCount}";
         }
         else if (linkedQuest is ReachDestinationQuest)
         {
-            return "Pending...";
+            return "진행중...";
         }
 
         return string.Empty;
