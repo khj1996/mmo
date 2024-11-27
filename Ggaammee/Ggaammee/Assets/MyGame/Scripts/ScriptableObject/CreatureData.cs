@@ -5,7 +5,9 @@ using UnityEngine.Serialization;
 
 public class CreatureData : ScriptableObject
 {
-    [Header("Basic Info")] public string creatureName;
+    [Header("Basic Info")] 
+    public string creatureId;
+    public string creatureName;
     public int level;
 
     [Header("Stats")] public float maxHp;

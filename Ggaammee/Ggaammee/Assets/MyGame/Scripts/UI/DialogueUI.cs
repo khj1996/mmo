@@ -22,6 +22,7 @@ public class DialogueUI : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(Managers.GameStateManager.CurrentState);
         if (isDialogueActive && Input.GetMouseButtonDown(0))
         {
             NextLine();
@@ -45,6 +46,9 @@ public class DialogueUI : MonoBehaviour
             EndDialogue();
             return;
         }
+
+        module.enterAction?.Execute();
+
 
         currentModule = module;
         currentLineIndex = 0;
@@ -76,7 +80,6 @@ public class DialogueUI : MonoBehaviour
         else
         {
             ShowChoices();
-            isDialogueActive = false;
         }
     }
 
@@ -102,13 +105,13 @@ public class DialogueUI : MonoBehaviour
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() =>
             {
-                choice.action?.Execute();
+                choice.endAction?.Execute();
 
                 DialogueModule nextModule = choice.GetNextModule();
 
                 LoadModule(nextModule);
 
-                if (nextModule == null && choice.action == null)
+                if (nextModule == null && choice.endAction is not OpenShopAction)
                 {
                     Managers.GameStateManager.SetState(GameState.Normal);
                 }

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eae83d1c0a9432bb42d21b0a74fe47a, type: 3}
   m_Name: quest_100
   m_EditorClassIdentifier: 
-  id: 
-  title: 
-  description: 
-  rewardGold: 0
-  rewardExp: 0
-  itemId: 
-  targetCount: 0
+  id: quest_100
+  title: "\uBA39\uC744\uAC8C \uD544\uC694\uD574\uC694"
+  description: "\uC0AC\uACFC 10\uAC1C \uC218\uC9D1"
+  rewardItems:
+  - itemData: {fileID: 11400000, guid: bc378b0c27e29f54cbe9a840f3bbafaf, type: 2}
+    count: 10
+  itemId: item_200
+  targetCount: 5

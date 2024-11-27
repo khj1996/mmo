@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "DialogueModule", menuName = "Dialogue/DialogueModule")]
 public class DialogueModule : ScriptableObject
 {
+    public DialogueAction enterAction;
     [TextArea] public string[] dialogueLines;
     public DialogueChoice[] choices;
 }
@@ -14,7 +15,7 @@ public class DialogueChoice
 {
     public string choiceText; 
     public DialogueModule defaultNextModule; 
-    public DialogueAction action;
+    public DialogueAction endAction;
     public ConditionalDialogueBranch[] conditionalBranches;
 
     public DialogueModule GetNextModule()
@@ -34,11 +35,12 @@ public class DialogueChoice
 [Serializable]
 public class ConditionalDialogueBranch
 {
-    public DialogueBranchNode branchNode; 
+    [SerializeReference] public DialogueBranchNode branchNode; 
     public DialogueModule nextModule; 
 }
 
 
+[Serializable]
 public abstract class DialogueBranchNode
 {
     public abstract bool CheckCondition(); 
@@ -67,5 +69,17 @@ public class DialogueQuestBranchNode : DialogueBranchNode
             QuestState.Completed => questManager.IsQuestCompleted(questId),
             _ => false,
         };
+    }
+}
+
+[Serializable]
+public class DialogueLevelBranchNode : DialogueBranchNode
+{
+    public int requiredLevel;
+
+    public override bool CheckCondition()
+    {
+
+        return requiredLevel > 0;
     }
 }

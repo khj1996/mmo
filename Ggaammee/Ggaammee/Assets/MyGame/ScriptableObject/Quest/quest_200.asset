@@ -12,10 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 480b28a76cd547f18100b5d389398742, type: 3}
   m_Name: quest_200
   m_EditorClassIdentifier: 
-  id: 
-  title: 
-  description: 
-  rewardGold: 0
-  rewardExp: 0
-  targetPosition: {x: 0, y: 0, z: 0}
-  radius: 0
+  id: quest_200
+  title: "\uC0AC\uB78C\uCC3E\uAE30"
+  description: "\uBCF4\uC774\uB294 \uC0AC\uB78C\uC744 \uCC3E\uC544\uAC00\uC11C \uB300\uD654\uB97C
+    \uD574\uBCF4\uC790"
+  rewardItems:
+  - itemData: {fileID: 11400000, guid: 3622dd2c6fd572440ab3a3b99f4e0e8c, type: 2}
+    count: 1
+  - itemData: {fileID: 11400000, guid: bc378b0c27e29f54cbe9a840f3bbafaf, type: 2}
+    count: 1
+  - itemData: {fileID: 11400000, guid: 945749d011959214eb18042048d1c6d2, type: 2}
+    count: 500
+  targetPosition: {x: 0, y: 3, z: -9}
+  radius: 0.4

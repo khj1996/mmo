@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26bf4f522d9043828a48550081cdc242, type: 3}
   m_Name: quest_000
   m_EditorClassIdentifier: 
-  id: 
-  title: 
-  description: 
-  rewardGold: 0
-  rewardExp: 0
-  monsterId: 
-  targetCount: 0
+  id: quest_000
+  title: "\uAE38\uC774 \uB9C9\uD614\uC5B4\uC694"
+  description: "\uAE38\uC744 \uB9C9\uB294 \uBAAC\uC2A4\uD130 \uCC98\uB9AC"
+  rewardItems:
+  - itemData: {fileID: 11400000, guid: 945749d011959214eb18042048d1c6d2, type: 2}
+    count: 2000
+  - itemData: {fileID: 11400000, guid: 468c9fffedfc2c24e8e14a8ed7ebaad8, type: 2}
+    count: 1
+  monsterId: monster_000
+  targetCount: 3

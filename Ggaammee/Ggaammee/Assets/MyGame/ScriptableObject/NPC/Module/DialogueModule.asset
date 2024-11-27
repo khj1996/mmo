@@ -10,15 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1758d32c5ee04954fbc63acd64e56792, type: 3}
-  m_Name: NPCStart
+  m_Name: DialogueModule
   m_EditorClassIdentifier: 
-  dialogueLines:
-  - "\uC548\uB155\uD558\uC138\uC694."
-  - "\uBB34\uC2A8\uC77C\uB85C \uC624\uC168\uB098\uC694?"
+  dialogueLines: []
   choices:
-  - choiceText: "\uC0C1\uC810 \uC5F4\uAE30"
-    nextModule: {fileID: 0}
-    action: {fileID: 11400000, guid: 124f23d07ccfb29489a3803bd96a4213, type: 2}
-  - choiceText: "\uB2EB\uAE30"
-    nextModule: {fileID: 0}
+  - choiceText: 
+    defaultNextModule: {fileID: 0}
     action: {fileID: 0}
+    conditionalBranches:
+    - branchNode:
+        rid: -2
+      nextModule: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

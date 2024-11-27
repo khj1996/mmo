@@ -49,6 +49,8 @@
     <Compile Include="Assets\MyGame\Editor\ShopUIEditor.cs" />
     <Compile Include="Assets\MyGame\Editor\ItemDatasEditor.cs" />
     <Compile Include="Assets\MyGame\Editor\MeshCombinerEditorMeshCombinerEditor.cs" />
+    <Compile Include="Assets\MyGame\Editor\ManagersUIEditor.cs" />
+    <Compile Include="Assets\MyGame\Editor\DialogueBranchNodeDrawer.cs" />
     <Compile Include="Assets\MyGame\Editor\SpriteAtlasCollector.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

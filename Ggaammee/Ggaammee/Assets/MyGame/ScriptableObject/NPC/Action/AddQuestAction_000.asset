@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d87f30c1bfd50a744a1cb99a2cfeb0a5, type: 3}
-  m_Name: Choice!
+  m_Script: {fileID: 11500000, guid: 294ed86ec6b94b64a9430fd3fb1dae96, type: 3}
+  m_Name: AddQuestAction_000
   m_EditorClassIdentifier: 
-  startModule: {fileID: 0}
-  npcName: 
+  questId: quest_000

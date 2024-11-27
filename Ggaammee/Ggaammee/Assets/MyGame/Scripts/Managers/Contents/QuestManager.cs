@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestManager
@@ -6,7 +7,10 @@ public class QuestManager
     private Dictionary<string, Quest> activeQuests = new Dictionary<string, Quest>(); // 진행 중
     private Dictionary<string, Quest> completedQuests = new Dictionary<string, Quest>(); // 완료된 퀘스트
 
-    [SerializeField] private List<QuestData> questDataList; // ScriptableObject 데이터
+    public void AddTestQuest()
+    {
+        AddQuest("quest_200");
+    }
 
     public void AddQuest(string questId)
     {
@@ -22,7 +26,7 @@ public class QuestManager
             return;
         }
 
-        var questData = questDataList.Find(q => q.id == questId);
+        var questData = Managers.DataManager.QuestDatas.GetData(questId);
         if (questData == null)
         {
             Debug.LogWarning($"QuestData with ID {questId} not found!");
@@ -69,6 +73,7 @@ public class QuestManager
             QuestType.KillMonster => new KillMonsterQuest(data),
             QuestType.CollectItem => new CollectItemQuest(data),
             QuestType.ReachDestination => new CollectItemQuest(data),
+            _ => throw new ArgumentOutOfRangeException()
         };
     }
 }

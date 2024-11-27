@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DialogueAction", menuName = "Dialogue/DialogueAction")]
 public class DialogueAction : ScriptableObject
 {
     public virtual void Execute()

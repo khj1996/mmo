@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1758d32c5ee04954fbc63acd64e56792, type: 3}
+  m_Name: NPCStart
+  m_EditorClassIdentifier: 
+  enterAction: {fileID: 0}
+  dialogueLines:
+  - "\uC548\uB155\uD558\uC138\uC694."
+  - "\uBB34\uC2A8\uC77C\uB85C \uC624\uC168\uB098\uC694?"
+  choices:
+  - choiceText: "\uC0C1\uC810 \uC5F4\uAE30"
+    defaultNextModule: {fileID: 0}
+    endAction: {fileID: 11400000, guid: 124f23d07ccfb29489a3803bd96a4213, type: 2}
+    conditionalBranches: []
+  - choiceText: "\uB300\uD654"
+    defaultNextModule: {fileID: 0}
+    endAction: {fileID: 0}
+    conditionalBranches:
+    - branchNode:
+        rid: 8857912580094033926
+      nextModule: {fileID: 11400000, guid: 8d98776f4e3487341ac206999e374806, type: 2}
+    - branchNode:
+        rid: 8857912580094033925
+      nextModule: {fileID: 0}
+    - branchNode:
+        rid: 8857912580094033927
+      nextModule: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8857912580094033925
+      type: {class: DialogueLevelBranchNode, ns: , asm: Assembly-CSharp}
+      data:
+        requiredLevel: 0
+    - rid: 8857912580094033926
+      type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
+      data:
+        questId: quest_200
+        requiredState: 1
+    - rid: 8857912580094033927
+      type: {class: DialogueLevelBranchNode, ns: , asm: Assembly-CSharp}
+      data:
+        requiredLevel: 0

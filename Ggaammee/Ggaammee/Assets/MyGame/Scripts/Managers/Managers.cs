@@ -107,8 +107,14 @@ public class Managers : MonoBehaviour
         _data = new DataManager();
         _shop = new ShopManager();
         _gameState = new GameStateManager();
+        _quest = new QuestManager();
 
         Application.targetFrameRate = 60;
         isInit = true;
+    }
+
+    public void SetTestData()
+    {
+        _quest.AddTestQuest();
     }
 }
