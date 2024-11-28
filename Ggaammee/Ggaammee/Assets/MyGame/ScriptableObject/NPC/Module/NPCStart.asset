@@ -33,6 +33,9 @@ MonoBehaviour:
         rid: 8857912580094033935
       nextModule: {fileID: 11400000, guid: a1cd1cf25ee20454e8923ae7337108c1, type: 2}
     - branchNode:
+        rid: 8857912580094033936
+      nextModule: {fileID: 11400000, guid: c0d8a4f4973cd1741bdcb2a6a609ffa4, type: 2}
+    - branchNode:
         rid: -2
       nextModule: {fileID: 0}
   references:
@@ -44,9 +47,14 @@ MonoBehaviour:
       type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
       data:
         questId: quest_200
-        requiredState: 1
+        requiredState: 2
     - rid: 8857912580094033935
       type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
       data:
-        questId: quest_100
+        questId: quest_000
         requiredState: 1
+    - rid: 8857912580094033936
+      type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
+      data:
+        questId: quest_000
+        requiredState: 2

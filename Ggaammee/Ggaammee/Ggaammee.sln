@@ -5,9 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask", "UniTask.csproj", "{9e09e2b5-5c9a-d253-1588-18406cbf47d3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastScriptReload.Editor", "FastScriptReload.Editor.csproj", "{2d47334e-2f03-cfab-f7dd-0a8bb0c5e862}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.Linq", "UniTask.Linq.csproj", "{4f2cd0cf-0ae2-aae7-a205-3a5f266d80a9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{95b17fe5-99c8-219f-2d5c-f13e7ccc36eb}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastScriptReload.Runtime", "FastScriptReload.Runtime.csproj", "{eeeb8a4a-a573-73b2-9965-9b9317c8bff7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.Addressables", "UniTask.Addressables.csproj", "{b9d7eaee-7055-1e86-a745-bf40b20134fa}"
 EndProject
@@ -17,7 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.DOTween", "UniTask.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniTask.Editor", "UniTask.Editor.csproj", "{317ec93c-134e-933a-e059-bf39109ca069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastScriptReload.Tests.Runtime", "FastScriptReload.Tests.Runtime.csproj", "{7d8f133c-8fb4-e8d0-eca3-65d932ce47f9}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{52ce65a8-dad3-1e90-fbc5-d31c8f6b53c3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastScriptReload.Tests.Editor", "FastScriptReload.Tests.Editor.csproj", "{77110ff4-e6ba-6a5c-435a-8aaf6864490d}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +36,14 @@ Global
 		{2b0d9248-bdee-16d3-8f53-3009486f9f5f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9e09e2b5-5c9a-d253-1588-18406cbf47d3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9e09e2b5-5c9a-d253-1588-18406cbf47d3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2d47334e-2f03-cfab-f7dd-0a8bb0c5e862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2d47334e-2f03-cfab-f7dd-0a8bb0c5e862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4f2cd0cf-0ae2-aae7-a205-3a5f266d80a9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4f2cd0cf-0ae2-aae7-a205-3a5f266d80a9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95b17fe5-99c8-219f-2d5c-f13e7ccc36eb}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95b17fe5-99c8-219f-2d5c-f13e7ccc36eb}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{eeeb8a4a-a573-73b2-9965-9b9317c8bff7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{eeeb8a4a-a573-73b2-9965-9b9317c8bff7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b9d7eaee-7055-1e86-a745-bf40b20134fa}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b9d7eaee-7055-1e86-a745-bf40b20134fa}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{e45f6acb-0b96-ce61-6f89-63bab239c84f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -40,8 +52,12 @@ Global
 		{46d83148-e332-4efe-e008-a7397c234055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{317ec93c-134e-933a-e059-bf39109ca069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{317ec93c-134e-933a-e059-bf39109ca069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7d8f133c-8fb4-e8d0-eca3-65d932ce47f9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7d8f133c-8fb4-e8d0-eca3-65d932ce47f9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52ce65a8-dad3-1e90-fbc5-d31c8f6b53c3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52ce65a8-dad3-1e90-fbc5-d31c8f6b53c3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77110ff4-e6ba-6a5c-435a-8aaf6864490d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77110ff4-e6ba-6a5c-435a-8aaf6864490d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

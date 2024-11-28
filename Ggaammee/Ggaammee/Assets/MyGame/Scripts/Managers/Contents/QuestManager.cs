@@ -18,20 +18,17 @@ public class QuestManager
     {
         if (completedQuests.ContainsKey(questId))
         {
-            Debug.LogWarning($"Quest with ID {questId} is already completed.");
             return;
         }
 
         if (activeQuests.ContainsKey(questId))
         {
-            Debug.LogWarning($"Quest with ID {questId} is already active.");
             return;
         }
 
         var questData = Managers.DataManager.QuestDatas.GetData(questId);
         if (questData == null)
         {
-            Debug.LogWarning($"QuestData with ID {questId} not found!");
             return;
         }
 
@@ -40,35 +37,40 @@ public class QuestManager
 
         newQuest.Subscribe();
         OnChangeQuest?.Invoke();
-        Debug.Log($"Quest '{newQuest.Data.title}' added.");
     }
 
     public void CompleteQuest(string questId)
     {
         if (!activeQuests.TryGetValue(questId, out Quest quest))
         {
-            Debug.LogWarning($"Quest with ID {questId} is not active.");
             return;
         }
+
+        if (!quest.CanComplete())
+            return;
 
         quest.Unsubscribe();
 
         activeQuests.Remove(questId);
         completedQuests.Add(questId, quest);
         OnChangeQuest?.Invoke();
-
-        Debug.Log($"Quest '{quest.Data.title}' completed and moved to completed quests.");
     }
 
-    public bool IsQuestActive(string questId)
+    public QuestState GetQuestStatus(string questId)
     {
-        return activeQuests.ContainsKey(questId);
+        if (completedQuests.ContainsKey(questId))
+        {
+            return QuestState.Completed;
+        }
+
+        if (activeQuests.TryGetValue(questId, out var activeQuest))
+        {
+            return activeQuest.CanComplete() ? QuestState.CanComplete : QuestState.InProgress;
+        }
+
+        return QuestState.NotStarted;
     }
 
-    public bool IsQuestCompleted(string questId)
-    {
-        return completedQuests.ContainsKey(questId);
-    }
 
     private Quest CreateQuestInstance(QuestData data)
     {

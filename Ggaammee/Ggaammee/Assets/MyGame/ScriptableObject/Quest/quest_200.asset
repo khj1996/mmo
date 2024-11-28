@@ -24,4 +24,4 @@ MonoBehaviour:
   - itemData: {fileID: 11400000, guid: 945749d011959214eb18042048d1c6d2, type: 2}
     count: 500
   targetPosition: {x: 0, y: 3, z: -9}
-  radius: 0.4
+  radius: 1

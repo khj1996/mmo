@@ -191,6 +191,7 @@ public class MonsterController : CreatureController
 
         if (stat.currentHp <= 0)
         {
+            EventManager.TriggerMonsterKilled(MonsterData.creatureId, 1);
             isDie = true;
         }
     }

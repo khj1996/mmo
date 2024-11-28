@@ -13,48 +13,30 @@ public class QuestUISub : MonoBehaviour
 
     public void Initialize(Quest quest)
     {
-        linkedQuest = quest;
-        if (linkedQuest == null)
+        if (quest == null)
         {
             ResetUI();
             return;
         }
 
-
+        linkedQuest = quest;
         questTitleText.text = quest.Data.title;
         questDescriptionText.text = quest.Data.description;
-        questProgressText.text = GetProgressText();
+        questProgressText.text = linkedQuest.GetProgress();
+        linkedQuest.OnUpdateProgress += UpdateProgressUI;
+    }
+
+    private void UpdateProgressUI()
+    {
+        questProgressText.text = linkedQuest?.GetProgress();
     }
 
     private void ResetUI()
     {
+        linkedQuest.OnUpdateProgress -= UpdateProgressUI;
         linkedQuest = null;
-
         questTitleText.text = "진행중인 퀘스트가 없습니다";
         questDescriptionText.text = "대기 중";
         questProgressText.text = "";
-    }
-
-    public void UpdateProgress(string progress)
-    {
-        questProgressText.text = progress;
-    }
-
-    private string GetProgressText()
-    {
-        if (linkedQuest is KillMonsterQuest killQuest)
-        {
-            return $"{killQuest.currentKillCount}/{killQuest.MonsterData.targetCount}";
-        }
-        else if (linkedQuest is CollectItemQuest itemQuest)
-        {
-            return $"{itemQuest.currentItemCount}/{itemQuest.ItemData.targetCount}";
-        }
-        else if (linkedQuest is ReachDestinationQuest)
-        {
-            return "진행중...";
-        }
-
-        return string.Empty;
     }
 }

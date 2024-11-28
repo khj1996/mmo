@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class KillMonsterQuest : Quest
 {
     public int currentKillCount = 0;
-    public KillMonsterQuestData MonsterData => (KillMonsterQuestData)Data;
+    public KillMonsterQuestData MonsterQuestData => (KillMonsterQuestData)Data;
+
 
     public KillMonsterQuest(QuestData data) : base(data)
     {
@@ -21,18 +23,34 @@ public class KillMonsterQuest : Quest
 
     private void OnMonsterKilled(string monsterId, int count)
     {
-        if (monsterId == MonsterData.monsterId)
+        if (monsterId == MonsterQuestData.monsterId)
         {
             currentKillCount += count;
-            if (IsComplete())
+            
+            InvokeOnUpdateProgress();
+
+            if (CanComplete())
             {
                 Debug.Log($"Quest '{Data.title}' completed!");
             }
         }
     }
 
-    public override bool IsComplete()
+
+    public override bool CanComplete()
     {
-        return currentKillCount >= MonsterData.targetCount;
+        return currentKillCount >= MonsterQuestData.targetCount;
+    }
+
+    public override string GetProgress()
+    {
+        if (CanComplete())
+        {
+            return "완료";
+        }
+        else
+        {
+            return $"{currentKillCount}/{MonsterQuestData.targetCount}";
+        }
     }
 }

@@ -111,7 +111,9 @@ public enum QuestState
 {
     NotStarted,
     InProgress,
-    Completed
+    CanComplete,
+    Completed,
+    Null
 }
 
 public static class AssignAnimationIDs

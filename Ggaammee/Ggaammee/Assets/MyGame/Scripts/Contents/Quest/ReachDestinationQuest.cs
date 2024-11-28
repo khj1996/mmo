@@ -2,38 +2,44 @@
 
 public class ReachDestinationQuest : Quest
 {
-    private ReachDestinationQuestData DestinationData => (ReachDestinationQuestData)Data;
-    private bool hasReached = false;
+    private ReachDestinationQuestData DestinationQuestData => (ReachDestinationQuestData)Data;
+    private float currentDistance;
 
-    public ReachDestinationQuest(QuestData data) : base(data) { }
+    public ReachDestinationQuest(QuestData data) : base(data)
+    {
+    }
 
     public override void Subscribe()
     {
-        EventManager.OnPlayerMoved += CheckPlayerPosition;
+        EventManager.OnPlayerMoved += UpdateDistance;
     }
 
     public override void Unsubscribe()
     {
-        EventManager.OnPlayerMoved -= CheckPlayerPosition;
+        EventManager.OnPlayerMoved -= UpdateDistance;
     }
 
-    private void CheckPlayerPosition(Vector3 playerPosition)
+    private void UpdateDistance(Vector3 playerPosition)
     {
-        float distance = Vector3.Distance(playerPosition, DestinationData.targetPosition);
-        if (distance <= DestinationData.radius)
+        float distance = Vector3.Distance(playerPosition, DestinationQuestData.targetPosition);
+        currentDistance = distance;
+        InvokeOnUpdateProgress();
+    }
+
+    public override bool CanComplete()
+    {
+        return currentDistance <= DestinationQuestData.radius;
+    }
+
+    public override string GetProgress()
+    {
+        if (CanComplete())
         {
-            hasReached = true;
-            Debug.Log($"Player reached the destination for quest '{Data.title}'!");
-
-            if (IsComplete())
-            {
-                Debug.Log($"Quest '{Data.title}' completed!");
-            }
+            return "목표지점에 도착";
         }
-    }
-
-    public override bool IsComplete()
-    {
-        return hasReached;
+        else
+        {
+            return currentDistance.ToString("F1");
+        }
     }
 }

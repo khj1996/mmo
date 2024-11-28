@@ -3,7 +3,7 @@
 public class CollectItemQuest : Quest
 {
     public int currentItemCount = 0;
-    public CollectItemQuestData ItemData => (CollectItemQuestData)Data;
+    public CollectItemQuestData ItemQuestData => (CollectItemQuestData)Data;
 
     public CollectItemQuest(QuestData data) : base(data)
     {
@@ -21,20 +21,35 @@ public class CollectItemQuest : Quest
 
     private void OnItemCollected(string itemId, int count)
     {
-        if (itemId == ItemData.itemId)
+        if (itemId == ItemQuestData.itemId)
         {
             currentItemCount += count;
-            Debug.Log($"Collected {currentItemCount}/{ItemData.targetCount} {ItemData.itemId}");
+            InvokeOnUpdateProgress();
+            Debug.Log($"Collected {currentItemCount}/{ItemQuestData.targetCount} {ItemQuestData.itemId}");
 
-            if (IsComplete())
+            if (CanComplete())
             {
                 Debug.Log($"Quest '{Data.title}' completed!");
             }
         }
     }
 
-    public override bool IsComplete()
+    public override bool CanComplete()
     {
-        return currentItemCount >= ItemData.targetCount;
+        return currentItemCount >= ItemQuestData.targetCount;
+    }
+
+    public override string GetProgress()
+    {
+        if (CanComplete())
+        {
+            return "완료";
+        }
+        else
+        {
+            var iteData = Managers.DataManager.ItemDatas.GetData(ItemQuestData.itemId);
+
+            return $"{iteData.name}개 수집 {currentItemCount}/{ItemQuestData.targetCount}";
+        }
     }
 }

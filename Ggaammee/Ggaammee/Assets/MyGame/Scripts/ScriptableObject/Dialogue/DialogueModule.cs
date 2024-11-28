@@ -59,19 +59,7 @@ public class DialogueQuestBranchNode : DialogueBranchNode
     {
         var questManager = Managers.QuestManager;
 
-        if (questManager == null)
-        {
-            Debug.LogWarning("QuestManager not found.");
-            return false;
-        }
-
-        return requiredState switch
-        {
-            QuestState.NotStarted => !questManager.IsQuestActive(questId) && !questManager.IsQuestCompleted(questId),
-            QuestState.InProgress => questManager.IsQuestActive(questId),
-            QuestState.Completed => questManager.IsQuestCompleted(questId),
-            _ => false,
-        };
+        return requiredState == questManager.GetQuestStatus(questId);
     }
 }
 

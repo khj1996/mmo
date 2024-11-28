@@ -137,6 +137,7 @@ public class PlayerController : CreatureController
         float move = targetDirection.z;
         animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
         animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
+        EventManager.TriggerPlayerMoved(transform.position);
     }
 
     public void Move()
@@ -154,6 +155,7 @@ public class PlayerController : CreatureController
         UpdateMovement(targetSpeed);
         ApplyRotation();
         ApplyTranslation(targetSpeed);
+        EventManager.TriggerPlayerMoved(transform.position);
     }
 
     private void UpdateMovement(float targetSpeed)
@@ -394,6 +396,7 @@ public class PlayerController : CreatureController
                 closestItem.Interact(this);
                 _currentDropItems.Remove(closestItem);
             }
+
             return;
         }
 
@@ -406,7 +409,7 @@ public class PlayerController : CreatureController
             }
         }
     }
-    
+
     private Npc GetClosestNpc()
     {
         Npc closestNpc = null;
@@ -429,7 +432,6 @@ public class PlayerController : CreatureController
 
         return closestNpc;
     }
-
 
     #endregion
 

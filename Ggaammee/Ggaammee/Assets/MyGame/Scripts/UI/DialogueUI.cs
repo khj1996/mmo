@@ -22,7 +22,6 @@ public class DialogueUI : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Managers.GameStateManager.CurrentState);
         if (isDialogueActive && Input.GetMouseButtonDown(0))
         {
             NextLine();
