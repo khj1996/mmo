@@ -13,8 +13,8 @@ public class DialogueModule : ScriptableObject
 [Serializable]
 public class DialogueChoice
 {
-    public string choiceText; 
-    public DialogueModule defaultNextModule; 
+    public string choiceText;
+    public DialogueModule defaultNextModule;
     public DialogueAction endAction;
     public ConditionalDialogueBranch[] conditionalBranches;
 
@@ -22,35 +22,38 @@ public class DialogueChoice
     {
         foreach (var branch in conditionalBranches)
         {
-            if (branch.branchNode.CheckCondition())
+            if (branch.branchNode != null && branch.branchNode.CheckCondition())
             {
                 return branch.nextModule;
             }
         }
 
-        return defaultNextModule; 
+        return defaultNextModule;
     }
 }
 
 [Serializable]
 public class ConditionalDialogueBranch
 {
-    [SerializeReference] public DialogueBranchNode branchNode; 
-    public DialogueModule nextModule; 
+    [SerializeReference] public DialogueBranchNode branchNode;
+    public DialogueModule nextModule;
 }
 
 
 [Serializable]
-public abstract class DialogueBranchNode
+public class DialogueBranchNode
 {
-    public abstract bool CheckCondition(); 
+    public virtual bool CheckCondition()
+    {
+        return false;
+    }
 }
 
 [Serializable]
 public class DialogueQuestBranchNode : DialogueBranchNode
 {
-    public string questId; 
-    public QuestState requiredState; 
+    public string questId;
+    public QuestState requiredState;
 
     public override bool CheckCondition()
     {
@@ -79,7 +82,6 @@ public class DialogueLevelBranchNode : DialogueBranchNode
 
     public override bool CheckCondition()
     {
-
         return requiredLevel > 0;
     }
 }

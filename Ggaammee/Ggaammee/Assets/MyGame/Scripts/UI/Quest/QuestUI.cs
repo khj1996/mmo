@@ -21,7 +21,7 @@ public class QuestUI : UI_Base
 
         for (int i = 0; i < activeQuestItems.Count; i++)
         {
-            activeQuestItems[i].Initialize(currentQuset.First().Value);
+            activeQuestItems[i].Initialize(currentQuset.FirstOrDefault().Value);
         }
     }
 

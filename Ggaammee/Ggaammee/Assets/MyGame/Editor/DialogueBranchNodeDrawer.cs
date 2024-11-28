@@ -24,7 +24,8 @@ public class DialogueBranchNodeDrawer : PropertyDrawer
                     menu.AddItem(new GUIContent(type.Name), false, () =>
                     {
                         property.serializedObject.Update();
-                        property.managedReferenceValue = Activator.CreateInstance(type);
+                        var newNode = Activator.CreateInstance(type);
+                        property.managedReferenceValue = newNode;
                         property.serializedObject.ApplyModifiedProperties();
                     });
                 }
@@ -33,9 +34,9 @@ public class DialogueBranchNodeDrawer : PropertyDrawer
         }
         else
         {
-            
             // 선택된 타입에 따른 필드 표시
             EditorGUI.PropertyField(position, property, label, true);
         }
     }
+
 }

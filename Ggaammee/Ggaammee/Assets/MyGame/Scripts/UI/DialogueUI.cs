@@ -77,6 +77,11 @@ public class DialogueUI : MonoBehaviour
         {
             ShowCurrentLine();
         }
+        else if (currentModule.choices.Length == 0)
+        {
+            EndDialogue();
+            Managers.GameStateManager.SetState(GameState.Normal);
+        }
         else
         {
             ShowChoices();

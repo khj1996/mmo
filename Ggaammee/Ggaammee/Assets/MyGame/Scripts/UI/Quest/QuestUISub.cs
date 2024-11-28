@@ -14,10 +14,25 @@ public class QuestUISub : MonoBehaviour
     public void Initialize(Quest quest)
     {
         linkedQuest = quest;
+        if (linkedQuest == null)
+        {
+            ResetUI();
+            return;
+        }
+
 
         questTitleText.text = quest.Data.title;
         questDescriptionText.text = quest.Data.description;
         questProgressText.text = GetProgressText();
+    }
+
+    private void ResetUI()
+    {
+        linkedQuest = null;
+
+        questTitleText.text = "진행중인 퀘스트가 없습니다";
+        questDescriptionText.text = "대기 중";
+        questProgressText.text = "";
     }
 
     public void UpdateProgress(string progress)

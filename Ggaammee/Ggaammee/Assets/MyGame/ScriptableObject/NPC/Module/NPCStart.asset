@@ -22,31 +22,31 @@ MonoBehaviour:
     endAction: {fileID: 11400000, guid: 124f23d07ccfb29489a3803bd96a4213, type: 2}
     conditionalBranches: []
   - choiceText: "\uB300\uD654"
-    defaultNextModule: {fileID: 0}
+    defaultNextModule: {fileID: 11400000, guid: dd82b6541242dd04083a53e77565b10e,
+      type: 2}
     endAction: {fileID: 0}
     conditionalBranches:
     - branchNode:
-        rid: 8857912580094033926
+        rid: 8857912580094033934
       nextModule: {fileID: 11400000, guid: 8d98776f4e3487341ac206999e374806, type: 2}
     - branchNode:
-        rid: 8857912580094033925
-      nextModule: {fileID: 0}
+        rid: 8857912580094033935
+      nextModule: {fileID: 11400000, guid: a1cd1cf25ee20454e8923ae7337108c1, type: 2}
     - branchNode:
-        rid: 8857912580094033927
+        rid: -2
       nextModule: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 8857912580094033925
-      type: {class: DialogueLevelBranchNode, ns: , asm: Assembly-CSharp}
-      data:
-        requiredLevel: 0
-    - rid: 8857912580094033926
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8857912580094033934
       type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
       data:
         questId: quest_200
         requiredState: 1
-    - rid: 8857912580094033927
-      type: {class: DialogueLevelBranchNode, ns: , asm: Assembly-CSharp}
+    - rid: 8857912580094033935
+      type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
       data:
-        requiredLevel: 0
+        questId: quest_100
+        requiredState: 1
