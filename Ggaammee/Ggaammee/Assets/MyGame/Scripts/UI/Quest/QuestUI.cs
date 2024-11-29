@@ -12,6 +12,7 @@ public class QuestUI : UI_Base
     public override void Init()
     {
         Managers.QuestManager.OnChangeQuest += RefreshUI;
+        RefreshUI();
     }
 
     public void RefreshUI()

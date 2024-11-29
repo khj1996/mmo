@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1758d32c5ee04954fbc63acd64e56792, type: 3}
   m_Name: Npc_000_Clear
   m_EditorClassIdentifier: 
-  enterAction: {fileID: 0}
+  enterAction: {fileID: 11400000, guid: 44c87d7c3549e0348a17f7a8c2bb0c78, type: 2}
   dialogueLines:
-  - "\uBD80\uD0C1\uC744 \uB4E4\uC5B4\uC8FC\uC154\uC11C \uAC10\uC0AC\uD569\uB2C8\uB2E4"
+  - "\uAE38\uC744 \uB9C9\uC740 \uAD34\uBB3C\uB4E4\uC744 \uCAD3\uC544\uB0B4\uC8FC\uC154\uC11C
+    \uAC10\uC0AC\uD569\uB2C8\uB2E4"
+  - "\uAE38\uC774 \uB9C9\uD600\uC788\uC5C8\uC5B4\uC11C \uBA39\uC744\uAC8C \uBD80\uC871\uD55C\uB370 "
+  - "\uC0AC\uACFC 10\uAC1C\uB9CC \uAC00\uC800\uB2E4 \uC8FC\uC2E4\uC218\uC788\uC73C\uC2E0\uAC00\uC694?"
   choices:
   - choiceText: "\uD655\uC778"
     defaultNextModule: {fileID: 0}
-    endAction: {fileID: 11400000, guid: 44c87d7c3549e0348a17f7a8c2bb0c78, type: 2}
+    endAction: {fileID: 11400000, guid: 5d33ef47fb02efb409cf253ef95283e6, type: 2}
     conditionalBranches: []
   references:
     version: 2

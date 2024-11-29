@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d87f30c1bfd50a744a1cb99a2cfeb0a5, type: 3}
-  m_Name: NPCDialogue
+  m_Script: {fileID: 11500000, guid: 294ed86ec6b94b64a9430fd3fb1dae96, type: 3}
+  m_Name: AddQuestAction_100
   m_EditorClassIdentifier: 
-  startModule: {fileID: 11400000, guid: 115429e18b4b7494ba46da9119d5d227, type: 2}
-  npcName: "\uC9D1 \uC8FC\uC778"
+  questId: quest_100

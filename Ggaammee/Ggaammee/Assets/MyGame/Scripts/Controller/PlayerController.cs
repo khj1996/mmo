@@ -553,7 +553,7 @@ public class PlayerController : CreatureController
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
-            AudioSource.PlayClipAtPoint(creatureData.walkSound, transform.position, 0.5f);
+            Managers.SoundManager.PlaySound(creatureData.walkSound, transform.position, 0.5f);
         }
     }
 

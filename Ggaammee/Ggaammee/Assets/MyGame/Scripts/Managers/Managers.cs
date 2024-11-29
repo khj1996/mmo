@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 [Serializable]
 public struct StartItem
@@ -13,31 +9,10 @@ public struct StartItem
     public int count;
 }
 
-public class Managers : MonoBehaviour
+public class Managers : Singleton<Managers>
 {
-    #region 싱글톤
-
-    private static Managers _instance = null;
-
-    public static Managers Instance
-    {
-        get
-        {
-            if (_instance is null)
-            {
-                _instance = FindObjectOfType<Managers>();
-
-                if (_instance is null) return null;
-            }
-
-            return _instance;
-        }
-    }
-
-    #endregion
-
-
     [SerializeField] public List<StartItem> StartItemData;
+    [SerializeField] public AudioClip bgmClip;
 
     private ObjectManager _obj;
     private DropManager _drop;
@@ -47,6 +22,7 @@ public class Managers : MonoBehaviour
     private ShopManager _shop;
     private GameStateManager _gameState;
     private QuestManager _quest;
+    private SoundManager _sound;
 
     public static ObjectManager ObjectManager
     {
@@ -89,6 +65,11 @@ public class Managers : MonoBehaviour
         get { return Instance._quest; }
     }
 
+    public static SoundManager SoundManager
+    {
+        get { return Instance._sound; }
+    }
+
 
     public bool isInit = false;
 
@@ -108,13 +89,9 @@ public class Managers : MonoBehaviour
         _shop = new ShopManager();
         _gameState = new GameStateManager();
         _quest = new QuestManager();
+        _sound = new SoundManager();
 
         Application.targetFrameRate = 60;
         isInit = true;
-    }
-
-    public void SetTestData()
-    {
-        _quest.AddTestQuest();
     }
 }

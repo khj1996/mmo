@@ -42,6 +42,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acd047aa76356df4c93d114e1f12a79a
+    m_Address: Assets/MyGame/Prefabs/AudioObject.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: eba9ec908a4a7804da34390f4c8bdb94, type: 2}
   m_SchemaSet:

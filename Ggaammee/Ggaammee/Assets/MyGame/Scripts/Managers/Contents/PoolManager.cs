@@ -36,8 +36,6 @@ public class PoolManager
                     newItem.OnReturnToPool();
                     pools[name].Enqueue(newItem);
                 }
-
-                Debug.Log($"[PoolManager] Pool '{name}' prewarmed with {count} items.");
             }
         };
     }
@@ -55,11 +53,9 @@ public class PoolManager
             item.gameObject.SetActive(true);
             item.OnGetFromPool();
 
-            Debug.Log($"[PoolManager] Retrieved item from pool '{name}'. Remaining: {pools[name].Count}");
             return (T)item;
         }
 
-        Debug.LogWarning($"[PoolManager] Pool '{name}' is empty. Consider increasing pool size.");
         return null;
     }
 
@@ -67,7 +63,6 @@ public class PoolManager
     {
         if (poolName == null)
         {
-            Debug.LogError("[PoolManager] Pool name is null. Cannot return to pool.");
             return;
         }
 
@@ -78,7 +73,5 @@ public class PoolManager
 
         item.OnReturnToPool();
         pools[poolName].Enqueue(item);
-
-        Debug.Log($"[PoolManager] Returned item to pool '{poolName}'. Total in pool: {pools[poolName].Count}");
     }
 }

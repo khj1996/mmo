@@ -9,9 +9,14 @@ public class QuestManager
 
     public event Action OnChangeQuest;
 
-    public void AddTestQuest()
+    public QuestManager()
     {
         AddQuest("quest_200");
+        
+    }
+
+    public void AddTestQuest()
+    {
     }
 
     public void AddQuest(string questId)

@@ -15,7 +15,6 @@ public class PopupUIManager : Singleton<PopupUIManager>
 
         public void InvokeOnOpen(string data = null)
         {
-            Debug.Log(OnOpen?.GetInvocationList());
             OnOpen?.Invoke(data);
         }
     }

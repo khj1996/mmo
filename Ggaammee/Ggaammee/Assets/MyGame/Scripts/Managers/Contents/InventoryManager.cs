@@ -31,6 +31,7 @@ public class InventoryManager
 
     public int Add(ItemData itemData, int amount = 1)
     {
+        EventManager.TriggerItemCollected(itemData.id, amount);
         return itemData switch
         {
             StackableItemData stackableData => AddStackableItem(stackableData, amount),
@@ -235,6 +236,11 @@ public class InventoryManager
             UpdateSlot(fromIndex, toItem);
             UpdateSlot(toIndex, fromItem);
         }
+    }
+
+    public int GetItemAmount(string itemId)
+    {
+        return Items.Where(x => x.Value.Data.id == itemId && x.Value is StackableItem).Sum(x => ((StackableItem)x.Value).Count);
     }
 
     public bool CheckCurrencyCost(string currencyId, int amount)

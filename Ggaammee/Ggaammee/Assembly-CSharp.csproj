@@ -58,6 +58,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\NpcDialogue.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Npc.cs" />
     <Compile Include="Assets\MyGame\InputSystem\InputSystem.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Managers\Contents\SoundManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ItemDatas.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ScrollView_Sub.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\QuickUI.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\Quest\QuestUISub.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\WeaponItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\StackableItemData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\AudioObject.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Quest\KillMonsterQuest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\IUsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DialogueUI.cs" />
