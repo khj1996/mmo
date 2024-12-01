@@ -7,6 +7,9 @@ public class ReachDestinationQuest : Quest
 
     public ReachDestinationQuest(QuestData data) : base(data)
     {
+        var test = Object.FindObjectOfType<GuideLine>();
+
+        test.StartGuide(DestinationQuestData.targetPosition);
     }
 
     public override void Subscribe()

@@ -94,4 +94,8 @@ public class Managers : Singleton<Managers>
         Application.targetFrameRate = 60;
         isInit = true;
     }
+
+    private void Start()
+    {
+    }
 }
