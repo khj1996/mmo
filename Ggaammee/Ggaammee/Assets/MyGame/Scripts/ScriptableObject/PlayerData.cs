@@ -77,7 +77,7 @@ public class PlayerData : CreatureData
             _owner.Move();
         }
     }
-    
+
     public class LadderState : State<PlayerController>
     {
         public LadderState(PlayerController owner) : base(owner)
@@ -95,6 +95,7 @@ public class PlayerData : CreatureData
             _owner.animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, false);
             _owner.animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, false);
             _owner.animator.SetLayerWeight(1, 1);
+            _owner.WarpNavMesh(_owner.transform.position);
         }
 
         public override void OnUpdate()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : CreatureController
 {
@@ -29,15 +30,16 @@ public class PlayerController : CreatureController
 
     private CreatureStateMachine<PlayerController> creatureStateMachine;
     private InputSystem _input;
-    private GameObject _mainCamera;
+    private Camera _mainCamera;
     private LockOn _lockOn;
+    [SerializeField] private NavMeshAgent _navMeshAgent;
     private List<DropItem> _currentDropItems;
 
     private void Awake()
     {
         if (_mainCamera == null)
         {
-            _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            _mainCamera = Camera.main;
         }
     }
 
@@ -468,7 +470,13 @@ public class PlayerController : CreatureController
     public void GroundedCheck()
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer | LayerData.DefaultLayer, QueryTriggerInteraction.Ignore);
+        var beforeStatus = Grounded;
+        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+
+        if (beforeStatus != Grounded)
+        {
+            WarpNavMesh(transform.position);
+        }
 
         if (_hasAnimator)
         {
@@ -575,6 +583,19 @@ public class PlayerController : CreatureController
 
     #endregion
 
+    #region 유틸
+
+    public void WarpNavMesh(Vector3 newPos)
+    {
+        _navMeshAgent.updatePosition = false;
+        _navMeshAgent.updateRotation = false;
+        _navMeshAgent.Warp(newPos);
+        _navMeshAgent.updatePosition = true;
+        _navMeshAgent.updateRotation = true;
+    }
+
+    #endregion
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -584,7 +605,7 @@ public class PlayerController : CreatureController
         Gizmos.color = Grounded ? transparentGreen : transparentRed;
         Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 
-        Gizmos.DrawSphere(new Vector3(attackPoint.position.x, attackPoint.position.y - GroundedOffset, attackPoint.position.z), 0.5f);
+        //Gizmos.DrawSphere(new Vector3(attackPoint.position.x, attackPoint.position.y - GroundedOffset, attackPoint.position.z), 0.5f);
     }
 #endif
 }
