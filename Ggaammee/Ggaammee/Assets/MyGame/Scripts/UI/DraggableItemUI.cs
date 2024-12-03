@@ -19,6 +19,7 @@ public class DraggableItem : MonoBehaviour
 
     public void StartDrag(ItemSlotUI data)
     {
+        
         Image.sprite = data.Item.Data.itemSprite;
         _beginDragIconPoint = data.Rect.transform.position;
         _beginDragCursorPoint = Input.mousePosition;

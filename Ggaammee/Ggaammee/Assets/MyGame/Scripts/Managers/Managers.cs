@@ -74,8 +74,10 @@ public class Managers : Singleton<Managers>
     public bool isInit = false;
 
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Init();
     }
 

@@ -33,8 +33,9 @@ public class PopupUIManager : Singleton<PopupUIManager>
 
     private List<PopupUI> _allPopupList;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _activePopupLList = new LinkedList<PopupUI>();
         Init();
     }
