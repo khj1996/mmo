@@ -39,14 +39,14 @@ public class CreatureStats
         currentHp = CurrentMaxHp;
         baseAttackPower = creatureData.attack;
         baseDefensePower = creatureData.defense;
-        ChangeHpEvent?.Invoke();
+        ChangeHpEvent?.Invoke(currentHp);
     }
 
     //public event Action<float, StatType> OnChangeCurrentMaxHp;
     public event Action<float, StatType> OnChangeCurrentAttackPower;
     public event Action<float, StatType> OnChangeCurrentDefensePower;
 
-    public event Action ChangeHpEvent;
+    public event Action<float> ChangeHpEvent;
 
     public void RefreshEquipStat(EquipType type)
     {
@@ -90,7 +90,7 @@ public class CreatureStats
     public void HpChange(float amount)
     {
         currentHp = Mathf.Min(currentHp + amount, CurrentMaxHp);
-        ChangeHpEvent?.Invoke();
+        ChangeHpEvent?.Invoke(amount);
     }
 
     // 공격력 증가

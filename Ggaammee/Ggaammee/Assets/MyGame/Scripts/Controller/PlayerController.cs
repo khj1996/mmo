@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 public class PlayerController : CreatureController
 {
@@ -34,6 +35,7 @@ public class PlayerController : CreatureController
     private LockOn _lockOn;
     [SerializeField] private NavMeshAgent _navMeshAgent;
     private List<DropItem> _currentDropItems;
+    [SerializeField] private VisualEffect healEffect;
 
     private void Awake()
     {
@@ -63,6 +65,7 @@ public class PlayerController : CreatureController
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
         _currentDropItems = new List<DropItem>();
+        stat.ChangeHpEvent += OnHeal;
     }
 
     private void InitFSM()
@@ -556,6 +559,14 @@ public class PlayerController : CreatureController
     #endregion
 
     #region 애니메이션
+
+    public void OnHeal(float amount)
+    {
+        if (amount > 0)
+        {
+            healEffect.Play();
+        }
+    }
 
     protected virtual void OnFootstep(AnimationEvent animationEvent)
     {

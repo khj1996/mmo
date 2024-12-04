@@ -27,7 +27,7 @@ public class CreatureController : Poolable
     {
         _hasAnimator = TryGetComponent(out animator);
         stat = new CreatureStats(creatureData);
-        stat.ChangeHpEvent += () => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
+        stat.ChangeHpEvent += _ => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
     }
 
     public void LockAtTargetPosition()
