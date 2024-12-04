@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,9 +15,13 @@ public class DragManager : UI_Base
     [SerializeField] private GraphicRaycaster _gr;
 
 
-    private ItemSlotUI _pointerOverSlot;
-    private ItemSlotUI _beginDragSlot;
-    private PointerEventData _ped;
+    private ItemSlotUI pointerOverSlot;
+    private ItemSlotUI beginDragSlot;
+    private PointerEventData ped;
+
+    public event Action onBeginDrag;
+    public event Action onEndDrag;
+
 
     private void Awake()
     {
@@ -30,19 +36,19 @@ public class DragManager : UI_Base
 
     public override void Init()
     {
-        _ped = new PointerEventData(EventSystem.current);
+        ped = new PointerEventData(EventSystem.current);
     }
 
     private void Update()
     {
-        _ped.position = Input.mousePosition;
+        ped.position = Input.mousePosition;
 
         HandlePointerEvents();
     }
 
     private void HandlePointerEvents()
     {
-        _pointerOverSlot = GetPointerOverObject();
+        pointerOverSlot = GetPointerOverObject();
 
         ShowOrHideItemTooltip();
         HandlePointerDown();
@@ -52,9 +58,9 @@ public class DragManager : UI_Base
 
     private void ShowOrHideItemTooltip()
     {
-        if (_pointerOverSlot != null && _pointerOverSlot.HasItem() && _pointerOverSlot != _beginDragSlot)
+        if (pointerOverSlot != null && pointerOverSlot.HasItem() && pointerOverSlot != beginDragSlot)
         {
-            UpdateTooltipUI(_pointerOverSlot);
+            UpdateTooltipUI(pointerOverSlot);
             _itemTooltip.Show();
         }
         else
@@ -86,11 +92,11 @@ public class DragManager : UI_Base
 
         if (Input.GetMouseButtonDown(0))
         {
-            _beginDragSlot = GetPointerOverObject();
+            beginDragSlot = GetPointerOverObject();
 
-            if (_beginDragSlot != null && _beginDragSlot.HasItem())
+            if (beginDragSlot != null && beginDragSlot.HasItem())
             {
-                StartDrag(_beginDragSlot);
+                StartDrag(beginDragSlot);
             }
         }
         else if (Input.GetMouseButtonDown(1))
@@ -102,7 +108,7 @@ public class DragManager : UI_Base
 
     private void HandlePointerDrag()
     {
-        if (_beginDragSlot == null) return;
+        if (beginDragSlot == null) return;
 
         if (Input.GetMouseButton(0))
         {
@@ -113,6 +119,7 @@ public class DragManager : UI_Base
 
     public void StartDrag(ItemSlotUI data)
     {
+        onBeginDrag?.Invoke();
         _draggableItem.StartDrag(data);
     }
 
@@ -124,28 +131,29 @@ public class DragManager : UI_Base
 
     private void HandlePointerUp()
     {
-        if (!Input.GetMouseButtonUp(0) || _beginDragSlot == null) return;
+        if (!Input.GetMouseButtonUp(0) || beginDragSlot == null) return;
 
         ItemSlotUI endDragSlot = GetPointerOverObject();
 
         if (endDragSlot != null)
         {
-            endDragSlot.HandleDrop(_beginDragSlot);
+            endDragSlot.HandleDrop(beginDragSlot);
         }
         else
         {
-            _beginDragSlot.SetItem(null);
+            beginDragSlot.SetItem(null);
         }
 
+        onEndDrag?.Invoke();
         _draggableItem.EndDrag();
-        _beginDragSlot = null;
+        beginDragSlot = null;
     }
 
 
     private ItemSlotUI GetPointerOverObject()
     {
         _rrList.Clear();
-        _gr.Raycast(_ped, _rrList);
+        _gr.Raycast(ped, _rrList);
 
         return _rrList.Count > 0 ? _rrList[0].gameObject.GetComponent<ItemSlotUI>() : null;
     }

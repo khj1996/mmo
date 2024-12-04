@@ -29,6 +29,9 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
             }
         }
 
+        DragManager.Instance.onBeginDrag += () => { scrollRect.vertical = false; };
+
+        DragManager.Instance.onEndDrag += () => { scrollRect.vertical = true; };
 
         gameObject.SetActive(false);
     }
@@ -96,5 +99,10 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
 
             current = current.Next;
         }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        throw new NotImplementedException();
     }
 }

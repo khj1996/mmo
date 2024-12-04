@@ -30,6 +30,16 @@ public abstract class UI_Base : MonoBehaviour
                 dragEvt.OnDragHandler -= action;
                 dragEvt.OnDragHandler += action;
                 break;
+            case UIEvent.BeginDrag:
+                UI_DragHandler beginDragEvt = Util.GetOrAddComponent<UI_DragHandler>(go);
+                beginDragEvt.OnBeginDragHandler -= action;
+                beginDragEvt.OnBeginDragHandler += action;
+                break;
+            case UIEvent.EndDrag:
+                UI_DragHandler endDragEvt = Util.GetOrAddComponent<UI_DragHandler>(go);
+                endDragEvt.OnEndDragHandler -= action;
+                endDragEvt.OnEndDragHandler += action;
+                break;
         }
     }
 }

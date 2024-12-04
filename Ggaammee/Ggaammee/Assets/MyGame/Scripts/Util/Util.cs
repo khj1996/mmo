@@ -47,6 +47,8 @@ public enum UIEvent
 {
     Click,
     Drag,
+    BeginDrag,
+    EndDrag
 }
 
 public enum ChangeType

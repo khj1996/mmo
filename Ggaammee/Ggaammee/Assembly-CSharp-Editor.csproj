@@ -744,6 +744,9 @@
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Runtime">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualEffectGraph.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
@@ -788,6 +791,9 @@
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Editor">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
@@ -849,11 +855,11 @@
     <Reference Include="Unity.VisualScripting.Core">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VisualScripting.Core.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow.Editor">
       <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
