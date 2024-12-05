@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,8 +8,17 @@ public class DialogueModule : ScriptableObject
 {
     public DialogueAction enterAction;
     [TextArea] public string[] dialogueLines;
+    public List<DialogueTimelineCue> dialogueTimelineCues;
     public DialogueChoice[] choices;
 }
+
+[Serializable]
+public class DialogueTimelineCue
+{
+    public string TimelineName;
+    public int LineNumber;
+}
+
 
 [Serializable]
 public class DialogueChoice

@@ -116,7 +116,7 @@ public class MonsterController : CreatureController
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
         _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
-        _speed = Mathf.Round(_speed * 1000f) / 1000f;
+        _speed = Mathf.Round(_speed * 1000f) / 300f;
 
         _controller.Move(direction.normalized * (_speed * Time.deltaTime));
     }

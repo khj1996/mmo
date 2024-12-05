@@ -18,6 +18,7 @@ MonoBehaviour:
     \uAC10\uC0AC\uD569\uB2C8\uB2E4"
   - "\uAE38\uC774 \uB9C9\uD600\uC788\uC5C8\uC5B4\uC11C \uBA39\uC744\uAC8C \uBD80\uC871\uD55C\uB370 "
   - "\uC0AC\uACFC 10\uAC1C\uB9CC \uAC00\uC800\uB2E4 \uC8FC\uC2E4\uC218\uC788\uC73C\uC2E0\uAC00\uC694?"
+  dialogueTimelineCues: []
   choices:
   - choiceText: "\uD655\uC778"
     defaultNextModule: {fileID: 0}

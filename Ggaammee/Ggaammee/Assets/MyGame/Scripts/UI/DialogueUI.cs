@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class DialogueUI : MonoBehaviour
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private Button[] choiceButtons;
 
-    private NpcDialogue currentDialogue;
+    private Npc currentInteractNpc;
     private DialogueModule currentModule;
     private int currentLineIndex;
     private bool isDialogueActive;
@@ -28,11 +29,11 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    public void StartDialogue(NpcDialogue dialogue)
+    public void StartDialogue(Npc npc)
     {
-        currentDialogue = dialogue;
-        npcNameText.text = dialogue.npcName;
-        LoadModule(dialogue.GetStartModule());
+        currentInteractNpc = npc;
+        npcNameText.text = npc.dialogue.npcName;
+        LoadModule(npc.dialogue.GetStartModule());
         dialogueUI.SetActive(true);
         isDialogueActive = true;
         Managers.GameStateManager.SetState(GameState.InConversation);
@@ -70,6 +71,12 @@ public class DialogueUI : MonoBehaviour
 
     private void NextLine()
     {
+        if (currentModule.dialogueTimelineCues.FirstOrDefault(x => x.LineNumber == currentLineIndex) != default)
+        {
+            currentInteractNpc?.StartTimeline();
+        }
+
+
         currentLineIndex++;
 
         if (currentLineIndex < currentModule.dialogueLines.Length)
@@ -143,7 +150,7 @@ public class DialogueUI : MonoBehaviour
     public void EndDialogue()
     {
         dialogueUI.SetActive(false);
-        currentDialogue = null;
+        currentInteractNpc = null;
         currentModule = null;
         isDialogueActive = false;
     }
