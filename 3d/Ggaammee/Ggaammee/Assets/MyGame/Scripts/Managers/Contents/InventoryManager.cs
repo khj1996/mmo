@@ -140,7 +140,7 @@ public class InventoryManager
     {
         foreach (var kvp in Items)
         {
-            if (kvp.Value is StackableItem stackable && stackable.Data == data && !stackable.IsMax)
+            if (kvp.Value is StackableItem stackable && stackable.StackableData == data && !stackable.IsMax)
             {
                 return kvp.Key;
             }

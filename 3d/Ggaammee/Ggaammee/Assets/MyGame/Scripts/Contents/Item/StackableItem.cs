@@ -3,22 +3,22 @@ using UnityEngine;
 
 public abstract class StackableItem : Item
 {
-    public StackableItemData StackableDataData { get; private set; }
+    public StackableItemData StackableData { get; private set; }
 
     public int Count { get; protected set; }
 
-    public int MaxCount => StackableDataData.maxStack;
+    public int MaxCount => StackableData.maxStack;
 
-    public bool IsMax => Count >= StackableDataData.maxStack;
+    public bool IsMax => Count >= StackableData.maxStack;
 
     public bool IsEmpty => Count <= 0;
 
     public event Action OnChangeCount;
 
 
-    public StackableItem(StackableItemData dataData, int amount = 1) : base(dataData)
+    public StackableItem(StackableItemData data, int amount = 1) : base(data)
     {
-        StackableDataData = dataData;
+        StackableData = data;
         SetAmount(amount);
     }
 

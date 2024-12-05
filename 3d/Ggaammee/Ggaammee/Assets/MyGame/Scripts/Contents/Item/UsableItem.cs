@@ -21,6 +21,6 @@ public class UsableItem : StackableItem, IUsableItem
 
     protected override StackableItem Clone(int amount)
     {
-        return new UsableItem(StackableDataData as UsableItemData, amount);
+        return new UsableItem(StackableData as UsableItemData, amount);
     }
 }

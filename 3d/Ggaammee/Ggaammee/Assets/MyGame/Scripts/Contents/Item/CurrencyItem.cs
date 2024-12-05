@@ -8,6 +8,6 @@ public class CurrencyItem : StackableItem
 
     protected override StackableItem Clone(int amount)
     {
-        return new CurrencyItem(StackableDataData as CurrencyItemData, amount);
+        return new CurrencyItem(StackableData as CurrencyItemData, amount);
     }
 }
