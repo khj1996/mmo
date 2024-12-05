@@ -83,6 +83,7 @@ public class Managers : Singleton<Managers>
 
     public void Init()
     {
+
         _obj = new ObjectManager();
         _pool = new PoolManager();
         _drop = new DropManager();
@@ -93,6 +94,7 @@ public class Managers : Singleton<Managers>
         _quest = new QuestManager();
         _sound = new SoundManager();
 
+        QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         isInit = true;
     }

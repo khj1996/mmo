@@ -160,6 +160,7 @@
     <None Include="Assets\MyGame\Data\QuestData.json" />
     <None Include="Assets\FastScriptReload\Samples\Basic\Point\Point Surface.shader" />
     <None Include="Assets\FastScriptReload\Plugins\Roslyn\2021+\System.Runtime.CompilerServices.Unsafe.xml" />
+    <None Include="Assets\AddressableAssetsData\link.xml" />
     <None Include="Assets\FastScriptReload\Plugins\Roslyn\2021+\RoslynLicense.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
