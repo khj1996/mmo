@@ -346,25 +346,25 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Harmony\net48\0Harmony.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Harmony\net48\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Roslyn\2021+\Microsoft.CodeAnalysis.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Roslyn\2021+\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Roslyn\2021+\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Roslyn\2021+\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="ImmersiveVRTools.Common.Editor">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRTools.Common.Editor.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRTools.Common.Editor.dll</HintPath>
     </Reference>
     <Reference Include="ImmersiveVRTools.Common.Runtime">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRTools.Common.Runtime.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRTools.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable.FSR">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Roslyn\2021+\System.Collections.Immutable.FSR.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Roslyn\2021+\System.Collections.Immutable.FSR.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -757,16 +757,16 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.TestRunner">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TestRunner">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

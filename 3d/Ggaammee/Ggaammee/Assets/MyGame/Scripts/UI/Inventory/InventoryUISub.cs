@@ -5,6 +5,7 @@ using UnityEngine;
 public class InventoryUISub : UI_ScrollView_Sub
 {
     [SerializeField] public ItemSlotUI[] items;
+    public bool isCheck = false;
 
     public override void Init()
     {

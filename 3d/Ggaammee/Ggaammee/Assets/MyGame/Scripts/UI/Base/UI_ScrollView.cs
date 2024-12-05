@@ -5,13 +5,11 @@ using UnityEngine.UI;
 
 public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
 {
-    [Header("---------UI_ScrollView-----------")] 
-    [SerializeField]
+    [Header("---------UI_ScrollView-----------")] [SerializeField]
     protected GameObject itemBase = null;
 
-    [SerializeField] 
-    protected RectOffset padding;
-    
+    [SerializeField] protected RectOffset padding;
+
     public ScrollRect scrollRect;
     public float spacingHeight = 10.0f;
     public RectTransform _RectTransform;
@@ -136,7 +134,6 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
             node = node.Next;
         }
     }
-
 
 
     protected void UpdateScrollViewSize()
@@ -265,10 +262,15 @@ public class UI_ScrollView<T> : UI_Base where T : UI_ScrollView_Sub
         item.RectTransform.offsetMin = offsetMin;
         item.RectTransform.offsetMax = offsetMax;
 
-        UpdateItemForIndex(item, index);
+        InitializedItem(item, index);
         items.AddLast(item);
 
         return item;
+    }
+
+    protected virtual void InitializedItem(T item, int _index)
+    {
+        UpdateItemForIndex(item, _index);
     }
 
     protected virtual void UpdateItemForIndex(UI_ScrollView_Sub item, int _index)

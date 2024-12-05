@@ -20,20 +20,21 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
         InitializeView();
         Managers.InventoryManager.InitializeInventory();
 
-
-        foreach (var elem in items)
-        {
-            foreach (var slot in elem.items)
-            {
-                slot.OnDropItem += HandleItemSwapOrSeparation;
-            }
-        }
-
         DragManager.Instance.onBeginDrag += () => { scrollRect.vertical = false; };
 
         DragManager.Instance.onEndDrag += () => { scrollRect.vertical = true; };
 
         gameObject.SetActive(false);
+    }
+
+    protected override void InitializedItem(InventoryUISub item, int _index)
+    {
+        foreach (var slot in item.items)
+        {
+            slot.OnDropItem += HandleItemSwapOrSeparation;
+        }
+
+        base.InitializedItem(item, _index);
     }
 
     private void HandleItemSwapOrSeparation(ItemSlotUI fromSlot, ItemSlotUI toSlot)
@@ -99,10 +100,5 @@ public class InventoryUI : UI_ScrollView<InventoryUISub>
 
             current = current.Next;
         }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -302,10 +302,10 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Harmony\net48\0Harmony.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\Harmony\net48\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="ImmersiveVRTools.Common.Runtime">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRTools.Common.Runtime.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRTools.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -689,10 +689,10 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.33f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:\project\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

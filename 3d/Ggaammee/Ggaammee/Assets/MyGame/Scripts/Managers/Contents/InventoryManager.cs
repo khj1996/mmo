@@ -231,9 +231,18 @@ public class InventoryManager
         }
         else
         {
-            Items[fromIndex] = toItem;
+            if (toItem == null)
+            {
+                Items.Remove(fromIndex);
+            }
+            else
+            {
+                Items[fromIndex] = toItem;
+            }
+
             Items[toIndex] = fromItem;
-            UpdateSlot(fromIndex, toItem);
+
+            UpdateSlot(fromIndex, Items.GetValueOrDefault(fromIndex));
             UpdateSlot(toIndex, fromItem);
         }
     }

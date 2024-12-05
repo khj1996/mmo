@@ -30,7 +30,7 @@ public abstract class StackableItem : Item
     public void SetAmount(int amount)
     {
         Count = Mathf.Clamp(amount, 0, MaxCount);
-        OnOnChangeCount();
+        InvokeOnChangeCount();
     }
 
     public int AddAmountAndGetExcess(int amount)
@@ -54,7 +54,7 @@ public abstract class StackableItem : Item
 
     protected abstract StackableItem Clone(int amount);
 
-    protected virtual void OnOnChangeCount()
+    protected virtual void InvokeOnChangeCount()
     {
         OnChangeCount?.Invoke();
     }

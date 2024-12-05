@@ -169,7 +169,7 @@ public class PlayerController : CreatureController
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
         _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
-        _speed = Mathf.Round(_speed * 1000f) / 300f;
+        _speed = Mathf.Round(_speed * 1000f) / 1000f;
 
         _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
         if (_animationBlend < 0.01f) _animationBlend = 0f;
