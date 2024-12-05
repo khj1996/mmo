@@ -8,6 +8,7 @@ public class CollectItemQuest : Quest
     public CollectItemQuest(QuestData data) : base(data)
     {
         currentItemCount = Managers.InventoryManager.GetItemAmount(ItemQuestData.itemId);
+        Debug.Log(currentItemCount);
     }
 
     public override void Subscribe()
@@ -50,7 +51,7 @@ public class CollectItemQuest : Quest
         {
             var iteData = Managers.DataManager.ItemDatas.GetData(ItemQuestData.itemId);
 
-            return $"{iteData.name}개 수집 {currentItemCount}/{ItemQuestData.targetCount}";
+            return $"{iteData.itemName} 수집 {currentItemCount}/{ItemQuestData.targetCount}";
         }
     }
 }

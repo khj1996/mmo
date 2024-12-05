@@ -31,7 +31,6 @@ public class InventoryManager
 
     public int Add(ItemData itemData, int amount = 1)
     {
-        EventManager.TriggerItemCollected(itemData.id, amount);
         return itemData switch
         {
             StackableItemData stackableData => AddStackableItem(stackableData, amount),
@@ -65,6 +64,7 @@ public class InventoryManager
             }
         }
 
+        EventManager.TriggerItemCollected(data.id, amount);
         return amount;
     }
 

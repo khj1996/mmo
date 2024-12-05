@@ -11,6 +11,7 @@ public class UsableItem : StackableItem, IUsableItem
         {
             SetAmount(--Count);
             Managers.ObjectManager.MainPlayer.stat.HpChange(data.value);
+            EventManager.TriggerItemCollected(StackableData.id, -1);
         };
     }
 
