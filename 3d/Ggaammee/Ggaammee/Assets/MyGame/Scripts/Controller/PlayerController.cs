@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 public class PlayerController : CreatureController
@@ -17,6 +18,9 @@ public class PlayerController : CreatureController
     public float GroundedRadius = 0.28f;
     public bool Grounded = true;
     public bool isClimbing = false;
+
+    [SerializeField] private NavMeshAgent _navMeshAgent;
+    [SerializeField] private VisualEffect healEffect;
 
 
     private float _speed;
@@ -33,9 +37,10 @@ public class PlayerController : CreatureController
     private InputSystem _input;
     private Camera _mainCamera;
     private LockOn _lockOn;
-    [SerializeField] private NavMeshAgent _navMeshAgent;
     private List<DropItem> _currentDropItems;
-    [SerializeField] private VisualEffect healEffect;
+
+
+    private WeaponData weaponData;
 
     private void Awake()
     {
@@ -66,6 +71,10 @@ public class PlayerController : CreatureController
         _fallTimeoutDelta = FallTimeout;
         _currentDropItems = new List<DropItem>();
         stat.ChangeHpEvent += OnHeal;
+    }
+
+    private void EquipWeapon()
+    {
     }
 
     private void InitFSM()
@@ -313,20 +322,11 @@ public class PlayerController : CreatureController
             return;
 
         _input.attack = false;
-        _AttackCoroutine = StartCoroutine(AttackCoroutine());
+        _AttackCoroutine = StartCoroutine(weaponData.AttackCoroutine(this));
     }
 
-    private IEnumerator AttackCoroutine()
+    public void EndAttack()
     {
-        animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
-        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 1);
-
-        while (animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1f)
-        {
-            yield return null;
-        }
-
-        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, 0);
         _AttackCoroutine = null;
     }
 
@@ -487,24 +487,6 @@ public class PlayerController : CreatureController
         }
     }
 
-
-    public List<CharacterController> GetMonstersInRange(Vector3 position, float radius = 0.5f)
-    {
-        List<CharacterController> monstersInRange = new List<CharacterController>();
-        Collider[] colliders = Physics.OverlapSphere(position, radius, LayerData.MonsterLayer);
-
-        foreach (Collider collider in colliders)
-        {
-            CharacterController monster = collider.GetComponent<CharacterController>();
-            if (monster != null)
-            {
-                monstersInRange.Add(monster);
-            }
-        }
-
-        return monstersInRange;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
@@ -578,10 +560,9 @@ public class PlayerController : CreatureController
 
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
-        List<CharacterController> monsters = GetMonstersInRange(attackPoint.position);
-        foreach (CharacterController monster in monsters)
+        if (weaponData is MeleeWeaponData mw)
         {
-            monster.gameObject.GetComponent<CreatureController>().GetDamaged(stat.CurrentAttackPower);
+            mw.OnHit(this, attackPoint.position);
         }
     }
 

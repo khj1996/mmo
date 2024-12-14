@@ -19,4 +19,4 @@ MonoBehaviour:
   - itemData: {fileID: 11400000, guid: bc378b0c27e29f54cbe9a840f3bbafaf, type: 2}
     count: 10
   itemId: item_200
-  targetCount: 5
+  targetCount: 10

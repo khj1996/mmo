@@ -13,11 +13,11 @@ public class CreatureController : Poolable
     protected bool isDie;
 
     public Animator animator;
-    public Transform attackPoint;
 
     protected bool _hasAnimator;
     protected CharacterController _controller;
     protected Transform _targetTransform;
+    [SerializeField] protected Transform attackPoint;
 
 
     public event Action OnReturnToPoolAction;

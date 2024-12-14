@@ -81,7 +81,7 @@ public class MonsterController : CreatureController
 
     private bool CheckCanAttack()
     {
-        return _targetTransform && !((_targetTransform.position - transform.position).sqrMagnitude > creatureData.sqrAttackRange);
+        return _targetTransform && !((_targetTransform.position - transform.position).sqrMagnitude > MonsterData.sqrAttackRange);
     }
 
     private void InitComponent()
@@ -128,7 +128,7 @@ public class MonsterController : CreatureController
 
     public void CheckAttack()
     {
-        if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + creatureData.attackSpeed)) return;
+        if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + MonsterData.attackSpeed)) return;
 
         _AttackCoroutine = StartCoroutine(AttackCoroutine());
         lastAttackTime = Time.time;
