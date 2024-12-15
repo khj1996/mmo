@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NpcDialogue", menuName = "Dialogue/NpcDialogue")]
+[CreateAssetMenu(fileName = "NpcDialogue", menuName = "ScriptableObjects/Dialogue/NpcDialogue")]
 public class NpcDialogue : ScriptableObject
 {
     public DialogueModule startModule; // 시작 모듈

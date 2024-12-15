@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "OpenShopAction", menuName = "Dialogue/DialogueAction/OpenShopAction")]
+[CreateAssetMenu(fileName = "OpenShopAction", menuName = "ScriptableObjects/Dialogue/DialogueAction/OpenShopAction")]
 public class OpenShopAction : DialogueAction
 {
     [SerializeField] private string shopId = "shop_";

@@ -76,6 +76,7 @@
     <Compile Include="Assets\MyGame\Scripts\Contents\Quest\Quest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStats.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\DialogueModule.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\ComplexCurveDebugTool.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DraggableItemUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\QuestManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\MonsterData.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\StackableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\DropItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_Base.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\ComplexCurveDesigner.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\Action\DialogueAction.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\Action\ClearQuestAction.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringBone.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Assets\MyGame\Scripts\UI\EquipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
+    <Compile Include="Assets\MyGame\Scripts\ScriptableObject\ComplexCurveDesignerAsset.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\QuestDatas.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\DragManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\CurrencyItem.cs" />
@@ -857,6 +860,9 @@
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
+    <Reference Include="EasyButtons">
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\EasyButtons.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
@@ -928,6 +934,9 @@
     </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyButtons.Editor">
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\EasyButtons.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>

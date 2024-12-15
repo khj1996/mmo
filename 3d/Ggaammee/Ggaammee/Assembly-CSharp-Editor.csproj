@@ -774,6 +774,9 @@
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
+    <Reference Include="EasyButtons">
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\EasyButtons.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
@@ -845,6 +848,9 @@
     </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyButtons.Editor">
+      <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\EasyButtons.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
       <HintPath>C:\project\3d\Ggaammee\Ggaammee\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>

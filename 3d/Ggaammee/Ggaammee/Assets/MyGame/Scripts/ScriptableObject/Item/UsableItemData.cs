@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "UsableItemData", menuName = "Inventory/UsableItemData")]
+[CreateAssetMenu(fileName = "UsableItemData", menuName = "ScriptableObjects/Inventory/UsableItemData")]
 public class UsableItemData : StackableItemData
 {
     public float value = 1;

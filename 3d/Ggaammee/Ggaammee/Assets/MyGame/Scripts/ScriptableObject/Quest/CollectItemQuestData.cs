@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "CollectItemQuest", menuName = "Quest/CollectItemQuest")]
+[CreateAssetMenu(fileName = "CollectItemQuest", menuName = "ScriptableObjects/Quest/CollectItemQuest")]
 public class CollectItemQuestData : QuestData
 {
     public string itemId; // 수집해야 할 아이템 ID

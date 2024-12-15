@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ClearQuestAction", menuName = "Dialogue/DialogueAction/ClearQuestAction")]
+[CreateAssetMenu(fileName = "ClearQuestAction", menuName = "ScriptableObjects/Dialogue/DialogueAction/ClearQuestAction")]
 public class ClearQuestAction : DialogueAction
 {
     [SerializeField] private string questId = "shop_";
