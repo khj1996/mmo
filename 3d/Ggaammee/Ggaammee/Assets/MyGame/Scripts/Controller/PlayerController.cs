@@ -28,7 +28,7 @@ public class PlayerController : CreatureController
     private float _targetRotation = 0.0f;
     private float _rotationVelocity;
     private float _verticalVelocity;
-    private float _terminalVelocity = 53.0f;
+    private readonly float _terminalVelocity = 53.0f;
 
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
@@ -40,7 +40,9 @@ public class PlayerController : CreatureController
     private List<DropItem> _currentDropItems;
 
 
-    private WeaponData weaponData;
+    [SerializeField] private WeaponData weaponData;
+    [SerializeField] private WeaponData[] tempWeaponDatas;
+    [SerializeField] private Transform equipWeapon;
 
     private void Awake()
     {
@@ -71,11 +73,11 @@ public class PlayerController : CreatureController
         _fallTimeoutDelta = FallTimeout;
         _currentDropItems = new List<DropItem>();
         stat.ChangeHpEvent += OnHeal;
+        weaponData = tempWeaponDatas[0];
+        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, weaponData.attackType);
+        animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, weaponData.attackType);
     }
 
-    private void EquipWeapon()
-    {
-    }
 
     private void InitFSM()
     {
@@ -573,6 +575,18 @@ public class PlayerController : CreatureController
         _targetTransform = null;
     }
 
+    public void OnChangeWeapon()
+    {
+        if (weaponData.attackType == 0)
+        {
+            equipWeapon.gameObject.SetActive(true);
+        }
+        else
+        {
+            equipWeapon.gameObject.SetActive(false);
+        }
+    }
+
     #endregion
 
     #region 유틸
@@ -584,6 +598,18 @@ public class PlayerController : CreatureController
         _navMeshAgent.Warp(newPos);
         _navMeshAgent.updatePosition = true;
         _navMeshAgent.updateRotation = true;
+    }
+
+    public void ChangeAttackType()
+    {
+        if (_input.changeAttackType && weaponData.attackType != _input.lastInputAttackType)
+        {
+            _input.changeAttackType = false;
+            animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, _input.lastInputAttackType);
+            animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, _input.lastInputAttackType);
+            animator.SetTrigger(AssignAnimationIDs.AnimIDChangeAttackType);
+            weaponData = tempWeaponDatas[_input.lastInputAttackType];
+        }
     }
 
     #endregion

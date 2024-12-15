@@ -23,6 +23,7 @@ public class PlayerData : CreatureData
         public override void OnUpdate()
         {
             _owner.Interact();
+            _owner.ChangeAttackType();
             _owner.JumpAndGravity();
             _owner.GroundedCheck();
             _owner.CheckAttack();

@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public class WeaponData : ScriptableObject
 {
-    public string weaponId;
+    public int attackType;
     public string weaponName;
 
     public float damageMultiply;

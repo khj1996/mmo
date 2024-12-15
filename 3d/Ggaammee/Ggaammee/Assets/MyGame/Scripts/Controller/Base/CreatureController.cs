@@ -30,32 +30,32 @@ public class CreatureController : Poolable
         stat.ChangeHpEvent += _ => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
     }
 
-    public void LockAtTargetPosition()
+    protected void LockAtTargetPosition()
     {
-        Vector3 targetPosition = new Vector3(_targetTransform.position.x, transform.position.y, _targetTransform.position.z);
-        Vector3 direction = (targetPosition - transform.position).normalized;
+        var targetPosition = new Vector3(_targetTransform.position.x, transform.position.y, _targetTransform.position.z);
+        var direction = (targetPosition - transform.position).normalized;
 
-        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        var distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
         _controller.Move(direction * distanceToTarget);
     }
 
-    public void LookAtTarget(Vector3 targetVector)
+    protected void LookAtTarget(Vector3 targetVector)
     {
         Vector3 up = transform.rotation * Vector3.up;
 
         transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, targetVector, up), up) * transform.rotation;
     }
 
-    public List<CharacterController> GetTargetInRange(Vector3 position, int targetLayer, float radius = 0.5f)
+    protected List<CharacterController> GetTargetInRange(Vector3 position, int targetLayer, float radius = 0.5f)
     {
-        List<CharacterController> targetsInRange = new List<CharacterController>();
+        var targetsInRange = new List<CharacterController>();
 
-        Collider[] colliders = Physics.OverlapSphere(position, radius, targetLayer);
+        var colliders = Physics.OverlapSphere(position, radius, targetLayer);
 
         foreach (Collider collider in colliders)
         {
-            CharacterController target = collider.GetComponent<CharacterController>();
+            var target = collider.GetComponent<CharacterController>();
 
             if (target != null)
             {

@@ -5284,7 +5284,8 @@ PrefabInstance:
       value: 0.017432982
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3981435478922690857, guid: c891e05de02202e469dd753f838ffc78, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5904525240692292765, guid: c891e05de02202e469dd753f838ffc78,
@@ -5785,6 +5786,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4293401399639331102, guid: 4d8d3aeb7b37cce489edce3815314b3b,
     type: 3}
   m_PrefabInstance: {fileID: 1271385206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1280160776 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8302426586812010115, guid: b692315e79bebd645b99ad3b91ac6c39,
+    type: 3}
+  m_PrefabInstance: {fileID: 1771782272930230241}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1290241929 stripped
 GameObject:
@@ -7990,9 +7997,43 @@ PrefabInstance:
       objectReference: {fileID: 201816391}
     - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}
+      propertyPath: weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: a463a89d5e50d0549ba49224382e083a,
+        type: 2}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
       propertyPath: attackPoint
       value: 
       objectReference: {fileID: 1771782272930230242}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: equipWeapon
+      value: 
+      objectReference: {fileID: 1280160776}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: tempWeaponDatas.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: tempWeaponDatas.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: a463a89d5e50d0549ba49224382e083a,
+        type: 2}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: tempWeaponDatas.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 721a90f26f1b7b74187df9b62929b553,
+        type: 2}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: tempWeaponDatas.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: a2030b7a84d33dd4e9c521496c4b3763,
+        type: 2}
     - target: {fileID: 8026870606457810531, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}
       propertyPath: m_LocalPosition.x

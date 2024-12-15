@@ -55,7 +55,7 @@ public class InventoryManager
                 int emptySlot = FindEmptySlot();
                 if (emptySlot == -1) break;
 
-                var newItem = data.CreateItem() as StackableItem;
+                StackableItem newItem = data.CreateItem() as StackableItem;
                 newItem.SetAmount(amount);
                 amount = Math.Max(0, amount - data.maxStack);
 

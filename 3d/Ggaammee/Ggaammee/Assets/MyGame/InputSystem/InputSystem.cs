@@ -12,7 +12,9 @@ public class InputSystem : MonoBehaviour
     public bool attack;
     public bool interaction;
     public bool lockOn;
+    public bool changeAttackType;
 
+    public int lastInputAttackType;
     public bool analogMovement;
     public bool cursorInputForLook = true;
 
@@ -76,6 +78,24 @@ public class InputSystem : MonoBehaviour
             LockOnInput(value.isPressed);
     }
 
+    public void OnAttackType0(InputValue value)
+    {
+        if (gameStateManager.CanPlayerInput())
+            AttackTypeInput(value.isPressed, 0);
+    }
+
+    public void OnAttackType1(InputValue value)
+    {
+        if (gameStateManager.CanPlayerInput())
+            AttackTypeInput(value.isPressed, 1);
+    }
+
+    public void OnAttackType2(InputValue value)
+    {
+        if (gameStateManager.CanPlayerInput())
+            AttackTypeInput(value.isPressed, 2);
+    }
+
     public void MoveInput(Vector2 newMoveDirection) => move = newMoveDirection;
 
     public void LookInput(Vector2 newLookDirection)
@@ -98,6 +118,12 @@ public class InputSystem : MonoBehaviour
 
     public void SprintInput(bool newValue) => sprint = newValue;
 
+    public void AttackTypeInput(bool newValue, int attackType)
+    {
+        changeAttackType = newValue;
+        lastInputAttackType = attackType;
+    }
+
     public void InterActionInput(bool newValue) => interaction = newValue;
 
     public void LockOnInput(bool newValue) => lockOn = newValue;
@@ -109,7 +135,7 @@ public class InputSystem : MonoBehaviour
             move = Vector2.zero;
             look = Vector2.zero;
         }
-        
+
         if (attack) attack = false;
         if (jump) jump = false;
         if (lockOn) lockOn = false;
