@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 2
   weaponName: 
-  damageMultiply: 0
+  damageMultiply: 0.2
   attackCoolTime: 0
   sqrAttackRange: 0
   attackStartSfx: {fileID: 0}
   attackImpactSfx: {fileID: 0}
+  _complexCurveDesigner: {fileID: 11400000, guid: c7cda69a63b2f8344b3dff9551473804,
+    type: 2}
+  damageCoolTime: 0.5

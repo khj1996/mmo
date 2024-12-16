@@ -131,6 +131,7 @@ public static class AssignAnimationIDs
     public static readonly int AnimIDAttackTypeTemp = Animator.StringToHash("AttackTypeTemp");
     public static readonly int AnimIDChangeAttackType = Animator.StringToHash("ChangeAttackType");
     public static readonly int AnimIDAttackTrigger = Animator.StringToHash("AttackTrigger");
+    public static readonly int AnimIDEndChannelingTrigger = Animator.StringToHash("EndChannelingTrigger");
     public static readonly int AnimIDLadder = Animator.StringToHash("Ladder");
     public static readonly int AnimIDLadderUpStart = Animator.StringToHash("LadderUpStart");
     public static readonly int AnimIDLadderDownStart = Animator.StringToHash("LadderDownStart");

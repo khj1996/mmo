@@ -76,6 +76,7 @@ public class PlayerController : CreatureController
         weaponData = tempWeaponDatas[0];
         animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, weaponData.attackType);
         animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, weaponData.attackType);
+        Managers.PoolManager.PrewarmPools<Bullet>("Bullet", null, 20);
     }
 
 
@@ -324,7 +325,14 @@ public class PlayerController : CreatureController
             return;
 
         _input.attack = false;
-        _AttackCoroutine = StartCoroutine(weaponData.AttackCoroutine(this));
+        if (weaponData is MeleeWeaponData mw)
+        {
+            _AttackCoroutine = StartCoroutine(mw.AttackCoroutine(this));
+        }
+        else if (weaponData is RangedWeaponData rw)
+        {
+            _AttackCoroutine = StartCoroutine(rw.AttackCoroutine(this, _lockOn.currentTarget));
+        }
     }
 
     public void EndAttack()

@@ -8,7 +8,7 @@ public class MeleeWeaponData : WeaponData
     public Vector3 attackPostion = new Vector3();
     public float CheckRadius;
 
-    public override IEnumerator AttackCoroutine(PlayerController controller)
+    public override IEnumerator AttackCoroutine(PlayerController controller, MonsterController target = null)
     {
         controller.animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
 

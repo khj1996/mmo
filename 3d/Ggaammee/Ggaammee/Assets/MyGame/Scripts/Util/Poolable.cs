@@ -2,8 +2,7 @@
 
 public abstract class Poolable : MonoBehaviour
 {
-    public string poolName;
-
+    [HideInInspector] public string poolName;
     public abstract void OnGetFromPool();
     public abstract void OnReturnToPool();
 

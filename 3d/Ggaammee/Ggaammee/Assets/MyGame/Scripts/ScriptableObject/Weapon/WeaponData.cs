@@ -14,7 +14,7 @@ public class WeaponData : ScriptableObject
     public AudioClip attackStartSfx;
     public AudioClip attackImpactSfx;
 
-    public virtual IEnumerator AttackCoroutine(PlayerController controller)
+    public virtual IEnumerator AttackCoroutine(PlayerController controller, MonsterController target = null)
     {
         yield return null;
     }

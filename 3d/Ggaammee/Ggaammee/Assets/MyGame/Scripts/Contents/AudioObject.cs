@@ -27,7 +27,7 @@ public class AudioObject : Poolable
     private IEnumerator ReturnToPoolAfterPlayback(float delay)
     {
         yield return new WaitForSeconds(delay);
-        Managers.PoolManager.ReturnToPool(poolName, this);
+        ReturnToPool();
     }
 
     public override void OnReturnToPool()
