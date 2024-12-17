@@ -562,11 +562,9 @@ public class PlayerController : CreatureController
 
     protected virtual void OnFootstep(AnimationEvent animationEvent)
     {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            Managers.SoundManager.PlaySound(creatureData.walkSound, transform.position, 0.5f);
-        }
+        Managers.SoundManager.PlaySound(creatureData.walkSound, transform.position, 0.5f);
     }
+
 
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
