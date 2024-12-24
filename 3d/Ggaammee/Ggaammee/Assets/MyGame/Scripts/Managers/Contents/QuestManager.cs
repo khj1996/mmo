@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,10 +10,10 @@ public class QuestManager
 
     public event Action OnChangeQuest;
 
-    public QuestManager()
+    public IEnumerator SetDefaultQuest()
     {
+        yield return new WaitUntil(() => Managers.DataManager.IsInitialize);
         AddQuest("quest_200");
-        
     }
 
     public void AddTestQuest()

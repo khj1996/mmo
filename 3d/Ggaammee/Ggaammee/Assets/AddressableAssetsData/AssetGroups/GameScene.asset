@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: GameScene
+  m_EditorClassIdentifier: 
+  m_GroupName: GameScene
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3f41b7244ee2e5c4683a0d02e6247747
+  m_SerializeEntries:
+  - m_GUID: 134571def16f29841904a1a0f660ce04
+    m_Address: GameScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90d5034d929f39c4ba4e7b1f16d64278
+    m_Address: Bullet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1b2c292f628817489918c844214092f
+    m_Address: Assets/MyGame/Art/sprite.spriteatlas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acd047aa76356df4c93d114e1f12a79a
+    m_Address: AudioObject
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 042f78af6384bb945bc7948bf55fb9d3
+    m_Address: QuestDatas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 379cfb6848589a948b84691a4df3bed9
+    m_Address: Monster1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ad055c5e471c9a489b3b13679017cbf
+    m_Address: ItemDatas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce4c6d79819a7c04da00550bd5a9bbd7
+    m_Address: ShopData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9598731bdb75cb249b8c87047fb72bce
+    m_Address: DropItem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: eba9ec908a4a7804da34390f4c8bdb94, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 033301cf9a356044d9b322a40498a934, type: 2}
+    - {fileID: 11400000, guid: 13618de72220fa5438c7f4502a808f6f, type: 2}

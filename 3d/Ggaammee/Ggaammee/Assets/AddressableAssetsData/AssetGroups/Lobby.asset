@@ -10,15 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: Lobby
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: Lobby
   m_Data:
     m_SerializedData: []
-  m_GUID: b40d853b102072849bcda80bf3d05e7b
+  m_GUID: a6d65d61009aeca4190e781521ba6899
   m_SerializeEntries:
-  - m_GUID: 144a2d6b231d23c4daa1791b5e9acc97
-    m_Address: PersistentScene
+  - m_GUID: 1f9ee12ad92259f47a82a150896c05d2
+    m_Address: LobbyScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eafd13a220e67a24b8e0b7d6cf42f4fb
+    m_Address: unitychan
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -26,5 +31,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: eba9ec908a4a7804da34390f4c8bdb94, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 1696ac52feaec5f4aaf44a89cec06b6c, type: 2}
-    - {fileID: 11400000, guid: c488cf14628a115408963a005fa1f1d4, type: 2}
+    - {fileID: 11400000, guid: e3d3455afe71c7440b8a83d44fcc6150, type: 2}
+    - {fileID: 11400000, guid: 41521cd2e8721b246aa606440571b16c, type: 2}

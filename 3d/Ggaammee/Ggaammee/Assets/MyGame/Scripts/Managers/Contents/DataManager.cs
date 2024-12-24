@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Data;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Newtonsoft.Json;
 
 public interface ILoader<Key, Value>
 {
@@ -12,34 +14,55 @@ public class DataManager
 {
     #region 데이터 초기화
 
-    public Dictionary<string, ShopData> ShopDict { get; private set; } = new();
-    //public Dictionary<string, QuestData> QuestDict { get; private set; } = new();
+    public bool IsInitialize = false;
 
-    public ItemDatas ItemDatas;
-    public QuestDatas QuestDatas;
+    public Dictionary<string, ShopData> ShopDict { get; private set; } = new();
+    public ItemDatas ItemDatas { get; private set; }
+    public QuestDatas QuestDatas { get; private set; }
 
     public DataManager()
     {
-        ShopDict = LoadJson<ShopLoader, string, ShopData>("ShopData").MakeDict();
-        //QuestDict = LoadJson<QuestLoader, string, QuestData>("QuestData").MakeDict();
-        ItemDatas = LoadSO<ItemDatas>("ItemDatas");
-        QuestDatas = LoadSO<QuestDatas>("QuestDatas");
+        _ = Initialize();
     }
 
-    Loader LoadJson<Loader, Key, Value>(string name) where Loader : ILoader<Key, Value>
+
+    private async UniTaskVoid Initialize()
     {
-        var textAsset = Addressables.LoadAssetAsync<TextAsset>(name);
+        var shopTask = LoadJsonAsync<ShopLoader, string, ShopData>("ShopData");
+        var itemTask = LoadSOAsync<ItemDatas>("ItemDatas");
+        var questTask = LoadSOAsync<QuestDatas>("QuestDatas");
 
-        var data = textAsset.WaitForCompletion();
+        (ShopDict, ItemDatas, QuestDatas) = await UniTask.WhenAll(shopTask, itemTask, questTask);
 
-        return Newtonsoft.Json.JsonConvert.DeserializeObject<Loader>(data.text);
+        IsInitialize = true;
     }
 
-    T LoadSO<T>(string name) where T : ScriptableObject
+    #endregion
+
+    #region 데이터 로드
+
+    private async UniTask<Dictionary<TKey, TValue>> LoadJsonAsync<TLoader, TKey, TValue>(string addressableKey) where TLoader : ILoader<TKey, TValue>
     {
-        var sO = Addressables.LoadAssetAsync<T>(name);
-        var data = sO.WaitForCompletion();
-        return data;
+        var textAsset = await Addressables.LoadAssetAsync<TextAsset>(addressableKey).ToUniTask();
+
+        var loader = JsonConvert.DeserializeObject<TLoader>(textAsset.text);
+        if (loader == null)
+        {
+            return new Dictionary<TKey, TValue>();
+        }
+
+        return loader.MakeDict();
+    }
+
+    private async UniTask<T> LoadSOAsync<T>(string addressableKey) where T : ScriptableObject
+    {
+        var scriptableObject = await Addressables.LoadAssetAsync<T>(addressableKey).ToUniTask();
+        if (scriptableObject == null)
+        {
+            return null;
+        }
+
+        return scriptableObject;
     }
 
     #endregion
