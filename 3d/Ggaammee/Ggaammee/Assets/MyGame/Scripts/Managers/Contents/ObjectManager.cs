@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ObjectManager
 {
-    public PlayerController MainPlayer = new PlayerController();
+    public PlayerController MainPlayer;
     public List<PlayerController> Players { get; set; } = new List<PlayerController>();
     public List<MonsterController> Monsters { get; set; } = new List<MonsterController>();
 
@@ -40,6 +40,4 @@ public class ObjectManager
 
         return closestPlayer?.transform;
     }
-    
-    
 }

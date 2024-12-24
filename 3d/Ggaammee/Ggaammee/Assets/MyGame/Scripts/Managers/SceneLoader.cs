@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -10,8 +11,9 @@ public class SceneLoader : Singleton<SceneLoader>
     private bool IsLoading { get; set; } = false;
 
     private SceneInstance currentlyLoadedScene;
-
     public string CurrentSceneName { get; private set; }
+
+    public GameObject LodingObj;
 
     public void LoadScene(string sceneName)
     {
@@ -27,6 +29,8 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private IEnumerator SwitchScene(string newSceneName)
     {
+        LodingObj.SetActive(true);
+
         if (currentlyLoadedScene.Scene.name != null)
         {
             Addressables.UnloadSceneAsync(currentlyLoadedScene, true).Completed += Addressables.Release;
@@ -43,9 +47,9 @@ public class SceneLoader : Singleton<SceneLoader>
                 CurrentSceneName = newSceneName;
 
                 SceneManager.SetActiveScene(result.Result.Scene);
+                LodingObj.SetActive(false);
             }
         };
-
         IsLoading = false;
     }
 }
