@@ -15,8 +15,8 @@ public class CreatureController : Poolable
     public Animator animator;
 
     protected bool _hasAnimator;
-    protected CharacterController _controller;
     protected Transform _targetTransform;
+    [SerializeField] protected CharacterController _controller;
     [SerializeField] protected Transform attackPoint;
 
 

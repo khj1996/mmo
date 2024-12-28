@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -34,15 +35,16 @@ public class PlayerController : CreatureController
     private float _fallTimeoutDelta;
 
     private CreatureStateMachine<PlayerController> creatureStateMachine;
-    private InputSystem _input;
     private Camera _mainCamera;
-    private LockOn _lockOn;
     private List<DropItem> _currentDropItems;
 
 
+    [SerializeField] private LockOn _lockOn;
+    [SerializeField] private InputSystem _input;
     [SerializeField] private WeaponData weaponData;
     [SerializeField] private WeaponData[] tempWeaponDatas;
     [SerializeField] private Transform equipWeapon;
+
 
     private void Awake()
     {
@@ -63,7 +65,6 @@ public class PlayerController : CreatureController
     protected override void Init()
     {
         InitFSM();
-        InitComponent();
 
         base.Init();
 
@@ -122,13 +123,6 @@ public class PlayerController : CreatureController
         #endregion
 
         creatureStateMachine.ChangeState(typeof(PlayerData.IdleAndMoveState));
-    }
-
-    private void InitComponent()
-    {
-        _controller = GetComponent<CharacterController>();
-        _input = GetComponent<InputSystem>();
-        _lockOn = GetComponent<LockOn>();
     }
 
     #endregion
@@ -405,7 +399,7 @@ public class PlayerController : CreatureController
 
         if (_input.interaction && _currentDropItems.Count > 0)
         {
-            DropItem closestItem = GetClosestDropItem();
+            DropItem closestItem = GetClosestObject(_currentDropItems, item => item.transform.position);
             if (closestItem)
             {
                 closestItem.Interact(this);
@@ -418,34 +412,26 @@ public class PlayerController : CreatureController
         if (_input.interaction)
         {
             Npc closestNpc = GetClosestNpc();
-            if (closestNpc != null)
+            if (closestNpc)
             {
                 closestNpc.Interact();
             }
         }
     }
 
+    private readonly Collider[] npcList = new Collider[3];
+
     private Npc GetClosestNpc()
     {
-        Npc closestNpc = null;
-        float closestDistance = float.MaxValue;
-
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 1.0f, LayerData.NpcLayer);
-        foreach (Collider collider in colliders)
+        var result = Physics.OverlapSphereNonAlloc(transform.position, 1.0f, npcList, LayerData.NpcLayer);
+        if (result == 0)
         {
-            Npc npc = collider.GetComponent<Npc>();
-            if (npc != null)
-            {
-                float distance = Vector3.Distance(transform.position, npc.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestNpc = npc;
-                }
-            }
+            return null;
         }
 
-        return closestNpc;
+        var npcs = npcList.Select(x => x ? x.GetComponent<Npc>() : null).Where(npc => npc != null).ToList();
+
+        return GetClosestObject(npcs, npc => npc.transform.position);
     }
 
     #endregion
@@ -456,24 +442,6 @@ public class PlayerController : CreatureController
     public bool AddItemToInventory(ItemData itemData)
     {
         return Managers.InventoryManager.Add(itemData) >= 0;
-    }
-
-    private DropItem GetClosestDropItem()
-    {
-        DropItem closestItem = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (var item in _currentDropItems)
-        {
-            float distance = Vector3.Distance(transform.position, item.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestItem = item;
-            }
-        }
-
-        return closestItem;
     }
 
     #endregion
@@ -619,6 +587,24 @@ public class PlayerController : CreatureController
             animator.SetTrigger(AssignAnimationIDs.AnimIDChangeAttackType);
             weaponData = tempWeaponDatas[_input.lastInputAttackType];
         }
+    }
+
+    private T GetClosestObject<T>(List<T> objects, Func<T, Vector3> positionSelector) where T : class
+    {
+        T closestObject = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var obj in objects)
+        {
+            float distance = Vector3.Distance(transform.position, positionSelector(obj));
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestObject = obj;
+            }
+        }
+
+        return closestObject;
     }
 
     #endregion

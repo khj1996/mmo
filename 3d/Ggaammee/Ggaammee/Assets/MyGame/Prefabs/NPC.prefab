@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5372287860960465378}
   - component: {fileID: 3616261065046674226}
   - component: {fileID: 8781337001286890983}
-  - component: {fileID: 7494340270673432493}
+  - component: {fileID: 880055167845755315}
   m_Layer: 17
   m_Name: NPC
   m_TagString: NPC
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: 34e94e0505b5b244392385d2c02553c9, type: 2}
-  playableDirector: {fileID: 0}
+  playableDirector: {fileID: 880055167845755315}
 --- !u!65 &8781337001286890983
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -92,27 +92,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 1, z: 0.5}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!65 &7494340270673432493
-BoxCollider:
+--- !u!320 &880055167845755315
+PlayableDirector:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5904525240692292765}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 262144
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: d64ad88b35d94e548a1cd430d9f55eb3, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -9159852182076006514, guid: d64ad88b35d94e548a1cd430d9f55eb3, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3786923221230438848, guid: d64ad88b35d94e548a1cd430d9f55eb3, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References:
+    - 382a84d3184c4604f843ee5c3232b25b: {fileID: 0}
+    - 1633bf2f3a25a21489be62743ae3b587: {fileID: 0}
+    - d0da4d850368e71469c7cd6bd7e94711: {fileID: 0}
 --- !u!1001 &4438202381635576741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -177,7 +180,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 781180970165166732, guid: 478274ce8a46eff46a8575eff20c7842, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 478274ce8a46eff46a8575eff20c7842, type: 3}

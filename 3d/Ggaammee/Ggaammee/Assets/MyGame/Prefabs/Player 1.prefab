@@ -345,7 +345,8 @@ MonoBehaviour:
   creatureData: {fileID: 11400000, guid: 6af78f56c8313794a8b448fab2a40171, type: 2}
   _hpBar: {fileID: 0}
   animator: {fileID: 5372287860960465378}
-  attackPoint: {fileID: 0}
+  _controller: {fileID: 786441117642222483}
+  attackPoint: {fileID: 5417652724333124433}
   RotationSmoothTime: 0.12
   JumpTimeout: 0.4
   FallTimeout: 0.15
@@ -355,6 +356,14 @@ MonoBehaviour:
   isClimbing: 0
   _navMeshAgent: {fileID: 1087078160600073815}
   healEffect: {fileID: 433901332998718311}
+  _lockOn: {fileID: 1874768547656342762}
+  _input: {fileID: 6591710976191693114}
+  weaponData: {fileID: 11400000, guid: a463a89d5e50d0549ba49224382e083a, type: 2}
+  tempWeaponDatas:
+  - {fileID: 11400000, guid: a463a89d5e50d0549ba49224382e083a, type: 2}
+  - {fileID: 11400000, guid: 721a90f26f1b7b74187df9b62929b553, type: 2}
+  - {fileID: 11400000, guid: a2030b7a84d33dd4e9c521496c4b3763, type: 2}
+  equipWeapon: {fileID: 8302426586812010115}
 --- !u!114 &6591710976191693114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,6 +384,8 @@ MonoBehaviour:
   attack: 0
   interaction: 0
   lockOn: 0
+  changeAttackType: 0
+  lastInputAttackType: 0
   analogMovement: 0
   cursorInputForLook: 1
 --- !u!114 &1653520059555725034
@@ -514,9 +525,8 @@ MonoBehaviour:
   BottomClamp: -70
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  cameraDirectionY: 0
+  cameraDirectionY: -0.25
   cameraSmoothing: 5
-  _mainCamera: {fileID: 0}
 --- !u!114 &1874768547656342762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,6 +666,12 @@ GameObject:
 --- !u!4 &7949308170935434658 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1711076075603086797, guid: 478274ce8a46eff46a8575eff20c7842,
+    type: 3}
+  m_PrefabInstance: {fileID: 8786359088973525103}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8302426586812010115 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 781180970165010156, guid: 478274ce8a46eff46a8575eff20c7842,
     type: 3}
   m_PrefabInstance: {fileID: 8786359088973525103}
   m_PrefabAsset: {fileID: 0}
