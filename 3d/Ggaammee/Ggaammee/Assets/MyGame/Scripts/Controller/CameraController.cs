@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float cameraDirectionY = 0;
     public float cameraSmoothing = 5f;
 
-    public GameObject _mainCamera;
+    private Camera _mainCamera;
 
 
     private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour
     {
         if (_mainCamera == null)
         {
-            _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            _mainCamera = Camera.main;
         }
     }
 
@@ -70,7 +70,11 @@ public class CameraController : MonoBehaviour
 
             direction.y = cameraDirectionY;
 
-            CinemachineCameraTarget.transform.forward = Vector3.Lerp(CinemachineCameraTarget.transform.forward, direction, Time.deltaTime * cameraSmoothing);
+            Vector3 currentForward = CinemachineCameraTarget.transform.forward;
+            if (!Mathf.Approximately(Vector3.Angle(currentForward, direction), 0))
+            {
+                CinemachineCameraTarget.transform.forward = Vector3.Lerp(currentForward, direction, Time.deltaTime * cameraSmoothing);
+            }
 
             Vector3 camAngles = _mainCamera.transform.eulerAngles;
 

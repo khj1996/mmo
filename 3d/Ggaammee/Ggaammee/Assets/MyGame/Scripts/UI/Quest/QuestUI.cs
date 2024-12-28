@@ -12,6 +12,8 @@ public class QuestUI : UI_Base
     public override void Init()
     {
         Managers.QuestManager.OnChangeQuest += RefreshUI;
+
+        Util.BindEvent(gameObject, _ => { StartAutoMove(); });
     }
 
     public void RefreshUI()
@@ -23,6 +25,11 @@ public class QuestUI : UI_Base
         {
             activeQuestItems[i].Initialize(currentQuset.FirstOrDefault().Value);
         }
+    }
+
+    public void StartAutoMove()
+    {
+        Debug.Log("자동이동 시작");
     }
 
     public void UpdateQuestProgress(string questId, string progress)

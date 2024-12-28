@@ -16,7 +16,7 @@ public class ShopUISub : UI_ScrollView_Sub
 
     public override void Init()
     {
-        buy.gameObject.BindEvent((evt) => { buyItem(); });
+        Util.BindEvent(buy.gameObject, _ => { buyItem(); });
     }
 
 

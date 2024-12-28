@@ -15,9 +15,31 @@ public static class Util
     }
 
 
-    public static void BindEvent(this GameObject go, Action<PointerEventData> action, UIEvent type = UIEvent.Click)
+    public static void BindEvent(GameObject go, Action<PointerEventData> action, UIEvent type = UIEvent.Click)
     {
-        UI_Base.BindEvent(go, action, type);
+        switch (type)
+        {
+            case UIEvent.Click:
+                UI_ClickHandler clickEvt = GetOrAddComponent<UI_ClickHandler>(go);
+                clickEvt.OnClickHandler -= action;
+                clickEvt.OnClickHandler += action;
+                break;
+            case UIEvent.Drag:
+                UI_DragHandler dragEvt = GetOrAddComponent<UI_DragHandler>(go);
+                dragEvt.OnDragHandler -= action;
+                dragEvt.OnDragHandler += action;
+                break;
+            case UIEvent.BeginDrag:
+                UI_DragHandler beginDragEvt = GetOrAddComponent<UI_DragHandler>(go);
+                beginDragEvt.OnBeginDragHandler -= action;
+                beginDragEvt.OnBeginDragHandler += action;
+                break;
+            case UIEvent.EndDrag:
+                UI_DragHandler endDragEvt = GetOrAddComponent<UI_DragHandler>(go);
+                endDragEvt.OnEndDragHandler -= action;
+                endDragEvt.OnEndDragHandler += action;
+                break;
+        }
     }
 
     public static string FormatNumber(long num)
