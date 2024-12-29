@@ -45,6 +45,8 @@ public class PlayerController : CreatureController
     [SerializeField] private WeaponData[] tempWeaponDatas;
     [SerializeField] private Transform equipWeapon;
 
+    private bool isAutoMove = false;
+
 
     private void Awake()
     {
@@ -60,23 +62,44 @@ public class PlayerController : CreatureController
     private void Start()
     {
         Init();
+        DisableNav();
     }
 
     protected override void Init()
     {
-        InitFSM();
-
         base.Init();
 
+        InitFSM();
+        InitializeManagers();
+        InitializePlayer();
+        InitializeAnimator();
+        PrewarmPools();
+    }
+
+    private void InitializeManagers()
+    {
         Managers.ObjectManager.MainPlayer = this;
         Managers.ObjectManager.RegisterPlayer(this);
+    }
+
+    private void InitializePlayer()
+    {
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
         _currentDropItems = new List<DropItem>();
         stat.ChangeHpEvent += OnHeal;
+        DisableNav();
+    }
+
+    private void InitializeAnimator()
+    {
         weaponData = tempWeaponDatas[0];
         animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, weaponData.attackType);
         animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, weaponData.attackType);
+    }
+
+    private void PrewarmPools()
+    {
         Managers.PoolManager.PrewarmPools<Bullet>("Bullet", null, 20);
     }
 
@@ -136,25 +159,11 @@ public class PlayerController : CreatureController
 
     #region 이동
 
-    public void MoveLadder()
-    {
-        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-        bool isMove = _input.move != Vector2.zero;
-        targetDirection.x = targetDirection.z = 0;
-
-        Grounded = true;
-        LookAtTarget(_targetTransform.transform.forward);
-
-        var move = _input.move.y;
-        animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
-        animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
-        EventManager.TriggerPlayerMoved(transform.position);
-    }
-
     public void Move()
     {
         if (isClimbing)
         {
+            MoveLadder();
             return;
         }
 
@@ -165,7 +174,18 @@ public class PlayerController : CreatureController
         UpdateMovement(targetSpeed);
         ApplyRotation();
         ApplyTranslation(targetSpeed);
+
+        if (!isAutoMove)
+        {
+            UpdateNaveMashAgent();
+        }
+
         EventManager.TriggerPlayerMoved(transform.position);
+    }
+
+    private void UpdateNaveMashAgent()
+    {
+        _navMeshAgent.nextPosition = transform.position;
     }
 
     private void UpdateMovement(float targetSpeed)
@@ -205,6 +225,35 @@ public class PlayerController : CreatureController
             animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
             animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, targetSpeed);
         }
+    }
+
+    private void MoveLadder()
+    {
+        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+        bool isMove = _input.move != Vector2.zero;
+        targetDirection.x = targetDirection.z = 0;
+
+        Grounded = true;
+        LookAtTarget(_targetTransform.transform.forward);
+
+        var move = _input.move.y;
+        animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
+        animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
+        EventManager.TriggerPlayerMoved(transform.position);
+    }
+
+    public void SwitchAutoMove()
+    {
+        if (isAutoMove)
+        {
+            DisableNav();
+        }
+        else if (!isAutoMove)
+        {
+            EnableNavMesh(transform.position);
+        }
+
+        isAutoMove = !isAutoMove;
     }
 
     #endregion
@@ -452,19 +501,14 @@ public class PlayerController : CreatureController
     public void GroundedCheck()
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-        var beforeStatus = Grounded;
         Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
-
-        if (beforeStatus != Grounded)
-        {
-            WarpNavMesh(transform.position);
-        }
 
         if (_hasAnimator)
         {
             animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
         }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -581,10 +625,14 @@ public class PlayerController : CreatureController
 
     #region 유틸
 
-    public void WarpNavMesh(Vector3 newPos)
+    public void DisableNav()
     {
         _navMeshAgent.updatePosition = false;
         _navMeshAgent.updateRotation = false;
+    }
+
+    public void EnableNavMesh(Vector3 newPos)
+    {
         _navMeshAgent.Warp(newPos);
         _navMeshAgent.updatePosition = true;
         _navMeshAgent.updateRotation = true;

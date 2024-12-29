@@ -28,7 +28,7 @@ public class QuestUISub : MonoBehaviour
 
     private void UpdateProgressUI()
     {
-        questProgressText.text = linkedQuest?.GetProgress();
+        //questProgressText.text = linkedQuest?.GetProgress();
     }
 
     private void ResetUI()

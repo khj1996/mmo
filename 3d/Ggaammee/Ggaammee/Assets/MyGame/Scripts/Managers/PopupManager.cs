@@ -53,9 +53,13 @@ public class PopupUIManager : Singleton<PopupUIManager>
             }
         }
 
-        foreach (var popup in popList.Where(p => p.type == PopupType.General))
+
+        foreach (var popup in popList)
         {
-            ToggleKeyDownAction(popup.key, popup);
+            if (popup.type == PopupType.General)
+            {
+                ToggleKeyDownAction(popup.key, popup);
+            }
         }
     }
 

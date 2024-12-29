@@ -112,7 +112,6 @@ public class InputSystem : MonoBehaviour
 
     public void AttackInput(bool newAttackState)
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
         attack = newAttackState;
     }
 
