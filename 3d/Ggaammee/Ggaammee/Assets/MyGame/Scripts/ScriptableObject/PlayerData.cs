@@ -89,7 +89,6 @@ public class PlayerData : CreatureData
         {
             _owner.CharacterToLadder();
             _owner.animator.SetLayerWeight(1, 0);
-            _owner.DisableNav();
         }
 
         public override void OnExit()
@@ -97,7 +96,6 @@ public class PlayerData : CreatureData
             _owner.animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, false);
             _owner.animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, false);
             _owner.animator.SetLayerWeight(1, 1);
-            _owner.EnableNavMesh(_owner.transform.position);
         }
 
         public override void OnUpdate()

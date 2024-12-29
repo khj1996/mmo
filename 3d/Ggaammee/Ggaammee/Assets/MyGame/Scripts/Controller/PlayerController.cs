@@ -625,13 +625,13 @@ public class PlayerController : CreatureController
 
     #region 유틸
 
-    public void DisableNav()
+    private void DisableNav()
     {
         _navMeshAgent.updatePosition = false;
         _navMeshAgent.updateRotation = false;
     }
 
-    public void EnableNavMesh(Vector3 newPos)
+    private void EnableNavMesh(Vector3 newPos)
     {
         _navMeshAgent.Warp(newPos);
         _navMeshAgent.updatePosition = true;
