@@ -116,6 +116,16 @@ public static class LayerData
     public static readonly int ItemSlotLayer = 1 << 20;
 }
 
+
+public static class TagData
+{
+    public static readonly string LadderBottomTag = "LadderBottom";
+    public static readonly string LadderTopTag = "LadderTop";
+    public static readonly string NpcTag = "Npc";
+    public static readonly string MonsterTag = "Monster";
+    public static readonly string ItemTag = "Item";
+}
+
 public static class PopUpName
 {
     public static readonly string InventoryUI = "InventoryUI";

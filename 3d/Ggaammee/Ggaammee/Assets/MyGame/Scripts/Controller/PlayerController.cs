@@ -18,7 +18,6 @@ public class PlayerController : CreatureController
     public float GroundedOffset = -0.14f;
     public float GroundedRadius = 0.28f;
     public bool Grounded = true;
-    public bool isClimbing = false;
 
     [SerializeField] private NavMeshAgent _navMeshAgent;
     [SerializeField] private VisualEffect healEffect;
@@ -37,6 +36,7 @@ public class PlayerController : CreatureController
     private CreatureStateMachine<PlayerController> creatureStateMachine;
     private Camera _mainCamera;
     private List<DropItem> _currentDropItems;
+    private PlayerData PlayerData => (PlayerData)creatureData;
 
 
     [SerializeField] private LockOn _lockOn;
@@ -145,7 +145,7 @@ public class PlayerController : CreatureController
         Grounded = true;
         LookAtTarget(_targetTransform.transform.forward);
 
-        float move = targetDirection.z;
+        var move = _input.move.y;
         animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
         animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
         EventManager.TriggerPlayerMoved(transform.position);
@@ -155,7 +155,6 @@ public class PlayerController : CreatureController
     {
         if (isClimbing)
         {
-            isClimbing = true;
             return;
         }
 
@@ -338,33 +337,34 @@ public class PlayerController : CreatureController
 
     #region 사다리
 
+    private bool isClimbing = false;
     private bool isNearLadder = false;
-    private bool isUpLadder = false;
+    private bool inLadderMotion = false;
 
 
-    private void NearLadderPosition(Collider other, bool isUp)
+    private void EnterLadderPosition(Collider other)
     {
+        if (isClimbing) return;
         isNearLadder = true;
-        isUpLadder = isUp;
         _targetTransform = other.gameObject.transform;
     }
 
     private void ExitLadderPosition()
     {
-        if (!isClimbing)
-        {
-            isNearLadder = false;
-            _targetTransform = null;
-        }
+        if (isClimbing) return;
+        isNearLadder = false;
+        _targetTransform = null;
     }
 
     private void EndofLadder(int animName)
     {
-        if (isClimbing)
+        if (isClimbing && !inLadderMotion)
         {
             animator.SetTrigger(animName);
             animator.SetBool(AssignAnimationIDs.AnimIDLadder, false);
         }
+
+        inLadderMotion = false;
     }
 
     public void CharacterToLadder()
@@ -377,12 +377,14 @@ public class PlayerController : CreatureController
     private void LadderStart()
     {
         animator.SetBool(AssignAnimationIDs.AnimIDLadder, true);
-        animator.SetTrigger(isUpLadder
+
+        animator.SetTrigger(_targetTransform.position.y > transform.position.y
             ? AssignAnimationIDs.AnimIDLadderUpStart
             : AssignAnimationIDs.AnimIDLadderDownStart);
 
         _input.interaction = false;
-        isUpLadder = isNearLadder = false;
+        isNearLadder = false;
+        inLadderMotion = true;
     }
 
     #endregion
@@ -436,7 +438,6 @@ public class PlayerController : CreatureController
 
     #endregion
 
-
     #region 아이템
 
     public bool AddItemToInventory(ItemData itemData)
@@ -474,21 +475,27 @@ public class PlayerController : CreatureController
                 _currentDropItems.Add(dropItem);
             }
         }
-        else if (other.CompareTag("StartDown"))
+        else if (other.CompareTag(TagData.LadderBottomTag))
         {
-            NearLadderPosition(other, false);
+            if (isClimbing)
+            {
+                EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
+            }
+            else
+            {
+                EnterLadderPosition(other);
+            }
         }
-        else if (other.CompareTag("EndDown"))
+        else if (other.CompareTag(TagData.LadderTopTag))
         {
-            EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
-        }
-        else if (other.CompareTag("StartUp"))
-        {
-            NearLadderPosition(other, true);
-        }
-        else if (other.CompareTag("EndUp"))
-        {
-            EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
+            if (isClimbing)
+            {
+                EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
+            }
+            else
+            {
+                EnterLadderPosition(other);
+            }
         }
     }
 
@@ -498,21 +505,27 @@ public class PlayerController : CreatureController
         {
             _currentDropItems.Remove(dropItem);
         }
-        else if (other.CompareTag("StartDown"))
+        else if (other.CompareTag(TagData.LadderBottomTag))
         {
-            ExitLadderPosition();
+            if (isClimbing)
+            {
+                EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
+            }
+            else
+            {
+                ExitLadderPosition();
+            }
         }
-        else if (other.CompareTag("EndDown"))
+        else if (other.CompareTag(TagData.LadderTopTag))
         {
-            EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
-        }
-        else if (other.CompareTag("StartUp"))
-        {
-            ExitLadderPosition();
-        }
-        else if (other.CompareTag("EndUp"))
-        {
-            EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
+            if (isClimbing)
+            {
+                EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
+            }
+            else
+            {
+                ExitLadderPosition();
+            }
         }
     }
 
