@@ -917,9 +917,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 659e4a65b6034cde84d49890d9c955c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolName: 
   creatureData: {fileID: 11400000, guid: 8f2d5c8f28720b14ba8f4555975531f5, type: 2}
-  _hpBar: {fileID: 2536172186406312922}
   animator: {fileID: 5030645071554350878}
+  hpBar: {fileID: 2536172186406312922}
+  controller: {fileID: 4891169203043775814}
   attackPoint: {fileID: 8888481641650611340}
   lockOnPos: {fileID: 2902881885765829236}
 --- !u!1 &5030645071561653436

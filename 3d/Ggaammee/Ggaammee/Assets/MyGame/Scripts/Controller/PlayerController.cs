@@ -1,58 +1,58 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 public class PlayerController : CreatureController
 {
-    [Range(0.0f, 0.3f)] public float RotationSmoothTime = 0.12f;
+    [Header("Movement Settings")] [Range(0.0f, 0.3f)]
+    public float RotationSmoothTime = 0.12f;
 
-    [Space(10)] public float JumpTimeout = 0.50f;
+    public float JumpTimeout = 0.50f;
     public float FallTimeout = 0.15f;
-
     public float GroundedOffset = -0.14f;
     public float GroundedRadius = 0.28f;
-    public bool Grounded = true;
 
-    [SerializeField] private NavMeshAgent _navMeshAgent;
+    [Header("References")] [SerializeField]
+    private NavMeshAgent navMeshAgent;
+
     [SerializeField] private VisualEffect healEffect;
-
-
-    private float _speed;
-    private float _animationBlend;
-    private float _targetRotation = 0.0f;
-    private float _rotationVelocity;
-    private float _verticalVelocity;
-    private readonly float _terminalVelocity = 53.0f;
-
-    private float _jumpTimeoutDelta;
-    private float _fallTimeoutDelta;
-
-    private CreatureStateMachine<PlayerController> creatureStateMachine;
-    private Camera _mainCamera;
-    private List<DropItem> _currentDropItems;
-    private PlayerData PlayerData => (PlayerData)creatureData;
-
-
-    [SerializeField] private LockOn _lockOn;
-    [SerializeField] private InputSystem _input;
-    [SerializeField] private WeaponData weaponData;
-    [SerializeField] private WeaponData[] tempWeaponDatas;
+    [SerializeField] private LockOn lockOn;
+    [SerializeField] private InputSystem inputSystem;
+    [SerializeField] private WeaponData[] weaponDataOptions;
     [SerializeField] private Transform equipWeapon;
 
-    private bool isAutoMove = false;
+    private float speed;
+    private float animationBlend;
+    private float targetRotation;
+    private float rotationVelocity;
+    private float verticalVelocity;
+    private float jumpTimeoutDelta;
+    private float fallTimeoutDelta;
+    private readonly float _terminalVelocity = 53.0f;
+
+    private bool isGrounded;
+
+    private bool isAutoMove;
+    private bool isClimbing;
+    private bool isNearLadder;
+    private bool inLadderMotion;
+
+    private Camera mainCamera;
+    private WeaponData currentEquipweaponData;
+    private Coroutine attackCoroutine;
+    private CreatureStateMachine<PlayerController> stateMachine;
+    private List<DropItem> currentDropItems;
+    private PlayerData playerData => (PlayerData)creatureData;
 
 
     private void Awake()
     {
-        if (_mainCamera == null)
+        if (mainCamera == null)
         {
-            _mainCamera = Camera.main;
+            mainCamera = Camera.main;
         }
     }
 
@@ -62,7 +62,7 @@ public class PlayerController : CreatureController
     private void Start()
     {
         Init();
-        DisableNav();
+        DisableNavMesh();
     }
 
     protected override void Init()
@@ -84,18 +84,17 @@ public class PlayerController : CreatureController
 
     private void InitializePlayer()
     {
-        _jumpTimeoutDelta = JumpTimeout;
-        _fallTimeoutDelta = FallTimeout;
-        _currentDropItems = new List<DropItem>();
+        jumpTimeoutDelta = JumpTimeout;
+        fallTimeoutDelta = FallTimeout;
+        currentDropItems = new List<DropItem>();
         stat.ChangeHpEvent += OnHeal;
-        DisableNav();
+        DisableNavMesh();
     }
 
     private void InitializeAnimator()
     {
-        weaponData = tempWeaponDatas[0];
-        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, weaponData.attackType);
-        animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, weaponData.attackType);
+        currentEquipweaponData = weaponDataOptions[0];
+        currentEquipweaponData.Initialize(animator);
     }
 
     private void PrewarmPools()
@@ -106,46 +105,46 @@ public class PlayerController : CreatureController
 
     private void InitFSM()
     {
-        creatureStateMachine = new CreatureStateMachine<PlayerController>();
+        stateMachine = new CreatureStateMachine<PlayerController>();
 
-        creatureStateMachine.AddState(new PlayerData.IdleAndMoveState(this));
-        creatureStateMachine.AddState(new PlayerData.CrouchState(this));
-        creatureStateMachine.AddState(new PlayerData.JumpState(this));
-        creatureStateMachine.AddState(new PlayerData.GetHitState(this));
-        creatureStateMachine.AddState(new PlayerData.LadderState(this));
+        stateMachine.AddState(new PlayerData.IdleAndMoveState(this));
+        stateMachine.AddState(new PlayerData.CrouchState(this));
+        stateMachine.AddState(new PlayerData.JumpState(this));
+        stateMachine.AddState(new PlayerData.GetHitState(this));
+        stateMachine.AddState(new PlayerData.LadderState(this));
 
         #region 상태 전이 조건
 
         #region IdleState
 
-        creatureStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !_lockOn.isFindTarget && _input.crouch);
-        creatureStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => !_lockOn.isFindTarget && _AttackCoroutine == null && Grounded && !_input.crouch && _input.jump);
-        creatureStateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
+        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !lockOn.isFindTarget && inputSystem.crouch);
+        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => !lockOn.isFindTarget && _AttackCoroutine == null && isGrounded && !inputSystem.crouch && inputSystem.jump);
+        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
 
         #endregion
 
 
         #region CrouchState
 
-        creatureStateMachine.AddTransition<PlayerData.CrouchState, PlayerData.IdleAndMoveState>(() => !_input.crouch || !Grounded);
+        stateMachine.AddTransition<PlayerData.CrouchState, PlayerData.IdleAndMoveState>(() => !inputSystem.crouch || !isGrounded);
 
         #endregion
 
         #region JumpState
 
-        creatureStateMachine.AddTransition<PlayerData.JumpState, PlayerData.IdleAndMoveState>(() => Grounded);
+        stateMachine.AddTransition<PlayerData.JumpState, PlayerData.IdleAndMoveState>(() => isGrounded);
 
         #endregion
 
         #region LadderState
 
-        creatureStateMachine.AddTransition<PlayerData.LadderState, PlayerData.IdleAndMoveState>(() => !isClimbing);
+        stateMachine.AddTransition<PlayerData.LadderState, PlayerData.IdleAndMoveState>(() => !isClimbing);
 
         #endregion
 
         #endregion
 
-        creatureStateMachine.ChangeState(typeof(PlayerData.IdleAndMoveState));
+        stateMachine.ChangeState(typeof(PlayerData.IdleAndMoveState));
     }
 
     #endregion
@@ -153,62 +152,70 @@ public class PlayerController : CreatureController
 
     private void Update()
     {
-        creatureStateMachine.Update();
+        stateMachine.Update();
     }
 
 
     #region 이동
 
+    public void MoveAuto(Vector3 destination)
+    {
+        if (!isAutoMove)
+        {
+            SwitchAutoMove();
+        }
+
+        destination = new Vector3(-0.0166049004f, 1.11998761f, -6.41998768f);
+        // NavMesh 위의 유효한 위치인지 확인
+        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
+        {
+            navMeshAgent.SetDestination(hit.position);
+        }
+    }
+
     public void Move()
     {
+        if (isAutoMove)
+        {
+            return;
+        }
+
         if (isClimbing)
         {
             MoveLadder();
             return;
         }
 
-        float targetSpeed = _input.sprint ? creatureData.sprintSpeed : creatureData.speed;
-        targetSpeed = (_input.crouch && Grounded || _lockOn.isFindTarget) ? creatureData.crouchSpeed : targetSpeed;
-        targetSpeed = _input.move == Vector2.zero ? 0.0f : targetSpeed;
+        float targetSpeed = inputSystem.sprint ? creatureData.sprintSpeed : creatureData.speed;
+        targetSpeed = (inputSystem.crouch && isGrounded || lockOn.isFindTarget) ? creatureData.crouchSpeed : targetSpeed;
+        targetSpeed = inputSystem.move == Vector2.zero ? 0.0f : targetSpeed;
 
         UpdateMovement(targetSpeed);
         ApplyRotation();
         ApplyTranslation(targetSpeed);
-
-        if (!isAutoMove)
-        {
-            UpdateNaveMashAgent();
-        }
-
-        EventManager.TriggerPlayerMoved(transform.position);
-    }
-
-    private void UpdateNaveMashAgent()
-    {
-        _navMeshAgent.nextPosition = transform.position;
     }
 
     private void UpdateMovement(float targetSpeed)
     {
-        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
+        float inputMagnitude = inputSystem.analogMovement ? inputSystem.move.magnitude : 1f;
 
-        _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
-        _speed = Mathf.Round(_speed * 1000f) / 1000f;
+        speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
+        speed = Mathf.Round(speed * 1000f) / 1000f;
 
-        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
-        if (_animationBlend < 0.01f) _animationBlend = 0f;
+        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
+        if (animationBlend < 0.01f) animationBlend = 0f;
     }
 
     private void ApplyRotation()
     {
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-        if (_input.move != Vector2.zero)
+        Vector3 inputDirection = new Vector3(inputSystem.move.x, 0.0f, inputSystem.move.y).normalized;
+        if (inputSystem.move != Vector2.zero)
         {
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
+            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
 
-            if (!_lockOn.isFindTarget)
+            if (!lockOn.isFindTarget)
             {
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
@@ -217,26 +224,32 @@ public class PlayerController : CreatureController
 
     private void ApplyTranslation(float targetSpeed)
     {
-        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+        controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, rotationVelocity, 0.0f) * Time.deltaTime);
+        EventManager.TriggerPlayerMoved(transform.position);
 
-        if (_hasAnimator)
+        if (hasAnimator)
         {
-            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, _animationBlend);
+            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, animationBlend);
             animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, targetSpeed);
+        }
+
+        if (!isAutoMove)
+        {
+            navMeshAgent.nextPosition = transform.position;
         }
     }
 
     private void MoveLadder()
     {
-        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-        bool isMove = _input.move != Vector2.zero;
+        Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+        bool isMove = inputSystem.move != Vector2.zero;
         targetDirection.x = targetDirection.z = 0;
 
-        Grounded = true;
-        LookAtTarget(_targetTransform.transform.forward);
+        isGrounded = true;
+        LookAtTarget(targetTransform.transform.forward);
 
-        var move = _input.move.y;
+        var move = inputSystem.move.y;
         animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
         animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
         EventManager.TriggerPlayerMoved(transform.position);
@@ -246,7 +259,7 @@ public class PlayerController : CreatureController
     {
         if (isAutoMove)
         {
-            DisableNav();
+            DisableNavMesh();
         }
         else if (!isAutoMove)
         {
@@ -263,18 +276,18 @@ public class PlayerController : CreatureController
 
     public void JumpAndGravity()
     {
-        if (Grounded)
+        if (isGrounded)
         {
             ResetFallTimeout();
 
-            if (_hasAnimator)
+            if (hasAnimator)
             {
                 ResetAnimatorJumpAndFall();
             }
 
             HandleGroundedVelocity();
 
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+            if (inputSystem.jump && jumpTimeoutDelta <= 0.0f)
             {
                 PerformJump();
             }
@@ -292,7 +305,7 @@ public class PlayerController : CreatureController
 
     private void ResetFallTimeout()
     {
-        _fallTimeoutDelta = FallTimeout;
+        fallTimeoutDelta = FallTimeout;
     }
 
     private void ResetAnimatorJumpAndFall()
@@ -303,43 +316,43 @@ public class PlayerController : CreatureController
 
     private void HandleGroundedVelocity()
     {
-        if (_verticalVelocity < 0.0f)
+        if (rotationVelocity < 0.0f)
         {
-            _verticalVelocity = -2f;
+            rotationVelocity = -2f;
         }
     }
 
     private void PerformJump()
     {
-        _verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
+        rotationVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
 
-        if (_hasAnimator)
+        if (hasAnimator)
         {
             animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
         }
 
-        _input.jump = false;
+        inputSystem.jump = false;
     }
 
     private void UpdateJumpTimeout()
     {
-        if (_jumpTimeoutDelta >= 0.0f)
+        if (jumpTimeoutDelta >= 0.0f)
         {
-            _jumpTimeoutDelta -= Time.deltaTime;
+            jumpTimeoutDelta -= Time.deltaTime;
         }
     }
 
     private void HandleAirborneState()
     {
-        _jumpTimeoutDelta = JumpTimeout;
+        fallTimeoutDelta = JumpTimeout;
 
-        if (_fallTimeoutDelta >= 0.0f)
+        if (fallTimeoutDelta >= 0.0f)
         {
-            _fallTimeoutDelta -= Time.deltaTime;
+            fallTimeoutDelta -= Time.deltaTime;
         }
         else
         {
-            if (_hasAnimator)
+            if (hasAnimator)
             {
                 animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
             }
@@ -348,9 +361,9 @@ public class PlayerController : CreatureController
 
     private void ApplyGravity()
     {
-        if (_verticalVelocity < _terminalVelocity)
+        if (rotationVelocity < _terminalVelocity)
         {
-            _verticalVelocity += creatureData.weight * Time.deltaTime;
+            rotationVelocity += creatureData.weight * Time.deltaTime;
         }
     }
 
@@ -363,17 +376,17 @@ public class PlayerController : CreatureController
 
     public void CheckAttack()
     {
-        if (_AttackCoroutine != null || !_input.attack)
+        if (_AttackCoroutine != null || !inputSystem.attack)
             return;
 
-        _input.attack = false;
-        if (weaponData is MeleeWeaponData mw)
+        inputSystem.attack = false;
+        if (currentEquipweaponData is MeleeWeaponData mw)
         {
             _AttackCoroutine = StartCoroutine(mw.AttackCoroutine(this));
         }
-        else if (weaponData is RangedWeaponData rw)
+        else if (currentEquipweaponData is RangedWeaponData rw)
         {
-            _AttackCoroutine = StartCoroutine(rw.AttackCoroutine(this, _lockOn.currentTarget));
+            _AttackCoroutine = StartCoroutine(rw.AttackCoroutine(this, lockOn.currentTarget));
         }
     }
 
@@ -386,23 +399,18 @@ public class PlayerController : CreatureController
 
     #region 사다리
 
-    private bool isClimbing = false;
-    private bool isNearLadder = false;
-    private bool inLadderMotion = false;
-
-
     private void EnterLadderPosition(Collider other)
     {
         if (isClimbing) return;
         isNearLadder = true;
-        _targetTransform = other.gameObject.transform;
+        targetTransform = other.gameObject.transform;
     }
 
     private void ExitLadderPosition()
     {
         if (isClimbing) return;
         isNearLadder = false;
-        _targetTransform = null;
+        targetTransform = null;
     }
 
     private void EndofLadder(int animName)
@@ -419,7 +427,7 @@ public class PlayerController : CreatureController
     public void CharacterToLadder()
     {
         LockAtTargetPosition();
-        LookAtTarget(_targetTransform.transform.forward);
+        LookAtTarget(targetTransform.transform.forward);
         LadderStart();
     }
 
@@ -427,11 +435,11 @@ public class PlayerController : CreatureController
     {
         animator.SetBool(AssignAnimationIDs.AnimIDLadder, true);
 
-        animator.SetTrigger(_targetTransform.position.y > transform.position.y
+        animator.SetTrigger(targetTransform.position.y > transform.position.y
             ? AssignAnimationIDs.AnimIDLadderUpStart
             : AssignAnimationIDs.AnimIDLadderDownStart);
 
-        _input.interaction = false;
+        inputSystem.interaction = false;
         isNearLadder = false;
         inLadderMotion = true;
     }
@@ -442,25 +450,25 @@ public class PlayerController : CreatureController
 
     public void Interact()
     {
-        if (isNearLadder && _input.interaction)
+        if (isNearLadder && inputSystem.interaction)
         {
             isClimbing = true;
             return;
         }
 
-        if (_input.interaction && _currentDropItems.Count > 0)
+        if (inputSystem.interaction && currentDropItems.Count > 0)
         {
-            DropItem closestItem = GetClosestObject(_currentDropItems, item => item.transform.position);
+            DropItem closestItem = GetClosestObject(currentDropItems, item => item.transform.position);
             if (closestItem)
             {
                 closestItem.Interact(this);
-                _currentDropItems.Remove(closestItem);
+                currentDropItems.Remove(closestItem);
             }
 
             return;
         }
 
-        if (_input.interaction)
+        if (inputSystem.interaction)
         {
             Npc closestNpc = GetClosestNpc();
             if (closestNpc)
@@ -501,11 +509,11 @@ public class PlayerController : CreatureController
     public void GroundedCheck()
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
 
-        if (_hasAnimator)
+        if (hasAnimator)
         {
-            animator.SetBool(AssignAnimationIDs.AnimIDGrounded, Grounded);
+            animator.SetBool(AssignAnimationIDs.AnimIDGrounded, isGrounded);
         }
     }
 
@@ -514,9 +522,9 @@ public class PlayerController : CreatureController
     {
         if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
         {
-            if (!_currentDropItems.Contains(dropItem))
+            if (!currentDropItems.Contains(dropItem))
             {
-                _currentDropItems.Add(dropItem);
+                currentDropItems.Add(dropItem);
             }
         }
         else if (other.CompareTag(TagData.LadderBottomTag))
@@ -547,7 +555,7 @@ public class PlayerController : CreatureController
     {
         if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
         {
-            _currentDropItems.Remove(dropItem);
+            currentDropItems.Remove(dropItem);
         }
         else if (other.CompareTag(TagData.LadderBottomTag))
         {
@@ -596,7 +604,7 @@ public class PlayerController : CreatureController
 
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
-        if (weaponData is MeleeWeaponData mw)
+        if (currentEquipweaponData is MeleeWeaponData mw)
         {
             mw.OnHit(this, attackPoint.position);
         }
@@ -604,14 +612,14 @@ public class PlayerController : CreatureController
 
     public void OnExitLadder()
     {
-        LookAtTarget(_targetTransform.transform.forward);
+        LookAtTarget(targetTransform.transform.forward);
         isClimbing = false;
-        _targetTransform = null;
+        targetTransform = null;
     }
 
     public void OnChangeWeapon()
     {
-        if (weaponData.attackType == 0)
+        if (currentEquipweaponData.attackType == 0)
         {
             equipWeapon.gameObject.SetActive(true);
         }
@@ -625,28 +633,27 @@ public class PlayerController : CreatureController
 
     #region 유틸
 
-    private void DisableNav()
+    private void DisableNavMesh()
     {
-        _navMeshAgent.updatePosition = false;
-        _navMeshAgent.updateRotation = false;
+        navMeshAgent.updatePosition = false;
+        navMeshAgent.updateRotation = false;
     }
 
     private void EnableNavMesh(Vector3 newPos)
     {
-        _navMeshAgent.Warp(newPos);
-        _navMeshAgent.updatePosition = true;
-        _navMeshAgent.updateRotation = true;
+        navMeshAgent.Warp(newPos);
+        navMeshAgent.updatePosition = true;
+        navMeshAgent.updateRotation = true;
     }
 
     public void ChangeAttackType()
     {
-        if (_input.changeAttackType && weaponData.attackType != _input.lastInputAttackType)
+        if (inputSystem.changeAttackType && currentEquipweaponData.attackType != inputSystem.lastInputAttackType)
         {
-            _input.changeAttackType = false;
-            animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, _input.lastInputAttackType);
-            animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, _input.lastInputAttackType);
+            inputSystem.changeAttackType = false;
+            currentEquipweaponData = weaponDataOptions[inputSystem.lastInputAttackType];
+            currentEquipweaponData.Initialize(animator);
             animator.SetTrigger(AssignAnimationIDs.AnimIDChangeAttackType);
-            weaponData = tempWeaponDatas[_input.lastInputAttackType];
         }
     }
 
@@ -676,7 +683,7 @@ public class PlayerController : CreatureController
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        Gizmos.color = Grounded ? transparentGreen : transparentRed;
+        Gizmos.color = isGrounded ? transparentGreen : transparentRed;
         Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 
         //Gizmos.DrawSphere(new Vector3(attackPoint.position.x, attackPoint.position.y - GroundedOffset, attackPoint.position.z), 0.5f);

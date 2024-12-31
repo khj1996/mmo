@@ -26,14 +26,14 @@ public class MonsterController : CreatureController
         OnReturnToPoolAction += () =>
         {
             isDie = false;
-            _targetTransform = null;
+            targetTransform = null;
             _AttackCoroutine = null;
 
             transform.localPosition = Vector3.zero;
             stat.ResetData(creatureData);
             stateMachine.ChangeState(typeof(MonsterData.IdleState));
         };
-        _hpBar.gameObject.transform.position = transform.TransformPoint(MonsterData.hpBarPos);
+        hpBar.gameObject.transform.position = transform.TransformPoint(MonsterData.hpBarPos);
     }
 
     private void InitFSM()
@@ -61,7 +61,7 @@ public class MonsterController : CreatureController
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
 
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => _AttackCoroutine == null && !CheckCanAttack());
-        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !_targetTransform);
+        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !targetTransform);
 
         stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanAttack);
         stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
@@ -74,27 +74,27 @@ public class MonsterController : CreatureController
             return false;
 
 
-        _targetTransform = Managers.ObjectManager.GetNearestPlayer(transform.position, MonsterData.sqrDetectionRange);
+        targetTransform = Managers.ObjectManager.GetNearestPlayer(transform.position, MonsterData.sqrDetectionRange);
 
-        return _targetTransform;
+        return targetTransform;
     }
 
     private bool CheckCanAttack()
     {
-        return _targetTransform && !((_targetTransform.position - transform.position).sqrMagnitude > MonsterData.sqrAttackRange);
+        return targetTransform && !((targetTransform.position - transform.position).sqrMagnitude > MonsterData.sqrAttackRange);
     }
 
     private void InitComponent()
     {
-        _hpBar = GetComponentInChildren<HpBar>();
-        _controller = GetComponent<CharacterController>();
+        hpBar = GetComponentInChildren<HpBar>();
+        controller = GetComponent<CharacterController>();
     }
 
     public void SetPos(Vector3 newPos)
     {
         Vector3 newPosition = newPos;
         Vector3 delta = newPosition - transform.position;
-        _controller.Move(delta);
+        controller.Move(delta);
     }
 
     #endregion
@@ -109,16 +109,16 @@ public class MonsterController : CreatureController
 
     public void Move()
     {
-        Vector3 direction = (_targetTransform.position - transform.position).normalized;
+        Vector3 direction = (targetTransform.position - transform.position).normalized;
 
         LookAtTarget(direction);
 
-        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
 
         _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
         _speed = Mathf.Round(_speed * 1000f) / 300f;
 
-        _controller.Move(direction.normalized * (_speed * Time.deltaTime));
+        controller.Move(direction.normalized * (_speed * Time.deltaTime));
     }
 
     #region 공격
@@ -137,7 +137,7 @@ public class MonsterController : CreatureController
     private IEnumerator AttackCoroutine()
     {
         animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
-        LookAtTarget((_targetTransform.position - transform.position).normalized);
+        LookAtTarget((targetTransform.position - transform.position).normalized);
 
         while (!IsAnimationComplete(AssignAnimationIDs.AnimIDAttackTrigger))
         {

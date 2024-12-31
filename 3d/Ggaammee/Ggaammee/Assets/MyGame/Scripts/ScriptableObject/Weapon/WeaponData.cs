@@ -18,4 +18,10 @@ public class WeaponData : ScriptableObject
     {
         yield return null;
     }
+
+    public void Initialize(Animator animator)
+    {
+        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, attackType);
+        animator.SetFloat(AssignAnimationIDs.AnimIDAttackTypeTemp, attackType);
+    }
 }

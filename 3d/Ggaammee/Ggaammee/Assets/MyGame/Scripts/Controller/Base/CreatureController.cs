@@ -7,37 +7,37 @@ using UnityEngine.Serialization;
 public class CreatureController : Poolable
 {
     public CreatureData creatureData;
-    [SerializeField] protected HpBar _hpBar;
-
     public CreatureStats stat;
-    protected bool isDie;
-
     public Animator animator;
-
-    protected bool _hasAnimator;
-    protected Transform _targetTransform;
-    [SerializeField] protected CharacterController _controller;
-    [SerializeField] protected Transform attackPoint;
-
 
     public event Action OnReturnToPoolAction;
     public event Action OnGetFromPoolAction;
 
+    [SerializeField] protected HpBar hpBar;
+    [SerializeField] protected CharacterController controller;
+    [SerializeField] protected Transform attackPoint;
+
+    protected bool isDie;
+    protected bool hasAnimator;
+    protected Transform targetTransform;
+
+    // 3. Unity Lifecycle or Initialization
     protected virtual void Init()
     {
-        _hasAnimator = TryGetComponent(out animator);
+        hasAnimator = TryGetComponent(out animator);
         stat = new CreatureStats(creatureData);
-        stat.ChangeHpEvent += _ => { _hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
+        stat.ChangeHpEvent += _ => { hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
     }
 
+    // 4. Core Logic Methods
     protected void LockAtTargetPosition()
     {
-        var targetPosition = new Vector3(_targetTransform.position.x, transform.position.y, _targetTransform.position.z);
+        var targetPosition = new Vector3(targetTransform.position.x, transform.position.y, targetTransform.position.z);
         var direction = (targetPosition - transform.position).normalized;
 
         var distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
-        _controller.Move(direction * distanceToTarget);
+        controller.Move(direction * distanceToTarget);
     }
 
     protected void LookAtTarget(Vector3 targetVector)
@@ -71,6 +71,7 @@ public class CreatureController : Poolable
         stat.HpChange(-damage);
     }
 
+    // 5. Poolable Methods
     public override void OnGetFromPool()
     {
         OnGetFromPoolAction?.Invoke();

@@ -1,29 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class LockOn : MonoBehaviour
 {
     public InputSystem input;
-
     public float lcokOnRadius = 5f;
-
-    public Camera _mainCamera;
     public float maxViewAngle = 70.0f;
     public float minViewAngle = -70.0f;
     public float lookAtSmoothing = 5f;
+    public bool isFindTarget = false;
+    public Vector3 currentTargetPosition;
+    public MonsterController currentTarget;
 
     [SerializeField] public Transform lockOnImage;
     [SerializeField] public List<MonsterController> targetEnemy = new List<MonsterController>();
 
+    private Camera _mainCamera;
     private bool isLockOn = false;
-    public bool isFindTarget = false;
-    public Vector3 currentTargetPosition;
-
-    public MonsterController currentTarget;
-
     private int currentIndex = 0;
 
     private void Awake()
@@ -39,26 +32,16 @@ public class LockOn : MonoBehaviour
 
     private void Update()
     {
-        if (isFindTarget)
-        {
-            if (!currentTarget.isActiveAndEnabled)
-            {
-                ResetTarget();
-            }
+        HandleLockOnToggle();
+        HandleTargetTracking();
+    }
 
-            if (isTargetRange())
-            {
-                LookAtTarget();
-            }
-            else
-            {
-                ResetTarget();
-            }
-        }
-
+    private void HandleLockOnToggle()
+    {
         if (input.lockOn)
         {
             isLockOn = !isLockOn;
+
             if (isLockOn)
             {
                 FindLockOnTarget();
@@ -68,82 +51,87 @@ public class LockOn : MonoBehaviour
         }
     }
 
-
-    private void FindLockOnTarget()
+    private void HandleTargetTracking()
     {
-        Collider[] findTarget = Physics.OverlapSphere(transform.position, lcokOnRadius, LayerData.MonsterLayer);
-
-        if (findTarget.Length <= 0)
+        if (isFindTarget)
         {
-            return;
-        }
-
-        for (int i = 0; i < findTarget.Length; i++)
-        {
-            MonsterController target = findTarget[i].GetComponent<MonsterController>();
-
-            if (target != null)
+            if (currentTarget == null || !currentTarget.isActiveAndEnabled)
             {
-                Vector3 targetDirection = target.transform.position - transform.position;
-
-                float viewAngle = Vector3.Angle(targetDirection, _mainCamera.transform.forward);
-
-                if (viewAngle > minViewAngle && viewAngle < maxViewAngle)
-                {
-                    if (Physics.Linecast(transform.position, target.lockOnPos.transform.position, out _, LayerData.MonsterLayer))
-                    {
-                        targetEnemy.Add(target);
-                    }
-                }
-                else
-                {
-                    ResetTarget();
-                }
+                ResetTarget();
+                return;
             }
-        }
 
-        LockOnTarget();
-    }
-
-    public void CnangeIndex()
-    {
-        if (currentIndex < targetEnemy.Count - 1)
-        {
-            currentIndex++;
-        }
-        else
-        {
-            currentIndex = 0;
-        }
-
-        currentTarget = targetEnemy[currentIndex];
-    }
-
-    private void LockOnTarget()
-    {
-        float shortDistance = Mathf.Infinity;
-
-        for (int i = 0; i < targetEnemy.Count; i++)
-        {
-            if (targetEnemy != null)
+            if (IsTargetRange())
             {
-                float distanceFromTarget = Vector3.Distance(transform.position, targetEnemy[i].transform.position);
-                if (distanceFromTarget < shortDistance)
-                {
-                    shortDistance = distanceFromTarget;
-                    currentTarget = targetEnemy[i];
-                    currentIndex = i;
-                }
+                LookAtTarget();
             }
             else
             {
                 ResetTarget();
             }
         }
+    }
+
+    private void FindLockOnTarget()
+    {
+        Collider[] findTarget = Physics.OverlapSphere(transform.position, lcokOnRadius, LayerData.MonsterLayer);
+
+        if (findTarget.Length == 0) return;
+
+        for (int i = 0; i < findTarget.Length; i++)
+        {
+            MonsterController target = findTarget[i].GetComponent<MonsterController>();
+
+            if (target != null && IsTargetInView(target))
+            {
+                targetEnemy.Add(target);
+            }
+        }
+
+        LockOnTarget();
+    }
+
+    private bool IsTargetInView(MonsterController target)
+    {
+        Vector3 targetDirection = target.transform.position - transform.position;
+        float viewAngle = Vector3.Angle(targetDirection, _mainCamera.transform.forward);
+
+        if (viewAngle > minViewAngle && viewAngle < maxViewAngle)
+        {
+            if (Physics.Linecast(transform.position, target.lockOnPos.transform.position, out _, LayerData.MonsterLayer))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void LockOnTarget()
+    {
+        float shortestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < targetEnemy.Count; i++)
+        {
+            if (targetEnemy[i] == null) continue;
+
+            float distanceFromTarget = Vector3.Distance(transform.position, targetEnemy[i].transform.position);
+
+            if (distanceFromTarget < shortestDistance)
+            {
+                shortestDistance = distanceFromTarget;
+                currentTarget = targetEnemy[i];
+                currentIndex = i;
+            }
+        }
 
         if (currentTarget != null)
         {
             FindTarget();
+        }
+        else
+        {
+            ResetTarget();
         }
     }
 
@@ -158,17 +146,10 @@ public class LockOn : MonoBehaviour
         currentTargetPosition = currentTarget.lockOnPos.transform.position;
         lockOnImage.position = _mainCamera.WorldToScreenPoint(currentTargetPosition);
 
-        Vector3 dir = (currentTargetPosition - transform.position).normalized;
+        Vector3 direction = (currentTargetPosition - transform.position).normalized;
+        direction.y = transform.forward.y;
 
-        dir.y = transform.forward.y;
-
-        transform.forward = Vector3.Lerp(transform.forward, dir, Time.deltaTime * lookAtSmoothing);
-    }
-
-    private void FindTarget()
-    {
-        isFindTarget = true;
-        lockOnImage.gameObject.SetActive(true);
+        transform.forward = Vector3.Lerp(transform.forward, direction, Time.deltaTime * lookAtSmoothing);
     }
 
     private void ResetTarget()
@@ -178,18 +159,34 @@ public class LockOn : MonoBehaviour
         lockOnImage.gameObject.SetActive(false);
     }
 
-    private bool isTargetRange()
+    public void CnangeIndex()
     {
-        if (!isLockOn)
-            return false;
+        if (targetEnemy.Count == 0) return;
 
-        float distance = (transform.position - currentTargetPosition).magnitude;
-
-        return !(distance > lcokOnRadius);
+        currentIndex = (currentIndex + 1) % targetEnemy.Count;
+        currentTarget = targetEnemy[currentIndex];
     }
 
+    private bool IsTargetRange()
+    {
+        if (!isLockOn) return false;
+
+        float distance = Vector3.Distance(transform.position, currentTargetPosition);
+        return distance <= lcokOnRadius;
+    }
+
+    private void FindTarget()
+    {
+        isFindTarget = true;
+        lockOnImage.gameObject.SetActive(true);
+    }
+
+
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, lcokOnRadius);
     }
+#endif
 }

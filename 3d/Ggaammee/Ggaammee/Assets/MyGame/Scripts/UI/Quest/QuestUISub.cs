@@ -9,7 +9,7 @@ public class QuestUISub : MonoBehaviour
     [SerializeField] private TMP_Text questDescriptionText;
     [SerializeField] private TMP_Text questProgressText;
 
-    private Quest linkedQuest;
+    public Quest linkedQuest;
 
     public void Initialize(Quest quest)
     {
