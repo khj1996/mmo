@@ -63,7 +63,6 @@ public class PlayerController : CreatureController
     private void Start()
     {
         Init();
-        DisableNavMesh();
     }
 
     protected override void Init()
@@ -75,6 +74,7 @@ public class PlayerController : CreatureController
         InitializePlayer();
         InitializeAnimator();
         PrewarmPools();
+        SetAutoMove(false);
     }
 
     private void InitializeManagers()
@@ -89,7 +89,6 @@ public class PlayerController : CreatureController
         fallTimeoutDelta = FallTimeout;
         currentDropItems = new List<DropItem>();
         stat.ChangeHpEvent += OnHeal;
-        DisableNavMesh();
     }
 
     private void InitializeAnimator()
@@ -161,58 +160,98 @@ public class PlayerController : CreatureController
 
     public void MoveAuto(Vector3 destination)
     {
-        if (!isAutoMove)
-        {
-            SwitchAutoMove();
-        }
+        SetAutoMove(true);
 
-        destination = new Vector3(-0.0166049004f, 1.11998761f, -6.41998768f);
-        // NavMesh 위의 유효한 위치인지 확인
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
-            navMeshAgent.SetDestination(hit.position);
+            bool success = navMeshAgent.SetDestination(hit.position);
+            Debug.Log($"SetDestination 성공 여부: {success}");
         }
     }
 
     public void Move()
     {
-        if (isAutoMove)
-        {
-            return;
-        }
+        SetTargetSpeed();
 
         if (isClimbing)
         {
             MoveLadder();
-            return;
+        }
+        else if (!isAutoMove)
+        {
+            UpdateMovement();
+            ApplyRotation();
+            ApplyTranslation();
         }
 
-        SetTargetSpeed();
-        UpdateMovement();
-        ApplyRotation();
-        ApplyTranslation();
+        EventManager.TriggerPlayerMoved(transform.position);
     }
 
     private void SetTargetSpeed()
     {
-        targetSpeed = true switch
+        float maxSpeed;
+
+        if (isAutoMove)
         {
-            _ when inputSystem.move == Vector2.zero => 0.0f,
-            _ when lockOn.isFindTarget || (inputSystem.crouch && isGrounded) => creatureData.crouchSpeed,
-            _ when inputSystem.sprint => creatureData.sprintSpeed,
-            _ => creatureData.speed
-        };
+            maxSpeed = navMeshAgent.speed;
+            if (!navMeshAgent.pathPending && navMeshAgent.hasPath)
+            {
+                var currentSpeed = navMeshAgent.velocity.magnitude;
 
 
-        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
+                if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+                {
+                    SetAutoMove(false);
+                }
+                else
+                {
+                    targetSpeed = currentSpeed;
+                }
+            }
+            else if (navMeshAgent.pathPending)
+            {
+                Debug.Log("경로 계산 중...");
+            }
+        }
+        else
+        {
+            maxSpeed = creatureData.sprintSpeed;
+
+            if (inputSystem.move == Vector2.zero)
+            {
+                targetSpeed = 0.0f;
+            }
+            else if (lockOn.isFindTarget || (inputSystem.crouch && isGrounded))
+            {
+                targetSpeed = creatureData.crouchSpeed;
+            }
+            else if (inputSystem.sprint)
+            {
+                targetSpeed = creatureData.sprintSpeed;
+            }
+            else
+            {
+                targetSpeed = creatureData.speed;
+            }
+        }
+
+        animationBlend = Mathf.Lerp(
+            animationBlend,
+            isAutoMove ? navMeshAgent.speed : targetSpeed,
+            isAutoMove ? Time.deltaTime * navMeshAgent.acceleration : Time.deltaTime * creatureData.acceleration
+        );
+
         if (animationBlend < 0.01f) animationBlend = 0f;
 
         if (hasAnimator)
         {
-            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, animationBlend);
-            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, targetSpeed);
+            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, targetSpeed);
+
+            float motionSpeedRatio = (maxSpeed > 0) ? animationBlend / maxSpeed : 0f;
+            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, motionSpeedRatio);
         }
     }
+
 
     private void UpdateMovement()
     {
@@ -242,7 +281,6 @@ public class PlayerController : CreatureController
     {
         Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
         controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
-        EventManager.TriggerPlayerMoved(transform.position);
 
         if (!isAutoMove)
         {
@@ -265,18 +303,18 @@ public class PlayerController : CreatureController
         EventManager.TriggerPlayerMoved(transform.position);
     }
 
-    public void SwitchAutoMove()
+    private void SetAutoMove(bool value)
     {
-        if (isAutoMove)
-        {
-            DisableNavMesh();
-        }
-        else if (!isAutoMove)
+        if (value)
         {
             EnableNavMesh(transform.position);
         }
+        else
+        {
+            DisableNavMesh();
+        }
 
-        isAutoMove = !isAutoMove;
+        isAutoMove = value;
     }
 
     #endregion
@@ -646,12 +684,14 @@ public class PlayerController : CreatureController
 
     private void DisableNavMesh()
     {
+        animator.applyRootMotion = true;
         navMeshAgent.updatePosition = false;
         navMeshAgent.updateRotation = false;
     }
 
     private void EnableNavMesh(Vector3 newPos)
     {
+        animator.applyRootMotion = false;
         navMeshAgent.Warp(newPos);
         navMeshAgent.updatePosition = true;
         navMeshAgent.updateRotation = true;

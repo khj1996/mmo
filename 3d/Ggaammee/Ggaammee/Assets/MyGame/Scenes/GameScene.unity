@@ -2880,6 +2880,34 @@ Transform:
   - {fileID: 259645781}
   m_Father: {fileID: 1333821381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &749075871 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5904525240692292765, guid: c891e05de02202e469dd753f838ffc78,
+    type: 3}
+  m_PrefabInstance: {fileID: 1107617121}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &749075876
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749075871}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 0
+  m_AutoRepath: 0
+  m_Height: 1
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &754268991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3730,7 +3758,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5904525240692292765, guid: c891e05de02202e469dd753f838ffc78,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 749075876}
   m_SourcePrefab: {fileID: 100100000, guid: c891e05de02202e469dd753f838ffc78, type: 3}
 --- !u!1001 &1108141148
 PrefabInstance:
@@ -6294,6 +6326,31 @@ PrefabInstance:
       propertyPath: lockOnImage
       value: 
       objectReference: {fileID: 73386360}
+    - target: {fileID: 4937063882719121326, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: m_Speed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937063882719121326, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937063882719121326, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: m_Acceleration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937063882719121326, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: m_AngularSpeed
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937063882719121326, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5372287860960465378, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}
       propertyPath: m_ApplyRootMotion
@@ -6303,6 +6360,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: test
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}

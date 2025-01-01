@@ -33,7 +33,6 @@ public class QuestUI : UI_Base
         if (activeQuestItems[0].linkedQuest.Data is ReachDestinationQuestData data)
         {
             Managers.ObjectManager.MainPlayer.MoveAuto(data.targetPosition);
-            
         }
     }
 
