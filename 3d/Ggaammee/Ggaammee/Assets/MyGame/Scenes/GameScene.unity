@@ -6294,6 +6294,11 @@ PrefabInstance:
       propertyPath: lockOnImage
       value: 
       objectReference: {fileID: 73386360}
+    - target: {fileID: 5372287860960465378, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5904525240692292765, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}
       propertyPath: m_Name
@@ -6314,6 +6319,11 @@ PrefabInstance:
       propertyPath: controller
       value: 
       objectReference: {fileID: 1771782272930230242}
+    - target: {fileID: 6674135991478004841, guid: b692315e79bebd645b99ad3b91ac6c39,
+        type: 3}
+      propertyPath: JumpTimeout
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 8026870606457810531, guid: b692315e79bebd645b99ad3b91ac6c39,
         type: 3}
       propertyPath: m_LocalPosition.x

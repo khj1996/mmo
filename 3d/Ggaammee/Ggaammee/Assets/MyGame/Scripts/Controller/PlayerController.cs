@@ -25,13 +25,14 @@ public class PlayerController : CreatureController
     [SerializeField] private Transform equipWeapon;
 
     private float speed;
+    private float targetSpeed;
     private float animationBlend;
     private float targetRotation;
     private float rotationVelocity;
     private float verticalVelocity;
-    private float jumpTimeoutDelta;
+    private float jumpTimeoutDelta = 0.9f;
     private float fallTimeoutDelta;
-    private readonly float _terminalVelocity = 53.0f;
+    private readonly float terminalVelocity = 53.0f;
 
     private bool isGrounded;
 
@@ -186,25 +187,40 @@ public class PlayerController : CreatureController
             return;
         }
 
-        float targetSpeed = inputSystem.sprint ? creatureData.sprintSpeed : creatureData.speed;
-        targetSpeed = (inputSystem.crouch && isGrounded || lockOn.isFindTarget) ? creatureData.crouchSpeed : targetSpeed;
-        targetSpeed = inputSystem.move == Vector2.zero ? 0.0f : targetSpeed;
-
-        UpdateMovement(targetSpeed);
+        SetTargetSpeed();
+        UpdateMovement();
         ApplyRotation();
-        ApplyTranslation(targetSpeed);
+        ApplyTranslation();
     }
 
-    private void UpdateMovement(float targetSpeed)
+    private void SetTargetSpeed()
+    {
+        targetSpeed = true switch
+        {
+            _ when inputSystem.move == Vector2.zero => 0.0f,
+            _ when lockOn.isFindTarget || (inputSystem.crouch && isGrounded) => creatureData.crouchSpeed,
+            _ when inputSystem.sprint => creatureData.sprintSpeed,
+            _ => creatureData.speed
+        };
+
+
+        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
+        if (animationBlend < 0.01f) animationBlend = 0f;
+
+        if (hasAnimator)
+        {
+            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, animationBlend);
+            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, targetSpeed);
+        }
+    }
+
+    private void UpdateMovement()
     {
         float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
         float inputMagnitude = inputSystem.analogMovement ? inputSystem.move.magnitude : 1f;
 
         speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
         speed = Mathf.Round(speed * 1000f) / 1000f;
-
-        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, Time.deltaTime * creatureData.acceleration);
-        if (animationBlend < 0.01f) animationBlend = 0f;
     }
 
     private void ApplyRotation()
@@ -222,17 +238,11 @@ public class PlayerController : CreatureController
         }
     }
 
-    private void ApplyTranslation(float targetSpeed)
+    private void ApplyTranslation()
     {
         Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
-        controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, rotationVelocity, 0.0f) * Time.deltaTime);
+        controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
         EventManager.TriggerPlayerMoved(transform.position);
-
-        if (hasAnimator)
-        {
-            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, animationBlend);
-            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, targetSpeed);
-        }
 
         if (!isAutoMove)
         {
@@ -316,15 +326,15 @@ public class PlayerController : CreatureController
 
     private void HandleGroundedVelocity()
     {
-        if (rotationVelocity < 0.0f)
+        if (verticalVelocity < 0.0f)
         {
-            rotationVelocity = -2f;
+            verticalVelocity = -2f;
         }
     }
 
     private void PerformJump()
     {
-        rotationVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
+        verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
 
         if (hasAnimator)
         {
@@ -333,6 +343,7 @@ public class PlayerController : CreatureController
 
         inputSystem.jump = false;
     }
+
 
     private void UpdateJumpTimeout()
     {
@@ -344,7 +355,7 @@ public class PlayerController : CreatureController
 
     private void HandleAirborneState()
     {
-        fallTimeoutDelta = JumpTimeout;
+        jumpTimeoutDelta = JumpTimeout;
 
         if (fallTimeoutDelta >= 0.0f)
         {
@@ -361,9 +372,9 @@ public class PlayerController : CreatureController
 
     private void ApplyGravity()
     {
-        if (rotationVelocity < _terminalVelocity)
+        if (verticalVelocity < terminalVelocity)
         {
-            rotationVelocity += creatureData.weight * Time.deltaTime;
+            verticalVelocity += creatureData.weight * Time.deltaTime;
         }
     }
 
