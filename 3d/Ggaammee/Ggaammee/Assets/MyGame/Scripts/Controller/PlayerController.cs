@@ -7,6 +7,8 @@ using UnityEngine.VFX;
 
 public class PlayerController : CreatureController
 {
+    #region 변수
+
     [Header("Movement Settings")] [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
 
@@ -35,11 +37,12 @@ public class PlayerController : CreatureController
     private readonly float terminalVelocity = 53.0f;
 
     private bool isGrounded;
-
     private bool isAutoMove;
     private bool isClimbing;
     private bool isNearLadder;
     private bool inLadderMotion;
+
+    private Vector3 autoMoveDestination;
 
     private Camera mainCamera;
     private WeaponData currentEquipweaponData;
@@ -47,6 +50,8 @@ public class PlayerController : CreatureController
     private CreatureStateMachine<PlayerController> stateMachine;
     private List<DropItem> currentDropItems;
     private PlayerData playerData => (PlayerData)creatureData;
+
+    #endregion
 
 
     private void Awake()
@@ -158,14 +163,19 @@ public class PlayerController : CreatureController
 
     #region 이동
 
+    /// <summary>
+    /// 자동이동 시작
+    /// </summary>
+    /// <param name="destination"> 목표위치</param>
     public void MoveAuto(Vector3 destination)
     {
         SetAutoMove(true);
 
+
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
-            bool success = navMeshAgent.SetDestination(hit.position);
-            Debug.Log($"SetDestination 성공 여부: {success}");
+            autoMoveDestination = hit.position;
+            navMeshAgent.SetDestination(hit.position);
         }
     }
 
@@ -196,21 +206,14 @@ public class PlayerController : CreatureController
             maxSpeed = navMeshAgent.speed;
             if (!navMeshAgent.pathPending && navMeshAgent.hasPath)
             {
-                var currentSpeed = navMeshAgent.velocity.magnitude;
-
-
                 if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
                 {
                     SetAutoMove(false);
                 }
                 else
                 {
-                    targetSpeed = currentSpeed;
+                    targetSpeed = navMeshAgent.speed;
                 }
-            }
-            else if (navMeshAgent.pathPending)
-            {
-                Debug.Log("경로 계산 중...");
             }
         }
         else
@@ -290,18 +293,26 @@ public class PlayerController : CreatureController
 
     private void MoveLadder()
     {
-        Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
-        bool isMove = inputSystem.move != Vector2.zero;
-        targetDirection.x = targetDirection.z = 0;
-
         isGrounded = true;
         LookAtTarget(targetTransform.transform.forward);
 
-        var move = inputSystem.move.y;
-        animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
-        animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
+        var isMove = inputSystem.move != Vector2.zero || isAutoMove;
+
+        if (isAutoMove)
+        {
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && isUpLadderTest);
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && !isUpLadderTest);
+        }
+        else
+        {
+            var move = inputSystem.move.y;
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
+        }
+
         EventManager.TriggerPlayerMoved(transform.position);
     }
+
 
     private void SetAutoMove(bool value)
     {
@@ -567,6 +578,8 @@ public class PlayerController : CreatureController
     }
 
 
+    private bool isUpLadderTest = false;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
@@ -585,6 +598,18 @@ public class PlayerController : CreatureController
             else
             {
                 EnterLadderPosition(other);
+
+                if (navMeshAgent.isOnOffMeshLink && isAutoMove)
+                {
+                    var offMeshData = navMeshAgent.currentOffMeshLinkData;
+                    if (offMeshData.offMeshLink.endTransform.position.y > transform.position.y)
+                    {
+                        isUpLadderTest = true;
+                    }
+
+                    DisableNavMesh();
+                    isClimbing = true;
+                }
             }
         }
         else if (other.CompareTag(TagData.LadderTopTag))
@@ -664,6 +689,12 @@ public class PlayerController : CreatureController
         LookAtTarget(targetTransform.transform.forward);
         isClimbing = false;
         targetTransform = null;
+
+        if (isAutoMove)
+        {
+            EnableNavMesh(transform.position);
+            navMeshAgent.SetDestination(autoMoveDestination);
+        }
     }
 
     public void OnChangeWeapon()
@@ -682,17 +713,20 @@ public class PlayerController : CreatureController
 
     #region 유틸
 
-    private void DisableNavMesh()
+    public void DisableNavMesh()
     {
         animator.applyRootMotion = true;
         navMeshAgent.updatePosition = false;
         navMeshAgent.updateRotation = false;
     }
 
-    private void EnableNavMesh(Vector3 newPos)
+    public void EnableNavMesh(Vector3 newPos)
     {
         animator.applyRootMotion = false;
+
         navMeshAgent.Warp(newPos);
+        navMeshAgent.nextPosition = newPos;
+
         navMeshAgent.updatePosition = true;
         navMeshAgent.updateRotation = true;
     }

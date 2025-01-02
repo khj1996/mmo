@@ -289,12 +289,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolName: 
   creatureData: {fileID: 11400000, guid: 6af78f56c8313794a8b448fab2a40171, type: 2}
-  _hpBar: {fileID: 0}
   animator: {fileID: 5372287860960465378}
-  _controller: {fileID: 786441117642222483}
+  hpBar: {fileID: 0}
+  controller: {fileID: 786441117642222483}
   attackPoint: {fileID: 5417652724333124433}
   RotationSmoothTime: 0.12
-  JumpTimeout: 0.4
+  JumpTimeout: 0.9
   FallTimeout: 0.15
   GroundedOffset: -0.15
   GroundedRadius: 0.2
@@ -484,15 +484,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 6591710976191693114}
   lcokOnRadius: 11
-  _mainCamera: {fileID: 0}
   maxViewAngle: 70
   minViewAngle: -70
   lookAtSmoothing: 5
-  lockOnImage: {fileID: 0}
-  targetEnemy: []
   isFindTarget: 0
   currentTargetPosition: {x: 0, y: 0, z: 0}
   currentTarget: {fileID: 0}
+  lockOnImage: {fileID: 0}
+  targetEnemy: []
 --- !u!320 &8278231705706070525
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -541,17 +540,17 @@ NavMeshAgent:
   m_GameObject: {fileID: 5904525240692292765}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.35
-  m_Speed: 11
-  m_Acceleration: 11
+  m_Radius: 0.2
+  m_Speed: 5
+  m_Acceleration: 3
   avoidancePriority: 50
-  m_AngularSpeed: 11
+  m_AngularSpeed: 1080
   m_StoppingDistance: 1
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1
-  m_BaseOffset: 0
+  m_BaseOffset: 0.02
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!1001 &8786359088973525103

@@ -24,6 +24,7 @@ public class ReachDestinationQuest : Quest
 
     private void UpdateDistance(Vector3 playerPosition)
     {
+        
         float distance = Vector3.Distance(playerPosition, DestinationQuestData.targetPosition);
         currentDistance = distance;
         InvokeOnUpdateProgress();
