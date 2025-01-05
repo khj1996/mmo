@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
@@ -169,8 +170,16 @@ public class PlayerController : CreatureController
     /// <param name="destination"> 목표위치</param>
     public void MoveAuto(Vector3 destination)
     {
-        SetAutoMove(true);
+        DOTween.Sequence()
+            .AppendCallback(() => NoticeTextUI.Instance.ShowText(ShowType.Timed, "자동이동 시작", 1.3f))
+            .AppendInterval(0.7f)
+            .AppendCallback(() => NoticeTextUI.Instance.ShowText(ShowType.Persistent, "자동이동 중"))
+            .AppendCallback(() => StartAutoMove(destination));
+    }
 
+    private void StartAutoMove(Vector3 destination)
+    {
+        SetAutoMove(true);
 
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
@@ -178,6 +187,7 @@ public class PlayerController : CreatureController
             navMeshAgent.SetDestination(hit.position);
         }
     }
+
 
     public void Move()
     {
@@ -208,6 +218,13 @@ public class PlayerController : CreatureController
             {
                 if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
                 {
+                    DOTween.Sequence()
+                        .AppendCallback(() => NoticeTextUI.Instance.StopPersistentText())
+                        .AppendInterval(0.1f)
+                        .AppendCallback(() => NoticeTextUI.Instance.ShowText(ShowType.Timed, "자동이동 종료"));
+
+                    NoticeTextUI.Instance.StopPersistentText();
+
                     SetAutoMove(false);
                 }
                 else

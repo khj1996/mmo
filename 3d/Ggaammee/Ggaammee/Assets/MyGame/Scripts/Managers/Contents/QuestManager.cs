@@ -42,6 +42,7 @@ public class QuestManager
         activeQuests.Add(questId, newQuest);
 
         newQuest.Subscribe();
+        NoticeTextUI.Instance.ShowText(ShowType.Timed, $"{newQuest.Data.title} 퀘스트를 수락하였습니다");
         OnChangeQuest?.Invoke();
     }
 
@@ -59,6 +60,7 @@ public class QuestManager
 
         activeQuests.Remove(questId);
         completedQuests.Add(questId, quest);
+        NoticeTextUI.Instance.ShowText(ShowType.Timed, $"{quest.Data.title} 퀘스트를 클리어하였습니다");
         OnChangeQuest?.Invoke();
     }
 

@@ -29,7 +29,6 @@ public class QuestUI : UI_Base
 
     public void StartAutoMove()
     {
-        Debug.Log("자동이동 시작");
         if (activeQuestItems[0].linkedQuest.Data is ReachDestinationQuestData data)
         {
             Managers.ObjectManager.MainPlayer.MoveAuto(data.targetPosition);

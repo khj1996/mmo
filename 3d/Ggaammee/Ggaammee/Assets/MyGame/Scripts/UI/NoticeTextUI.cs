@@ -50,7 +50,7 @@ public class NoticeTextUI : MonoBehaviour
         Instance = this;
     }
 
-    public void ShowText(ShowType type, string _text, float duration)
+    public void ShowText(ShowType type, string _text, float duration = 1.0f)
     {
         TextData newTextData = new TextData(type, _text, duration);
 
@@ -84,11 +84,22 @@ public class NoticeTextUI : MonoBehaviour
     {
         if (textQueue.Count == 0)
         {
-            RestorePersistentText();
+            if (isShowPersistent)
+            {
+                RestorePersistentText();
+            }
+
             return;
         }
 
         TextData nextTextData = textQueue.Dequeue();
+
+        if (isShowPersistent && nextTextData.type != ShowType.Persistent)
+        {
+            textQueue.Enqueue(nextTextData);
+            return;
+        }
+
         DisplayText(nextTextData.content, nextTextData.duration, ShowNextText);
     }
 
