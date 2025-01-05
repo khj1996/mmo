@@ -96,6 +96,7 @@
     <Compile Include="Assets\ImprtAsset\StarterAssets\FirstPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Hp\HpBar.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DataManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\UI\NoticeTextUI.cs" />
     <Compile Include="Assets\FastScriptReload\Samples\Basic\Scripts\FunctionLibrary.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Shop\ShopUISub.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\StackableItem.cs" />
