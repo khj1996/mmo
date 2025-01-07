@@ -54,6 +54,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringCollider.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\Singleton.cs" />
+    <Compile Include="Assets\ImprtAsset\Quirky Series Ultimate\_Scripts\RotateOnScroll.cs" />
     <Compile Include="Assets\MyGame\Scripts\Util\MeshCombiner.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\NpcDialogue.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Npc.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Assets\MyGame\Scripts\Bullet.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_DragHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DropManager.cs" />
-    <Compile Include="Assets\Quirky Series Ultimate\_Scripts\RotateOnScroll.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\EquipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
@@ -124,6 +124,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ShopManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
+    <Compile Include="Assets\ImprtAsset\Quirky Series Ultimate\_Scripts\QuirkySeriesDemo.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryPopupUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\ReachDestinationQuestData.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\Action\AddQuestAction.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\PopupManager.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
-    <Compile Include="Assets\Quirky Series Ultimate\_Scripts\QuirkySeriesDemo.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureController.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ScrollView.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\UsableItemData.cs" />
@@ -165,7 +165,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\FastScriptReload\Plugins\Harmony\HarmonyLicense.txt" />
-    <None Include="Assets\Quirky Series Ultimate\_Shader\SoftSurface.shader" />
+    <None Include="Assets\ImprtAsset\Quirky Series Ultimate\_Shader\SoftSurface.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\FastScriptReload\Plugins\ImmersiveVrToolsCommon\ImmersiveVRToolsCommonLicense.txt" />
@@ -195,7 +195,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\README_SD_UnityChan_jp.txt" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Assets\Quirky Series Ultimate\_Shader\ToonRamp.shader" />
+    <None Include="Assets\ImprtAsset\Quirky Series Ultimate\_Shader\ToonRamp.shader" />
     <None Include="Assets\MyGame\Data\ShopData.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne.json" />
