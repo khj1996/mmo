@@ -14,22 +14,18 @@ public class CreatureController : Poolable
     public event Action OnGetFromPoolAction;
 
     [SerializeField] protected HpBar hpBar;
-    [SerializeField] protected CharacterController controller;
+    [SerializeField] public CharacterController controller;
     [SerializeField] protected Transform attackPoint;
 
     protected bool isDie;
-    protected bool hasAnimator;
-    protected Transform targetTransform;
+    public Transform targetTransform;
 
-    // 3. Unity Lifecycle or Initialization
     protected virtual void Init()
     {
-        hasAnimator = TryGetComponent(out animator);
         stat = new CreatureStats(creatureData);
         stat.ChangeHpEvent += _ => { hpBar.UpdateHealthBar(stat.currentHp, stat.CurrentMaxHp); };
     }
 
-    // 4. Core Logic Methods
     protected void LockAtTargetPosition()
     {
         var targetPosition = new Vector3(targetTransform.position.x, transform.position.y, targetTransform.position.z);
@@ -40,7 +36,7 @@ public class CreatureController : Poolable
         controller.Move(direction * distanceToTarget);
     }
 
-    protected void LookAtTarget(Vector3 targetVector)
+    public void LookAtTarget(Vector3 targetVector)
     {
         Vector3 up = transform.rotation * Vector3.up;
 

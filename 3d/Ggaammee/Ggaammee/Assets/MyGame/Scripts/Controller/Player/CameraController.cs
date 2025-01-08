@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
     private InputSystem _input;
     private const float _threshold = 0.01f;
 
-    private LockOn _lockOn;
+    private PlayerLockOn _playerLockOn;
     [SerializeField] private float cameraDirectionY = 0;
     public float cameraSmoothing = 5f;
 
@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _playerInput = GetComponent<PlayerInput>();
         _input = GetComponent<InputSystem>();
-        _lockOn = GetComponent<LockOn>();
+        _playerLockOn = GetComponent<PlayerLockOn>();
     }
 
     private void LateUpdate()
@@ -64,9 +64,9 @@ public class CameraController : MonoBehaviour
         _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        if (_lockOn.isFindTarget && _lockOn.currentTarget != null)
+        if (_playerLockOn.isFindTarget && _playerLockOn.currentTarget != null)
         {
-            Vector3 direction = (_lockOn.currentTarget.lockOnPos.transform.position - CinemachineCameraTarget.transform.position).normalized;
+            Vector3 direction = (_playerLockOn.currentTarget.lockOnPos.transform.position - CinemachineCameraTarget.transform.position).normalized;
 
             direction.y = cameraDirectionY;
 

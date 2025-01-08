@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LockOn : MonoBehaviour
+public class PlayerLockOn : MonoBehaviour
 {
     public InputSystem input;
     public float lcokOnRadius = 5f;

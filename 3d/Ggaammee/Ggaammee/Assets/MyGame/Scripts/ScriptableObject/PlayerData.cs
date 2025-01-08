@@ -22,12 +22,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
-            _owner.Interact();
-            _owner.ChangeAttackType();
-            _owner.JumpAndGravity();
-            _owner.GroundedCheck();
-            _owner.CheckAttack();
-            _owner.Move();
+            _owner.IdleAndMoveStateUpdate();
         }
     }
 
@@ -49,10 +44,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
-            _owner.Interact();
-            _owner.CheckAttack();
-            _owner.GroundedCheck();
-            _owner.Move();
+            _owner.CrouchStateUpdate();
         }
     }
 
@@ -72,10 +64,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
-            _owner.Interact();
-            _owner.JumpAndGravity();
-            _owner.GroundedCheck();
-            _owner.Move();
+            _owner.JumpStateUpdate();
         }
     }
 
@@ -100,7 +89,7 @@ public class PlayerData : CreatureData
 
         public override void OnUpdate()
         {
-            _owner.Move();
+            _owner.LadderStateUpdate();
         }
     }
 

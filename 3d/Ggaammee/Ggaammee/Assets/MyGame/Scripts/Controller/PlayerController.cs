@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 public class PlayerController : CreatureController
@@ -18,51 +15,34 @@ public class PlayerController : CreatureController
     public float GroundedOffset = -0.14f;
     public float GroundedRadius = 0.28f;
 
+
     [Header("References")] [SerializeField]
-    private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
 
     [SerializeField] private VisualEffect healEffect;
-    [SerializeField] private LockOn lockOn;
+    [SerializeField] public PlayerLockOn playerLockOn;
     [SerializeField] private InputSystem inputSystem;
     [SerializeField] private WeaponData[] weaponDataOptions;
     [SerializeField] private Transform equipWeapon;
 
-    private float speed;
-    private float targetSpeed;
-    private float animationBlend;
-    private float targetRotation;
-    private float rotationVelocity;
-    private float verticalVelocity;
-    private float jumpTimeoutDelta = 0.9f;
-    private float fallTimeoutDelta;
-    private readonly float terminalVelocity = 53.0f;
 
-    private bool isGrounded;
-    private bool isAutoMove;
-    private bool isClimbing;
-    private bool isNearLadder;
-    private bool inLadderMotion;
+    [HideInInspector] public bool isClimbing;
+    [HideInInspector] public bool isNearLadder;
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isAutoMove;
+    [HideInInspector] public bool inLadderMotion;
+    [HideInInspector] public bool isUpLadder = false;
+    [HideInInspector] public Vector3 autoMoveDestination;
 
-    private Vector3 autoMoveDestination;
-
-    private Camera mainCamera;
     private WeaponData currentEquipweaponData;
     private Coroutine attackCoroutine;
     private CreatureStateMachine<PlayerController> stateMachine;
-    private List<DropItem> currentDropItems;
     private PlayerData playerData => (PlayerData)creatureData;
 
+    private PlayerInteract playerInteract;
+    private PlayerMovement playerMovement;
+
     #endregion
-
-
-    private void Awake()
-    {
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main;
-        }
-    }
-
 
     #region 초기화
 
@@ -80,7 +60,6 @@ public class PlayerController : CreatureController
         InitializePlayer();
         InitializeAnimator();
         PrewarmPools();
-        SetAutoMove(false);
     }
 
     private void InitializeManagers()
@@ -91,9 +70,9 @@ public class PlayerController : CreatureController
 
     private void InitializePlayer()
     {
-        jumpTimeoutDelta = JumpTimeout;
-        fallTimeoutDelta = FallTimeout;
-        currentDropItems = new List<DropItem>();
+        playerMovement = new PlayerMovement(this, navMeshAgent, inputSystem, animator, playerData);
+        playerInteract = new PlayerInteract(this, inputSystem);
+        DisableNavMesh();
         stat.ChangeHpEvent += OnHeal;
     }
 
@@ -107,7 +86,6 @@ public class PlayerController : CreatureController
     {
         Managers.PoolManager.PrewarmPools<Bullet>("Bullet", null, 20);
     }
-
 
     private void InitFSM()
     {
@@ -123,12 +101,12 @@ public class PlayerController : CreatureController
 
         #region IdleState
 
-        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !lockOn.isFindTarget && inputSystem.crouch);
-        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() => !lockOn.isFindTarget && _AttackCoroutine == null && isGrounded && !inputSystem.crouch && inputSystem.jump);
+        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.CrouchState>(() => !playerLockOn.isFindTarget && inputSystem.crouch);
+        stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.JumpState>(() =>
+            !playerLockOn.isFindTarget && _AttackCoroutine == null && isGrounded && !inputSystem.crouch && inputSystem.jump);
         stateMachine.AddTransition<PlayerData.IdleAndMoveState, PlayerData.LadderState>(() => isClimbing);
 
         #endregion
-
 
         #region CrouchState
 
@@ -155,296 +133,51 @@ public class PlayerController : CreatureController
 
     #endregion
 
+    #region 업데이트
 
     private void Update()
     {
         stateMachine.Update();
     }
 
+    public void IdleAndMoveStateUpdate()
+    {
+        playerInteract.Interact();
+        playerMovement.Move();
+        playerMovement.JumpAndGravity();
+        ChangeAttackType();
+        GroundedCheck();
+        CheckAttack();
+    }
 
-    #region 이동
+    public void CrouchStateUpdate()
+    {
+        playerInteract.Interact();
+        playerMovement.Move();
+        CheckAttack();
+        GroundedCheck();
+    }
 
-    /// <summary>
-    /// 자동이동 시작
-    /// </summary>
-    /// <param name="destination"> 목표위치</param>
+
+    public void JumpStateUpdate()
+    {
+        playerInteract.Interact();
+        playerMovement.Move();
+        playerMovement.JumpAndGravity();
+        GroundedCheck();
+    }
+
+    public void LadderStateUpdate()
+    {
+        playerMovement.Move();
+    }
+
+    #endregion
+
     public void MoveAuto(Vector3 destination)
     {
-        DOTween.Sequence()
-            .AppendCallback(() => NoticeTextUI.Instance.ShowText(ShowType.Timed, "자동이동 시작", 1.3f))
-            .AppendInterval(0.7f)
-            .AppendCallback(() => NoticeTextUI.Instance.ShowText(ShowType.Persistent, "자동이동 중"))
-            .AppendCallback(() => StartAutoMove(destination));
+        playerMovement.MoveAuto(destination);
     }
-
-    private void StartAutoMove(Vector3 destination)
-    {
-        SetAutoMove(true);
-
-        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
-        {
-            autoMoveDestination = hit.position;
-            navMeshAgent.SetDestination(hit.position);
-        }
-    }
-
-
-    public void Move()
-    {
-        SetTargetSpeed();
-
-        if (isClimbing)
-        {
-            MoveLadder();
-        }
-        else if (!isAutoMove)
-        {
-            UpdateMovement();
-            ApplyRotation();
-            ApplyTranslation();
-        }
-
-        EventManager.TriggerPlayerMoved(transform.position);
-    }
-
-    private void SetTargetSpeed()
-    {
-        float maxSpeed;
-
-        if (isAutoMove)
-        {
-            maxSpeed = navMeshAgent.speed;
-            if (!navMeshAgent.pathPending && navMeshAgent.hasPath)
-            {
-                if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-                {
-                    DOTween.Sequence()
-                        .AppendCallback(() => NoticeTextUI.Instance.StopPersistentText())
-                        .AppendInterval(0.1f)
-                        .AppendCallback(() => NoticeTextUI.Instance.ShowText(ShowType.Timed, "자동이동 종료"));
-
-                    NoticeTextUI.Instance.StopPersistentText();
-
-                    SetAutoMove(false);
-                }
-                else
-                {
-                    targetSpeed = navMeshAgent.speed;
-                }
-            }
-        }
-        else
-        {
-            maxSpeed = creatureData.sprintSpeed;
-
-            if (inputSystem.move == Vector2.zero)
-            {
-                targetSpeed = 0.0f;
-            }
-            else if (lockOn.isFindTarget || (inputSystem.crouch && isGrounded))
-            {
-                targetSpeed = creatureData.crouchSpeed;
-            }
-            else if (inputSystem.sprint)
-            {
-                targetSpeed = creatureData.sprintSpeed;
-            }
-            else
-            {
-                targetSpeed = creatureData.speed;
-            }
-        }
-
-        animationBlend = Mathf.Lerp(
-            animationBlend,
-            isAutoMove ? navMeshAgent.speed : targetSpeed,
-            isAutoMove ? Time.deltaTime * navMeshAgent.acceleration : Time.deltaTime * creatureData.acceleration
-        );
-
-        if (animationBlend < 0.01f) animationBlend = 0f;
-
-        if (hasAnimator)
-        {
-            animator.SetFloat(AssignAnimationIDs.AnimIDSpeed, targetSpeed);
-
-            float motionSpeedRatio = (maxSpeed > 0) ? animationBlend / maxSpeed : 0f;
-            animator.SetFloat(AssignAnimationIDs.AnimIDMotionSpeed, motionSpeedRatio);
-        }
-    }
-
-
-    private void UpdateMovement()
-    {
-        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
-        float inputMagnitude = inputSystem.analogMovement ? inputSystem.move.magnitude : 1f;
-
-        speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * creatureData.acceleration);
-        speed = Mathf.Round(speed * 1000f) / 1000f;
-    }
-
-    private void ApplyRotation()
-    {
-        Vector3 inputDirection = new Vector3(inputSystem.move.x, 0.0f, inputSystem.move.y).normalized;
-        if (inputSystem.move != Vector2.zero)
-        {
-            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
-
-            if (!lockOn.isFindTarget)
-            {
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            }
-        }
-    }
-
-    private void ApplyTranslation()
-    {
-        Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
-        controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
-
-        if (!isAutoMove)
-        {
-            navMeshAgent.nextPosition = transform.position;
-        }
-    }
-
-    private void MoveLadder()
-    {
-        isGrounded = true;
-        LookAtTarget(targetTransform.transform.forward);
-
-        var isMove = inputSystem.move != Vector2.zero || isAutoMove;
-
-        if (isAutoMove)
-        {
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && isUpLadderTest);
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && !isUpLadderTest);
-        }
-        else
-        {
-            var move = inputSystem.move.y;
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && move >= 0);
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && move < 0);
-        }
-
-        EventManager.TriggerPlayerMoved(transform.position);
-    }
-
-
-    private void SetAutoMove(bool value)
-    {
-        if (value)
-        {
-            EnableNavMesh(transform.position);
-        }
-        else
-        {
-            DisableNavMesh();
-        }
-
-        isAutoMove = value;
-    }
-
-    #endregion
-
-
-    #region 점프
-
-    public void JumpAndGravity()
-    {
-        if (isGrounded)
-        {
-            ResetFallTimeout();
-
-            if (hasAnimator)
-            {
-                ResetAnimatorJumpAndFall();
-            }
-
-            HandleGroundedVelocity();
-
-            if (inputSystem.jump && jumpTimeoutDelta <= 0.0f)
-            {
-                PerformJump();
-            }
-
-            UpdateJumpTimeout();
-        }
-        else
-        {
-            HandleAirborneState();
-        }
-
-        ApplyGravity();
-    }
-
-
-    private void ResetFallTimeout()
-    {
-        fallTimeoutDelta = FallTimeout;
-    }
-
-    private void ResetAnimatorJumpAndFall()
-    {
-        animator.SetBool(AssignAnimationIDs.AnimIDJump, false);
-        animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, false);
-    }
-
-    private void HandleGroundedVelocity()
-    {
-        if (verticalVelocity < 0.0f)
-        {
-            verticalVelocity = -2f;
-        }
-    }
-
-    private void PerformJump()
-    {
-        verticalVelocity = Mathf.Sqrt(-2.5f * creatureData.weight);
-
-        if (hasAnimator)
-        {
-            animator.SetBool(AssignAnimationIDs.AnimIDJump, true);
-        }
-
-        inputSystem.jump = false;
-    }
-
-
-    private void UpdateJumpTimeout()
-    {
-        if (jumpTimeoutDelta >= 0.0f)
-        {
-            jumpTimeoutDelta -= Time.deltaTime;
-        }
-    }
-
-    private void HandleAirborneState()
-    {
-        jumpTimeoutDelta = JumpTimeout;
-
-        if (fallTimeoutDelta >= 0.0f)
-        {
-            fallTimeoutDelta -= Time.deltaTime;
-        }
-        else
-        {
-            if (hasAnimator)
-            {
-                animator.SetBool(AssignAnimationIDs.AnimIDFreeFall, true);
-            }
-        }
-    }
-
-    private void ApplyGravity()
-    {
-        if (verticalVelocity < terminalVelocity)
-        {
-            verticalVelocity += creatureData.weight * Time.deltaTime;
-        }
-    }
-
-    #endregion
 
 
     #region 공격
@@ -463,7 +196,7 @@ public class PlayerController : CreatureController
         }
         else if (currentEquipweaponData is RangedWeaponData rw)
         {
-            _AttackCoroutine = StartCoroutine(rw.AttackCoroutine(this, lockOn.currentTarget));
+            _AttackCoroutine = StartCoroutine(rw.AttackCoroutine(this, playerLockOn.currentTarget));
         }
     }
 
@@ -475,31 +208,6 @@ public class PlayerController : CreatureController
     #endregion
 
     #region 사다리
-
-    private void EnterLadderPosition(Collider other)
-    {
-        if (isClimbing) return;
-        isNearLadder = true;
-        targetTransform = other.gameObject.transform;
-    }
-
-    private void ExitLadderPosition()
-    {
-        if (isClimbing) return;
-        isNearLadder = false;
-        targetTransform = null;
-    }
-
-    private void EndofLadder(int animName)
-    {
-        if (isClimbing && !inLadderMotion)
-        {
-            animator.SetTrigger(animName);
-            animator.SetBool(AssignAnimationIDs.AnimIDLadder, false);
-        }
-
-        inLadderMotion = false;
-    }
 
     public void CharacterToLadder()
     {
@@ -523,55 +231,6 @@ public class PlayerController : CreatureController
 
     #endregion
 
-    #region 상호작용
-
-    public void Interact()
-    {
-        if (isNearLadder && inputSystem.interaction)
-        {
-            isClimbing = true;
-            return;
-        }
-
-        if (inputSystem.interaction && currentDropItems.Count > 0)
-        {
-            DropItem closestItem = GetClosestObject(currentDropItems, item => item.transform.position);
-            if (closestItem)
-            {
-                closestItem.Interact(this);
-                currentDropItems.Remove(closestItem);
-            }
-
-            return;
-        }
-
-        if (inputSystem.interaction)
-        {
-            Npc closestNpc = GetClosestNpc();
-            if (closestNpc)
-            {
-                closestNpc.Interact();
-            }
-        }
-    }
-
-    private readonly Collider[] npcList = new Collider[3];
-
-    private Npc GetClosestNpc()
-    {
-        var result = Physics.OverlapSphereNonAlloc(transform.position, 1.0f, npcList, LayerData.NpcLayer);
-        if (result == 0)
-        {
-            return null;
-        }
-
-        var npcs = npcList.Select(x => x ? x.GetComponent<Npc>() : null).Where(npc => npc != null).ToList();
-
-        return GetClosestObject(npcs, npc => npc.transform.position);
-    }
-
-    #endregion
-
     #region 아이템
 
     public bool AddItemToInventory(ItemData itemData)
@@ -588,88 +247,18 @@ public class PlayerController : CreatureController
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
         isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
 
-        if (hasAnimator)
-        {
-            animator.SetBool(AssignAnimationIDs.AnimIDGrounded, isGrounded);
-        }
+        animator?.SetBool(AssignAnimationIDs.AnimIDGrounded, isGrounded);
     }
 
 
-    private bool isUpLadderTest = false;
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
-        {
-            if (!currentDropItems.Contains(dropItem))
-            {
-                currentDropItems.Add(dropItem);
-            }
-        }
-        else if (other.CompareTag(TagData.LadderBottomTag))
-        {
-            if (isClimbing)
-            {
-                EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
-            }
-            else
-            {
-                EnterLadderPosition(other);
-
-                if (navMeshAgent.isOnOffMeshLink && isAutoMove)
-                {
-                    var offMeshData = navMeshAgent.currentOffMeshLinkData;
-                    if (offMeshData.offMeshLink.endTransform.position.y > transform.position.y)
-                    {
-                        isUpLadderTest = true;
-                    }
-
-                    DisableNavMesh();
-                    isClimbing = true;
-                }
-            }
-        }
-        else if (other.CompareTag(TagData.LadderTopTag))
-        {
-            if (isClimbing)
-            {
-                EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
-            }
-            else
-            {
-                EnterLadderPosition(other);
-            }
-        }
+        playerInteract.OnTriggerEnter(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Item") && other.TryGetComponent<DropItem>(out var dropItem))
-        {
-            currentDropItems.Remove(dropItem);
-        }
-        else if (other.CompareTag(TagData.LadderBottomTag))
-        {
-            if (isClimbing)
-            {
-                EndofLadder(AssignAnimationIDs.AnimIDLadderDownEnd);
-            }
-            else
-            {
-                ExitLadderPosition();
-            }
-        }
-        else if (other.CompareTag(TagData.LadderTopTag))
-        {
-            if (isClimbing)
-            {
-                EndofLadder(AssignAnimationIDs.AnimIDLadderUpEnd);
-            }
-            else
-            {
-                ExitLadderPosition();
-            }
-        }
+        playerInteract.OnTriggerExit(other);
     }
 
     #endregion
@@ -757,24 +346,6 @@ public class PlayerController : CreatureController
             currentEquipweaponData.Initialize(animator);
             animator.SetTrigger(AssignAnimationIDs.AnimIDChangeAttackType);
         }
-    }
-
-    private T GetClosestObject<T>(List<T> objects, Func<T, Vector3> positionSelector) where T : class
-    {
-        T closestObject = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (var obj in objects)
-        {
-            float distance = Vector3.Distance(transform.position, positionSelector(obj));
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestObject = obj;
-            }
-        }
-
-        return closestObject;
     }
 
     #endregion

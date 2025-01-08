@@ -218,14 +218,14 @@ GameObject:
   m_Component:
   - component: {fileID: 8026870606457810531}
   - component: {fileID: 786441117642222483}
+  - component: {fileID: 4937063882719121326}
+  - component: {fileID: 5372287860960465378}
+  - component: {fileID: 1653520059555725034}
+  - component: {fileID: 8278231705706070525}
   - component: {fileID: 6674135991478004841}
   - component: {fileID: 6591710976191693114}
-  - component: {fileID: 1653520059555725034}
-  - component: {fileID: 5372287860960465378}
   - component: {fileID: 7019786601706362603}
   - component: {fileID: 1874768547656342762}
-  - component: {fileID: 8278231705706070525}
-  - component: {fileID: 4937063882719121326}
   m_Layer: 18
   m_Name: Player
   m_TagString: Player
@@ -276,62 +276,49 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &6674135991478004841
-MonoBehaviour:
+--- !u!195 &4937063882719121326
+NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5904525240692292765}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dacf52c9d93423f9ea84f23b056cab4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolName: 
-  creatureData: {fileID: 11400000, guid: 6af78f56c8313794a8b448fab2a40171, type: 2}
-  animator: {fileID: 5372287860960465378}
-  hpBar: {fileID: 0}
-  controller: {fileID: 786441117642222483}
-  attackPoint: {fileID: 5417652724333124433}
-  RotationSmoothTime: 0.12
-  JumpTimeout: 0.9
-  FallTimeout: 0.15
-  GroundedOffset: -0.15
-  GroundedRadius: 0.2
-  navMeshAgent: {fileID: 4937063882719121326}
-  healEffect: {fileID: 433901332998718311}
-  lockOn: {fileID: 1874768547656342762}
-  inputSystem: {fileID: 6591710976191693114}
-  weaponDataOptions:
-  - {fileID: 11400000, guid: a463a89d5e50d0549ba49224382e083a, type: 2}
-  - {fileID: 11400000, guid: 721a90f26f1b7b74187df9b62929b553, type: 2}
-  - {fileID: 11400000, guid: a2030b7a84d33dd4e9c521496c4b3763, type: 2}
-  equipWeapon: {fileID: 8302426586812010115}
---- !u!114 &6591710976191693114
-MonoBehaviour:
+  m_AgentTypeID: 0
+  m_Radius: 0.2
+  m_Speed: 5
+  m_Acceleration: 5
+  avoidancePriority: 50
+  m_AngularSpeed: 1080
+  m_StoppingDistance: 0.4
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.02
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!95 &5372287860960465378
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5904525240692292765}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e087ecce43ebbff45a1b360637807d93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  move: {x: 0, y: 0}
-  look: {x: 0, y: 0}
-  jump: 0
-  crouch: 0
-  sprint: 0
-  attack: 0
-  interaction: 0
-  lockOn: 0
-  changeAttackType: 0
-  lastInputAttackType: 0
-  analogMovement: 0
-  cursorInputForLook: 1
+  m_Avatar: {fileID: 9000000, guid: f320efa63ce12874a9ad50add869c0b5, type: 3}
+  m_Controller: {fileID: 9100000, guid: a0702f03fac0faa4d983e423203b2fb4, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1653520059555725034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,27 +418,110 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!95 &5372287860960465378
-Animator:
-  serializedVersion: 5
+--- !u!320 &8278231705706070525
+PlayableDirector:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5904525240692292765}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: f320efa63ce12874a9ad50add869c0b5, type: 3}
-  m_Controller: {fileID: 9100000, guid: a0702f03fac0faa4d983e423203b2fb4, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 0
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 818776381336771371, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -563218745225277978, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2956656245042940128, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4952658714359317637, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 404016994398834799, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References:
+    - 3edffc32dc4323d44b208cc53abd3745: {fileID: 0}
+    - a8e3c6f1bc67a734db66c7d2115815ef: {fileID: 0}
+    - 940be08b4df0fd1408dc984bb5073272: {fileID: 0}
+    - d97cc9f76f7637e4faeb1a1db0d033b5: {fileID: 0}
+    - 5bc382541266c0e48b52e382bdd044c1: {fileID: 0}
+    - 0d8f8326bfe8c6849a7261085665a0fd: {fileID: 0}
+    - 1e11e6b6163c9174bb8c2d0b9652c906: {fileID: 5336412553519107330}
+    - b895d4e544c56494d90ec23e67a6b56e: {fileID: 0}
+    - 5ec2e5797f280a34fb42ada16dce88ac: {fileID: 8485660908376241349}
+    - fd34e90230ec4b74b8de62baf9b4d4bc: {fileID: 0}
+    - 1b79f0e17c2db78438dea24314fe7be9: {fileID: 0}
+    - 007a1a403d2721b44b9ab0c8e32e6789: {fileID: 0}
+--- !u!114 &6674135991478004841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904525240692292765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dacf52c9d93423f9ea84f23b056cab4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolName: 
+  creatureData: {fileID: 11400000, guid: 6af78f56c8313794a8b448fab2a40171, type: 2}
+  animator: {fileID: 5372287860960465378}
+  hpBar: {fileID: 0}
+  controller: {fileID: 786441117642222483}
+  attackPoint: {fileID: 5417652724333124433}
+  hasAnimator: 0
+  targetTransform: {fileID: 0}
+  RotationSmoothTime: 0.12
+  JumpTimeout: 0.9
+  FallTimeout: 0.15
+  GroundedOffset: -0.15
+  GroundedRadius: 0.2
+  navMeshAgent: {fileID: 4937063882719121326}
+  healEffect: {fileID: 433901332998718311}
+  playerLockOn: {fileID: 1874768547656342762}
+  inputSystem: {fileID: 6591710976191693114}
+  weaponDataOptions:
+  - {fileID: 11400000, guid: a463a89d5e50d0549ba49224382e083a, type: 2}
+  - {fileID: 11400000, guid: 721a90f26f1b7b74187df9b62929b553, type: 2}
+  - {fileID: 11400000, guid: a2030b7a84d33dd4e9c521496c4b3763, type: 2}
+  equipWeapon: {fileID: 8302426586812010115}
+  isClimbing: 0
+  isNearLadder: 0
+  isGrounded: 0
+  isAutoMove: 0
+  inLadderMotion: 0
+  isUpLadder: 0
+  autoMoveDestination: {x: 0, y: 0, z: 0}
+--- !u!114 &6591710976191693114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904525240692292765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e087ecce43ebbff45a1b360637807d93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {x: 0, y: 0}
+  look: {x: 0, y: 0}
+  jump: 0
+  crouch: 0
+  sprint: 0
+  attack: 0
+  interaction: 0
+  lockOn: 0
+  changeAttackType: 0
+  lastInputAttackType: 0
+  analogMovement: 0
+  cursorInputForLook: 1
 --- !u!114 &7019786601706362603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,67 +563,6 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   lockOnImage: {fileID: 0}
   targetEnemy: []
---- !u!320 &8278231705706070525
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5904525240692292765}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 0
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: 818776381336771371, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: -563218745225277978, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: -2956656245042940128, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: -4952658714359317637, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: 404016994398834799, guid: 55a606ada226c5e4bb80da5ab91a1aa1, type: 2}
-    value: {fileID: 0}
-  m_ExposedReferences:
-    m_References:
-    - 3edffc32dc4323d44b208cc53abd3745: {fileID: 0}
-    - a8e3c6f1bc67a734db66c7d2115815ef: {fileID: 0}
-    - 940be08b4df0fd1408dc984bb5073272: {fileID: 0}
-    - d97cc9f76f7637e4faeb1a1db0d033b5: {fileID: 0}
-    - 5bc382541266c0e48b52e382bdd044c1: {fileID: 0}
-    - 0d8f8326bfe8c6849a7261085665a0fd: {fileID: 0}
-    - 1e11e6b6163c9174bb8c2d0b9652c906: {fileID: 5336412553519107330}
-    - b895d4e544c56494d90ec23e67a6b56e: {fileID: 0}
-    - 5ec2e5797f280a34fb42ada16dce88ac: {fileID: 8485660908376241349}
-    - fd34e90230ec4b74b8de62baf9b4d4bc: {fileID: 0}
-    - 1b79f0e17c2db78438dea24314fe7be9: {fileID: 0}
-    - 007a1a403d2721b44b9ab0c8e32e6789: {fileID: 0}
---- !u!195 &4937063882719121326
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5904525240692292765}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.2
-  m_Speed: 5
-  m_Acceleration: 5
-  avoidancePriority: 50
-  m_AngularSpeed: 1080
-  m_StoppingDistance: 0.4
-  m_AutoTraverseOffMeshLink: 0
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.02
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1001 &4832850185860167160
 PrefabInstance:
   m_ObjectHideFlags: 0

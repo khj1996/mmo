@@ -48,7 +48,6 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\KillMonsterQuestData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\State.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Quest\ReachDestinationQuest.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Controller\LockOn.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\MonsterSpawner.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
@@ -76,6 +75,7 @@
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\Action\OpenShopAction.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Quest\Quest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStats.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Player\PlayerInteract.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Dialogue\DialogueModule.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\ComplexCurveDebugTool.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DraggableItemUI.cs" />
@@ -111,6 +111,8 @@
     <Compile Include="Assets\MyGame\Scripts\Bullet.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_DragHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\DropManager.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Player\CameraController.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Player\PlayerLockOn.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\EquipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\GoldUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\CurrencyItemData.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Assets\MyGame\Scripts\SpringManager.cs" />
     <Compile Include="Assets\ImprtAsset\Quirky Series Ultimate\_Scripts\QuirkySeriesDemo.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\InventoryPopupUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Controller\Player\PlayerMovement.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Quest\ReachDestinationQuestData.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\ItemTooltipUI.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\Base\CreatureStateMachine.cs" />
@@ -154,7 +157,6 @@
     <Compile Include="Assets\MyGame\Scripts\Contents\Quest\KillMonsterQuest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\IUsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DialogueUI.cs" />
-    <Compile Include="Assets\MyGame\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ClickHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\PopupUIHeader.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\PlayerController.cs" />
