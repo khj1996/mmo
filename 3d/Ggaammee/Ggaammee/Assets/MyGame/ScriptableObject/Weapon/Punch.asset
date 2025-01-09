@@ -19,5 +19,5 @@ MonoBehaviour:
   sqrAttackRange: 0
   attackStartSfx: {fileID: 0}
   attackImpactSfx: {fileID: 0}
-  attackPostion: {x: 0, y: 0.5, z: 0.2}
-  CheckRadius: 0.3
+  attackPoint: {x: 0, y: 0.5, z: 0.2}
+  checkRadius: 0.3

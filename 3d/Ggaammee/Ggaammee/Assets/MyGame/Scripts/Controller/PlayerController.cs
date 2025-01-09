@@ -286,7 +286,7 @@ public class PlayerController : CreatureController
     {
         if (currentEquipweaponData is MeleeWeaponData mw)
         {
-            mw.OnHit(this, attackPoint.position);
+            mw.OnHit(this, Util.GetModifiedPoint(transform, mw.attackPoint));
         }
     }
 

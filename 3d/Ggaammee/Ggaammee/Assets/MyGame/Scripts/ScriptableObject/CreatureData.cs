@@ -5,8 +5,8 @@ using UnityEngine.Serialization;
 
 public class CreatureData : ScriptableObject
 {
-    [Header("Basic Info")] 
-    public string creatureId;
+
+    [Header("Basic Info")] public string creatureId;
     public string creatureName;
     public int level;
 
@@ -21,7 +21,6 @@ public class CreatureData : ScriptableObject
 
     [Header("Animations & Sounds")] public AnimationData[] animations;
     public AudioClip walkSound;
-
 
     [Serializable]
     public struct AnimationData

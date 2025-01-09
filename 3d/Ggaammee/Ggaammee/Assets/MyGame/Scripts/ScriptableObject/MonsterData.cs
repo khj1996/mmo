@@ -1,24 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 [CreateAssetMenu(fileName = "NewMonster", menuName = "ScriptableObjects/Monster")]
 public class MonsterData : CreatureData
 {
+    public enum SkillType
+    {
+        Point,
+        Area
+    }
+
+    public enum DeafultAttackType
+    {
+        Melee,
+        Range
+    }
+
     [Header("-------------------MonsterData--------------------")]
     public GameObject creatureModel;
-    
-    public float attackSpeed;
-    public float sqrAttackRange;
-    
+
+    public DeafultAttackType defaultAttackType;
+    public float minAttackSpeed;
+    public float minSqrAttackRange;
+
     public Vector3 hpBarPos;
 
+    public Vector3 defaultAttackPoint;
     public float sqrDetectionRange;
     public float sqrChaseRange;
 
     public List<DropItem> dropItems;
     public float exp;
+
+
+    [Header("Skills")] public SkillData[] SkillDatas;
+
+    [Serializable]
+    public struct SkillData
+    {
+        public SkillType type;
+        public Vector3 attackPos;
+        public float attackRadius;
+        public float skillCoolTime;
+    }
 
 
     [Serializable]

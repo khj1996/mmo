@@ -15,7 +15,6 @@ public class CreatureController : Poolable
 
     [SerializeField] protected HpBar hpBar;
     [SerializeField] public CharacterController controller;
-    [SerializeField] protected Transform attackPoint;
 
     protected bool isDie;
     public Transform targetTransform;

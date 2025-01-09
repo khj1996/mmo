@@ -81,7 +81,7 @@ public class MonsterController : CreatureController
 
     private bool CheckCanAttack()
     {
-        return targetTransform && !((targetTransform.position - transform.position).sqrMagnitude > MonsterData.sqrAttackRange);
+        return targetTransform && !((targetTransform.position - transform.position).sqrMagnitude > MonsterData.minSqrAttackRange);
     }
 
     private void InitComponent()
@@ -128,7 +128,7 @@ public class MonsterController : CreatureController
 
     public void CheckAttack()
     {
-        if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + MonsterData.attackSpeed)) return;
+        if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + MonsterData.minAttackSpeed)) return;
 
         _AttackCoroutine = StartCoroutine(AttackCoroutine());
         lastAttackTime = Time.time;
@@ -175,7 +175,7 @@ public class MonsterController : CreatureController
 
     protected virtual void OnHit(AnimationEvent animationEvent)
     {
-        List<CharacterController> players = GetTargetInRange(attackPoint.position, LayerData.PlayerLayer);
+        List<CharacterController> players = GetTargetInRange(Util.GetModifiedPoint(transform, MonsterData.defaultAttackPoint), LayerData.PlayerLayer);
 
         foreach (CharacterController player in players)
         {

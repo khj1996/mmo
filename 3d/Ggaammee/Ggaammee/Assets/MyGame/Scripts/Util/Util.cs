@@ -42,6 +42,17 @@ public static class Util
         }
     }
 
+    public static Vector3 GetModifiedPoint(Transform playerTransform, Vector3 modifier)
+    {
+        Vector3 playerPosition = playerTransform.position;
+
+        Quaternion playerRotation = playerTransform.rotation;
+
+        Vector3 worldAttackPosition = playerPosition + (playerRotation * modifier);
+
+        return worldAttackPosition;
+    }
+
     public static string FormatNumber(long num)
     {
         var suffixes = new[] { "K", "M", "B", "T" };

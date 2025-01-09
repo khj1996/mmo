@@ -111,37 +111,6 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &1470926010194516061
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5417652724333124433}
-  m_Layer: 18
-  m_Name: AttackPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5417652724333124433
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470926010194516061}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 910621210248506824}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1919987346168350438
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +171,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5417652724333124433}
   - {fileID: 5418255543766765209}
   - {fileID: 7169400261683765724}
   - {fileID: 2545846092866099598}
@@ -474,8 +442,7 @@ MonoBehaviour:
   animator: {fileID: 5372287860960465378}
   hpBar: {fileID: 0}
   controller: {fileID: 786441117642222483}
-  attackPoint: {fileID: 5417652724333124433}
-  hasAnimator: 0
+  attackPoint: {fileID: 0}
   targetTransform: {fileID: 0}
   RotationSmoothTime: 0.12
   JumpTimeout: 0.9

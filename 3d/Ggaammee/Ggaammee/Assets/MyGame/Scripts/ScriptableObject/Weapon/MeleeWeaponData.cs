@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "MeleeWeaponData", menuName = "ScriptableObjects/Weapon/MeleeWeaponData")]
 public class MeleeWeaponData : WeaponData
 {
-    public Vector3 attackPostion = new Vector3();
-    public float CheckRadius;
+    public Vector3 attackPoint;
+    public float checkRadius;
 
     public override IEnumerator AttackCoroutine(PlayerController controller, MonsterController target = null)
     {
@@ -20,9 +21,9 @@ public class MeleeWeaponData : WeaponData
         controller.EndAttack();
     }
 
-    public void OnHit(PlayerController playerController, Vector3 attackPoint)
+    public void OnHit(PlayerController playerController, Vector3 point)
     {
-        List<CharacterController> monsters = GetMonstersInRange(attackPoint, CheckRadius);
+        List<CharacterController> monsters = GetMonstersInRange(point, checkRadius);
         foreach (CharacterController monster in monsters)
         {
             monster.gameObject.GetComponent<CreatureController>().GetDamaged(playerController.stat.CurrentAttackPower);

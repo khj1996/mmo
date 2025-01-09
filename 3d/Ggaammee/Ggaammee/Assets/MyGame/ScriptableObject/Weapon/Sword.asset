@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875b07893d4f413d9fa9da94dfaa83e1, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  weaponId: 1
+  attackType: 0
   weaponName: 
   damageMultiply: 0
-  attackSpeed: 0
+  attackCoolTime: 0
   sqrAttackRange: 0
   attackStartSfx: {fileID: 0}
   attackImpactSfx: {fileID: 0}
-  attackPostion: {x: 0, y: 0.5, z: 0.5}
-  CheckRadius: 0.5
+  attackPoint: {x: 0, y: 0.5, z: 0.5}
+  checkRadius: 0.5

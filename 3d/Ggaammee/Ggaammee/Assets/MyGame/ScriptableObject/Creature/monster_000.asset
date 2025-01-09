@@ -18,20 +18,23 @@ MonoBehaviour:
   maxHp: 100
   attack: 15
   defense: 0
-  attackSpeed: 2
   speed: 5
   sprintSpeed: 0
   crouchSpeed: 0
   acceleration: 10
   weight: -15
-  sqrAttackRange: 1.5
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
+  defaultAttackType: 0
+  minAttackSpeed: 2
+  minSqrAttackRange: 0
   hpBarPos: {x: 0, y: 2.5, z: 0}
+  defaultAttackPoint: {x: 0, y: 0, z: 0.65}
   sqrDetectionRange: 16
   sqrChaseRange: 25
   dropItems:
   - itemData: {fileID: 11400000, guid: 9dd3bcd593af7bb4384fc99d9fa08402, type: 2}
     dropRate: 100
   exp: 0
+  SkillDatas: []
