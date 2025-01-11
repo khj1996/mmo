@@ -33,7 +33,7 @@ public class CreatureStats
         Managers.InventoryManager.OnEquipChanged += RefreshEquipStat;
     }
 
-    public void ResetData(CreatureData creatureData)
+    public void ResetStat(CreatureData creatureData)
     {
         baseMaxHp = creatureData.maxHp;
         currentHp = CurrentMaxHp;

@@ -10,6 +10,10 @@ public class MonsterController : CreatureController
     private MonsterData MonsterData => (MonsterData)creatureData;
     private CreatureStateMachine<MonsterController> stateMachine;
 
+    //다음 스킬 사용 가능 시간
+    private float[] canUseSkillTimes;
+
+
     #region 초기화
 
     private void Awake()
@@ -23,17 +27,21 @@ public class MonsterController : CreatureController
         InitFSM();
         InitComponent();
 
-        OnReturnToPoolAction += () =>
-        {
-            isDie = false;
-            targetTransform = null;
-            _AttackCoroutine = null;
+        OnReturnToPoolAction += SetData;
+    }
 
-            transform.localPosition = Vector3.zero;
-            stat.ResetData(creatureData);
-            stateMachine.ChangeState(typeof(MonsterData.IdleState));
-        };
+    private void SetData()
+    {
+        canUseSkillTimes = new float[MonsterData.SkillDatas.Length];
+
+        isDie = false;
+        targetTransform = null;
+
+        transform.localPosition = Vector3.zero;
         hpBar.gameObject.transform.position = transform.TransformPoint(MonsterData.hpBarPos);
+
+        stat.ResetStat(creatureData);
+        stateMachine.ChangeState(typeof(MonsterData.IdleState));
     }
 
     private void InitFSM()
@@ -60,10 +68,10 @@ public class MonsterController : CreatureController
 
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
 
-        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => _AttackCoroutine == null && !CheckCanAttack());
-        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => _AttackCoroutine == null && !targetTransform);
+        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => !isInMotion && GetAttackActionIndex() == -2);
+        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => !isInMotion && !targetTransform);
 
-        stateMachine.AddGlobalTransition<MonsterData.AttackState>(CheckCanAttack);
+        stateMachine.AddGlobalTransition<MonsterData.AttackState>(() => GetAttackActionIndex() != -2);
         stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
     }
 
@@ -79,10 +87,6 @@ public class MonsterController : CreatureController
         return targetTransform;
     }
 
-    private bool CheckCanAttack()
-    {
-        return targetTransform && !((targetTransform.position - transform.position).sqrMagnitude > MonsterData.minSqrAttackRange);
-    }
 
     private void InitComponent()
     {
@@ -109,6 +113,9 @@ public class MonsterController : CreatureController
 
     public void Move()
     {
+        if (isInMotion)
+            return;
+
         Vector3 direction = (targetTransform.position - transform.position).normalized;
 
         LookAtTarget(direction);
@@ -123,34 +130,94 @@ public class MonsterController : CreatureController
 
     #region 공격
 
-    private float lastAttackTime = 0f;
-    private Coroutine _AttackCoroutine = null;
+    private float canAttackTime = 0f;
+    private float motionEndTime = 0f;
+    private bool isInMotion = false;
 
     public void CheckAttack()
     {
-        if (_AttackCoroutine != null || !(Time.time >= lastAttackTime + MonsterData.minAttackSpeed)) return;
-
-        _AttackCoroutine = StartCoroutine(AttackCoroutine());
-        lastAttackTime = Time.time;
-    }
-
-    private IEnumerator AttackCoroutine()
-    {
-        animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
-        LookAtTarget((targetTransform.position - transform.position).normalized);
-
-        while (!IsAnimationComplete(AssignAnimationIDs.AnimIDAttackTrigger))
+        if (Time.time >= motionEndTime && isInMotion)
         {
-            yield return null;
+            EndAttackMotion();
         }
 
-        _AttackCoroutine = null;
+        if (Time.time >= canAttackTime && !isInMotion)
+        {
+            StartAttack();
+        }
     }
 
-    private bool IsAnimationComplete(int animationID)
+    private void StartAttack()
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        return stateInfo.normalizedTime >= 1f;
+        int skillIndex = GetAttackActionIndex();
+
+        if (skillIndex != -1)
+        {
+            StartAttack(skillIndex, MonsterData.SkillDatas[skillIndex].skillCoolTime);
+        }
+        else
+        {
+            StartAttack(skillIndex, MonsterData.minAttackSpeed);
+        }
+    }
+
+    private void StartAttack(int skillIndex, float coolTime)
+    {
+        isInMotion = true;
+
+        animator.SetInteger(AssignAnimationIDs.AnimIDAttackType, skillIndex);
+        animator.SetTrigger(AssignAnimationIDs.AnimIDAttackTrigger);
+
+        LookAtTarget((targetTransform.position - transform.position).normalized);
+
+        motionEndTime = Time.time + GetAnimationDuration(skillIndex);
+
+        canAttackTime = Time.time + MonsterData.minAttackSpeed;
+
+        if (skillIndex != -1)
+        {
+            canUseSkillTimes[skillIndex] = Time.time + coolTime;
+        }
+    }
+
+    private void EndAttackMotion()
+    {
+        isInMotion = false;
+    }
+
+    private float GetAnimationDuration(int skillIndex)
+    {
+        return skillIndex != -1
+            ? MonsterData.SkillDatas[skillIndex].motionDelay
+            : MonsterData.defaultMotionDelay;
+    }
+
+
+    //현재 사용 가능한 스킬반환
+    private int GetAttackActionIndex()
+    {
+        // 현재 대상이 없을경우 반환
+        if (!targetTransform)
+            return -2;
+
+        var targetDistance = (targetTransform.position - transform.position).sqrMagnitude;
+
+        for (var i = 0; i < canUseSkillTimes.Length; i++)
+        {
+            // 스킬 범위 내에 유저가 있고 스킬 쿨타임이 아닐 때
+            if (targetDistance <= MonsterData.SkillDatas[i].attackSqrRadius && Time.time > canUseSkillTimes[i])
+            {
+                return i;
+            }
+        }
+
+        // 기본 공격 가능 여부 확인
+        if (targetDistance <= MonsterData.minSqrAttackRange)
+        {
+            return -1;
+        }
+
+        return -2;
     }
 
     public void DropItem()

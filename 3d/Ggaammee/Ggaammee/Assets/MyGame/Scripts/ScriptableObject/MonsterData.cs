@@ -9,7 +9,8 @@ public class MonsterData : CreatureData
 {
     public enum SkillType
     {
-        Point,
+        Melee,
+        Range,
         Area
     }
 
@@ -23,6 +24,7 @@ public class MonsterData : CreatureData
     public GameObject creatureModel;
 
     public DeafultAttackType defaultAttackType;
+    public float defaultMotionDelay;
     public float minAttackSpeed;
     public float minSqrAttackRange;
 
@@ -43,7 +45,8 @@ public class MonsterData : CreatureData
     {
         public SkillType type;
         public Vector3 attackPos;
-        public float attackRadius;
+        public float attackSqrRadius;
+        public float motionDelay;
         public float skillCoolTime;
     }
 
