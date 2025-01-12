@@ -26,12 +26,14 @@ MonoBehaviour:
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
-  defaultAttackType: 0
-  defaultMotionDelay: 1
-  minAttackSpeed: 2
-  minSqrAttackRange: 1
+  defaultSkillData:
+    action: {fileID: 11400000, guid: 117298c79615f3b4a8a7ae49efd7b76f, type: 2}
+    attackPos: {x: 0, y: 0, z: 0.65}
+    attackSqrRadius: 1
+    attackEffectRadiusSqr: 0.9
+    motionDelay: 1
+    skillCoolTime: 2
   hpBarPos: {x: 0, y: 2.5, z: 0}
-  defaultAttackPoint: {x: 0, y: 0, z: 0.65}
   sqrDetectionRange: 16
   sqrChaseRange: 25
   dropItems:

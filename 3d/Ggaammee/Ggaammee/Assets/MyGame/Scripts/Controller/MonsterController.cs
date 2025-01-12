@@ -13,6 +13,8 @@ public class MonsterController : CreatureController
     //다음 스킬 사용 가능 시간
     private float[] canUseSkillTimes;
 
+    private int currentSkillIndex;
+
 
     #region 초기화
 
@@ -139,6 +141,7 @@ public class MonsterController : CreatureController
         if (Time.time >= motionEndTime && isInMotion)
         {
             EndAttackMotion();
+            return;
         }
 
         if (Time.time >= canAttackTime && !isInMotion)
@@ -149,16 +152,9 @@ public class MonsterController : CreatureController
 
     private void StartAttack()
     {
-        int skillIndex = GetAttackActionIndex();
+        currentSkillIndex = GetAttackActionIndex();
 
-        if (skillIndex != -1)
-        {
-            StartAttack(skillIndex, MonsterData.SkillDatas[skillIndex].skillCoolTime);
-        }
-        else
-        {
-            StartAttack(skillIndex, MonsterData.minAttackSpeed);
-        }
+        StartAttack(currentSkillIndex, currentSkillIndex != -1 ? MonsterData.SkillDatas[currentSkillIndex].skillCoolTime : MonsterData.defaultSkillData.skillCoolTime);
     }
 
     private void StartAttack(int skillIndex, float coolTime)
@@ -172,7 +168,7 @@ public class MonsterController : CreatureController
 
         motionEndTime = Time.time + GetAnimationDuration(skillIndex);
 
-        canAttackTime = Time.time + MonsterData.minAttackSpeed;
+        canAttackTime = Time.time + MonsterData.defaultSkillData.skillCoolTime;
 
         if (skillIndex != -1)
         {
@@ -189,7 +185,7 @@ public class MonsterController : CreatureController
     {
         return skillIndex != -1
             ? MonsterData.SkillDatas[skillIndex].motionDelay
-            : MonsterData.defaultMotionDelay;
+            : MonsterData.defaultSkillData.motionDelay;
     }
 
 
@@ -212,7 +208,7 @@ public class MonsterController : CreatureController
         }
 
         // 기본 공격 가능 여부 확인
-        if (targetDistance <= MonsterData.minSqrAttackRange)
+        if (targetDistance <= MonsterData.defaultSkillData.attackSqrRadius)
         {
             return -1;
         }
@@ -240,14 +236,9 @@ public class MonsterController : CreatureController
     }
 
 
-    protected virtual void OnHit(AnimationEvent animationEvent)
+    protected virtual void OnAttack(AnimationEvent animationEvent)
     {
-        List<CharacterController> players = GetTargetInRange(Util.GetModifiedPoint(transform, MonsterData.defaultAttackPoint), LayerData.PlayerLayer);
-
-        foreach (CharacterController player in players)
-        {
-            player.gameObject.GetComponent<PlayerController>().GetDamaged(stat.CurrentAttackPower);
-        }
+        MonsterData.InvokeSkill(currentSkillIndex, transform, stat.CurrentAttackPower);
     }
 
     #endregion

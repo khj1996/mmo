@@ -23,31 +23,33 @@ public class MonsterData : CreatureData
     [Header("-------------------MonsterData--------------------")]
     public GameObject creatureModel;
 
-    public DeafultAttackType defaultAttackType;
-    public float defaultMotionDelay;
-    public float minAttackSpeed;
-    public float minSqrAttackRange;
 
     public Vector3 hpBarPos;
 
-    public Vector3 defaultAttackPoint;
     public float sqrDetectionRange;
     public float sqrChaseRange;
 
     public List<DropItem> dropItems;
     public float exp;
 
-
-    [Header("Skills")] public SkillData[] SkillDatas;
+    [Header("-------------------Skills--------------------")]
+    public SkillData defaultSkillData;
+    public SkillData[] SkillDatas;
 
     [Serializable]
     public struct SkillData
     {
-        public SkillType type;
+        public SkillAction action;
         public Vector3 attackPos;
-        public float attackSqrRadius;
+        [Tooltip("공격 사용이 가능한 거리")] public float attackSqrRadius;
+        [Tooltip("공격시 효과 범위")] public float attackEffectRadiusSqr;
         public float motionDelay;
         public float skillCoolTime;
+
+        public void InvokeSkill(Transform caster, float power)
+        {
+            action.InvokeSkill(this, caster, attackPos, power);
+        }
     }
 
 
@@ -56,6 +58,19 @@ public class MonsterData : CreatureData
     {
         public ItemData itemData;
         [Range(0, 100)] public int dropRate;
+    }
+
+
+    public void InvokeSkill(int skillIndex, Transform caster, float power)
+    {
+        if (skillIndex == -1)
+            defaultSkillData.InvokeSkill(caster, power);
+        else if (skillIndex >= 0)
+            defaultSkillData.InvokeSkill(caster, power);
+    }
+
+    public void ActiveSkill(SkillData skillData)
+    {
     }
 
     public class IdleState : State<MonsterController>

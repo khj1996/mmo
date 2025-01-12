@@ -42,25 +42,6 @@ public class CreatureController : Poolable
         transform.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, targetVector, up), up) * transform.rotation;
     }
 
-    protected List<CharacterController> GetTargetInRange(Vector3 position, int targetLayer, float radius = 0.5f)
-    {
-        var targetsInRange = new List<CharacterController>();
-
-        var colliders = Physics.OverlapSphere(position, radius, targetLayer);
-
-        foreach (Collider collider in colliders)
-        {
-            var target = collider.GetComponent<CharacterController>();
-
-            if (target != null)
-            {
-                targetsInRange.Add(target);
-            }
-        }
-
-        return targetsInRange;
-    }
-
     public virtual void GetDamaged(float damage)
     {
         stat.HpChange(-damage);

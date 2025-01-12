@@ -26,11 +26,14 @@ MonoBehaviour:
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
-  defaultAttackType: 0
-  minAttackSpeed: 3
-  minSqrAttackRange: 1
+  defaultSkillData:
+    action: {fileID: 0}
+    attackPos: {x: 0, y: 0, z: 0}
+    attackSqrRadius: 1
+    attackEffectRadiusSqr: 0.9
+    motionDelay: 0
+    skillCoolTime: 3
   hpBarPos: {x: 0, y: 1.8, z: 0}
-  defaultAttackPoint: {x: 0, y: 0, z: 0}
   sqrDetectionRange: 16
   sqrChaseRange: 25
   dropItems:
@@ -38,11 +41,15 @@ MonoBehaviour:
     dropRate: 100
   exp: 0
   SkillDatas:
-  - type: 2
+  - action: {fileID: 0}
     attackPos: {x: 0, y: -999, z: 0}
-    attackRadius: 4
+    attackSqrRadius: 0
+    attackEffectRadiusSqr: 0
+    motionDelay: 0
     skillCoolTime: 10
-  - type: 1
+  - action: {fileID: 0}
     attackPos: {x: 0, y: 0, z: 0}
-    attackRadius: 36
+    attackSqrRadius: 0
+    attackEffectRadiusSqr: 0
+    motionDelay: 0
     skillCoolTime: 5
