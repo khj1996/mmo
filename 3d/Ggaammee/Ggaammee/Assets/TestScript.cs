@@ -9,7 +9,6 @@ public class TestScript : MonoBehaviour
 
     public void tttt()
     {
-        test.mode
     }
     
     
