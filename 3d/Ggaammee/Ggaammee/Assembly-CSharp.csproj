@@ -124,6 +124,7 @@
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\CurrencyItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\Item.cs" />
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
+    <Compile Include="Assets\TestScript.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ObjectManager.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\PlayerData.cs" />
     <Compile Include="Assets\MyGame\Scripts\Managers\Contents\ShopManager.cs" />
