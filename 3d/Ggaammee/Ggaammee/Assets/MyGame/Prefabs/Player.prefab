@@ -442,12 +442,11 @@ MonoBehaviour:
   animator: {fileID: 5372287860960465378}
   hpBar: {fileID: 0}
   controller: {fileID: 786441117642222483}
-  attackPoint: {fileID: 0}
   targetTransform: {fileID: 0}
   RotationSmoothTime: 0.12
   JumpTimeout: 0.9
   FallTimeout: 0.15
-  GroundedOffset: -0.15
+  GroundedOffset: 0
   GroundedRadius: 0.2
   navMeshAgent: {fileID: 4937063882719121326}
   healEffect: {fileID: 433901332998718311}
@@ -639,6 +638,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 48893525206391916, guid: 478274ce8a46eff46a8575eff20c7842,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 781180970163239988, guid: 478274ce8a46eff46a8575eff20c7842,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 1711076075603086797, guid: 478274ce8a46eff46a8575eff20c7842,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -688,6 +697,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918438315696384805, guid: 478274ce8a46eff46a8575eff20c7842,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522008294084905194, guid: 478274ce8a46eff46a8575eff20c7842,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673120281980407948, guid: 478274ce8a46eff46a8575eff20c7842,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797744661640350301, guid: 478274ce8a46eff46a8575eff20c7842,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
