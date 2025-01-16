@@ -839,7 +839,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: f5e71d2eda3d6cc40857811c187df502, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -890,9 +890,9 @@ MonoBehaviour:
   animator: {fileID: 5030645071554350878}
   hpBar: {fileID: 2536172186406312922}
   controller: {fileID: 4891169203043775814}
-  attackPoint: {fileID: 0}
   targetTransform: {fileID: 0}
   lockOnPos: {fileID: 2902881885765829236}
+  _speed: 0
 --- !u!1 &5030645071561653436
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,21 +18,14 @@ MonoBehaviour:
   maxHp: 500
   attack: 45
   defense: 0
-  speed: 1
+  speed: 3
   sprintSpeed: 0
   crouchSpeed: 0
-  acceleration: 1
+  acceleration: 5
   weight: -15
   animations: []
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
-  defaultSkillData:
-    action: {fileID: 0}
-    attackPos: {x: 0, y: 0, z: 0}
-    attackSqrRadius: 1
-    attackEffectRadiusSqr: 0.9
-    motionDelay: 0
-    skillCoolTime: 3
   hpBarPos: {x: 0, y: 1.8, z: 0}
   sqrDetectionRange: 16
   sqrChaseRange: 25
@@ -41,15 +34,9 @@ MonoBehaviour:
     dropRate: 100
   exp: 0
   SkillDatas:
-  - action: {fileID: 0}
-    attackPos: {x: 0, y: -999, z: 0}
-    attackSqrRadius: 0
-    attackEffectRadiusSqr: 0
-    motionDelay: 0
-    skillCoolTime: 10
-  - action: {fileID: 0}
-    attackPos: {x: 0, y: 0, z: 0}
-    attackSqrRadius: 0
-    attackEffectRadiusSqr: 0
-    motionDelay: 0
-    skillCoolTime: 5
+  - action: {fileID: 11400000, guid: 117298c79615f3b4a8a7ae49efd7b76f, type: 2}
+    attackPos: {x: 0, y: 0.245, z: 0.55}
+    attackSqrRadius: 1
+    attackEffectRadiusSqr: 0.9
+    motionDelay: 0.5
+    skillCoolTime: 1

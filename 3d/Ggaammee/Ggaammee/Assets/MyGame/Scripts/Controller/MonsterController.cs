@@ -28,6 +28,7 @@ public class MonsterController : CreatureController
         base.Init();
         InitFSM();
         InitComponent();
+        SetData();
 
         OnReturnToPoolAction += SetData;
     }
@@ -39,7 +40,6 @@ public class MonsterController : CreatureController
         isDie = false;
         targetTransform = null;
 
-        transform.localPosition = Vector3.zero;
         hpBar.gameObject.transform.position = transform.TransformPoint(MonsterData.hpBarPos);
 
         stat.ResetStat(creatureData);
@@ -70,10 +70,10 @@ public class MonsterController : CreatureController
 
         stateMachine.AddTransition<MonsterData.ChaseState, MonsterData.IdleState>(() => !CheckCanChase());
 
-        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => !isInMotion && GetAttackActionIndex() == -2);
+        stateMachine.AddTransition<MonsterData.AttackState, MonsterData.ChaseState>(() => !isInMotion && GetAttackActionIndex() == -1);
         stateMachine.AddTransition<MonsterData.AttackState, MonsterData.IdleState>(() => !isInMotion && !targetTransform);
 
-        stateMachine.AddGlobalTransition<MonsterData.AttackState>(() => GetAttackActionIndex() != -2);
+        stateMachine.AddGlobalTransition<MonsterData.AttackState>(() => GetAttackActionIndex() != -1);
         stateMachine.AddGlobalTransition<MonsterData.DeadState>(() => isDie);
     }
 
@@ -111,24 +111,35 @@ public class MonsterController : CreatureController
         stateMachine.Update();
     }
 
-    private float _speed;
+    [SerializeField] private float _speed;
 
     public void Move()
     {
         if (isInMotion)
             return;
 
+        // 방향 계산
         Vector3 direction = (targetTransform.position - transform.position).normalized;
+        direction.y = 0; // 수평 이동만 적용
 
-        LookAtTarget(direction);
+        // 회전
+        Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 100f);
 
+        // 현재 속도 확인 및 초기화
         float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
+        if (currentHorizontalSpeed < 0.01f) 
+            currentHorizontalSpeed = 0; // 초기 프레임에서 속도 튐 방지
 
+        // 이동 속도 계산
         _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
-        _speed = Mathf.Round(_speed * 1000f) / 300f;
+        _speed = Mathf.Clamp(_speed, 0, creatureData.speed); // 속도 범위 제한
 
+        // 이동
         controller.Move(direction.normalized * (_speed * Time.deltaTime));
     }
+
+
 
     #region 공격
 
@@ -154,7 +165,7 @@ public class MonsterController : CreatureController
     {
         currentSkillIndex = GetAttackActionIndex();
 
-        StartAttack(currentSkillIndex, currentSkillIndex != -1 ? MonsterData.SkillDatas[currentSkillIndex].skillCoolTime : MonsterData.defaultSkillData.skillCoolTime);
+        StartAttack(currentSkillIndex, currentSkillIndex != -1 ? MonsterData.SkillDatas[currentSkillIndex].skillCoolTime : MonsterData.SkillDatas[0].skillCoolTime);
     }
 
     private void StartAttack(int skillIndex, float coolTime)
@@ -168,7 +179,7 @@ public class MonsterController : CreatureController
 
         motionEndTime = Time.time + GetAnimationDuration(skillIndex);
 
-        canAttackTime = Time.time + MonsterData.defaultSkillData.skillCoolTime;
+        canAttackTime = Time.time + MonsterData.SkillDatas[0].skillCoolTime;
 
         if (skillIndex != -1)
         {
@@ -183,9 +194,7 @@ public class MonsterController : CreatureController
 
     private float GetAnimationDuration(int skillIndex)
     {
-        return skillIndex != -1
-            ? MonsterData.SkillDatas[skillIndex].motionDelay
-            : MonsterData.defaultSkillData.motionDelay;
+        return MonsterData.SkillDatas[skillIndex].motionDelay;
     }
 
 
@@ -194,7 +203,7 @@ public class MonsterController : CreatureController
     {
         // 현재 대상이 없을경우 반환
         if (!targetTransform)
-            return -2;
+            return -1;
 
         var targetDistance = (targetTransform.position - transform.position).sqrMagnitude;
 
@@ -207,13 +216,7 @@ public class MonsterController : CreatureController
             }
         }
 
-        // 기본 공격 가능 여부 확인
-        if (targetDistance <= MonsterData.defaultSkillData.attackSqrRadius)
-        {
-            return -1;
-        }
-
-        return -2;
+        return -1;
     }
 
     public void DropItem()

@@ -33,7 +33,6 @@ public class MonsterData : CreatureData
     public float exp;
 
     [Header("-------------------Skills--------------------")]
-    public SkillData defaultSkillData;
     public SkillData[] SkillDatas;
 
     [Serializable]
@@ -63,10 +62,7 @@ public class MonsterData : CreatureData
 
     public void InvokeSkill(int skillIndex, Transform caster, float power)
     {
-        if (skillIndex == -1)
-            defaultSkillData.InvokeSkill(caster, power);
-        else if (skillIndex >= 0)
-            defaultSkillData.InvokeSkill(caster, power);
+        SkillDatas[skillIndex].InvokeSkill(caster, power);
     }
 
     public void ActiveSkill(SkillData skillData)
