@@ -38,5 +38,5 @@ MonoBehaviour:
     attackPos: {x: 0, y: 0.245, z: 0.55}
     attackSqrRadius: 1
     attackEffectRadiusSqr: 0.9
-    motionDelay: 0.5
+    motionDelay: 0.8
     skillCoolTime: 1

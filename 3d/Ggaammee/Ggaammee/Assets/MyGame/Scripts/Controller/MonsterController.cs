@@ -118,27 +118,21 @@ public class MonsterController : CreatureController
         if (isInMotion)
             return;
 
-        // 방향 계산
         Vector3 direction = (targetTransform.position - transform.position).normalized;
-        direction.y = 0; // 수평 이동만 적용
+        direction.y = 0;
 
-        // 회전
         Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 100f);
 
-        // 현재 속도 확인 및 초기화
         float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
-        if (currentHorizontalSpeed < 0.01f) 
-            currentHorizontalSpeed = 0; // 초기 프레임에서 속도 튐 방지
 
-        // 이동 속도 계산
+        if (currentHorizontalSpeed < 0.01f)
+            currentHorizontalSpeed = 0;
+
         _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
-        _speed = Mathf.Clamp(_speed, 0, creatureData.speed); // 속도 범위 제한
 
-        // 이동
         controller.Move(direction.normalized * (_speed * Time.deltaTime));
     }
-
 
 
     #region 공격
@@ -181,10 +175,7 @@ public class MonsterController : CreatureController
 
         canAttackTime = Time.time + MonsterData.SkillDatas[0].skillCoolTime;
 
-        if (skillIndex != -1)
-        {
-            canUseSkillTimes[skillIndex] = Time.time + coolTime;
-        }
+        canUseSkillTimes[skillIndex] = Time.time + coolTime;
     }
 
     private void EndAttackMotion()
@@ -216,7 +207,7 @@ public class MonsterController : CreatureController
             }
         }
 
-        return -1;
+        return (targetDistance > 1) ? -1 : 0;
     }
 
     public void DropItem()
