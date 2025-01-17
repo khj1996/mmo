@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DefaultMelee", menuName = "ScriptableObjects/Skill/DefaultMelee")]
 public class DefaultMelee : SkillAction
 {
-    public override void InvokeSkill(MonsterData.SkillData data, Transform caster, Vector3 attackPos, float power)
+    public override void InvokeSkill(MonsterData.SkillData data, Transform caster, Transform target, float power)
     {
-        List<CharacterController> players = Managers.ObjectManager.GetTargetInRange(Util.GetModifiedPoint(caster, attackPos), LayerData.PlayerLayer, data.attackEffectRadiusSqr);
+        List<CharacterController> players = Managers.ObjectManager.GetTargetInRange(Util.GetModifiedPoint(caster, data.attackPos), LayerData.PlayerLayer, data.attackEffectRadiusSqr);
 
         foreach (CharacterController player in players)
         {

@@ -130,8 +130,12 @@ public class MonsterController : CreatureController
             currentHorizontalSpeed = 0;
 
         _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
+        controller.Move(direction.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, MonsterData.weight, 0.0f) * Time.deltaTime);
+    }
 
-        controller.Move(direction.normalized * (_speed * Time.deltaTime));
+    public void ApplyGravity()
+    {
+        controller.Move(new Vector3(0.0f, MonsterData.weight, 0.0f) * Time.deltaTime);
     }
 
 
@@ -172,7 +176,6 @@ public class MonsterController : CreatureController
         LookAtTarget((targetTransform.position - transform.position).normalized);
 
         motionEndTime = Time.time + GetAnimationDuration(skillIndex);
-
         canAttackTime = Time.time + MonsterData.SkillDatas[0].skillCoolTime;
 
         canUseSkillTimes[skillIndex] = Time.time + coolTime;
@@ -198,7 +201,7 @@ public class MonsterController : CreatureController
 
         var targetDistance = (targetTransform.position - transform.position).sqrMagnitude;
 
-        for (var i = 0; i < canUseSkillTimes.Length; i++)
+        for (var i = 1; i < canUseSkillTimes.Length; i++)
         {
             // 스킬 범위 내에 유저가 있고 스킬 쿨타임이 아닐 때
             if (targetDistance <= MonsterData.SkillDatas[i].attackSqrRadius && Time.time > canUseSkillTimes[i])
@@ -230,9 +233,44 @@ public class MonsterController : CreatureController
     }
 
 
-    protected virtual void OnAttack(AnimationEvent animationEvent)
+    private Vector3[] moveData = new Vector3[50];
+
+    protected virtual void OnInvokeSkill(AnimationEvent animationEvent)
     {
-        MonsterData.InvokeSkill(currentSkillIndex, transform, stat.CurrentAttackPower);
+        if (MonsterData.SkillDatas[currentSkillIndex].isMove)
+        {
+            MonsterData.SetPath(currentSkillIndex, transform, targetTransform, ref moveData);
+            StartCoroutine(SkillMove());
+        }
+        else
+        {
+            MonsterData.InvokeSkill(currentSkillIndex, transform, targetTransform, stat.CurrentAttackPower);
+        }
+    }
+
+    public IEnumerator SkillMove()
+    {
+        float duration = 2f;
+        float elapsedTime = 0f;
+        int curveIndex = 0;
+
+        while (elapsedTime < duration && curveIndex < moveData.Length - 1)
+        {
+            float deltaTime = Time.deltaTime;
+            elapsedTime += deltaTime;
+
+            Vector3 direction = (moveData[curveIndex + 1] - controller.transform.position).normalized;
+            float distance = Vector3.Distance(controller.transform.position, moveData[curveIndex + 1]);
+
+            controller.Move(direction * (distance / (duration / moveData.Length) * deltaTime));
+
+            if (distance < 0.1f)
+            {
+                curveIndex++;
+            }
+
+            yield return null;
+        }
     }
 
     #endregion

@@ -421,7 +421,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.375988
-        functionName: OnAttack
+        functionName: OnInvokeSkill
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

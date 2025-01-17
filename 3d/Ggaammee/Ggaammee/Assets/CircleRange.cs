@@ -15,18 +15,6 @@ public class CircleRange : MonoBehaviour
         range.material = new Material(rangeMat);
     }
 
-    [Button]
-    public void TestProgress()
-    {
-        range.material.SetFloat(Progress, 0);
-        DOTween.To(
-            () => range.material.GetFloat(Progress),
-            x => range.material.SetFloat(Progress, x),
-            1f,
-            3.5f
-        );
-    }
-
     public void StartRange(float diameter, float duration, Action onComplete = null)
     {
         range.size = new Vector3(diameter, diameter);

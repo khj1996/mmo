@@ -39,15 +39,21 @@ public class MonsterData : CreatureData
     public struct SkillData
     {
         public SkillAction action;
+        [Tooltip("스킬 사용 과정에서 이동 여부")] public bool isMove;
         public Vector3 attackPos;
         [Tooltip("공격 사용이 가능한 거리")] public float attackSqrRadius;
         [Tooltip("공격시 효과 범위")] public float attackEffectRadiusSqr;
         public float motionDelay;
         public float skillCoolTime;
 
-        public void InvokeSkill(Transform caster, float power)
+        public void InvokeSkill(Transform caster, Transform target, float power)
         {
-            action.InvokeSkill(this, caster, attackPos, power);
+            action.InvokeSkill(this, caster, target, power);
+        }
+
+        public void SetPath(Transform caster, Transform target, ref Vector3[] curvePointsArr)
+        {
+            action.SetPath(this, caster, target, ref curvePointsArr);
         }
     }
 
@@ -60,14 +66,16 @@ public class MonsterData : CreatureData
     }
 
 
-    public void InvokeSkill(int skillIndex, Transform caster, float power)
+    public void InvokeSkill(int skillIndex, Transform caster, Transform target, float power)
     {
-        SkillDatas[skillIndex].InvokeSkill(caster, power);
+        SkillDatas[skillIndex].InvokeSkill(caster, target, power);
     }
 
-    public void ActiveSkill(SkillData skillData)
+    public void SetPath(int skillIndex, Transform caster, Transform target, ref Vector3[] curvePointsArr)
     {
+        SkillDatas[skillIndex].SetPath(caster, target, ref curvePointsArr);
     }
+
 
     public class IdleState : State<MonsterController>
     {
@@ -85,6 +93,7 @@ public class MonsterData : CreatureData
 
         public override void OnUpdate()
         {
+            _owner.ApplyGravity();
         }
     }
 
