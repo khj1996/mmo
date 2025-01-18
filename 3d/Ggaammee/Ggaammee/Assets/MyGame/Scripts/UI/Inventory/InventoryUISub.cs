@@ -15,7 +15,6 @@ public class InventoryUISub : UI_ScrollView_Sub
     {
         if (items == null || items.Length == 0)
         {
-            Debug.LogWarning("InventoryUISub: No slots available for UI update.");
             return;
         }
 

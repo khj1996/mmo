@@ -35,8 +35,6 @@ public class RangedWeaponData : WeaponData
     public void EffectProcess(Transform controllerTransform, Vector3 targetTransformPosition)
     {
         var bullet = Managers.PoolManager.GetFromPool<Bullet>("Bullet");
-        if (bullet == null)
-            Debug.Log(123);
 
         var designer = _complexCurveDesigner.GetCurveDesigner();
         var curveSet = designer.GetNextCurveSet();

@@ -103,7 +103,6 @@ public class DialogueUI : MonoBehaviour
             var choice = currentModule.choices[index];
             if (index >= choiceButtons.Length)
             {
-                Debug.LogWarning("Not enough buttons for all choices.");
                 break;
             }
 

@@ -8,17 +8,11 @@ public class Npc : MonoBehaviour
 
     public void Interact()
     {
-        if (dialogue != null)
+        if (dialogue == null) return;
+        DialogueUI manager = FindObjectOfType<DialogueUI>();
+        if (manager != null)
         {
-            DialogueUI manager = FindObjectOfType<DialogueUI>();
-            if (manager != null)
-            {
-                manager.StartDialogue(this);
-            }
-        }
-        else
-        {
-            Debug.Log("대화 데이터가 없습니다!");
+            manager.StartDialogue(this);
         }
     }
 

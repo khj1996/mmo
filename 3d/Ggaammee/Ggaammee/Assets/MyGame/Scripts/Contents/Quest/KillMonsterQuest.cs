@@ -28,11 +28,6 @@ public class KillMonsterQuest : Quest
             currentKillCount += count;
             
             InvokeOnUpdateProgress();
-
-            if (CanComplete())
-            {
-                Debug.Log($"Quest '{Data.title}' completed!");
-            }
         }
     }
 

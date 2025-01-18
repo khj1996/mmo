@@ -116,7 +116,6 @@ public class PopupUIManager : Singleton<PopupUIManager>
         var popup = popList.FirstOrDefault(p => p.UI.name == popupName);
         if (popup.UI == null)
         {
-            Debug.LogWarning($"Popup with name {popupName} not found!");
             return;
         }
 

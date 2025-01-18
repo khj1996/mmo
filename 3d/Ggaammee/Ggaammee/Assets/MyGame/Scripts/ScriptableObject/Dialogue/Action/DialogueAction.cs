@@ -12,6 +12,5 @@ public class ExecuteFunctionAction : DialogueAction
 {
     public override void Execute()
     {
-        Debug.Log("함수가 실행됩니다!");
     }
 }

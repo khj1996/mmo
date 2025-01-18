@@ -18,7 +18,6 @@ public class ShopUI : UI_ScrollView<ShopUISub>
     {
         if (string.IsNullOrEmpty(shopId))
         {
-            Debug.LogError("Shop ID is null or empty!");
             return;
         }
 

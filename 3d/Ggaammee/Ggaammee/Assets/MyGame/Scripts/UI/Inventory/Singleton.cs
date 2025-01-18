@@ -26,7 +26,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             DestroyImmediate(gameObject);
             IsDeleted = true;
-            Debug.LogWarning($"{typeof(T)} 중복 오브젝트 파괴.");
         }
     }
 

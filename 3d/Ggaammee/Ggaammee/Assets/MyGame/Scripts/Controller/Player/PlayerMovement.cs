@@ -190,7 +190,6 @@ public class PlayerMovement
 
         if (playerController.isAutoMove)
         {
-            Debug.Log(playerController.isUpLadder);
             animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, playerController.isUpLadder);
             animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, !playerController.isUpLadder);
         }

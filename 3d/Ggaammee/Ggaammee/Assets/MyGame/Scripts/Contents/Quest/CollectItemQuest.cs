@@ -8,7 +8,6 @@ public class CollectItemQuest : Quest
     public CollectItemQuest(QuestData data) : base(data)
     {
         currentItemCount = Managers.InventoryManager.GetItemAmount(ItemQuestData.itemId);
-        Debug.Log(currentItemCount);
     }
 
     public override void Subscribe()
@@ -27,12 +26,7 @@ public class CollectItemQuest : Quest
         {
             currentItemCount = Managers.InventoryManager.GetItemAmount(itemId);
             InvokeOnUpdateProgress();
-            Debug.Log($"Collected {currentItemCount}/{ItemQuestData.targetCount} {ItemQuestData.itemId}");
 
-            if (CanComplete())
-            {
-                Debug.Log($"Quest '{Data.title}' completed!");
-            }
         }
     }
 
