@@ -4,7 +4,7 @@ using EasyButtons;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class CircleRange : MonoBehaviour
+public class CircleRange : Poolable
 {
     [SerializeField] private DecalProjector range;
     [SerializeField] private Material rangeMat;
@@ -15,9 +15,10 @@ public class CircleRange : MonoBehaviour
         range.material = new Material(rangeMat);
     }
 
-    public void StartRange(float diameter, float duration, Action onComplete = null)
+    public void StartRange(Vector3 position, float diameter, float duration, Action onComplete = null)
     {
-        range.size = new Vector3(diameter, diameter);
+        gameObject.transform.position = position;
+        range.size = new Vector3(diameter, diameter, 0.5f);
 
         float progress = 0f;
         DOTween.To(
@@ -29,6 +30,19 @@ public class CircleRange : MonoBehaviour
             },
             1f,
             duration
-        ).OnComplete(() => { onComplete?.Invoke(); });
+        ).OnComplete(() =>
+        {
+            onComplete?.Invoke();
+            ReturnToPool();
+        });
+    }
+
+    public override void OnGetFromPool()
+    {
+    }
+
+    public override void OnReturnToPool()
+    {
+        gameObject.SetActive(false);
     }
 }

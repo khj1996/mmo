@@ -271,6 +271,8 @@ public class MonsterController : CreatureController
 
             yield return null;
         }
+
+        MonsterData.InvokeSkill(currentSkillIndex, transform, targetTransform, stat.CurrentAttackPower);
     }
 
     #endregion

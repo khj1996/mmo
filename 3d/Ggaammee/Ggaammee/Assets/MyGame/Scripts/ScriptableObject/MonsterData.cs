@@ -42,7 +42,7 @@ public class MonsterData : CreatureData
         [Tooltip("스킬 사용 과정에서 이동 여부")] public bool isMove;
         public Vector3 attackPos;
         [Tooltip("공격 사용이 가능한 거리")] public float attackSqrRadius;
-        [Tooltip("공격시 효과 범위")] public float attackEffectRadiusSqr;
+        [Tooltip("공격시 효과 범위")] public float attackEffectRadius;
         public float motionDelay;
         public float skillCoolTime;
 

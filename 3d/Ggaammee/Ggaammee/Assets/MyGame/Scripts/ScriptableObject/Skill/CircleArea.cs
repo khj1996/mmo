@@ -6,6 +6,24 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CircleArea", menuName = "ScriptableObjects/Skill/CircleArea")]
 public class CircleArea : SkillAction
 {
+    public override void InvokeSkill(MonsterData.SkillData data, Transform caster, Transform target, float power)
+    {
+        if (Physics.Raycast(caster.position, Vector3.down, out var hit, 10f, LayerData.GroundLayer))
+        {
+            var test = Managers.PoolManager.GetFromPool<CircleRange>("CircleRange");
+
+            test.StartRange(hit.point, data.attackEffectRadius, data.motionDelay - 3, () =>
+            {
+                List<CharacterController> players = Managers.ObjectManager.GetTargetInRange(hit.point, LayerData.PlayerLayer, data.attackEffectRadius);
+
+                foreach (CharacterController player in players)
+                {
+                    player.gameObject.GetComponent<PlayerController>().GetDamaged(power);
+                }
+            });
+        }
+    }
+
     public override void SetPath(MonsterData.SkillData data, Transform caster, Transform target, ref Vector3[] curvePointsArr)
     {
         // attackPos의 위치만큼 이동
@@ -23,6 +41,7 @@ public class CircleArea : SkillAction
     }
 
 
+    //경로 계산
     public static void CalculateCurvePoints(ref Vector3[] curvePointsArr, Vector3 start, Vector3 target, Vector3 curvePos, int reCalcIndex = 0)
     {
         int _count = curvePointsArr.Length;

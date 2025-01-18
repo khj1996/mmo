@@ -38,13 +38,13 @@ MonoBehaviour:
     isMove: 0
     attackPos: {x: 0, y: 0.245, z: 0.55}
     attackSqrRadius: 1
-    attackEffectRadiusSqr: 0.9
+    attackEffectRadius: 0.7
     motionDelay: 0.8
     skillCoolTime: 1
   - action: {fileID: 11400000, guid: 9cbb19d064b558340b1981e5d819c94d, type: 2}
     isMove: 1
     attackPos: {x: 0, y: 5, z: 0}
     attackSqrRadius: 3
-    attackEffectRadiusSqr: 16
+    attackEffectRadius: 4
     motionDelay: 7
     skillCoolTime: 15

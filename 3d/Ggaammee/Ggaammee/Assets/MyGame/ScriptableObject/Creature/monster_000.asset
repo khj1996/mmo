@@ -35,8 +35,9 @@ MonoBehaviour:
   exp: 0
   SkillDatas:
   - action: {fileID: 11400000, guid: 117298c79615f3b4a8a7ae49efd7b76f, type: 2}
+    isMove: 0
     attackPos: {x: 0, y: 0, z: 0.65}
     attackSqrRadius: 1
-    attackEffectRadiusSqr: 0.9
+    attackEffectRadius: 0.7
     motionDelay: 1
     skillCoolTime: 2

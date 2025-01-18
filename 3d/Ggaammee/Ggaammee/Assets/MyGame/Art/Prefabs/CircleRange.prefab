@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9301481635217a140b9eb4d59f97e3e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolName: 
   range: {fileID: 1340905341818157837}
   rangeMat: {fileID: 2100000, guid: 2293c563a338b4c4ba7fecc87b1ed923, type: 2}
 --- !u!114 &1340905341818157837
@@ -70,4 +71,4 @@ MonoBehaviour:
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
   m_Size: {x: 2, y: 2, z: 0.3}
-  m_FadeFactor: 0.114
+  m_FadeFactor: 0.4

@@ -17,6 +17,7 @@ public class MonsterSpawner : MonoBehaviour
     {
         poolManager = Managers.PoolManager;
         poolManager.PrewarmPools<MonsterController>(monsterType.name, transform, maxMonsters);
+        poolManager.PrewarmPools<CircleRange>("CircleRange");
     }
 
     private void Update()
