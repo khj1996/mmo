@@ -132,6 +132,8 @@ public class PlayerInteract
             {
                 EnterLadderPosition(other);
 
+                Debug.Log(playerController.isAutoMove);
+                Debug.Log(playerController.navMeshAgent.isOnOffMeshLink);
                 if (playerController.navMeshAgent.isOnOffMeshLink && playerController.isAutoMove)
                 {
                     var offMeshData = playerController.navMeshAgent.currentOffMeshLinkData;

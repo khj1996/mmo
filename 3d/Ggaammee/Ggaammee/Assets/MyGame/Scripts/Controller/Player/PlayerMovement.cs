@@ -25,8 +25,6 @@ public class PlayerMovement
     private readonly float terminalVelocity = 53.0f;
 
 
-    private bool _isAutoMove;
-
     public PlayerMovement(PlayerController playerController, NavMeshAgent navMeshAgent, InputSystem inputSystem, Animator animator, CreatureData creatureData)
     {
         this.playerController = playerController;
@@ -53,7 +51,7 @@ public class PlayerMovement
         {
             MoveLadder();
         }
-        else if (!_isAutoMove)
+        else if (!playerController.isAutoMove)
         {
             UpdateMovement();
             ApplyRotation();
@@ -87,7 +85,7 @@ public class PlayerMovement
     {
         float maxSpeed;
 
-        if (_isAutoMove)
+        if (playerController.isAutoMove)
         {
             maxSpeed = navMeshAgent.speed;
             if (!navMeshAgent.pathPending && navMeshAgent.hasPath)
@@ -133,8 +131,8 @@ public class PlayerMovement
 
         animationBlend = Mathf.Lerp(
             animationBlend,
-            _isAutoMove ? navMeshAgent.speed : targetSpeed,
-            _isAutoMove ? Time.deltaTime * navMeshAgent.acceleration : Time.deltaTime * creatureData.acceleration
+            playerController.isAutoMove ? navMeshAgent.speed : targetSpeed,
+            playerController.isAutoMove ? Time.deltaTime * navMeshAgent.acceleration : Time.deltaTime * creatureData.acceleration
         );
 
         if (animationBlend < 0.01f) animationBlend = 0f;
@@ -177,7 +175,7 @@ public class PlayerMovement
         Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
         playerController.controller.Move(targetDirection.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
 
-        if (!_isAutoMove)
+        if (!playerController.isAutoMove)
         {
             navMeshAgent.nextPosition = playerController.transform.position;
         }
@@ -188,9 +186,9 @@ public class PlayerMovement
         playerController.isGrounded = true;
         playerController.LookAtTarget(playerController.targetTransform.transform.forward);
 
-        var isMove = inputSystem.move != Vector2.zero || _isAutoMove;
+        var isMove = inputSystem.move != Vector2.zero || playerController.isAutoMove;
 
-        if (_isAutoMove)
+        if (playerController.isAutoMove)
         {
             animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && playerController.isUpLadder);
             animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && !playerController.isUpLadder);
@@ -216,7 +214,7 @@ public class PlayerMovement
             playerController.DisableNavMesh();
         }
 
-        _isAutoMove = value;
+        playerController.isAutoMove = value;
     }
 
     #endregion
