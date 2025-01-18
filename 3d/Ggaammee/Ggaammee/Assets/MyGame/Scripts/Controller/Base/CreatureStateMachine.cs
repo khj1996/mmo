@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class CreatureStateMachine<T> where T : CreatureController
 {
@@ -39,6 +40,9 @@ public class CreatureStateMachine<T> where T : CreatureController
 
     public void Update()
     {
+        if (_currentState == null)
+            return;
+
         foreach (var transition in _transitions)
         {
             if (transition.Key.Item1 == _currentState.GetType() && transition.Value())

@@ -28,8 +28,6 @@ public class MonsterController : CreatureController
         base.Init();
         InitComponent();
         InitFSM();
-        SetData();
-
     }
 
     public void SetData()
@@ -38,6 +36,8 @@ public class MonsterController : CreatureController
 
         isDie = false;
         targetTransform = null;
+        _speed = 0;
+        controller.Move(Vector3.zero);
 
         hpBar.gameObject.transform.position = transform.TransformPoint(MonsterData.hpBarPos);
 
@@ -127,8 +127,17 @@ public class MonsterController : CreatureController
             currentHorizontalSpeed = 0;
 
         _speed = Mathf.Lerp(currentHorizontalSpeed, creatureData.speed, Time.deltaTime * creatureData.acceleration);
-        controller.Move(direction.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, MonsterData.weight, 0.0f) * Time.deltaTime);
+
+        if (_speed > creatureData.speed)
+        {
+            controller.Move(Vector3.zero);
+        }
+        else
+        {
+            controller.Move(direction.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, MonsterData.weight, 0.0f) * Time.deltaTime);
+        }
     }
+
 
     public void ApplyGravity()
     {
