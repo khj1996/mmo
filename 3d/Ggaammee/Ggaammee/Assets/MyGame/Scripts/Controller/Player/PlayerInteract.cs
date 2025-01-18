@@ -132,8 +132,6 @@ public class PlayerInteract
             {
                 EnterLadderPosition(other);
 
-                Debug.Log(playerController.isAutoMove);
-                Debug.Log(playerController.navMeshAgent.isOnOffMeshLink);
                 if (playerController.navMeshAgent.isOnOffMeshLink && playerController.isAutoMove)
                 {
                     var offMeshData = playerController.navMeshAgent.currentOffMeshLinkData;
@@ -156,6 +154,18 @@ public class PlayerInteract
             else
             {
                 EnterLadderPosition(other);
+
+                if (playerController.navMeshAgent.isOnOffMeshLink && playerController.isAutoMove)
+                {
+                    var offMeshData = playerController.navMeshAgent.currentOffMeshLinkData;
+                    if (offMeshData.offMeshLink.startTransform.position.y < playerController.transform.position.y)
+                    {
+                        playerController.isUpLadder = false;
+                    }
+
+                    playerController.DisableNavMesh();
+                    playerController.isClimbing = true;
+                }
             }
         }
     }

@@ -26,14 +26,13 @@ public class MonsterController : CreatureController
     protected override void Init()
     {
         base.Init();
-        InitFSM();
         InitComponent();
+        InitFSM();
         SetData();
 
-        OnReturnToPoolAction += SetData;
     }
 
-    private void SetData()
+    public void SetData()
     {
         canUseSkillTimes = new float[MonsterData.SkillDatas.Length];
 
@@ -52,8 +51,6 @@ public class MonsterController : CreatureController
 
         RegisterStates();
         RegisterTransitions();
-
-        stateMachine.ChangeState(typeof(MonsterData.IdleState));
     }
 
     private void RegisterStates()

@@ -45,6 +45,7 @@ public class MonsterSpawner : MonoBehaviour
     private void SpawnMonster()
     {
         var monster = poolManager.GetFromPool<MonsterController>(monsterType.name);
+        monster.SetData();
         if (monster)
         {
             monster.SetPos(GetRandomSpawnPosition());

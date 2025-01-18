@@ -82,14 +82,21 @@ public class GuideLine : MonoBehaviour
 
                 if (heightDifference > 1.5f)
                 {
-                    Vector3 adjustedPoint = new Vector3(current.x, next.y, current.z);
-                    pathVector.Add(adjustedPoint + Vector3.up * lineHeightOffset);
+                    if (next.y > current.y)
+                    {
+                        Vector3 adjustedPoint = new Vector3(current.x, next.y, current.z);
+                        pathVector.Add(adjustedPoint + Vector3.up * lineHeightOffset);
+                    }
+                    else
+                    {
+                        Vector3 adjustedPoint = new Vector3(next.x, current.y, next.z);
+                        pathVector.Add(adjustedPoint + Vector3.up * lineHeightOffset);
+                    }
                 }
             }
         }
 
         lineRenderer.positionCount = pathVector.Count;
-
         for (int i = 0; i < pathVector.Count; i++)
         {
             lineRenderer.SetPosition(i, pathVector[i]);

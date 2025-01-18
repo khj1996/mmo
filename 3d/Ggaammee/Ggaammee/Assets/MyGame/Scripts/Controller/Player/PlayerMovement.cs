@@ -186,12 +186,13 @@ public class PlayerMovement
         playerController.isGrounded = true;
         playerController.LookAtTarget(playerController.targetTransform.transform.forward);
 
-        var isMove = inputSystem.move != Vector2.zero || playerController.isAutoMove;
+        var isMove = inputSystem.move != Vector2.zero;
 
         if (playerController.isAutoMove)
         {
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, isMove && playerController.isUpLadder);
-            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, isMove && !playerController.isUpLadder);
+            Debug.Log(playerController.isUpLadder);
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderUpPlay, playerController.isUpLadder);
+            animator.SetBool(AssignAnimationIDs.AnimIDLadderDownPlay, !playerController.isUpLadder);
         }
         else
         {

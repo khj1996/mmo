@@ -7403,6 +7403,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5265186704714320077, guid: a4c73f91703f6b34f9bd38ff6eeda3df,
         type: 3}
+      propertyPath: m_Size.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265186704714320077, guid: a4c73f91703f6b34f9bd38ff6eeda3df,
+        type: 3}
       propertyPath: m_Center.y
       value: 0.26
       objectReference: {fileID: 0}
