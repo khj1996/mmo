@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1758d32c5ee04954fbc63acd64e56792, type: 3}
+  m_Name: Npc_100_Clear
+  m_EditorClassIdentifier: 
+  enterAction: {fileID: 11400000, guid: 98e4bf26528315246bdd42847a4132ea, type: 2}
+  dialogueLines:
+  - "\uC2DD\uB7C9\uC744 \uAC00\uC838\uB2E4 \uC8FC\uC154\uC11C \uAC10\uC0AC\uD569\uB2C8\uB2E4"
+  - "\uB9C8\uC744\uB85C \uAC00\uB294 \uAE38\uC740 \uC800\uCABD \uBC29\uD5A5\uC774\uC5D0\uC694"
+  - "\uC548\uB155\uD788\uAC00\uC138\uC694"
+  dialogueTimelineCues: []
+  choices:
+  - choiceText: "\uD655\uC778"
+    defaultNextModule: {fileID: 0}
+    endAction: {fileID: 11400000, guid: b64989e436f3f374fb4d97c920b70792, type: 2}
+    conditionalBranches: []
+  references:
+    version: 2
+    RefIds: []

@@ -14,7 +14,7 @@ public class CircleArea : SkillAction
 
             test.StartRange(hit.point, data.attackEffectRadius, data.motionDelay - 3, () =>
             {
-                List<CharacterController> players = Managers.ObjectManager.GetTargetInRange(hit.point, LayerData.PlayerLayer, data.attackEffectRadius);
+                List<CharacterController> players = Managers.ObjectManager.GetTargetInRange(hit.point, LayerData.PlayerLayer, data.attackEffectRadius / 2f);
 
                 foreach (CharacterController player in players)
                 {

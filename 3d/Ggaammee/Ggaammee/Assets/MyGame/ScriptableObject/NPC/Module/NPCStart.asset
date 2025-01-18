@@ -16,6 +16,7 @@ MonoBehaviour:
   dialogueLines:
   - "\uC548\uB155\uD558\uC138\uC694."
   - "\uBB34\uC2A8\uC77C\uB85C \uC624\uC168\uB098\uC694?"
+  dialogueTimelineCues: []
   choices:
   - choiceText: "\uC0C1\uC810 \uC5F4\uAE30"
     defaultNextModule: {fileID: 0}
@@ -35,6 +36,9 @@ MonoBehaviour:
     - branchNode:
         rid: 8857912580094033936
       nextModule: {fileID: 11400000, guid: c0d8a4f4973cd1741bdcb2a6a609ffa4, type: 2}
+    - branchNode:
+        rid: 8878465559725080576
+      nextModule: {fileID: 11400000, guid: 53cf1a104ef52ce4a9b5c36e8c8d6343, type: 2}
     - branchNode:
         rid: -2
       nextModule: {fileID: 0}
@@ -57,4 +61,9 @@ MonoBehaviour:
       type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
       data:
         questId: quest_000
+        requiredState: 2
+    - rid: 8878465559725080576
+      type: {class: DialogueQuestBranchNode, ns: , asm: Assembly-CSharp}
+      data:
+        questId: quest_100
         requiredState: 2

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 480b28a76cd547f18100b5d389398742, type: 3}
+  m_Name: quest_201
+  m_EditorClassIdentifier: 
+  id: quest_201
+  title: "\uB9C8\uC744\uB85C \uAC00\uBCF4\uC790"
+  description: "\uC9D1 \uC8FC\uC778\uC774 \uC54C\uB824\uC900 \uBC29\uD5A5\uC73C\uB85C
+    \uAC00\uBCF4\uC790"
+  rewardItems:
+  - itemData: {fileID: 11400000, guid: 3622dd2c6fd572440ab3a3b99f4e0e8c, type: 2}
+    count: 1
+  - itemData: {fileID: 11400000, guid: bc378b0c27e29f54cbe9a840f3bbafaf, type: 2}
+    count: 1
+  - itemData: {fileID: 11400000, guid: 945749d011959214eb18042048d1c6d2, type: 2}
+    count: 500
+  targetPosition: {x: -6.08, y: 0.764, z: -32.06}
+  radius: 1

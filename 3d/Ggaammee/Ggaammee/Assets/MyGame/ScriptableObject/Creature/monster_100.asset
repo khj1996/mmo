@@ -27,8 +27,8 @@ MonoBehaviour:
   walkSound: {fileID: 0}
   creatureModel: {fileID: 0}
   hpBarPos: {x: 0, y: 1.8, z: 0}
-  sqrDetectionRange: 16
-  sqrChaseRange: 25
+  sqrDetectionRange: 36
+  sqrChaseRange: 49
   dropItems:
   - itemData: {fileID: 11400000, guid: 9dd3bcd593af7bb4384fc99d9fa08402, type: 2}
     dropRate: 100
@@ -37,14 +37,14 @@ MonoBehaviour:
   - action: {fileID: 11400000, guid: 117298c79615f3b4a8a7ae49efd7b76f, type: 2}
     isMove: 0
     attackPos: {x: 0, y: 0.245, z: 0.55}
-    attackSqrRadius: 1
+    attackSqrRadius: 3
     attackEffectRadius: 0.7
     motionDelay: 0.8
     skillCoolTime: 1
   - action: {fileID: 11400000, guid: 9cbb19d064b558340b1981e5d819c94d, type: 2}
     isMove: 1
     attackPos: {x: 0, y: 5, z: 0}
-    attackSqrRadius: 3
-    attackEffectRadius: 4
+    attackSqrRadius: 7
+    attackEffectRadius: 6
     motionDelay: 7
     skillCoolTime: 15
