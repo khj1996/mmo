@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 
 [CreateAssetMenu(fileName = "OpenShopAction", menuName = "ScriptableObjects/Dialogue/DialogueAction/OpenShopAction")]
 public class OpenShopAction : DialogueAction
