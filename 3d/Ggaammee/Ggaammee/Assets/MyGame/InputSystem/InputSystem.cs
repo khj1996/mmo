@@ -96,6 +96,18 @@ public class InputSystem : MonoBehaviour
             AttackTypeInput(value.isPressed, 2);
     }
 
+    public void OnSwitchCursorType()
+    {
+        if (gameStateManager.CurrentState == GameState.Normal)
+        {
+            gameStateManager.SetState(GameState.CursorFree);
+        }
+        else if (gameStateManager.CurrentState == GameState.CursorFree)
+        {
+            gameStateManager.SetState(GameState.Normal);
+        }
+    }
+
     public void MoveInput(Vector2 newMoveDirection) => move = newMoveDirection;
 
     public void LookInput(Vector2 newLookDirection)

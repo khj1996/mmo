@@ -5,6 +5,7 @@ using UnityEngine;
 public enum GameState
 {
     Normal, 
+    CursorFree, 
     InConversation,
     InMenu, 
     Paused 
