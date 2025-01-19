@@ -11,6 +11,7 @@ public class PopupUIManager : Singleton<PopupUIManager>
         [SerializeField] public PopupUI UI;
         [SerializeField] public KeyCode key;
         [SerializeField] public PopupType type;
+        [SerializeField] public GameObject icon;
         public event Action<string> OnOpen;
 
         public void InvokeOnOpen(string data = null)
@@ -69,6 +70,10 @@ public class PopupUIManager : Singleton<PopupUIManager>
 
         foreach (var popup in popList)
         {
+            if (popup.icon != null)
+                Util.BindEvent(popup.icon, _ => { ToggleOpenClosePopup(popup); });
+
+
             popup.UI.OnFocus += () =>
             {
                 _activePopupLList.Remove(popup.UI);

@@ -51,6 +51,7 @@
     <Compile Include="Assets\ImprtAsset\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\MonsterSpawner.cs" />
     <Compile Include="Assets\MyGame\Scripts\ScriptableObject\Item\ArmorItemData.cs" />
+    <Compile Include="Assets\TriggerSpawner.cs" />
     <Compile Include="Assets\MyGame\Scripts\SpringCollider.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Inventory\Singleton.cs" />
     <Compile Include="Assets\ImprtAsset\Quirky Series Ultimate\_Scripts\RotateOnScroll.cs" />

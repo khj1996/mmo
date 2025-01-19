@@ -21,7 +21,7 @@ MonoBehaviour:
   speed: 3
   sprintSpeed: 0
   crouchSpeed: 0
-  acceleration: 5
+  acceleration: 3
   weight: -15
   animations: []
   walkSound: {fileID: 0}
