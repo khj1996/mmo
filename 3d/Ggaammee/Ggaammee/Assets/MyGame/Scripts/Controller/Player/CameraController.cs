@@ -1,4 +1,6 @@
 ﻿using System;
+using Cinemachine;
+using EasyButtons;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,10 +9,11 @@ using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour
 {
     public GameObject CinemachineCameraTarget;
-    public float TopClamp = 70.0f;
-    public float BottomClamp = -30.0f;
-    public float CameraAngleOverride = 0.0f;
-    public bool LockCameraPosition = false;
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+    [SerializeField] private float TopClamp = 70.0f;
+    [SerializeField] private float BottomClamp = -30.0f;
+    [SerializeField] private float CameraAngleOverride = 0.0f;
+    [SerializeField] private bool LockCameraPosition = false;
 
 
     private float _cinemachineTargetYaw;
@@ -25,6 +28,7 @@ public class CameraController : MonoBehaviour
     public float cameraSmoothing = 5f;
 
     private Camera _mainCamera;
+    [SerializeField] private Cinemachine3rdPersonFollow cinemachine3RdPersonFollow;
 
 
     private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
@@ -34,6 +38,7 @@ public class CameraController : MonoBehaviour
         if (_mainCamera == null)
         {
             _mainCamera = Camera.main;
+            cinemachine3RdPersonFollow = cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         }
     }
 
@@ -88,10 +93,15 @@ public class CameraController : MonoBehaviour
     }
 
 
-    private static float ClampAngle(float angle, float min, float max)
+    private float ClampAngle(float angle, float min, float max)
     {
         angle = Mathf.Repeat(angle + 180f, 360f) - 180f;
 
         return Mathf.Clamp(angle, min, max);
+    }
+
+    public void ChangeViewDistance(float dis)
+    {
+        cinemachine3RdPersonFollow.CameraDistance = dis;
     }
 }

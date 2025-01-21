@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 7019786601706362603}
   - component: {fileID: 1874768547656342762}
   - component: {fileID: 8212706078614429010}
+  - component: {fileID: 5946932513150996892}
   m_Layer: 18
   m_Name: Player
   m_TagString: Player
@@ -504,12 +505,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CinemachineCameraTarget: {fileID: 1919987346168350438}
+  cinemachineVirtualCamera: {fileID: 8485660908376241349}
   TopClamp: 70
   BottomClamp: -70
   CameraAngleOverride: 0
   LockCameraPosition: 0
   cameraDirectionY: -0.25
   cameraSmoothing: 5
+  cinemachine3RdPersonFollow: {fileID: 0}
 --- !u!114 &1874768547656342762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,7 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 6591710976191693114}
-  lcokOnRadius: 11
+  lcokOnRadius: 17.29
   maxViewAngle: 70
   minViewAngle: -70
   lookAtSmoothing: 5
@@ -546,22 +549,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Events:
     m_Signals:
-    - {fileID: 11400000, guid: 88a61c9643e1b8d4098eb05193e4e338, type: 2}
+    - {fileID: 11400000, guid: b568d78bbdd3348418e3dfb08799b9f3, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 5904525240692292765}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
+        - m_Target: {fileID: 5946932513150996892}
+          m_TargetAssemblyTypeName: TestText, Assembly-CSharp
+          m_MethodName: ShowNextScript
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5946932513150996892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904525240692292765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e081bf0aaafb4f4c99c62f7afa8ca61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testScript:
+  - "\uC544 \uBA38\uB9AC\uC57C..."
+  - "\uBD84\uBA85 \uB9C8\uC744\uC5D0 \uAC00\uB294 \uB3C4\uC911\uC774\uC600\uB294\uB370"
+  - "\uC5EC\uAE30\uAC00 \uC5B4\uB514\uC9C0?"
+  - "\uC55E\uC5D0 \uBCF4\uC774\uB294 \uC0AC\uB78C\uC5D0\uAC8C \uAC00\uBD10\uC57C\uACA0\uB2E4"
+  text: {fileID: 0}
 --- !u!1001 &4832850185860167160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -593,7 +614,7 @@ PrefabInstance:
     - target: {fileID: 6936970777044036726, guid: 6941924d6de682344bf9c7401e5b187d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 6936970777044036726, guid: 6941924d6de682344bf9c7401e5b187d,
         type: 3}
@@ -603,7 +624,7 @@ PrefabInstance:
     - target: {fileID: 6936970777044036726, guid: 6941924d6de682344bf9c7401e5b187d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6936970777044036726, guid: 6941924d6de682344bf9c7401e5b187d,
         type: 3}
@@ -613,7 +634,7 @@ PrefabInstance:
     - target: {fileID: 6936970777044036726, guid: 6941924d6de682344bf9c7401e5b187d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6936970777044036726, guid: 6941924d6de682344bf9c7401e5b187d,
         type: 3}

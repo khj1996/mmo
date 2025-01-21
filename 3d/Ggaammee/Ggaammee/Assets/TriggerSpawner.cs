@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Cinemachine;
+using EasyButtons;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -12,7 +13,6 @@ public class TriggerSpawner : MonoBehaviour
     [SerializeField] private DialogueAction beforeAction; // 연출 시작 전 실행
     [SerializeField] private DialogueAction afterAction; // 연출 끝난 뒤 실행
     [SerializeField] private PlayableDirector director; // 플레이어블 디렉터
-    [SerializeField] private PlayableAsset playableAsset; // 플레이어블 에셋
 
     [SerializeField] private CinemachineVirtualCamera cameraa;
     [SerializeField] private CinemachineVirtualCamera cameraaa;
@@ -27,11 +27,9 @@ public class TriggerSpawner : MonoBehaviour
                 break;
             }
         }
-        /*
-        director.arra
-        director.SetGenericBinding();
+
         director.SetReferenceValue("FirstCamera", cameraa);
-        director.SetReferenceValue("SecondCamera", cameraaa);*/
+        director.SetReferenceValue("SecondCamera", cameraaa);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,9 +42,13 @@ public class TriggerSpawner : MonoBehaviour
 
     IEnumerator TestCoroutine()
     {
+        Managers.GameStateManager.SetState(GameState.InConversation);
         beforeAction?.Execute();
 
         GameObject spawnObj = Instantiate(spawnObject, spawnPos, Quaternion.identity);
+        cameraaa.LookAt = spawnObj.transform;
+        director.Play();
+
 
         spawnObj.transform.SetParent(transform);
         spawnObj.GetComponent<MonsterController>().SetData();
@@ -54,5 +56,6 @@ public class TriggerSpawner : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
 
         afterAction?.Execute();
+        Managers.GameStateManager.SetState(GameState.Normal);
     }
 }

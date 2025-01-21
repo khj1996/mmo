@@ -7,23 +7,7 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "NewMonster", menuName = "ScriptableObjects/Monster")]
 public class MonsterData : CreatureData
 {
-    public enum SkillType
-    {
-        Melee,
-        Range,
-        Area
-    }
-
-    public enum DeafultAttackType
-    {
-        Melee,
-        Range
-    }
-
-    [Header("-------------------MonsterData--------------------")]
-    public GameObject creatureModel;
-
-
+    public bool isBoss;
     public Vector3 hpBarPos;
 
     public float sqrDetectionRange;

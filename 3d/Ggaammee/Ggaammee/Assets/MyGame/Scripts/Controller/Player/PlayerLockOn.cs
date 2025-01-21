@@ -122,6 +122,7 @@ public class PlayerLockOn : MonoBehaviour
                 shortestDistance = distanceFromTarget;
                 currentTarget = targetEnemy[i];
                 currentIndex = i;
+                currentTargetPosition = currentTarget.lockOnPos.transform.position;
             }
         }
 

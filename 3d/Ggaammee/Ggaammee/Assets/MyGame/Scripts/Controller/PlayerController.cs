@@ -21,6 +21,7 @@ public class PlayerController : CreatureController
 
     [SerializeField] private VisualEffect healEffect;
     [SerializeField] public PlayerLockOn playerLockOn;
+    [SerializeField] private CameraController playerCameraController;
     [SerializeField] private InputSystem inputSystem;
     [SerializeField] private WeaponData[] weaponDataOptions;
     [SerializeField] private Transform equipWeapon;
@@ -346,6 +347,11 @@ public class PlayerController : CreatureController
             currentEquipweaponData.Initialize(animator);
             animator.SetTrigger(AssignAnimationIDs.AnimIDChangeAttackType);
         }
+    }
+
+    public void ChangeViewDistance(float distance)
+    {
+        playerCameraController.ChangeViewDistance(distance);
     }
 
     #endregion

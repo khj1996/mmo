@@ -43,6 +43,12 @@ public class MonsterController : CreatureController
 
         stat.ResetStat(creatureData);
         stateMachine.ChangeState(typeof(MonsterData.IdleState));
+
+
+        if (MonsterData.isBoss)
+        {
+            Managers.ObjectManager.MainPlayer.ChangeViewDistance(13);
+        }
     }
 
     private void InitFSM()
@@ -216,7 +222,7 @@ public class MonsterController : CreatureController
             }
         }
 
-        return (targetDistance > 1) ? -1 : 0;
+        return (targetDistance > MonsterData.SkillDatas[0].attackSqrRadius) ? -1 : 0;
     }
 
     public void DropItem()
@@ -282,6 +288,13 @@ public class MonsterController : CreatureController
     }
 
     #endregion
+
+    public override void OnReturnToPool()
+    {
+        base.OnReturnToPool();
+        if (MonsterData.isBoss)
+            Managers.ObjectManager.MainPlayer.ChangeViewDistance(5);
+    }
 
     public override void GetDamaged(float damage)
     {
