@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -11,6 +13,26 @@ public class TriggerSpawner : MonoBehaviour
     [SerializeField] private DialogueAction afterAction; // 연출 끝난 뒤 실행
     [SerializeField] private PlayableDirector director; // 플레이어블 디렉터
     [SerializeField] private PlayableAsset playableAsset; // 플레이어블 에셋
+
+    [SerializeField] private CinemachineVirtualCamera cameraa;
+    [SerializeField] private CinemachineVirtualCamera cameraaa;
+
+    private void Start()
+    {
+        foreach (var binding in director.playableAsset.outputs)
+        {
+            if (binding.streamName == "Cinemachine Track")
+            {
+                if (Camera.main != null) director.SetGenericBinding(binding.sourceObject, Camera.main.GetComponent<CinemachineBrain>());
+                break;
+            }
+        }
+        /*
+        director.arra
+        director.SetGenericBinding();
+        director.SetReferenceValue("FirstCamera", cameraa);
+        director.SetReferenceValue("SecondCamera", cameraaa);*/
+    }
 
     private void OnTriggerEnter(Collider other)
     {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2943991646522970600}
   - component: {fileID: 8808194546674991569}
   - component: {fileID: -1415769420947119433}
+  - component: {fileID: 2835428433052883702}
   m_Layer: 0
   m_Name: TriggerSpawner
   m_TagString: Untagged
@@ -45,6 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7197baf1d2fb3324faec851ebaeae1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  needContdition: quest_201
+  spawnObject: {fileID: 7511180232019162148, guid: 818c5a1ba0d9810439f11299463f2294,
+    type: 3}
+  spawnPos: {x: -5.97, y: 10, z: -51.15}
+  beforeAction: {fileID: 11400000, guid: 79cb6a90d2c923f4890c45153563f6aa, type: 2}
+  afterAction: {fileID: 11400000, guid: 8a7915fa18784454da16b6028c68d66f, type: 2}
+  director: {fileID: 2835428433052883702}
+  playableAsset: {fileID: 0}
 --- !u!65 &-1415769420947119433
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -60,9 +69,30 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 3, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!320 &2835428433052883702
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2789019325578585414}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 716c766c91f501f4d99a103d4b7ee30e, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -9159852182076006514, guid: 716c766c91f501f4d99a103d4b7ee30e, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3786923221230438848, guid: 716c766c91f501f4d99a103d4b7ee30e, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []

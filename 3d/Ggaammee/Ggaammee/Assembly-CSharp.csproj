@@ -163,6 +163,7 @@
     <Compile Include="Assets\MyGame\Scripts\Contents\Quest\KillMonsterQuest.cs" />
     <Compile Include="Assets\MyGame\Scripts\Contents\Item\IUsableItem.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\DialogueUI.cs" />
+    <Compile Include="Assets\MyGame\Scripts\Contents\TestText.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\UI_ClickHandler.cs" />
     <Compile Include="Assets\MyGame\Scripts\UI\Base\PopupUIHeader.cs" />
     <Compile Include="Assets\MyGame\Scripts\Controller\PlayerController.cs" />
