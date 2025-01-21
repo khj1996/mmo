@@ -19,7 +19,6 @@ public class DialogueTimelineCue
     public int LineNumber;
 }
 
-
 [Serializable]
 public class DialogueChoice
 {
@@ -48,7 +47,6 @@ public class ConditionalDialogueBranch
     [SerializeReference] public DialogueBranchNode branchNode;
     public DialogueModule nextModule;
 }
-
 
 [Serializable]
 public class DialogueBranchNode
