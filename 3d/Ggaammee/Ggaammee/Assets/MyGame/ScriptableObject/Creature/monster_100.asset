@@ -26,7 +26,7 @@ MonoBehaviour:
   animations: []
   walkSound: {fileID: 0}
   isBoss: 1
-  hpBarPos: {x: 0, y: 1.8, z: 0}
+  hpBarPos: {x: 0, y: 1.5, z: 0}
   sqrDetectionRange: 49
   sqrChaseRange: 10000
   dropItems:

@@ -13,7 +13,7 @@ public class QuestManager
     public IEnumerator SetDefaultQuest()
     {
         yield return new WaitUntil(() => Managers.DataManager.IsInitialize);
-        AddQuest("quest_201");
+        AddQuest("quest_200");
     }
 
     public void AddTestQuest()
